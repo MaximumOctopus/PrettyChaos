@@ -13,6 +13,8 @@
 
 struct PCProject
 {
+	std::wstring Name = L"";        // name of the fractal being generated
+
 	int Width = 0;
 	int Height = 0;
 
@@ -26,29 +28,36 @@ struct PCProject
 	double xmax = 0;
 	double ymin = 0;
 	double ymax = 0;
+
+	double var_a = 0;
+	double var_b = 0;
+	double var_c = 0;
 };
 
 
 class ProjectIO
 {
 	enum class FileProperty {
-		None = 0, Width = 1, Height = 2, RenderMode = 3, nCoeff = 4,
-		MaxIterations = 5, BailoutRadius = 6,
-		xmin = 7, xmax = 8, ymin = 9, ymax = 10
+		None = 0, Name = 1, Width = 2, Height = 3, RenderMode = 4, nCoeff = 5,
+		MaxIterations = 6, BailoutRadius = 7,
+		xmin = 8, xmax = 9, ymin = 10, ymax = 11,
+		var_a = 12, var_b = 13, var_c = 14
 	};
 
-	static const int kPropertyListCount = 10;
+	static const int kPropertyListCount = 14;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
-		L"Width", L"Height", L"RenderMode", L"nCoeff",
+		L"Width", L"Name", L"Height", L"RenderMode", L"nCoeff",
 		L"MaxIterations", L"BailoutRadius",
-		L"xmin", L"xmax", L"ymin", L"ymax"
+		L"xmin", L"xmax", L"ymin", L"ymax",
+		L"var_a", L"var_b", L"var_c"
 	};
 
 	const FileProperty FilePropertyReference[kPropertyListCount] = {
-		FileProperty::Width, FileProperty::Height, FileProperty::RenderMode, FileProperty::nCoeff,
+		FileProperty::Name, FileProperty::Width, FileProperty::Height, FileProperty::RenderMode, FileProperty::nCoeff,
 		FileProperty::MaxIterations, FileProperty::BailoutRadius,
-		FileProperty::xmin, FileProperty::xmax, FileProperty::ymin, FileProperty::ymax
+		FileProperty::xmin, FileProperty::xmax, FileProperty::ymin, FileProperty::ymax,
+        FileProperty::var_a, FileProperty::var_b, FileProperty::var_c
 	};
 
 	FileProperty GetInputProperty(std::wstring);

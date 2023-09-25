@@ -183,12 +183,20 @@
             <BuildOrder>17</BuildOrder>
         </CppCompile>
         <CppCompile Include="Fractal.cpp">
-            <VirtualFolder>{64C7C5C2-487C-4A13-995B-F058C27D22E0}</VirtualFolder>
+            <VirtualFolder>{CBC6E249-27A9-4600-9ED7-EEE1DE006581}</VirtualFolder>
             <BuildOrder>5</BuildOrder>
         </CppCompile>
         <None Include="Fractal.h">
-            <VirtualFolder>{64C7C5C2-487C-4A13-995B-F058C27D22E0}</VirtualFolder>
+            <VirtualFolder>{CBC6E249-27A9-4600-9ED7-EEE1DE006581}</VirtualFolder>
             <BuildOrder>6</BuildOrder>
+        </None>
+        <CppCompile Include="FractalHandler.cpp">
+            <VirtualFolder>{64C7C5C2-487C-4A13-995B-F058C27D22E0}</VirtualFolder>
+            <BuildOrder>26</BuildOrder>
+        </CppCompile>
+        <None Include="FractalHandler.h">
+            <VirtualFolder>{64C7C5C2-487C-4A13-995B-F058C27D22E0}</VirtualFolder>
+            <BuildOrder>25</BuildOrder>
         </None>
         <CppCompile Include="HistoryHandler.cpp">
             <VirtualFolder>{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}</VirtualFolder>
@@ -219,6 +227,14 @@
         <None Include="Mandelbrot.h">
             <VirtualFolder>{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}</VirtualFolder>
             <BuildOrder>3</BuildOrder>
+        </None>
+        <CppCompile Include="Martin.cpp">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>23</BuildOrder>
+        </CppCompile>
+        <None Include="Martin.h">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>24</BuildOrder>
         </None>
         <CppCompile Include="PaletteEditor.cpp">
             <VirtualFolder>{6F195188-9F40-4F70-B1F3-F2BFE6978011}</VirtualFolder>
@@ -290,8 +306,10 @@
                     <VFOLDER ID="{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}" name="History"/>
                     <VFOLDER ID="{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}" name="Palette"/>
                     <VFOLDER ID="{64C7C5C2-487C-4A13-995B-F058C27D22E0}" name="Renderers">
+                        <VFOLDER ID="{CBC6E249-27A9-4600-9ED7-EEE1DE006581}" name="Base"/>
                         <VFOLDER ID="{8FFEB68A-C801-4430-885E-1783CF9ED09A}" name="Julia"/>
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
+                        <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                     </VFOLDER>
                     <VFOLDER ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}" name="Utility"/>
                 </VFOLDERS>
@@ -312,14 +330,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32c270mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgcrtl.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\Win32\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32c270.dll" Class="DependencyModule">
                     <Platform Name="Win32">
-                        <RemoteName>PrettyChaos.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -369,13 +386,14 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgcrtl.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32c270mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32c270.dll" Class="DependencyModule">
+                <DeployFile LocalName=".\Win32\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
+                        <RemoteName>PrettyChaos.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

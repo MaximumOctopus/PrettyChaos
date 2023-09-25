@@ -30,7 +30,7 @@ namespace ColourUtility
 		int b = (rgb & 0xff0000) >> 16;
 
 		int MinValue = std::min(std::min(r, g), b);
-		V        = std::max(std::max(r, g), b);
+		V            = std::max(std::max(r, g), b);
 
 		int Delta = V - MinValue;
 

@@ -30,7 +30,7 @@
 class TfrmPaletteEditor : public TForm
 {
 __published:	// IDE-managed Components
-	TImageList *grou;
+	TImageList *iPalette;
 	TBevel *Bevel2;
 	TBitBtn *bSave;
 	TBitBtn *bLoad;
@@ -40,12 +40,12 @@ __published:	// IDE-managed Components
 	TTrackBar *tbLog;
 	TSpeedButton *sbLinear;
 	TSpeedButton *sbLog;
-	TGroupBox *GroupBox3;
+	TGroupBox *gbColour;
 	TSpeedButton *sbAddNewKey;
 	TImage *iPointer;
 	TSpeedButton *sbColour;
 	TSpeedButton *sbBW;
-	TSpeedButton *SpeedButton2;
+	TSpeedButton *sbDeleteSelectedKey;
 	TLabel *Label1;
 	TSpeedButton *sbClear;
 	TSpeedButton *sbAlignAll;
@@ -88,6 +88,7 @@ __published:	// IDE-managed Components
 	TLabel *lInfinityHex;
 	TLabel *lColourHex;
 	TLabel *Label5;
+	TLabel *lLog;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall sbAddNewKeyClick(TObject *Sender);
 	void __fastcall shapeStartColourMouseDown(TObject *Sender, TMouseButton Button,
@@ -117,8 +118,12 @@ __published:	// IDE-managed Components
 	void __fastcall seSaturationChange(TObject *Sender);
 	void __fastcall seValueChange(TObject *Sender);
 	void __fastcall sbLinearClick(TObject *Sender);
+	void __fastcall sbDeleteSelectedKeyClick(TObject *Sender);
 
 private:
+
+	static const int __KeyOffset = 12;
+	static const int __KeyTop = 78;
 
     bool IsRendering = false;
 	bool SliderUpdating = false;

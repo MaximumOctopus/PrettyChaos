@@ -6,8 +6,8 @@
 
 USEFORM("PaletteEditor.cpp", frmPaletteEditor);
 USEFORM("main.cpp", frmMain);
-USEFORM("FormEditBounds.cpp", frmEditBounds);
 USEFORM("FormColourDialog.cpp", frmColourDialog);
+USEFORM("FormEditBounds.cpp", frmEditBounds);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

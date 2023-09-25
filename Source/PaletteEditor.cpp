@@ -79,11 +79,11 @@ void __fastcall TfrmPaletteEditor::FormPaint(TObject *Sender)
 void TfrmPaletteEditor::AddNewKey(int colour, int mode, int position)
 {
 	TShape* ts = new TShape(this);
-	ts->Parent = this;
+	ts->Parent = gbColour;
 	ts->Width = 10;
 	ts->Height = 10;
-	ts->Top = 78;
-	ts->Left = position + 16;
+	ts->Top = __KeyTop;
+	ts->Left = position + __KeyOffset;
 	ts->Brush->Color = TColor(colour);
 	ts->Tag = PaletteKeys.size();
 	ts->OnMouseDown = shapeStartColourMouseDown;
@@ -314,6 +314,34 @@ void __fastcall TfrmPaletteEditor::sbAddNewKeyClick(TObject *Sender)
 }
 
 
+void __fastcall TfrmPaletteEditor::sbDeleteSelectedKeyClick(TObject *Sender)
+{
+	if (KeySelected > 1)
+	{
+		delete PaletteKeys[KeySelected].Shape;
+		PaletteKeys.erase(PaletteKeys.begin() + KeySelected);
+
+		for (int t = 0; t < PaletteKeys.size(); t++)
+		{
+			PaletteKeys[t].Shape->Tag = t;
+		}
+
+		if (KeySelected != 0)
+		{
+			KeySelected--;
+		}
+		else
+		{
+			KeySelected = 0;
+		}
+
+		UpdateKeyDisplay(KeySelected);
+
+		RenderGradient();
+    }
+}
+
+
 void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 {
 	if (PaletteKeys.size() > 2)         // nothing to align if only two keys
@@ -322,8 +350,8 @@ void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 
 		for (int t = 2; t < PaletteKeys.size(); t++)
 		{
-			PaletteKeys[t].Shape->Left = (delta * (t - 1)) + 16;
-            PaletteKeys[t].Position = delta * (t - 1);
+			PaletteKeys[t].Shape->Left = (delta * (t - 1)) + __KeyOffset;
+			PaletteKeys[t].Position = delta * (t - 1);
 		}
 
 		iPointer->Left = PaletteKeys[KeySelected].Shape->Left;
@@ -379,18 +407,18 @@ void __fastcall TfrmPaletteEditor::shapeStartColourMouseMove(TObject *Sender, TS
 				shape->Left = 515;
 				iPointer->Left = shape->Left;
 			}
-			else if (shape->Left + (X - 5) < 16)
+			else if (shape->Left + (X - 5) < __KeyOffset)
 			{
-				shape->Left = 16;
+				shape->Left = __KeyOffset;
 				iPointer->Left = shape->Left;
 			}
 			else
 			{
 				shape->Left = shape->Left + (X - 5);
 				iPointer->Left = shape->Left;
-            }
+			}
 
-			PaletteKeys[KeySelected].Position = shape->Left - 16;
+			PaletteKeys[KeySelected].Position = shape->Left - __KeyOffset;
 
             RenderGradient();
         }
@@ -682,7 +710,7 @@ void TfrmPaletteEditor::ResetUI()
 {
 	KeyMoveMode = false;
 	KeySelected = 0;
-	iPointer->Left = 16;
+	iPointer->Left = __KeyOffset;
 }
 
 

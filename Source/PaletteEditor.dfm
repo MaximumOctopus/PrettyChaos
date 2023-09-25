@@ -4,7 +4,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   BorderStyle = bsDialog
   Caption = 'Palette Editor'
   ClientHeight = 540
-  ClientWidth = 541
+  ClientWidth = 546
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -29,7 +29,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   object GroupBox2: TGroupBox
     Left = 8
     Top = 415
-    Width = 525
+    Width = 530
     Height = 66
     Caption = 'Gradient Shape'
     TabOrder = 4
@@ -41,7 +41,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       GroupIndex = 3
       Down = True
       ImageIndex = 8
-      Images = grou
+      Images = iPalette
       OnClick = sbLinearClick
     end
     object sbLog: TSpeedButton
@@ -52,13 +52,26 @@ object frmPaletteEditor: TfrmPaletteEditor
       Height = 22
       GroupIndex = 3
       ImageIndex = 9
-      Images = grou
+      Images = iPalette
       OnClick = sbLinearClick
     end
+    object lLog: TLabel
+      Left = 482
+      Top = 34
+      Width = 8
+      Height = 16
+      Caption = '0'
+      Font.Charset = DEFAULT_CHARSET
+      Font.Color = clWindowText
+      Font.Height = -13
+      Font.Name = 'Courier New'
+      Font.Style = []
+      ParentFont = False
+    end
     object tbLog: TTrackBar
-      Left = 86
+      Left = 78
       Top = 32
-      Width = 422
+      Width = 398
       Height = 23
       Max = 100
       Min = 1
@@ -75,7 +88,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     Height = 25
     Caption = 'Save'
     ImageIndex = 3
-    Images = grou
+    Images = iPalette
     TabOrder = 0
     OnClick = bSaveClick
   end
@@ -86,7 +99,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     Height = 25
     Caption = 'Load'
     ImageIndex = 6
-    Images = grou
+    Images = iPalette
     TabOrder = 1
     OnClick = bLoadClick
   end
@@ -107,15 +120,15 @@ object frmPaletteEditor: TfrmPaletteEditor
     Height = 25
     Caption = 'OK'
     ImageIndex = 4
-    Images = grou
+    Images = iPalette
     ModalResult = 1
     TabOrder = 3
     OnClick = bAcceptClick
   end
-  object GroupBox3: TGroupBox
+  object gbColour: TGroupBox
     Left = 8
     Top = 8
-    Width = 524
+    Width = 530
     Height = 401
     Caption = 'Colour'
     TabOrder = 5
@@ -125,12 +138,12 @@ object frmPaletteEditor: TfrmPaletteEditor
       Width = 23
       Height = 22
       ImageIndex = 2
-      Images = grou
+      Images = iPalette
       OnClick = sbAddNewKeyClick
     end
     object iPointer: TImage
       Left = 12
-      Top = 100
+      Top = 96
       Width = 10
       Height = 10
       AutoSize = True
@@ -151,34 +164,34 @@ object frmPaletteEditor: TfrmPaletteEditor
       Transparent = True
     end
     object sbColour: TSpeedButton
-      Left = 477
+      Left = 453
       Top = 24
       Width = 23
       Height = 22
       GroupIndex = 1
       Down = True
       ImageIndex = 0
-      Images = grou
+      Images = iPalette
       OnClick = sbColourClick
     end
     object sbBW: TSpeedButton
-      Left = 502
+      Left = 478
       Top = 24
       Width = 23
       Height = 22
       GroupIndex = 1
       ImageIndex = 1
-      Images = grou
+      Images = iPalette
       OnClick = sbColourClick
     end
-    object SpeedButton2: TSpeedButton
+    object sbDeleteSelectedKey: TSpeedButton
       Left = 124
       Top = 24
       Width = 23
       Height = 22
       ImageIndex = 5
-      Images = grou
-      OnClick = sbAddNewKeyClick
+      Images = iPalette
+      OnClick = sbDeleteSelectedKeyClick
     end
     object Label1: TLabel
       Left = 176
@@ -193,7 +206,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Width = 70
       Height = 22
       Caption = 'Clear'
-      Images = grou
+      Images = iPalette
       OnClick = sbClearClick
     end
     object sbAlignAll: TSpeedButton
@@ -202,7 +215,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Width = 23
       Height = 22
       ImageIndex = 7
-      Images = grou
+      Images = iPalette
       OnClick = sbAlignAllClick
     end
     object pbGradient: TPaintBox
@@ -214,7 +227,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     object sbRGB: TSpeedButton
       Left = 329
       Top = 24
-      Width = 33
+      Width = 40
       Height = 22
       GroupIndex = 2
       Down = True
@@ -223,20 +236,20 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object sbHSV: TSpeedButton
       Tag = 1
-      Left = 364
+      Left = 370
       Top = 24
-      Width = 33
+      Width = 40
       Height = 22
       GroupIndex = 2
       Caption = 'HSV'
       OnClick = sbRGBClick
     end
     object lColourHex: TLabel
-      Left = 348
+      Left = 333
       Top = 374
-      Width = 48
+      Width = 64
       Height = 16
-      Caption = '000000'
+      Caption = '0x000000'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -245,11 +258,11 @@ object frmPaletteEditor: TfrmPaletteEditor
       ParentFont = False
     end
     object Label5: TLabel
-      Left = 286
+      Left = 277
       Top = 374
-      Width = 56
+      Width = 48
       Height = 16
-      Caption = 'Colour:'
+      Caption = 'Colour'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -545,7 +558,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnChange = sePositionChange
     end
     object GroupBox1: TGroupBox
-      Left = 407
+      Left = 409
       Top = 175
       Width = 101
       Height = 189
@@ -574,7 +587,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       end
     end
   end
-  object grou: TImageList
+  object iPalette: TImageList
     Left = 264
     Top = 489
     Bitmap = {

@@ -10,6 +10,7 @@ object frmMain: TfrmMain
   Font.Height = -11
   Font.Name = 'Tahoma'
   Font.Style = []
+  Menu = MainMenu1
   OldCreateOrder = False
   Position = poMainFormCenter
   OnDestroy = FormDestroy
@@ -75,6 +76,58 @@ object frmMain: TfrmMain
       Height = 28
       Shape = bsLeftLine
     end
+    object sbReset: TSpeedButton
+      Left = 414
+      Top = 2
+      Width = 30
+      Height = 27
+      ImageIndex = 1
+      Images = ImageList1
+      OnClick = sbResetClick
+    end
+    object sbZoom: TSpeedButton
+      Left = 450
+      Top = 2
+      Width = 30
+      Height = 27
+      ImageIndex = 0
+      Images = ImageList1
+      OnClick = sbZoomClick
+    end
+    object sbZoomCrop: TSpeedButton
+      Left = 484
+      Top = 2
+      Width = 30
+      Height = 27
+      ImageIndex = 8
+      Images = ImageList1
+      OnClick = sbZoomCropClick
+    end
+    object sbBack: TSpeedButton
+      Left = 520
+      Top = 2
+      Width = 30
+      Height = 27
+      ImageIndex = 2
+      Images = ImageList1
+      OnClick = sbBackClick
+    end
+    object SpeedButton1: TSpeedButton
+      Left = 554
+      Top = 2
+      Width = 30
+      Height = 27
+      ImageIndex = 3
+      Images = ImageList1
+      OnClick = sbBackClick
+    end
+    object Bevel4: TBevel
+      Left = 406
+      Top = 2
+      Width = 6
+      Height = 28
+      Shape = bsLeftLine
+    end
   end
   object Panel2: TPanel
     Left = 966
@@ -83,74 +136,30 @@ object frmMain: TfrmMain
     Height = 735
     Align = alRight
     TabOrder = 1
-    object sbReset: TSpeedButton
+    object Label16: TLabel
       Left = 6
-      Top = 199
-      Width = 30
-      Height = 22
-      ImageIndex = 1
-      Images = ImageList1
-      OnClick = sbResetClick
-    end
-    object sbBack: TSpeedButton
-      Left = 112
-      Top = 199
-      Width = 30
-      Height = 22
-      ImageIndex = 2
-      Images = ImageList1
-      OnClick = sbBackClick
-    end
-    object sbZoom: TSpeedButton
-      Left = 42
-      Top = 199
-      Width = 30
-      Height = 22
-      ImageIndex = 0
-      Images = ImageList1
-      OnClick = sbZoomClick
-    end
-    object iPreview: TImage
-      Left = 6
-      Top = 6
-      Width = 171
-      Height = 171
+      Top = 17
+      Width = 33
+      Height = 13
+      Caption = 'Fractal'
     end
     object Bevel1: TBevel
       Left = 6
-      Top = 183
+      Top = 48
       Width = 171
       Height = 10
       Shape = bsTopLine
     end
-    object SpeedButton1: TSpeedButton
-      Left = 146
-      Top = 199
-      Width = 30
-      Height = 22
-      ImageIndex = 3
-      Images = ImageList1
-      OnClick = sbBackClick
-    end
-    object sbZoomCrop: TSpeedButton
-      Left = 76
-      Top = 199
-      Width = 30
-      Height = 22
-      ImageIndex = 8
-      Images = ImageList1
-      OnClick = sbZoomCropClick
-    end
     object GroupBox2: TGroupBox
       Left = 6
-      Top = 507
+      Top = 329
       Width = 171
-      Height = 214
+      Height = 174
       Caption = 'Dimensions'
       TabOrder = 1
       object lXMin: TLabel
         Left = 72
-        Top = 96
+        Top = 56
         Width = 100
         Height = 13
         AutoSize = False
@@ -158,7 +167,7 @@ object frmMain: TfrmMain
       end
       object lXMax: TLabel
         Left = 72
-        Top = 115
+        Top = 75
         Width = 100
         Height = 13
         AutoSize = False
@@ -166,7 +175,7 @@ object frmMain: TfrmMain
       end
       object lYMin: TLabel
         Left = 72
-        Top = 134
+        Top = 94
         Width = 100
         Height = 13
         AutoSize = False
@@ -174,7 +183,7 @@ object frmMain: TfrmMain
       end
       object lYMax: TLabel
         Left = 72
-        Top = 153
+        Top = 113
         Width = 100
         Height = 13
         AutoSize = False
@@ -182,7 +191,7 @@ object frmMain: TfrmMain
       end
       object Label4: TLabel
         Left = 24
-        Top = 161
+        Top = 121
         Width = 17
         Height = 11
         Caption = 'Max'
@@ -195,7 +204,7 @@ object frmMain: TfrmMain
       end
       object Label8: TLabel
         Left = 16
-        Top = 153
+        Top = 113
         Width = 7
         Height = 13
         Caption = 'Y'
@@ -208,7 +217,7 @@ object frmMain: TfrmMain
       end
       object Label7: TLabel
         Left = 16
-        Top = 134
+        Top = 94
         Width = 7
         Height = 13
         Caption = 'Y'
@@ -221,7 +230,7 @@ object frmMain: TfrmMain
       end
       object Label3: TLabel
         Left = 24
-        Top = 142
+        Top = 102
         Width = 15
         Height = 11
         Caption = 'Min'
@@ -234,7 +243,7 @@ object frmMain: TfrmMain
       end
       object Label2: TLabel
         Left = 24
-        Top = 123
+        Top = 83
         Width = 17
         Height = 11
         Caption = 'Max'
@@ -247,7 +256,7 @@ object frmMain: TfrmMain
       end
       object Label6: TLabel
         Left = 16
-        Top = 115
+        Top = 75
         Width = 7
         Height = 13
         Caption = 'X'
@@ -260,7 +269,7 @@ object frmMain: TfrmMain
       end
       object Label5: TLabel
         Left = 16
-        Top = 96
+        Top = 56
         Width = 7
         Height = 13
         Caption = 'X'
@@ -273,7 +282,7 @@ object frmMain: TfrmMain
       end
       object Label1: TLabel
         Left = 24
-        Top = 104
+        Top = 64
         Width = 15
         Height = 11
         Caption = 'Min'
@@ -287,20 +296,20 @@ object frmMain: TfrmMain
       object lWidth: TLabel
         Left = 16
         Top = 27
-        Width = 28
+        Width = 19
         Height = 13
-        Caption = 'Width'
+        Caption = 'Size'
       end
       object Label9: TLabel
-        Left = 16
-        Top = 54
-        Width = 31
+        Left = 87
+        Top = 27
+        Width = 6
         Height = 13
-        Caption = 'Height'
+        Caption = 'x'
       end
       object sbCopyBoundsToClipboard: TSpeedButton
         Left = 45
-        Top = 182
+        Top = 142
         Width = 23
         Height = 22
         ImageIndex = 9
@@ -309,7 +318,7 @@ object frmMain: TfrmMain
       end
       object sbEditBounds: TSpeedButton
         Left = 16
-        Top = 182
+        Top = 142
         Width = 23
         Height = 22
         ImageIndex = 4
@@ -317,9 +326,9 @@ object frmMain: TfrmMain
         OnClick = sbEditBoundsClick
       end
       object eWidth: TEdit
-        Left = 72
+        Left = 41
         Top = 24
-        Width = 49
+        Width = 40
         Height = 21
         NumbersOnly = True
         PopupMenu = puDimensions
@@ -328,9 +337,9 @@ object frmMain: TfrmMain
         OnKeyPress = eWidthKeyPress
       end
       object eHeight: TEdit
-        Left = 72
-        Top = 51
-        Width = 49
+        Left = 99
+        Top = 24
+        Width = 40
         Height = 21
         NumbersOnly = True
         PopupMenu = puDimensions
@@ -341,7 +350,7 @@ object frmMain: TfrmMain
     end
     object GroupBox1: TGroupBox
       Left = 6
-      Top = 399
+      Top = 221
       Width = 171
       Height = 102
       Caption = 'Palette'
@@ -365,7 +374,7 @@ object frmMain: TfrmMain
     end
     object GroupBox3: TGroupBox
       Left = 6
-      Top = 235
+      Top = 64
       Width = 171
       Height = 150
       Caption = 'Render'
@@ -397,17 +406,8 @@ object frmMain: TfrmMain
         Width = 150
         Height = 21
         Style = csDropDownList
-        ItemIndex = 0
         TabOrder = 0
-        Text = 'Escape time'
         OnChange = cbRenderModeChange
-        Items.Strings = (
-          'Escape time'
-          'Continuous'
-          'Two-tone'
-          'Three-tone'
-          'Distance'
-          'Distance II')
       end
       object eCoeffN: TEdit
         Left = 72
@@ -442,6 +442,74 @@ object frmMain: TfrmMain
         OnExit = eCoeffNExit
       end
     end
+    object gbVarABC: TGroupBox
+      Left = 6
+      Top = 509
+      Width = 171
+      Height = 118
+      Caption = 'Parameters'
+      TabOrder = 3
+      object Label13: TLabel
+        Left = 16
+        Top = 30
+        Width = 6
+        Height = 13
+        Caption = 'a'
+      end
+      object lVarB: TLabel
+        Left = 16
+        Top = 57
+        Width = 6
+        Height = 13
+        Caption = 'b'
+      end
+      object lVarC: TLabel
+        Left = 16
+        Top = 84
+        Width = 5
+        Height = 13
+        Caption = 'c'
+      end
+      object eVarA: TEdit
+        Left = 72
+        Top = 27
+        Width = 65
+        Height = 21
+        Hint = 'maps linear palette to exponential palette (default is 1)'
+        TabOrder = 0
+        Text = '1'
+        OnExit = eCoeffNExit
+      end
+      object eVarB: TEdit
+        Left = 72
+        Top = 54
+        Width = 65
+        Height = 21
+        TabOrder = 1
+        Text = '1000'
+        OnExit = eCoeffNExit
+        OnKeyPress = eWidthKeyPress
+      end
+      object eVarC: TEdit
+        Left = 72
+        Top = 81
+        Width = 65
+        Height = 21
+        Hint = 'maps linear palette to exponential palette (default is 1)'
+        TabOrder = 2
+        Text = '256'
+        OnExit = eCoeffNExit
+      end
+    end
+    object cbFractalSelector: TComboBox
+      Left = 59
+      Top = 14
+      Width = 113
+      Height = 21
+      Style = csDropDownList
+      TabOrder = 4
+      OnChange = cbFractalSelectorChange
+    end
   end
   object Panel3: TPanel
     Left = 0
@@ -467,8 +535,8 @@ object frmMain: TfrmMain
     SimplePanel = True
   end
   object ImageList1: TImageList
-    Left = 776
-    Top = 16
+    Left = 784
+    Top = 88
     Bitmap = {
       494C01010A001800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000003000000001002000000000000030
@@ -874,8 +942,8 @@ object frmMain: TfrmMain
       000000000000}
   end
   object puDimensions: TPopupMenu
-    Left = 888
-    Top = 8
+    Left = 856
+    Top = 72
     object Dimensions1: TMenuItem
       Caption = 'Dimensions'
       Enabled = False
@@ -1025,6 +1093,61 @@ object frmMain: TfrmMain
         Tag = 11
         Caption = 'iPhone 13 Pro Max (1284 x 2778)'
         OnClick = miMobileDimensionsClick
+      end
+    end
+  end
+  object MainMenu1: TMainMenu
+    Left = 712
+    Top = 72
+    object File1: TMenuItem
+      Caption = 'File'
+      object File2: TMenuItem
+        Caption = 'Open Project...'
+        OnClick = bOpenProjectClick
+      end
+      object Saveproject1: TMenuItem
+        Caption = 'Save Project...'
+        OnClick = bSaveProjectClick
+      end
+      object N1: TMenuItem
+        Caption = '-'
+      end
+      object N2: TMenuItem
+        Caption = 'Export...'
+        OnClick = sbSaveImageClick
+      end
+      object N3: TMenuItem
+        Caption = '-'
+      end
+      object N4: TMenuItem
+        Caption = 'Exit'
+      end
+    end
+    object ools1: TMenuItem
+      Caption = 'Tools'
+      object Resetparameters1: TMenuItem
+        Caption = 'Reset parameters'
+        OnClick = sbResetClick
+      end
+      object N5: TMenuItem
+        Caption = '-'
+      end
+      object N6: TMenuItem
+        Caption = 'Zoom at point'
+        ShortCut = 16474
+        OnClick = sbZoomClick
+      end
+      object Zoomintoarea1: TMenuItem
+        Caption = 'Zoom into area'
+        ShortCut = 32858
+        OnClick = sbZoomCropClick
+      end
+    end
+    object Render1: TMenuItem
+      Caption = 'Render'
+      object Render2: TMenuItem
+        Caption = 'Render'
+        ShortCut = 116
       end
     end
   end

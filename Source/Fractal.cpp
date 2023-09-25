@@ -225,9 +225,26 @@ void Fractal::SetParameters(double n, int i, int b)
 }
 
 
+void Fractal::SetABC(double a, double b, double c)
+{
+	Var.a = a;
+	Var.b = b;
+	Var.c = c;
+}
+
+
 void Fractal::SetRenderMode(int new_mode)
 {
 	RenderMode = new_mode;
 
     HasChanged = true;
+}
+
+
+double Fractal::Sign(double n)
+{
+	if (n > 0) return 1;
+	if (n < 0) return -1;
+
+	return 0;
 }

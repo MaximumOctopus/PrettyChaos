@@ -12,12 +12,23 @@
 
 
 #include <chrono>
+#include <vector>
+
+
+struct Variables
+{
+	double a = 0;
+	double b = 0;
+	double c = 0;
+};
 
 
 class Fractal
 {
 
 protected:
+
+	int* NumIterationsPerPixel = nullptr;
 
 	std::chrono::system_clock::time_point StartTime;
 
@@ -27,15 +38,27 @@ protected:
 
 	int LinearInterpolate(int, int, double);
 
+	double Sign(double);
+
 public:
 
 	#ifdef _DEBUG
 	std::wstring debug = L"";
 	#endif
 
-    double n_coeff = 1;  // used to map the linear range of palette colours to an exponential range (very cool)
+	std::vector<std::wstring> RenderModes;
+	std::wstring Name;
+
+	double n_coeff = 1;  // used to map the linear range of palette colours to an exponential range (very cool)
 	double max_iterations = 1000;
-    double bailout_radius = 256;
+	double bailout_radius = 256;
+
+    Variables Var;
+
+	bool AcceptsABC = false;
+	bool AcceptsVarA = false;
+	bool AcceptsVarB = false;
+	bool AcceptsVarC = false;
 
 	int Palette[500];
 	int PaletteInfinity = 0x000000;
@@ -71,6 +94,7 @@ public:
 
 	void SetDimensions(int, int);
 	void SetParameters(double, int, int);
-    void SetRenderMode(int);
+	void SetRenderMode(int);
 
+	void SetABC(double, double, double);
 };

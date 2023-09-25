@@ -55,6 +55,9 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project)
 					{
 					case FileProperty::None:
 						break;
+					case FileProperty::Name:
+						project.Name = value;
+						break;
 					case FileProperty::Width:
 						project.Width = stoi(value);
 						break;
@@ -83,7 +86,16 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project)
 						project.ymin = stod(value);
 						break;
 					case FileProperty::ymax:
-                        project.ymax = stod(value);
+						project.ymax = stod(value);
+						break;
+					case FileProperty::var_a:
+						project.var_a = stod(value);
+						break;
+					case FileProperty::var_b:
+						project.var_b = stod(value);
+						break;
+					case FileProperty::var_c:
+						project.var_c = stod(value);
 						break;
                     }
 				}
@@ -121,6 +133,7 @@ bool ProjectIO::Save(std::wstring file_name, PCProject &project)
 	{
 		file << Formatting::to_utf8(L"[\n");
 
+		file << Formatting::to_utf8(L"Name=" + project.Name + L"\n");
 		file << Formatting::to_utf8(L"Width=" + std::to_wstring(project.Width) + L"\n");
 		file << Formatting::to_utf8(L"Height=" + std::to_wstring(project.Width) + L"\n");
 
@@ -133,6 +146,10 @@ bool ProjectIO::Save(std::wstring file_name, PCProject &project)
 		file << Formatting::to_utf8(L"xmax=" + std::to_wstring(project.xmax) + L"\n");
 		file << Formatting::to_utf8(L"ymin=" + std::to_wstring(project.ymin) + L"\n");
 		file << Formatting::to_utf8(L"ymax=" + std::to_wstring(project.ymax) + L"\n");
+
+		file << Formatting::to_utf8(L"var_a=" + std::to_wstring(project.var_a) + L"\n");
+		file << Formatting::to_utf8(L"var_b=" + std::to_wstring(project.var_b) + L"\n");
+		file << Formatting::to_utf8(L"var_c=" + std::to_wstring(project.var_c) + L"\n");
 
 		file << Formatting::to_utf8(L"]\n");
 

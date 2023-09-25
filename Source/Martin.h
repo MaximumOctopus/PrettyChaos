@@ -14,21 +14,16 @@
 #include "Fractal.h"
 
 
-class Mandelbrot : public Fractal
+class Martin : public Fractal
 {
-	void ColourTwoTone();
-	void ColourThreeTone();
-	void ColourDistanceI(double);
-	void ColourDistanceII(double);
 
 public:
 
-	Mandelbrot();
+	Martin();
 
-	~Mandelbrot();
+	~Martin();
 
 	void Render() override;
-    void Preview() override;
 
     void ResetView() override;
 };

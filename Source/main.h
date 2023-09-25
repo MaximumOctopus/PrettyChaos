@@ -18,8 +18,10 @@
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Buttons.hpp>
 
+#include "FractalHandler.h"
 #include "HistoryHandler.h"
 #include "Mandelbrot.h"
+#include "Martin.h"
 #include "ProjectIO.h"
 
 #include <Vcl.ComCtrls.hpp>
@@ -38,11 +40,6 @@ __published:	// IDE-managed Components
 	TImage *iRender;
 	TSpeedButton *sbRender;
 	TSpeedButton *sbSaveImage;
-	TSpeedButton *sbReset;
-	TSpeedButton *sbBack;
-	TSpeedButton *sbZoom;
-	TImage *iPreview;
-	TBevel *Bevel1;
 	TStatusBar *sbMain;
 	TGroupBox *GroupBox1;
 	TGroupBox *GroupBox2;
@@ -65,7 +62,6 @@ __published:	// IDE-managed Components
 	TSpeedButton *bEditPalette;
 	TPaintBox *pbPalette;
 	TImageList *ImageList1;
-	TSpeedButton *SpeedButton1;
 	TGroupBox *GroupBox3;
 	TComboBox *cbRenderMode;
 	TLabel *Label10;
@@ -74,7 +70,6 @@ __published:	// IDE-managed Components
 	TSpeedButton *bOpenProject;
 	TBevel *Bevel2;
 	TBevel *Bevel3;
-	TSpeedButton *sbZoomCrop;
 	TSpeedButton *sbCopyBoundsToClipboard;
 	TSpeedButton *sbEditBounds;
 	TLabel *Label11;
@@ -114,6 +109,37 @@ __published:	// IDE-managed Components
 	TMenuItem *iPhone13mini1080x23401;
 	TMenuItem *iPhone13mini1080x23402;
 	TMenuItem *iPhone13ProMax1284x27781;
+	TMainMenu *MainMenu1;
+	TMenuItem *File1;
+	TMenuItem *File2;
+	TMenuItem *Saveproject1;
+	TMenuItem *N1;
+	TMenuItem *N2;
+	TMenuItem *N3;
+	TMenuItem *N4;
+	TMenuItem *ools1;
+	TMenuItem *Resetparameters1;
+	TMenuItem *N5;
+	TMenuItem *N6;
+	TMenuItem *Zoomintoarea1;
+	TMenuItem *Render1;
+	TMenuItem *Render2;
+	TGroupBox *gbVarABC;
+	TLabel *Label13;
+	TLabel *lVarB;
+	TLabel *lVarC;
+	TEdit *eVarA;
+	TEdit *eVarB;
+	TEdit *eVarC;
+	TComboBox *cbFractalSelector;
+	TLabel *Label16;
+	TBevel *Bevel1;
+	TSpeedButton *sbReset;
+	TSpeedButton *sbZoom;
+	TSpeedButton *sbZoomCrop;
+	TSpeedButton *sbBack;
+	TSpeedButton *SpeedButton1;
+	TBevel *Bevel4;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -134,9 +160,11 @@ __published:	// IDE-managed Components
 	void __fastcall sbEditBoundsClick(TObject *Sender);
 	void __fastcall miDesktopDimensionClick(TObject *Sender);
 	void __fastcall miMobileDimensionsClick(TObject *Sender);
+	void __fastcall cbFractalSelectorChange(TObject *Sender);
 private:	// User declarations
 
-	Mandelbrot* fractal = nullptr;
+    FractalHandler* GFractalHandler = nullptr;
+
 	HistoryHandler* history = nullptr;
     ProjectIO* projectio = nullptr;
 
@@ -151,11 +179,15 @@ private:	// User declarations
     void UpdateDimension();
 
 	void SetFromProjectFile(PCProject&);
-    PCProject GetProjectSettings();
+	PCProject GetProjectSettings();
+
+    void UpdateFromFractalChange();
 
 	void UpdateFractalPanel();
 
 	void UpdatePalette();
+
+	void CopyPaletteToFractal();
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);

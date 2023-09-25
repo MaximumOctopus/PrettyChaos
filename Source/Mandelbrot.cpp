@@ -15,10 +15,16 @@
 
 Mandelbrot::Mandelbrot() : Fractal()
 {
-	ymin = -1.22;
-	ymax = 1.22;
-	xmin = -2.0;
-	xmax = 0.47;
+	Name = L"Mandelbrot";
+
+	RenderModes.push_back(L"Escape time");
+	RenderModes.push_back(L"Continuous");
+	RenderModes.push_back(L"Two-tone");
+	RenderModes.push_back(L"Three-tone");
+	RenderModes.push_back(L"Distance");
+	RenderModes.push_back(L"Distance II");
+
+	ResetView();
 }
 
 
@@ -29,20 +35,17 @@ Mandelbrot::~Mandelbrot()
 
 void Mandelbrot::Render()
 {
-	#ifdef _DEBUG
-	int maxit = 0;
-	int minit = 9999999;
-	#endif
-
 	double max_d = 0;
 
 	StartTime = std::chrono::system_clock::now();
 
-	int* NumIterationsPerPixel = new int[max_iterations];
-	for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
+	if (RenderMode == 0)
+	{
+		NumIterationsPerPixel = new int[max_iterations];
+		for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
+	}
 
 	if (RenderMode == 3 || RenderMode == 4) Distances = new double[Width * Height];
-
 
 	for (int y = 0; y < Height; y++)
 	{
@@ -79,12 +82,6 @@ void Mandelbrot::Render()
 			case 3:
 			{
 				Iteration[y * Width + x] = it;
-
-				#ifdef _DEBUG
-				if (it > maxit) maxit = it;
-				if (it < minit) minit = it;
-				#endif
-
 				break;
 			}
 			case 1:
@@ -114,7 +111,7 @@ void Mandelbrot::Render()
 				{
 					Distances[y * Width + x] = std::sqrt(w);
 
-					if ( Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
+					if (Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
 
 					Iteration[y * Width + x] = it;
 				}
@@ -127,7 +124,7 @@ void Mandelbrot::Render()
 				{
 					Distances[y * Width + x] = std::sqrt(std::pow(x2 + y2, 2));
 
-					if ( Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
+					if (Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
 
 					Iteration[y * Width + x] = it;
 				}
@@ -142,44 +139,41 @@ void Mandelbrot::Render()
 	{
 	case 0:
 	{
-		if (RenderMode == 0)
+		for (int y = 0; y < Height; y++)
 		{
-			for (int y = 0; y < Height; y++)
+			for (int x = 0; x < Width; x++)
 			{
-				for (int x = 0; x < Width; x++)
+				NumIterationsPerPixel[Iteration[y * Width + x]]++;
+			}
+		}
+
+		int total = 0;
+
+		for (int i = 0; i < max_iterations; i++)
+		{
+			total += NumIterationsPerPixel[i];
+		}
+
+		for (int y = 0; y < Height; y++)
+		{
+			for (int x = 0; x < Width; x++)
+			{
+				double c = 0;
+
+				for (int i = 0; i < Iteration[y * Width + x]; i++)
 				{
-					NumIterationsPerPixel[Iteration[y * Width + x]]++;
+					c += (double)NumIterationsPerPixel[i] / (double)total;
 				}
-			}
 
-			int total = 0;
+				int index = std::round(std::pow(c, n_coeff) * 500);
 
-			for (int i = 0; i < max_iterations; i++)
-			{
-				total += NumIterationsPerPixel[i];
-			}
-
-			for (int y = 0; y < Height; y++)
-			{
-				for (int x = 0; x < Width; x++)
+				if (Iteration[y * Width + x] != max_iterations)
 				{
-					double c = 0;
-
-					for (int i = 0; i < Iteration[y * Width + x]; i++)
-					{
-						c += (double)NumIterationsPerPixel[i] / (double)total;
-					}
-
-					int index = std::round(std::pow(c, n_coeff) * 500);
-
-					if (Iteration[y * Width + x] != max_iterations)
-					{
-						Canvas[y * Width + x] = Palette[index];
-					}
-					else
-					{
-						Canvas[y * Width + x] = PaletteInfinity;
-					}
+					Canvas[y * Width + x] = Palette[index];
+				}
+				else
+				{
+					Canvas[y * Width + x] = PaletteInfinity;
 				}
 			}
 		}
@@ -201,11 +195,8 @@ void Mandelbrot::Render()
 
 	CalculateRenderTime();
 
-	delete[] NumIterationsPerPixel;
-
-	#ifdef _DEBUG
-	debug = L"min_it = " + std::to_wstring(minit) + L", max_it = " + std::to_wstring(maxit);
-	#endif
+	if (RenderMode == 0)
+		delete[] NumIterationsPerPixel;
 }
 
 
@@ -317,6 +308,6 @@ void Mandelbrot::ResetView()
 {
 	ymin = -1.22;
 	ymax =  1.22;
-	xmin = -2.0;
+	xmin = -2.00;
 	xmax =  0.47;
 }
