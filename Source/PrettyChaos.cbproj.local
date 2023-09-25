@@ -1,59 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <BorlandProject>
-	<Transactions>
-    <Transaction>2023/09/16 16:29:27.000.042,=C:\Users\iamru\Documents\Software Development\CBuilder\Project1PCH1.h</Transaction>
-    <Transaction>2023/09/16 16:29:27.000.284,=C:\Users\iamru\Documents\Software Development\CBuilder\Unit1.cpp</Transaction>
-    <Transaction>2023/09/16 16:36:20.000.667,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.dfm=C:\Users\iamru\Documents\Software Development\CBuilder\Unit1.dfm</Transaction>
-    <Transaction>2023/09/16 16:36:20.000.667,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\Unit1.cpp</Transaction>
-    <Transaction>2023/09/16 16:36:20.000.667,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.h=C:\Users\iamru\Documents\Software Development\CBuilder\Unit1.h</Transaction>
-    <Transaction>2023/09/16 16:36:24.000.641,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Project1PCH1.h=C:\Users\iamru\Documents\Software Development\CBuilder\Project1PCH1.h</Transaction>
-    <Transaction>2023/09/16 16:36:33.000.118,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaos.cbproj=C:\Users\iamru\Documents\Software Development\CBuilder\Project1.cbproj</Transaction>
-    <Transaction>2023/09/16 16:36:33.000.111,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaosPCH1.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Project1PCH1.h</Transaction>
-    <Transaction>2023/09/16 16:49:19.000.240,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/16 16:50:12.000.419,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/16 16:50:55.000.980,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/16 16:51:30.000.728,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/17 00:44:11.000.262,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp</Transaction>
-    <Transaction>2023/09/17 00:44:41.000.636,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.h</Transaction>
-    <Transaction>2023/09/17 00:45:08.000.174,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h</Transaction>
-    <Transaction>2023/09/17 00:45:08.000.169,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp</Transaction>
-    <Transaction>2023/09/17 00:45:29.000.800,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp</Transaction>
-    <Transaction>2023/09/17 00:45:29.000.804,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.h</Transaction>
-    <Transaction>2023/09/17 17:26:23.000.842,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.cpp</Transaction>
-    <Transaction>2023/09/17 17:29:55.000.716,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.dfm=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.dfm</Transaction>
-    <Transaction>2023/09/17 17:29:55.000.716,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.cpp</Transaction>
-    <Transaction>2023/09/17 17:29:55.000.716,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.h</Transaction>
-    <Transaction>2023/09/17 18:21:33.000.629,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/17 18:26:41.000.118,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteKey.h</Transaction>
-    <Transaction>2023/09/18 00:39:00.000.106,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h</Transaction>
-    <Transaction>2023/09/18 00:39:00.000.098,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp</Transaction>
-    <Transaction>2023/09/18 11:38:15.000.537,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/18 11:39:03.000.538,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h</Transaction>
-    <Transaction>2023/09/18 20:10:40.000.998,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp</Transaction>
-    <Transaction>2023/09/19 11:49:43.000.537,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.cpp</Transaction>
-    <Transaction>2023/09/19 11:49:58.000.210,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.h</Transaction>
-    <Transaction>2023/09/19 11:49:58.000.210,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.dfm=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.dfm</Transaction>
-    <Transaction>2023/09/19 11:49:58.000.209,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Unit2.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp</Transaction>
-    <Transaction>2023/09/19 17:24:51.000.918,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/19 17:26:09.000.139,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/19 17:26:23.000.689,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/19 17:26:46.000.471,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/20 19:35:13.000.756,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/20 19:36:05.000.352,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/20 19:36:24.000.298,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/20 19:37:33.000.524,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/22 00:57:50.000.409,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/22 00:58:22.000.541,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/22 00:58:33.000.969,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/22 00:59:00.000.439,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/22 01:21:27.000.839,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp=</Transaction>
-    <Transaction>2023/09/24 13:30:56.000.839,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Martin.cpp</Transaction>
-    <Transaction>2023/09/24 13:31:06.000.674,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Martin.h</Transaction>
-    <Transaction>2023/09/24 15:36:17.000.101,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/24 15:38:16.000.596,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.h</Transaction>
-    <Transaction>2023/09/24 15:38:34.000.284,=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-    <Transaction>2023/09/24 15:40:00.000.681,C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\File1.cpp</Transaction>
-  </Transactions>
 	<ProjectSortOrder AutoSort="0" SortType="0">
     <VirtualFolder ID="{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}"/>
     <File Path="ProjectIO.cpp"/>
@@ -89,6 +35,9 @@
     <VirtualFolder ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}"/>
     <File Path="Martin.cpp"/>
     <File Path="Martin.h"/>
+    <VirtualFolder ID="{FC06D070-0AEB-4B26-88BC-53285A85579E}"/>
+    <File Path="JuliaCubic.cpp"/>
+    <File Path="JuliaCubic.h"/>
     <File Path="FractalHandler.h"/>
     <File Path="FractalHandler.cpp"/>
     <VirtualFolder ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}"/>
