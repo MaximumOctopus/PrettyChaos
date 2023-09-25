@@ -1,5 +1,5 @@
 ==========================================================================================================================
-PrettyChaos 0.2
+PrettyChaos 0.3
 (c) Paul Alan Freshney 2023
 
 paul@freshney.org
@@ -35,9 +35,11 @@ All of my software is free and open source; please consider donating to a local 
 
 Release History
 
-0.2 / September 25th 2023
+0.3 / September 25th 2023
 
 Added Julia Sets.
+Added Cubic Julia Sets.
+Fixed RGB/HSV gradient displays repainting
 
 Modifications to easily allow more fractal generators to be added in a modular way.
 
