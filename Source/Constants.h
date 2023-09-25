@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.3 (debug) :: September 23rd 2023";
+static const std::wstring __PrettyChaosVersion = L"0.3 (debug) :: September 25th 2023";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.3 :: September 23rd 2023";
+static const std::wstring __PrettyChaosVersion = L"0.3 :: September 25th 2023";
 #endif
 
 
