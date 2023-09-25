@@ -94,7 +94,9 @@ void TfrmMain::UpdateFromFractalChange()
 		cbRenderMode->Items->Add(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderModes[t].c_str());
 	}
 
-    cbRenderMode->ItemIndex = 0;
+	cbRenderMode->ItemIndex = 0;
+
+    cbRenderModeChange(nullptr);
 }
 
 

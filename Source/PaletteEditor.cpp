@@ -70,9 +70,133 @@ void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::FormPaint(TObject *Sender)
 {
-	BuildRGBGradients();
+	if (pcColourSpace->TabIndex == 0)
+	{
+		BuildRGBGradients();
+	}
+	else
+	{
+		BuildHSVGradients();
+	}
 
 	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::pbRedPaint(TObject *Sender)
+{
+	TRGBTriple *ptr1 = reinterpret_cast<TRGBTriple *>(RGBGradients[0]->ScanLine[0]);
+
+	for (int t = 0; t < 256; t++)
+	{
+		ptr1[t].rgbtRed = t;
+		ptr1[t].rgbtGreen = tbGreen->Position;
+		ptr1[t].rgbtBlue = tbBlue->Position;
+	}
+
+	for (int t = 0; t < 4; t++)
+	{
+		pbRed->Canvas->Draw(0, t, RGBGradients[0]);
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::pbGreenPaint(TObject *Sender)
+{
+	TRGBTriple *ptr2 = reinterpret_cast<TRGBTriple *>(RGBGradients[1]->ScanLine[0]);
+
+	for (int t = 0; t < 256; t++)
+	{
+		ptr2[t].rgbtRed = tbRed->Position;
+		ptr2[t].rgbtGreen = t;
+		ptr2[t].rgbtBlue = tbBlue->Position;
+	}
+
+	for (int t = 0; t < 4; t++)
+	{
+		pbGreen->Canvas->Draw(0, t, RGBGradients[1]);
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::pbBluePaint(TObject *Sender)
+{
+	TRGBTriple *ptr3 = reinterpret_cast<TRGBTriple *>(RGBGradients[2]->ScanLine[0]);
+
+	for (int t = 0; t < 256; t++)
+	{
+		ptr3[t].rgbtRed = tbRed->Position;
+		ptr3[t].rgbtGreen = tbGreen->Position;
+		ptr3[t].rgbtBlue = t;
+	}
+
+	for (int t = 0; t < 4; t++)
+	{
+		pbBlue->Canvas->Draw(0, t, RGBGradients[2]);
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::pbHuePaint(TObject *Sender)
+{
+	TRGBTriple *ptr1 = reinterpret_cast<TRGBTriple *>(RGBGradients[0]->ScanLine[0]);
+
+	int r, g, b;
+
+	for (int i = 0; i < 256; i++)
+	{
+		ColourUtility::HSVtoRGB(std::floor(((double)i / 255) * 360), tbSaturation->Position, tbValue->Position, r, g, b);
+		ptr1[i].rgbtBlue  = b;
+		ptr1[i].rgbtGreen = g;
+		ptr1[i].rgbtRed   = r;
+	}
+
+	for (int t = 0; t < 4; t++)
+	{
+		pbHue->Canvas->Draw(0, t, RGBGradients[0]);
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::pbSaturationPaint(TObject *Sender)
+{
+	TRGBTriple *ptr2 = reinterpret_cast<TRGBTriple *>(RGBGradients[1]->ScanLine[0]);
+
+	int r, g, b;
+
+	for (int i = 0; i < 256; i++)
+	{
+		ColourUtility::HSVtoRGB(tbHue->Position, i, tbValue->Position, r, g, b);
+		ptr2[i].rgbtBlue  = b;
+		ptr2[i].rgbtGreen = g;
+		ptr2[i].rgbtRed   = r;
+	}
+
+	for (int t = 0; t < 4; t++)
+	{
+		pbSaturation->Canvas->Draw(0, t, RGBGradients[1]);
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::pbValuePaint(TObject *Sender)
+{
+	TRGBTriple *ptr3 = reinterpret_cast<TRGBTriple *>(RGBGradients[2]->ScanLine[0]);
+
+	int r, g, b;
+
+	for (int i = 0; i < 256; i++)
+	{
+		ColourUtility::HSVtoRGB(tbHue->Position, tbSaturation->Position, i, r, g, b);
+		ptr3[i].rgbtBlue  = b;
+		ptr3[i].rgbtGreen = g;
+		ptr3[i].rgbtRed   = r;
+	}
+
+	for (int t = 0; t < 4; t++)
+	{
+		pbValue->Canvas->Draw(0, t, RGBGradients[2]);
+	}
 }
 
 
@@ -230,66 +354,17 @@ void __fastcall TfrmPaletteEditor::tbHueChange(TObject *Sender)
 
 void TfrmPaletteEditor::BuildRGBGradients()
 {
-	TRGBTriple *ptr1 = reinterpret_cast<TRGBTriple *>(RGBGradients[0]->ScanLine[0]);
-	TRGBTriple *ptr2 = reinterpret_cast<TRGBTriple *>(RGBGradients[1]->ScanLine[0]);
-	TRGBTriple *ptr3 = reinterpret_cast<TRGBTriple *>(RGBGradients[2]->ScanLine[0]);
-
-	for (int t = 0; t < 256; t++)
-	{
-		ptr1[t].rgbtRed = t;
-		ptr1[t].rgbtGreen = tbGreen->Position;
-		ptr1[t].rgbtBlue = tbBlue->Position;
-
-		ptr2[t].rgbtRed = tbRed->Position;
-		ptr2[t].rgbtGreen = t;
-		ptr2[t].rgbtBlue = tbBlue->Position;
-
-		ptr3[t].rgbtRed = tbRed->Position;
-		ptr3[t].rgbtGreen = tbGreen->Position;
-		ptr3[t].rgbtBlue = t;
-	}
-
-	for (int t = 0; t < 4; t++)
-	{
-		pbRed->Canvas->Draw(0, t, RGBGradients[0]);
-		pbGreen->Canvas->Draw(0, t, RGBGradients[1]);
-		pbBlue->Canvas->Draw(0, t, RGBGradients[2]);
-	}
+	pbRedPaint(nullptr);
+	pbGreenPaint(nullptr);
+	pbBluePaint(nullptr);
 }
 
 
 void TfrmPaletteEditor::BuildHSVGradients()
 {
-	TRGBTriple *ptr1 = reinterpret_cast<TRGBTriple *>(RGBGradients[0]->ScanLine[0]);
-	TRGBTriple *ptr2 = reinterpret_cast<TRGBTriple *>(RGBGradients[1]->ScanLine[0]);
-	TRGBTriple *ptr3 = reinterpret_cast<TRGBTriple *>(RGBGradients[2]->ScanLine[0]);
-
-	int r, g, b;
-
-	for (int i = 0; i < 256; i++)
-	{
-		ColourUtility::HSVtoRGB(std::floor(((double)i / 255) * 360), tbSaturation->Position, tbValue->Position, r, g, b);
-		ptr1[i].rgbtBlue  = b;
-		ptr1[i].rgbtGreen = g;
-		ptr1[i].rgbtRed   = r;
-
-		ColourUtility::HSVtoRGB(tbHue->Position, i, tbValue->Position, r, g, b);
-		ptr2[i].rgbtBlue  = b;
-		ptr2[i].rgbtGreen = g;
-		ptr2[i].rgbtRed   = r;
-
-		ColourUtility::HSVtoRGB(tbHue->Position, tbSaturation->Position, i, r, g, b);
-		ptr3[i].rgbtBlue  = b;
-		ptr3[i].rgbtGreen = g;
-		ptr3[i].rgbtRed   = r;
-	}
-
-	for (int t = 0; t < 4; t++)
-	{
-		pbHue->Canvas->Draw(0, t, RGBGradients[0]);
-		pbSaturation->Canvas->Draw(0, t, RGBGradients[1]);
-		pbValue->Canvas->Draw(0, t, RGBGradients[2]);
-	}
+	pbHuePaint(nullptr);
+	pbSaturationPaint(nullptr);
+	pbValuePaint(nullptr);
 }
 
 
@@ -932,4 +1007,35 @@ void __fastcall TfrmPaletteEditor::sbLinearClick(TObject *Sender)
 	PaletteKeys[KeySelected].Method = sb->Tag;
 
 	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::pcColourSpaceChange(TObject *Sender)
+{
+	if (pcColourSpace->TabIndex == 0)
+	{
+		int r, g, b;
+
+		ColourUtility::HSVtoRGB(tbHue->Position, tbSaturation->Position, tbValue->Position,
+			r, g, b);
+
+		tbRed->Position = r;
+		tbGreen->Position = g;
+		tbBlue->Position = b;
+
+		tbRedChange(nullptr);
+	}
+	else
+	{
+		int h, s, v;
+		int colour = (tbRed->Position << 16) + (tbGreen->Position << 8) + tbBlue->Position;
+
+		ColourUtility::RGBtoHSV(colour, h, s, v);
+
+		tbHue->Position = h;
+		tbSaturation->Position = s;
+		tbValue->Position = v;
+
+		tbHueChange(nullptr);
+	}
 }

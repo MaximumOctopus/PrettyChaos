@@ -25,8 +25,8 @@ object frmMain: TfrmMain
     Align = alTop
     TabOrder = 0
     object sbRender: TSpeedButton
-      Left = 310
-      Top = 2
+      Left = 311
+      Top = 1
       Width = 89
       Height = 27
       Caption = 'Render'

@@ -10,10 +10,10 @@
 
 #include <string>
 
-#include "Julia.h"
+#include "JuliaCubic.h"
 
 
-Julia::Julia() : Fractal()
+JuliaCubic::JuliaCubic() : Fractal()
 {
 	AcceptsABC = true;
 	AcceptsVarA = true;
@@ -24,7 +24,7 @@ Julia::Julia() : Fractal()
 	Var.a = -0.7;
 	Var.b = 0.27015;
 
-	Name = L"Julia Set";
+	Name = L"JuliaCubic Set";
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
@@ -37,18 +37,18 @@ Julia::Julia() : Fractal()
 }
 
 
-Julia::~Julia()
+JuliaCubic::~JuliaCubic()
 {
 }
 
 
-void Julia::Render()
+void JuliaCubic::Render()
 {
 	double max_d = 0;
 
 	StartTime = std::chrono::system_clock::now();
 
-    // maximum distance from the centre of the image
+	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	if (RenderMode == 4) Distances = new double[Width * Height];
@@ -66,9 +66,8 @@ void Julia::Render()
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
-				w = p * p - q * q + Var.a;
-				q = 2 * p * q + Var.b;
-
+				w = std::pow(p * p + q * q, 1.5) * std::cos(3 * std::atan2(q, p)) + Var.a;
+				q = std::pow(p * p + q * q, 1.5) * std::sin(3 * std::atan2l(q, p)) + Var.b;
 				p = w;
 
 				it++;
@@ -92,7 +91,7 @@ void Julia::Render()
 
 					double itnew = it + 1 - nu;
 
-					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * 500;
+					it = std::pow((std::floor(itnew) / max_iterations), n_coeff) * 500;
 					double it_d = (double)it + 1 - nu;
 
 					Canvas[y * Width + x] = LinearInterpolate(Palette[it], Palette[it + 1], it_d - (std::floorl(it_d)));
@@ -109,6 +108,8 @@ void Julia::Render()
 				Distances[y * Width + x] = std::sqrt(std::pow(p + q, 2));
 
 				if (Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
+
+				Iteration[y * Width + x] = it;
 				break;
 			}
 			case 5:
@@ -174,7 +175,7 @@ void Julia::Render()
 }
 
 
-void Julia::ColourTwoTone()
+void JuliaCubic::ColourTwoTone()
 {
 	for (int y = 0; y < Height; y++)
 	{
@@ -193,7 +194,7 @@ void Julia::ColourTwoTone()
 }
 
 
-void Julia::ColourThreeTone()
+void JuliaCubic::ColourThreeTone()
 {
 	for (int y = 0; y < Height; y++)
 	{
@@ -216,7 +217,7 @@ void Julia::ColourThreeTone()
 }
 
 
-void Julia::ColourDistanceII(double max_d)
+void JuliaCubic::ColourDistanceII(double max_d)
 {
 	for (int y = 0; y < Height; y++)
 	{
@@ -237,7 +238,7 @@ void Julia::ColourDistanceII(double max_d)
 }
 
 
-void Julia::ResetView()
+void JuliaCubic::ResetView()
 {
 	ymin = -2.0;
 	ymax =  2.0;

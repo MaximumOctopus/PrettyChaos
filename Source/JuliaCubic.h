@@ -14,7 +14,7 @@
 #include "Fractal.h"
 
 
-class Julia : public Fractal
+class JuliaCubic : public Fractal
 {
 	void ColourTwoTone();
 	void ColourThreeTone();
@@ -22,9 +22,9 @@ class Julia : public Fractal
 
 public:
 
-	Julia();
+	JuliaCubic();
 
-	~Julia();
+	~JuliaCubic();
 
 	void Render() override;
 

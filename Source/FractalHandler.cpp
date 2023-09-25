@@ -11,6 +11,7 @@
 #include "FractalHandler.h"
 
 #include "Julia.h"
+#include "JuliaCubic.h"
 #include "Mandelbrot.h"
 #include "Martin.h"
 
@@ -18,10 +19,12 @@
 FractalHandler::FractalHandler()
 {
 	Fractal* ja = new Julia();
+	Fractal* jc = new JuliaCubic();
 	Fractal* mt = new Mandelbrot();
 	Fractal* mn = new Martin();
 
 	Fractals.push_back(ja);
+	Fractals.push_back(jc);
 	Fractals.push_back(mt);
 	Fractals.push_back(mn);
 }

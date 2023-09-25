@@ -214,6 +214,14 @@
             <VirtualFolder>{8FFEB68A-C801-4430-885E-1783CF9ED09A}</VirtualFolder>
             <BuildOrder>20</BuildOrder>
         </None>
+        <CppCompile Include="JuliaCubic.cpp">
+            <VirtualFolder>{FC06D070-0AEB-4B26-88BC-53285A85579E}</VirtualFolder>
+            <BuildOrder>27</BuildOrder>
+        </CppCompile>
+        <None Include="JuliaCubic.h">
+            <VirtualFolder>{FC06D070-0AEB-4B26-88BC-53285A85579E}</VirtualFolder>
+            <BuildOrder>28</BuildOrder>
+        </None>
         <CppCompile Include="main.cpp">
             <Form>Form1</Form>
             <FormType>dfm</FormType>
@@ -310,6 +318,7 @@
                         <VFOLDER ID="{8FFEB68A-C801-4430-885E-1783CF9ED09A}" name="Julia"/>
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
+                        <VFOLDER ID="{FC06D070-0AEB-4B26-88BC-53285A85579E}" name="JuliaCubic"/>
                     </VFOLDER>
                     <VFOLDER ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}" name="Utility"/>
                 </VFOLDERS>
@@ -330,13 +339,14 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgcrtl.dylib" Class="DependencyModule">
-                    <Platform Name="OSX64">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32c270mt.dll" Class="DependencyModule">
+                    <Platform Name="Win32">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32c270.dll" Class="DependencyModule">
+                <DeployFile LocalName=".\Win32\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
+                        <RemoteName>PrettyChaos.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
@@ -386,14 +396,13 @@
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'=='true'" LocalName="$(BDS)\bin\cc32c270mt.dll" Class="DependencyModule">
-                    <Platform Name="Win32">
+                <DeployFile Condition="'$(DynamicRTL)'=='true'" LocalName="$(BDS)\Redist\osx64\libcgcrtl.dylib" Class="DependencyModule">
+                    <Platform Name="OSX64">
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName=".\Win32\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile Condition="'$(DynamicRTL)'=='true' And '$(Multithreaded)'!='true'" LocalName="$(BDS)\bin\cc32c270.dll" Class="DependencyModule">
                     <Platform Name="Win32">
-                        <RemoteName>PrettyChaos.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

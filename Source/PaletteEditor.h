@@ -119,6 +119,13 @@ __published:	// IDE-managed Components
 	void __fastcall seValueChange(TObject *Sender);
 	void __fastcall sbLinearClick(TObject *Sender);
 	void __fastcall sbDeleteSelectedKeyClick(TObject *Sender);
+	void __fastcall pcColourSpaceChange(TObject *Sender);
+	void __fastcall pbRedPaint(TObject *Sender);
+	void __fastcall pbGreenPaint(TObject *Sender);
+	void __fastcall pbBluePaint(TObject *Sender);
+	void __fastcall pbHuePaint(TObject *Sender);
+	void __fastcall pbValuePaint(TObject *Sender);
+	void __fastcall pbSaturationPaint(TObject *Sender);
 
 private:
 

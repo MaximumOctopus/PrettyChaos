@@ -69,6 +69,7 @@ void Martin::Render()
 	{
 		int x = std::floor((double)xold + ((double)Width / 2));
 		int y = std::floor((double)yold + ((double)Height / 2));
+
 		if (x < Width && y < Height && x >= 0 && y >= 0)
 		{
 			switch (RenderMode)

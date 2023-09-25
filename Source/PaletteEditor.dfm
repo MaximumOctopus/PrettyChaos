@@ -275,27 +275,31 @@ object frmPaletteEditor: TfrmPaletteEditor
       Top = 175
       Width = 393
       Height = 193
-      ActivePage = TabSheet1
+      ActivePage = TabSheet2
       TabOrder = 0
+      OnChange = pcColourSpaceChange
       object TabSheet1: TTabSheet
         Caption = 'RGB'
         object pbRed: TPaintBox
           Left = 38
           Top = 43
-          Width = 255
+          Width = 256
           Height = 5
+          OnPaint = pbRedPaint
         end
         object pbGreen: TPaintBox
           Left = 38
           Top = 96
-          Width = 255
+          Width = 256
           Height = 5
+          OnPaint = pbGreenPaint
         end
         object pbBlue: TPaintBox
           Left = 38
           Top = 147
-          Width = 255
+          Width = 256
           Height = 5
+          OnPaint = pbBluePaint
         end
         object Shape1: TShape
           Left = 5
@@ -429,18 +433,21 @@ object frmPaletteEditor: TfrmPaletteEditor
           Top = 43
           Width = 255
           Height = 5
+          OnPaint = pbHuePaint
         end
         object pbSaturation: TPaintBox
           Left = 38
           Top = 96
           Width = 255
           Height = 5
+          OnPaint = pbSaturationPaint
         end
         object pbValue: TPaintBox
           Left = 38
           Top = 147
           Width = 255
           Height = 5
+          OnPaint = pbValuePaint
         end
         object Label2: TLabel
           Left = 10

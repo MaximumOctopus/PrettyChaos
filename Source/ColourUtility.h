@@ -73,63 +73,51 @@ namespace ColourUtility
 
 	void RGBtoHSV(int rgb, int &H, int &S, int &V)
 	{
-		double fR = (rgb & 0xff0000) >> 16;
-		double fG = (rgb & 0x00ff00) >> 8;
-		double fB = (rgb & 0x0000ff);
+		double r = (rgb & 0xff0000) >> 16;
+		double g = (rgb & 0x00ff00) >> 8;
+		double b = (rgb & 0x0000ff);
 
-		fR = fR / 255;
-		fG = fG / 255;
-		fB = fB / 255;
+		int MinValue = std::min(std::min(r, g), b);
+		V            = std::max(std::max(r, g), b);
 
-		double fH = H;
-		double fS = S / 255;
-		double fV = V / 255;
+		int Delta = V - MinValue;
 
-		float fCMax = std::max(std::max(fR, fG), fB);
-		float fCMin = std::min(std::min(fR, fG), fB);
-		float fDelta = fCMax - fCMin;
-
-		if (fDelta > 0)
+		// Calculate saturation:  saturation is 0 if r, g and b are all 0
+		if (V == 0)
 		{
-			if(fCMax == fR)
-			{
-				fH = 60 * (fmod(((fG - fB) / fDelta), 6));
-			}
-			else if(fCMax == fG) {
-				fH = 60 * (((fB - fR) / fDelta) + 2);
-			}
-			else if(fCMax == fB)
-			{
-				fH = 60 * (((fR - fG) / fDelta) + 4);
-			}
-
-			if (fCMax > 0)
-			{
-				fS = fDelta / fCMax;
-			}
-			else
-			{
-				fS = 0;
-			}
-
-			fV = fCMax;
+			S = 0;
 		}
 		else
 		{
-			fH = 0;
-			fS = 0;
-			fV = fCMax;
+			S  = std::floor(std::div(255 * Delta, V).quot);
 		}
 
-		if (fH < 0)
+		if (S == 0)
 		{
-			fH = 360 + fH;
+			H = 0;
 		}
+		else
+		{
+			if (r == V)
+			{
+				H = std::floor(std::div(60*(g-b), Delta).quot);
+			}
+			else if (g == V)
+			{
+				H = std::floor(120 + std::div((60*(b-r)), Delta).quot);
+			}
+			else if (b == V)
+			{
+				H = std::floor(240 + std::div((60 * ( r - g)), Delta).quot);
+			}
+		  }
 
-		H = std::floor(fH);
-		S = std::floor(fS * 255);
-		V = std::floor(fV * 255);
+		if (H < 0)
+		{
+			H = H + 360;
+		}
 	}
+
 
 	void HSVtoRGB(int H, int S, int V, int &R, int &G, int &B)
 	{
