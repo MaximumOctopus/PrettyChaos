@@ -25,5 +25,7 @@ public:
 
 	void Render() override;
 
-    void ResetView() override;
+	void ResetView() override;
+
+    void ToFile(std::ofstream&) override;
 };

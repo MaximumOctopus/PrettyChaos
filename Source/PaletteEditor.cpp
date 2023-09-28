@@ -15,6 +15,7 @@
 
 #include "FormColourDialog.h"
 
+#include "Constants.h"
 #include "ColourUtility.h"
 #include "Formatting.h"
 #include "PaletteEditor.h"
@@ -31,7 +32,7 @@ __fastcall TfrmPaletteEditor::TfrmPaletteEditor(TComponent* Owner)
 {
 	bGradient = new TBitmap();
 	bGradient->PixelFormat = pf24bit;
-	bGradient->Width = 500;
+	bGradient->Width = __PaletteCount;
 	bGradient->Height = 1;
 
 	for (int t = 0; t < 3; t++)
@@ -421,7 +422,7 @@ void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 {
 	if (PaletteKeys.size() > 2)         // nothing to align if only two keys
 	{
-		int delta = std::floor(500 / (PaletteKeys.size() - 1));
+		int delta = std::floor(__PaletteCount / (PaletteKeys.size() - 1));
 
 		for (int t = 2; t < PaletteKeys.size(); t++)
 		{
@@ -578,7 +579,7 @@ void TfrmPaletteEditor::RenderGradient()
 
 	// ===========================================================================
 
-	for (int y = 0; y < 500; y++)
+	for (int y = 0; y < __PaletteCount; y++)
 	{
 		int keyat = GradientKeyAt(y);
 
@@ -601,7 +602,7 @@ void TfrmPaletteEditor::RenderGradient()
 			{
 				colend = PaletteKeys[1].Colour;
 
-				gradheight = 500 - y;
+				gradheight = __PaletteCount - y;
 				gradstart = y;
 			}
 
@@ -721,12 +722,14 @@ void __fastcall TfrmPaletteEditor::bAcceptClick(TObject *Sender)
 	ptr = reinterpret_cast<TRGBTriple *>(bGradient->ScanLine[0]);
 
 	// render palette to public
-	for (int t = 0; t < 500; t++)
+	for (int t = 0; t < __PaletteCount; t++)
 	{
 		Palette[t] = ptr[t].rgbtRed + (ptr[t].rgbtGreen << 8) + (ptr[t].rgbtBlue << 16);
 	}
 
-    InfinityColour = sInfinity->Brush->Color;
+	Palette[__PaletteInfinity] = sInfinity->Brush->Color;
+
+    HasPalette = true;
 }
 
 
@@ -937,7 +940,7 @@ void __fastcall TfrmPaletteEditor::sInfinityMouseDown(TObject *Sender, TMouseBut
 	{
 		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
-		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(frmColourDialog->SelectedColour);
+		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(frmColourDialog->SelectedColour).c_str();
     }
 }
 

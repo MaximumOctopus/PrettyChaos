@@ -16,6 +16,7 @@
 
 class Mandelbrot : public Fractal
 {
+	void ColourNTone(int);
 	void ColourTwoTone();
 	void ColourThreeTone();
 	void ColourDistanceI(double);
@@ -30,5 +31,7 @@ public:
 	void Render() override;
     void Preview() override;
 
-    void ResetView() override;
+	void ResetView() override;
+
+    void ToFile(std::ofstream&) override;
 };

@@ -132,7 +132,7 @@ private:
 	static const int __KeyOffset = 12;
 	static const int __KeyTop = 78;
 
-    bool IsRendering = false;
+	bool IsRendering = false;
 	bool SliderUpdating = false;
 	bool KeyDisplayUpdating = false;
 
@@ -141,15 +141,15 @@ private:
 	int KeySelected = 0;
 
 	TBitmap* RGBGradients[3];
-    TBitmap* bGradient;
+	TBitmap* bGradient;
 
 	std::vector<PaletteKey> PaletteKeys;
 
-    void AddNewKey(int, int, int);
+	void AddNewKey(int, int, int);
 
 	void UpdateKeyDisplay(int);
 	void BuildRGBGradients();
-    void BuildHSVGradients();
+	void BuildHSVGradients();
 
 	void RenderGradient();
 
@@ -157,18 +157,18 @@ private:
 	int GetNextGradientKey(int);
 
 	void ClearPalette();
-    void ResetUI();
+	void ResetUI();
 
 	void SavePalette(std::wstring);
 	bool LoadPalette(std::wstring);
 
-    int GetKeyType(const std::wstring);
+	int GetKeyType(const std::wstring);
 
 public:
 
-	int Palette[500];
+	bool HasPalette = false;
 
-    int InfinityColour = 0;
+	int Palette[501];
 
 	__fastcall TfrmPaletteEditor(TComponent* Owner);
 };

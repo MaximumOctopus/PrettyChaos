@@ -12,7 +12,11 @@
 
 
 #include <chrono>
+#include <fstream>
 #include <vector>
+
+
+#include "Formatting.h"
 
 
 struct Variables
@@ -36,8 +40,6 @@ protected:
 
 	void CalculateRenderTime();
 
-	int LinearInterpolate(int, int, double);
-
 	double Sign(double);
 
 public:
@@ -60,8 +62,9 @@ public:
 	bool AcceptsVarB = false;
 	bool AcceptsVarC = false;
 
-	int Palette[500];
-	int PaletteInfinity = 0x000000;
+	std::wstring NameA = L"";
+	std::wstring NameB = L"";
+	std::wstring NameC = L"";
 
 	int RenderMode = 0;
 
@@ -69,7 +72,7 @@ public:
 
 	int* Canvas = nullptr;
 	int* Iteration = nullptr;
-	double* Distances = nullptr;
+	double* Data = nullptr;
 
 	double ymin = 0;    // fractal objects must set these in their constructor
 	double ymax = 0;    //
@@ -97,4 +100,6 @@ public:
 	void SetRenderMode(int);
 
 	void SetABC(double, double, double);
+
+	virtual void ToFile(std::ofstream&);
 };

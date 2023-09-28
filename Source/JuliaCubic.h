@@ -16,8 +16,7 @@
 
 class JuliaCubic : public Fractal
 {
-	void ColourTwoTone();
-	void ColourThreeTone();
+	void ColourNTone(int);
 	void ColourDistanceII(double);
 
 public:
@@ -28,5 +27,7 @@ public:
 
 	void Render() override;
 
-    void ResetView() override;
+	void ResetView() override;
+
+    void ToFile(std::ofstream&) override;
 };

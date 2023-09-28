@@ -18,13 +18,7 @@ Fractal::Fractal()
 {
 	Canvas = new int[640 * 640];
 	Iteration = new int[640 * 640];
-
-	for (int t = 0; t < 500; t++)
-	{
-		int colour = std::floor(((double)t / 500) * 255);
-
-		Palette[t] = colour + (colour << 8) + (colour << 16);
-    }
+	Data = new double[640 * 640];
 }
 
 
@@ -32,6 +26,7 @@ Fractal::~Fractal()
 {
 	delete Canvas;
 	delete Iteration;
+    delete Data;
 }
 
 
@@ -42,24 +37,6 @@ void Fractal::CalculateRenderTime()
 	std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
 
 	RenderTime = std::to_wstring(elapsed_seconds.count());
-}
-
-
-int Fractal::LinearInterpolate(int colour1, int colour2, double t)
-{
-	int red1 = colour1 & 0x0000ff;
-	int green1 = colour1 >> 8 & 0x0000ff;
-	int blue1 = colour1 >> 16 & 0x0000ff;
-
-	int red2 = colour2 & 0x0000ff;
-	int green2 = colour2 >> 8 & 0x0000ff;
-	int blue2 = colour2 >> 16 & 0x0000ff;
-
-	int red = std::floor((double)red1 + t * ((double)red2 - (double)red1));
-	int green = std::floor((double)green1 + t * ((double)green2 - (double)green1));
-	int blue = std::floor((double)blue1 + t * ((double)blue2 - (double)blue1));
-
-    return (blue << 16) + (green << 8) + red;
 }
 
 
@@ -145,11 +122,13 @@ void Fractal::SetDimensions(int _width, int _height)
 		Width = _width;
 		Height = _height;
 
-		delete Canvas;
-		delete Iteration;
+		delete[] Canvas;
+		delete[] Iteration;
+		delete[] Data;
 
 		Canvas = new int[Width * Height];
 		Iteration = new int[Width * Height];
+		Data = new double[Width * Height];
 
 		if (Width > Height || Width == Height)
 		{
@@ -247,4 +226,10 @@ double Fractal::Sign(double n)
 	if (n < 0) return -1;
 
 	return 0;
+}
+
+
+void Fractal::ToFile(std::ofstream& ofile)
+{
+
 }

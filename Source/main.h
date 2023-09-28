@@ -125,7 +125,7 @@ __published:	// IDE-managed Components
 	TMenuItem *Render1;
 	TMenuItem *Render2;
 	TGroupBox *gbVarABC;
-	TLabel *Label13;
+	TLabel *lVarA;
 	TLabel *lVarB;
 	TLabel *lVarC;
 	TEdit *eVarA;
@@ -140,6 +140,47 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbBack;
 	TSpeedButton *SpeedButton1;
 	TBevel *Bevel4;
+	TPopupMenu *puExamples;
+	TMenuItem *JuliaSets1;
+	TMenuItem *miExampleJS1;
+	TMenuItem *N1621041;
+	TMenuItem *N3011;
+	TMenuItem *N147601;
+	TMenuItem *N12771;
+	TMenuItem *N280081;
+	TMenuItem *N0081;
+	TMenuItem *N037011;
+	TMenuItem *N035503551;
+	TMenuItem *N0540541;
+	TMenuItem *N040591;
+	TMenuItem *N0340051;
+	TMenuItem *N035553403372921;
+	TMenuItem *N01621041;
+	TMenuItem *N0790151;
+	TMenuItem *N03300081;
+	TMenuItem *N0745430113011;
+	TMenuItem *N0801561;
+	TMenuItem *N0260541;
+	TMenuItem *N1040041;
+	TMenuItem *N1135024751;
+	TMenuItem *N11825031751;
+	TMenuItem *N072032751;
+	TMenuItem *N11767506451;
+	TMenuItem *Martin1;
+	TMenuItem *miExampleM1;
+	TMenuItem *N6875832;
+	TMenuItem *N10101001;
+	TMenuItem *N2004801;
+	TMenuItem *N1371741;
+	TMenuItem *N10100101;
+	TMenuItem *N10100102;
+	TMenuItem *N12182561;
+	TMenuItem *Export1;
+	TMenuItem *miSaveParameters;
+	TMenuItem *N7;
+	TMenuItem *miSaveAllImages;
+	TBevel *Bevel5;
+	TSpeedButton *sbAbout;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -148,7 +189,6 @@ __published:	// IDE-managed Components
 	void __fastcall FormDestroy(TObject *Sender);
 	void __fastcall sbResetClick(TObject *Sender);
 	void __fastcall sbBackClick(TObject *Sender);
-	void __fastcall eWidthKeyPress(TObject *Sender, System::WideChar &Key);
 	void __fastcall bEditPaletteClick(TObject *Sender);
 	void __fastcall FormPaint(TObject *Sender);
 	void __fastcall cbRenderModeChange(TObject *Sender);
@@ -161,6 +201,10 @@ __published:	// IDE-managed Components
 	void __fastcall miDesktopDimensionClick(TObject *Sender);
 	void __fastcall miMobileDimensionsClick(TObject *Sender);
 	void __fastcall cbFractalSelectorChange(TObject *Sender);
+	void __fastcall miExampleJS1Click(TObject *Sender);
+	void __fastcall miExampleM1Click(TObject *Sender);
+	void __fastcall sbAboutClick(TObject *Sender);
+	void __fastcall eWidthExit(TObject *Sender);
 private:	// User declarations
 
     FractalHandler* GFractalHandler = nullptr;
@@ -176,10 +220,15 @@ private:	// User declarations
 	double ZPoint1x, ZPoint1y;
 	double ZPoint2x, ZPoint2y;
 
-    void UpdateDimension();
+	void SaveFractal(const std::wstring);
+	void SaveFractalParameters(const std::wstring);
+
+	void UpdateDimension();
 
 	void SetFromProjectFile(PCProject&);
 	PCProject GetProjectSettings();
+
+	void CopyFromFractalToScreen();
 
     void UpdateFromFractalChange();
 

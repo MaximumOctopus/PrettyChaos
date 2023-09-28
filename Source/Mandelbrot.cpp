@@ -10,6 +10,7 @@
 
 #include <string>
 
+#include "Constants.h"
 #include "Mandelbrot.h"
 
 
@@ -19,10 +20,15 @@ Mandelbrot::Mandelbrot() : Fractal()
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
-	RenderModes.push_back(L"Two-tone");
-	RenderModes.push_back(L"Three-tone");
 	RenderModes.push_back(L"Distance");
 	RenderModes.push_back(L"Distance II");
+	RenderModes.push_back(L"Two-tone");
+	RenderModes.push_back(L"Three-tone");
+	RenderModes.push_back(L"Four-tone");
+	RenderModes.push_back(L"Five-tone");
+
+	NameA = L"real";
+	NameB = L"imaginary";
 
 	ResetView();
 }
@@ -44,8 +50,6 @@ void Mandelbrot::Render()
 		NumIterationsPerPixel = new int[max_iterations];
 		for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
 	}
-
-	if (RenderMode == 3 || RenderMode == 4) Distances = new double[Width * Height];
 
 	for (int y = 0; y < Height; y++)
 	{
@@ -78,8 +82,6 @@ void Mandelbrot::Render()
 			switch (RenderMode)
 			{
 			case 0:
-			case 2:
-			case 3:
 			{
 				Iteration[y * Width + x] = it;
 				break;
@@ -93,42 +95,44 @@ void Mandelbrot::Render()
 
 					double itnew = it + 1 - nu;
 
-					it = std::pow((std::floor(itnew) / max_iterations), n_coeff) * 500;
+					it = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
 					double it_d = (double)it + 1 - nu;
 
-					Canvas[y * Width + x] = LinearInterpolate(Palette[it], Palette[it + 1], it_d - (std::floorl(it_d)));
+					Canvas[y * Width + x] = it;
+					Data[y * Width + x] = it_d - (std::floorl(it_d));
 				}
 				else
 				{
-					Canvas[y * Width + x] = PaletteInfinity;
+					Canvas[y * Width + x] = __PaletteInfinity;
 				}
 
 				break;
 			}
-			case 4:
+			case 2:
 			{
 				if (it < max_iterations)
 				{
-					Distances[y * Width + x] = std::sqrt(w);
+					Data[y * Width + x] = std::sqrt(w);
 
-					if (Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
+					if (Data[y * Width + x] > max_d) max_d = Data[y * Width + x];
 
 					Iteration[y * Width + x] = it;
 				}
 				Iteration[y * Width + x] = it;
 				break;
 			}
-			case 5:
+			case 3:
 			{
 				if (it < max_iterations)
 				{
-					Distances[y * Width + x] = std::sqrt(std::pow(x2 + y2, 2));
+					Data[y * Width + x] = std::sqrt(std::pow(x2 + y2, 2));
 
-					if (Distances[y * Width + x] > max_d) max_d = Distances[y * Width + x];
+					if (Data[y * Width + x] > max_d) max_d = Data[y * Width + x];
 
 					Iteration[y * Width + x] = it;
 				}
 				Iteration[y * Width + x] = it;
+
 				break;
 			}
 			}
@@ -165,31 +169,37 @@ void Mandelbrot::Render()
 					c += (double)NumIterationsPerPixel[i] / (double)total;
 				}
 
-				int index = std::round(std::pow(c, n_coeff) * 500);
+				int index = std::round(std::pow(c, n_coeff) * __PaletteCount);
 
 				if (Iteration[y * Width + x] != max_iterations)
 				{
-					Canvas[y * Width + x] = Palette[index];
+					Canvas[y * Width + x] = index;
 				}
 				else
 				{
-					Canvas[y * Width + x] = PaletteInfinity;
+					Canvas[y * Width + x] = __PaletteInfinity;
 				}
 			}
 		}
 		break;
 	}
-	case 2:                                                                     // two-tone
-		ColourTwoTone();
-		break;
-	case 3:                                                                     // three-tone
-		ColourThreeTone();
-		break;
-	case 4:                                                                     // distance I
+	case 2:                                                                     // distance I
 		ColourDistanceI(max_d);
 		break;
-	case 5:                                                                     // distance II
+	case 3:                                                                     // distance II
 		ColourDistanceII(max_d);
+		break;
+	case 4:                                                                     // two-tone
+		ColourNTone(2);
+		break;
+	case 5:                                                                     // three-tone
+		ColourNTone(3);
+		break;
+	case 6:                                                                     // four-tone
+		ColourNTone(4);
+		break;
+	case 7:                                                                     // five-tone
+		ColourNTone(5);
 		break;
 	}
 
@@ -200,59 +210,39 @@ void Mandelbrot::Render()
 }
 
 
-void Mandelbrot::ColourTwoTone()
+void Mandelbrot::ColourNTone(int n)
 {
+	int* colours = new int[n];
+
+	colours[0] = 0;
+	colours[n - 1] = 499;
+
+	if (n > 2)
+	{
+		int delta = std::floor(__PaletteCount / (n - 1));
+
+		for (int t = 1; t < n - 1; t++)
+		{
+			colours[t] = delta * t;
+		}
+	}
+
 	for (int y = 0; y < Height; y++)
 	{
 		for (int x = 0; x < Width; x++)
 		{
 			if (Iteration[y * Width + x] != max_iterations)
 			{
-				if (Iteration[y * Width + x] % 2 == 0)
-				{
-					Canvas[y * Width + x] = Palette[0];
-				}
-				else if (Iteration[y * Width + x] % 2 == 1)
-				{
-					Canvas[y * Width + x] = Palette[499];
-				}
+				Canvas[y * Width + x] = colours[Iteration[y * Width + x] % n];
 			}
 			else
 			{
-				Canvas[y * Width + x] = PaletteInfinity;
+				Canvas[y * Width + x] = __PaletteInfinity;
 			}
 		}
 	}
-}
 
-
-void Mandelbrot::ColourThreeTone()
-{
-	for (int y = 0; y < Height; y++)
-	{
-		for (int x = 0; x < Width; x++)
-		{
-			if (Iteration[y * Width + x] != max_iterations)
-			{
-				switch (Iteration[y * Width + x] % 3)
-				{
-				case 0:
-					Canvas[y * Width + x] = Palette[0];
-					break;
-				case 1:
-					Canvas[y * Width + x] = Palette[249];
-					break;
-				case 2:
-					Canvas[y * Width + x] = Palette[499];
-					break;
-				}
-			}
-			else
-			{
-				Canvas[y * Width + x] = PaletteInfinity;
-			}
-		}
-	}
+	delete[] colours;
 }
 
 
@@ -264,13 +254,13 @@ void Mandelbrot::ColourDistanceI(double max_d)
 		{
 			if (Iteration[y * Width + x] != max_iterations)
 			{
-				int index = std::floor(std::pow((Distances[y * Width + x] / max_d), n_coeff) * 500);
+				int index = std::floor(std::pow((Data[y * Width + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[y * Width + x] = Palette[index];
+				Canvas[y * Width + x] = index;
 			}
 			else
 			{
-				Canvas[y * Width + x] = PaletteInfinity;
+				Canvas[y * Width + x] = __PaletteInfinity;
 			}
 		}
 	}
@@ -285,13 +275,13 @@ void Mandelbrot::ColourDistanceII(double max_d)
 		{
 			if (Iteration[y * Width + x] != max_iterations)
 			{
-				int index = std::floor(std::pow((Distances[y * Width + x] / max_d), n_coeff) * 500);
+				int index = std::floor(std::pow((Data[y * Width + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[y * Width + x] = Palette[index];
+				Canvas[y * Width + x] = index;
 			}
 			else
 			{
-				Canvas[y * Width + x] = PaletteInfinity;
+				Canvas[y * Width + x] = __PaletteInfinity;
 			}
 		}
 	}
@@ -310,4 +300,20 @@ void Mandelbrot::ResetView()
 	ymax =  1.22;
 	xmin = -2.00;
 	xmax =  0.47;
+}
+
+
+void Mandelbrot::ToFile(std::ofstream& ofile)
+{
+	ofile << Formatting::to_utf8(L"Mandelbrot fractal\n");
+	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + std::to_wstring(RenderMode) + L"\n");
+	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
+	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
+	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
+
+	ofile << Formatting::to_utf8(L"    x min      : " + std::to_wstring(xmin) + L"\n");
+	ofile << Formatting::to_utf8(L"    x max      : " + std::to_wstring(xmax) + L"\n");
+	ofile << Formatting::to_utf8(L"    y min      : " + std::to_wstring(ymin) + L"\n");
+	ofile << Formatting::to_utf8(L"    y max      : " + std::to_wstring(ymax) + L"\n");
 }

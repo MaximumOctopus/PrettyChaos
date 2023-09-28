@@ -10,21 +10,20 @@
 
 #pragma once
 
+
 #include "Fractal.h"
 
 
-class FractalHandler
+class Newton : public Fractal
 {
 
 public:
 
-	std::vector<Fractal*> Fractals;
+	Newton();
 
-	std::vector<std::wstring> Names;
+	~Newton();
 
-	int Palette[501];
+	void Render() override;
 
-	FractalHandler();
-    ~FractalHandler();
-
+    void ResetView() override;
 };

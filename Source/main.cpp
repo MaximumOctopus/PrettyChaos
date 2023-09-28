@@ -16,9 +16,11 @@
 
 #include "main.h"
 
+#include "FormAbout.h"
 #include "FormEditBounds.h"
 #include "PaletteEditor.h"
 
+#include "ColourUtility.h"
 #include "Constants.h"
 #include "Mandelbrot.h"
 #include "Martin.h"
@@ -58,7 +60,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
 	cbFractalSelectorChange(nullptr);
 
-	eWidthKeyPress(nullptr, k);
+	eWidthExit(nullptr);
 
 	UpdatePalette();
 }
@@ -219,28 +221,14 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 
 	sbMain->SimpleText = c.c_str();
 
-	TBitmap* bit = new TBitmap();
-	bit->PixelFormat = pf24bit;
-	bit->Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-	bit->Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
+	CopyFromFractalToScreen();
 
-	TRGBTriple *ptr;
-
-	for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
+	if (miSaveAllImages->Checked)
 	{
-		ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
+		std::wstring file_name = Utility::ProcessFileName(__AutoSaveTemplate);
 
-		for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
-		{
-			ptr[x].rgbtRed = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x] & 0x0000ff;
-			ptr[x].rgbtGreen = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x] >> 8 & 0x0000ff;
-			ptr[x].rgbtBlue = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x] >> 16 & 0x0000ff;
-		}
+		SaveFractal(file_name);
 	}
-
-	iRender->Picture->Assign(bit);
-
-	delete bit;
 }
 
 
@@ -282,6 +270,55 @@ void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 }
 
 
+void TfrmMain::CopyFromFractalToScreen()
+{
+	TBitmap* bit = new TBitmap();
+	bit->PixelFormat = pf24bit;
+	bit->Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
+	bit->Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
+
+	TRGBTriple *ptr;
+
+	// only julia+cubic and mandelbrot have this mode that uses more data to build the palette...
+	if (cbRenderMode->ItemIndex == 1 && cbFractalSelector->ItemIndex < 3)
+	{
+		for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
+		{
+			ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
+
+			for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
+			{
+				int colour = ColourUtility::LinearInterpolate(GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]],
+											GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x] + 1],
+											GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Data[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]);
+
+				ptr[x].rgbtRed = colour & 0x0000ff;
+				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = colour >> 16 & 0x0000ff;
+			}
+		}
+	}
+	else
+	{
+		for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
+		{
+			ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
+
+			for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
+			{
+				ptr[x].rgbtRed = GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]] & 0x0000ff;
+				ptr[x].rgbtGreen = GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]] >> 16 & 0x0000ff;
+			}
+		}
+	}
+
+	iRender->Picture->Assign(bit);
+
+	delete bit;
+}
+
+
 void __fastcall TfrmMain::sbSaveImageClick(TObject *Sender)
 {
 	std::wstring file_name = Utility::GetSaveFileName(1);
@@ -293,12 +330,45 @@ void __fastcall TfrmMain::sbSaveImageClick(TObject *Sender)
 			file_name += L".png";
 		}
 
-		TPngImage* png  = new TPngImage();
-		png->Assign(iRender->Picture->Bitmap);
+		SaveFractal(file_name);
+	}
+}
 
-		png->SaveToFile(file_name.c_str());
 
-		delete png;
+void TfrmMain::SaveFractal(const std::wstring file_name)
+{
+	TPngImage* png  = new TPngImage();
+	png->Assign(iRender->Picture->Bitmap);
+
+	png->SaveToFile(file_name.c_str());
+
+	if (miSaveParameters->Checked)
+	{
+		std::wstring pfn = file_name;
+
+		auto index = pfn.find(L".png", 0);
+
+		if (index != std::wstring::npos)
+		{
+			pfn.replace(index, 4, L".txt");
+
+			SaveFractalParameters(pfn);
+		}
+	}
+
+	delete png;
+}
+
+
+void TfrmMain::SaveFractalParameters(const std::wstring file_name)
+{
+	std::ofstream file(file_name);
+
+	if (file)
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ToFile(file);
+
+		file.close();
 	}
 }
 
@@ -374,6 +444,8 @@ void __fastcall TfrmMain::iRenderMouseDown(TObject *Sender, TMouseButton Button,
 void __fastcall TfrmMain::sbResetClick(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetView();
+
+	UpdateFractalPanel();
 }
 
 
@@ -428,12 +500,15 @@ void __fastcall TfrmMain::sbBackClick(TObject *Sender)
 }
 
 
-void __fastcall TfrmMain::eWidthKeyPress(TObject *Sender, System::WideChar &Key)
+void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
 {
-	if (Key == VK_RETURN)
-	{
-		UpdateDimension();
-	}
+	frmAbout->ShowModal();
+}
+
+
+ void __fastcall TfrmMain::eWidthExit(TObject *Sender)
+{
+	UpdateDimension();
 }
 
 
@@ -444,6 +519,8 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 		CopyPaletteToFractal();
 
 		UpdatePalette();
+
+        CopyFromFractalToScreen();
 	}
 }
 
@@ -452,12 +529,13 @@ void TfrmMain::CopyPaletteToFractal()
 {
 	if (frmPaletteEditor != nullptr)
 	{
-	for (int t = 0; t < 500; t++)
-	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t] = frmPaletteEditor->Palette[t];
-	}
-
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PaletteInfinity = frmPaletteEditor->InfinityColour;
+		if (frmPaletteEditor->HasPalette)
+		{
+			for (int t = 0; t < 501; t++)
+			{
+				GFractalHandler->Palette[t] = frmPaletteEditor->Palette[t];
+			}
+		}
 	}
 }
 
@@ -468,9 +546,9 @@ void TfrmMain::UpdatePalette()
 
 	for (int t = 0; t < 125; t++)
 	{
-		ptr[t].rgbtBlue = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] >> 16 & 0x0000ff;
-		ptr[t].rgbtGreen = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] >> 8 & 0x0000ff;
-		ptr[t].rgbtRed = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] & 0x0000ff;
+		ptr[t].rgbtBlue = GFractalHandler->Palette[t * 4] >> 16 & 0x0000ff;
+		ptr[t].rgbtGreen = GFractalHandler->Palette[t * 4] >> 8 & 0x0000ff;
+		ptr[t].rgbtRed = GFractalHandler->Palette[t * 4] & 0x0000ff;
 	}
 
 	for (int t = 0; t < 20; t++)
@@ -498,6 +576,10 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 		eVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
 		lVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
 		eVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
+
+		lVarA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
+		lVarB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
+		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
 	}
 
 	UpdateDimension();
@@ -592,5 +674,24 @@ void __fastcall TfrmMain::miMobileDimensionsClick(TObject *Sender)
 	eWidth->Text = DimensionsPhone[mi->Tag][0];
 	eHeight->Text = DimensionsPhone[mi->Tag][1];
 
-    UpdateDimension();
+	UpdateDimension();
+}
+
+
+void __fastcall TfrmMain::miExampleJS1Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	eVarA->Text = JuliaSetExamples[mi->Tag][0];
+	eVarB->Text = JuliaSetExamples[mi->Tag][1];
+}
+
+
+void __fastcall TfrmMain::miExampleM1Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	eVarA->Text = MartinExamples[mi->Tag][0];
+	eVarB->Text = MartinExamples[mi->Tag][1];
+	eVarC->Text = MartinExamples[mi->Tag][2];
 }
