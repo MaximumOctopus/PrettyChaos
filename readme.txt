@@ -1,5 +1,5 @@
 ==========================================================================================================================
-PrettyChaos 0.3
+PrettyChaos 0.4
 (c) Paul Alan Freshney 2023
 
 paul@freshney.org
@@ -7,16 +7,16 @@ paul@freshney.org
 Source code and portable install
   https://github.com/MaximumOctopus/PrettyChaos
 
-September 25th 2023
+September 28th 2023
 ==========================================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
 
-Currently supports Julia Set, Mandelbrot, and Martin fractals.
+Currently supports Julia Set, Julia Set (cubic), Mandelbrot, and Martin fractals.
 
 ==========================================================================================================================
 
-Written with C++ 17 in C++ Builder 10.4 Community Edition (free).
+Written with C++ Builder 11 (Update 3) Community Edition (free).
    https://www.embarcadero.com/products/cbuilder/starter
 
 ==========================================================================================================================
@@ -34,6 +34,12 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.4 / September 28th 2023
+
+Fixed a few small issues.
+A single palette is now shared by all fractal sub-classes
+Added auto save (saves every rendered image), and the option to save fractal parameters (as a separate file) for each image.
 
 0.3 / September 25th 2023
 
