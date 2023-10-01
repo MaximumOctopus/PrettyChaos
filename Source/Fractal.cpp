@@ -7,6 +7,7 @@
 //
 // https://github.com/MaximumOctopus/PrettyChaos
 //
+#include <Vcl.Dialogs.hpp>
 
 #include <string>
 
@@ -65,6 +66,9 @@ void Fractal::SetView(double _xmin, double _xmax, double _ymin, double _ymax)
 
 	ymin = _ymin;
 	ymax = _ymax;
+
+	x_resolution = (xmax - xmin) / Width;
+	y_resolution = (ymax - ymin) / Height;
 
 	HasChanged = true;
 }
@@ -153,6 +157,9 @@ void Fractal::SetDimensions(int _width, int _height)
 			xmax = c_xaxis + (x_range / 2);
 		}
 
+		x_resolution = (xmax - xmin) / Width;
+		y_resolution = (ymax - ymin) / Height;
+
        	HasChanged = true;
 	}
 }
@@ -209,6 +216,26 @@ void Fractal::SetABC(double a, double b, double c)
 	Var.a = a;
 	Var.b = b;
 	Var.c = c;
+}
+
+
+bool Fractal::ShowABC(int rm)
+{
+	if (AcceptsABC)
+	{
+		if (AcceptsABCSpectificRenderModeBegin != -1)
+		{
+			if (AcceptsABCSpectificRenderModeBegin > rm ||
+				AcceptsABCSpectificRenderModeEnd < rm)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	return false;
 }
 
 

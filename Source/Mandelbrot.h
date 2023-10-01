@@ -21,6 +21,7 @@ class Mandelbrot : public Fractal
 	void ColourThreeTone();
 	void ColourDistanceI(double);
 	void ColourDistanceII(double);
+	void OrbitTrap(bool);
 
 public:
 

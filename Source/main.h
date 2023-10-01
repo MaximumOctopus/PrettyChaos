@@ -138,7 +138,7 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbZoom;
 	TSpeedButton *sbZoomCrop;
 	TSpeedButton *sbBack;
-	TSpeedButton *SpeedButton1;
+	TSpeedButton *sbForward;
 	TBevel *Bevel4;
 	TPopupMenu *puExamples;
 	TMenuItem *JuliaSets1;
@@ -181,6 +181,16 @@ __published:	// IDE-managed Components
 	TMenuItem *miSaveAllImages;
 	TBevel *Bevel5;
 	TSpeedButton *sbAbout;
+	TMenuItem *N101;
+	TMenuItem *N102;
+	TCheckBox *cbAutoRender;
+	TGroupBox *GroupBox4;
+	TLabel *lCursor;
+	TLabel *lCursorColour;
+	TMenuItem *N8;
+	TMenuItem *miRMBSetParameters;
+	TMenuItem *Help1;
+	TMenuItem *About1;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -205,6 +215,10 @@ __published:	// IDE-managed Components
 	void __fastcall miExampleM1Click(TObject *Sender);
 	void __fastcall sbAboutClick(TObject *Sender);
 	void __fastcall eWidthExit(TObject *Sender);
+	void __fastcall iRenderMouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+	void __fastcall Panel3MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+
+
 private:	// User declarations
 
     FractalHandler* GFractalHandler = nullptr;
@@ -224,6 +238,8 @@ private:	// User declarations
 	void SaveFractalParameters(const std::wstring);
 
 	void UpdateDimension();
+	void UpdateABCPanel();
+    void UpdateZoomPanel();
 
 	void SetFromProjectFile(PCProject&);
 	PCProject GetProjectSettings();

@@ -1,3 +1,12 @@
+//
+// PrettyChaos 1.0
+//
+// (c) Paul Alan Freshney 2023
+//
+// paul@freshney.org
+//
+// https://github.com/MaximumOctopus/PrettyChaos
+//
 
 #include <System.SysUtils.hpp>
 #include "ColourUtility.h"
@@ -11,7 +20,7 @@ namespace ColourUtility
 		int g = (bgr & 0x00ff00) >> 8;
 		int b = (bgr & 0xff0000) >> 16;
 
-		return IntToHex((r << 16) + (g << 8) + b, 6);
+		return "0x" + IntToHex((r << 16) + (g << 8) + b, 6);
 	}
 
 

@@ -57,10 +57,14 @@ public:
 
     Variables Var;
 
+	int AcceptsABCSpectificRenderModeBegin = -1;
+	int AcceptsABCSpectificRenderModeEnd = -1;
 	bool AcceptsABC = false;
 	bool AcceptsVarA = false;
 	bool AcceptsVarB = false;
 	bool AcceptsVarC = false;
+
+	bool AcceptsZoom = true;
 
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
@@ -78,9 +82,11 @@ public:
 	double ymax = 0;    //
 	double xmin = 0;    //
 	double xmax = 0;    //
+	double x_resolution = 0;
+	double y_resolution = 0;
 
-	int Width = 0;
-    int Height = 0;
+	int Width = 640;
+    int Height = 640;
 
 	Fractal();
 
@@ -100,6 +106,7 @@ public:
 	void SetRenderMode(int);
 
 	void SetABC(double, double, double);
+	bool ShowABC(int);
 
 	virtual void ToFile(std::ofstream&);
 };

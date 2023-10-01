@@ -22,6 +22,8 @@ Martin::Martin() : Fractal()
 	AcceptsVarB = true;
 	AcceptsVarC = true;
 
+    AcceptsZoom = false;
+
 	Var.a = 45;
 	Var.b = 2;
 	Var.c = -300;
@@ -159,7 +161,7 @@ void Martin::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + std::to_wstring(RenderMode) + L"\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");

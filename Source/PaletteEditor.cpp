@@ -312,7 +312,7 @@ void __fastcall TfrmPaletteEditor::tbRedChange(TObject *Sender)
 		lHexGreen->Caption = IntToHex(tbGreen->Position, 2);
 		lHexBlue->Caption = IntToHex(tbBlue->Position, 2);
 
-		lColourHex->Caption = "0x" + ColourUtility::BRGtoRGBHex(pk.Colour);
+		lColourHex->Caption = ColourUtility::BRGtoRGBHex(pk.Colour);
 
 		BuildRGBGradients();
 
@@ -577,6 +577,9 @@ void TfrmPaletteEditor::RenderGradient()
 	double sg = 0;
 	double sb = 0;
 
+	int step = 1;
+	int step_count = cbSteps->Text.ToInt();
+
 	// ===========================================================================
 
 	for (int y = 0; y < __PaletteCount; y++)
@@ -694,16 +697,25 @@ void TfrmPaletteEditor::RenderGradient()
 
 		// =====================================================================
 
-		if (mode == modeRGB)
+		if (step == step_count)
 		{
-			newrout = newri;
-			newgout = newgi;
-			newbout = newbi;
+			step = 1;
+
+			if (mode == modeRGB)
+			{
+				newrout = newri;
+				newgout = newgi;
+				newbout = newbi;
+			}
+			else
+			{
+				ColourUtility::HSVtoRGB(newri, newgi, newbi, newrout, newgout, newbout);
+			}
 		}
 		else
 		{
-			ColourUtility::HSVtoRGB(newri, newgi, newbi, newrout, newgout, newbout);
-		}
+            step++;
+        }
 	}
 
 	for (int t = 0; t < 25; t++)
@@ -798,8 +810,11 @@ void TfrmPaletteEditor::SavePalette(std::wstring file_name)
 
 	if (file)
 	{
+		std::wstring steps = cbSteps->Text.c_str();
+
 		file << Formatting::to_utf8(L"[\n");
 		file << Formatting::to_utf8(L"infinity=" + std::to_wstring(sbColour->Down) + L"\n");
+		file << Formatting::to_utf8(L"steps=" + steps + L"\n");
 		file << Formatting::to_utf8(L"]\n");
 
 		for (int t = 0; t < PaletteKeys.size(); t++)
@@ -830,6 +845,7 @@ bool TfrmPaletteEditor::LoadPalette(std::wstring file_name)
 		int mode(0);
 		int position(0);
 		int infinity(0);
+		std::wstring steps(L"");
 
 		while (std::getline(file, s))
 		{
@@ -882,12 +898,20 @@ bool TfrmPaletteEditor::LoadPalette(std::wstring file_name)
 					case 9:
 						position = stoi(value);
 						break;
+					case 10:
+						steps = value;
+						break;
                     }
 				}
 			}
 		}
 
 		file.close();
+
+		sInfinity->Brush->Color = TColor(infinity);
+		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(infinity);
+
+		cbSteps->Text = steps.c_str();
 
 		return true;
 	}
@@ -916,6 +940,8 @@ int TfrmPaletteEditor::GetKeyType(const std::wstring key)
 		return 8;
 	else if (key == L"position")
 		return 9;
+	else if (key == L"steps")
+		return 10;
 
 	return 0;
 }
@@ -940,7 +966,7 @@ void __fastcall TfrmPaletteEditor::sInfinityMouseDown(TObject *Sender, TMouseBut
 	{
 		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
-		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(frmColourDialog->SelectedColour).c_str();
+		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(frmColourDialog->SelectedColour);
     }
 }
 

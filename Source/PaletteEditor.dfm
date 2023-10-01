@@ -131,7 +131,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     Caption = 'Colour'
     TabOrder = 5
     object sbAddNewKey: TSpeedButton
-      Left = 95
+      Left = 79
       Top = 24
       Width = 23
       Height = 22
@@ -162,7 +162,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Transparent = True
     end
     object sbColour: TSpeedButton
-      Left = 453
+      Left = 467
       Top = 24
       Width = 23
       Height = 22
@@ -173,7 +173,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbColourClick
     end
     object sbBW: TSpeedButton
-      Left = 478
+      Left = 496
       Top = 24
       Width = 23
       Height = 22
@@ -183,7 +183,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbColourClick
     end
     object sbDeleteSelectedKey: TSpeedButton
-      Left = 124
+      Left = 100
       Top = 24
       Width = 23
       Height = 22
@@ -192,7 +192,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbDeleteSelectedKeyClick
     end
     object Label1: TLabel
-      Left = 176
+      Left = 136
       Top = 27
       Width = 37
       Height = 13
@@ -201,14 +201,14 @@ object frmPaletteEditor: TfrmPaletteEditor
     object sbClear: TSpeedButton
       Left = 12
       Top = 24
-      Width = 70
+      Width = 52
       Height = 22
       Caption = 'Clear'
       Images = iPalette
       OnClick = sbClearClick
     end
     object sbAlignAll: TSpeedButton
-      Left = 286
+      Left = 234
       Top = 24
       Width = 23
       Height = 22
@@ -223,7 +223,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Height = 25
     end
     object sbRGB: TSpeedButton
-      Left = 329
+      Left = 277
       Top = 24
       Width = 40
       Height = 22
@@ -234,7 +234,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object sbHSV: TSpeedButton
       Tag = 1
-      Left = 370
+      Left = 318
       Top = 24
       Width = 40
       Height = 22
@@ -268,12 +268,19 @@ object frmPaletteEditor: TfrmPaletteEditor
       Font.Style = []
       ParentFont = False
     end
+    object Label6: TLabel
+      Left = 376
+      Top = 27
+      Width = 27
+      Height = 13
+      Caption = 'Steps'
+    end
     object pcColourSpace: TPageControl
       Left = 10
       Top = 175
       Width = 393
       Height = 193
-      ActivePage = TabSheet2
+      ActivePage = TabSheet1
       TabOrder = 0
       OnChange = pcColourSpaceChange
       object TabSheet1: TTabSheet
@@ -552,7 +559,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       end
     end
     object sePosition: TSpinEdit
-      Left = 219
+      Left = 179
       Top = 24
       Width = 49
       Height = 22
@@ -566,7 +573,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Left = 409
       Top = 175
       Width = 101
-      Height = 189
+      Height = 193
       Caption = 'Infinity'
       TabOrder = 2
       object sInfinity: TShape
@@ -590,6 +597,29 @@ object frmPaletteEditor: TfrmPaletteEditor
         Font.Style = []
         ParentFont = False
       end
+    end
+    object cbSteps: TComboBox
+      Left = 409
+      Top = 24
+      Width = 45
+      Height = 21
+      Style = csDropDownList
+      ItemIndex = 0
+      TabOrder = 3
+      Text = '1'
+      OnClick = sbColourClick
+      Items.Strings = (
+        '1'
+        '2'
+        '4'
+        '5'
+        '10'
+        '20'
+        '25'
+        '50'
+        '100'
+        '125'
+        '250')
     end
   end
   object iPalette: TImageList

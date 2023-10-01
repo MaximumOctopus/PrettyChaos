@@ -89,6 +89,8 @@ __published:	// IDE-managed Components
 	TLabel *lColourHex;
 	TLabel *Label5;
 	TLabel *lLog;
+	TLabel *Label6;
+	TComboBox *cbSteps;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall sbAddNewKeyClick(TObject *Sender);
 	void __fastcall shapeStartColourMouseDown(TObject *Sender, TMouseButton Button,

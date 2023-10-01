@@ -244,10 +244,7 @@ void Julia::ColourDistanceII(double max_d)
 
 void Julia::ResetView()
 {
-	ymin = -2.0;
-	ymax =  2.0;
-	xmin = -2.0;
-	xmax =  2.0;
+	SetView(-2.00, 2.00, -2.00, 2.00);
 }
 
 
@@ -255,7 +252,7 @@ void Julia::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Julia Set\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + std::to_wstring(RenderMode) + L"\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");

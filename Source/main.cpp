@@ -202,6 +202,36 @@ void TfrmMain::UpdateDimension()
 }
 
 
+void TfrmMain::UpdateABCPanel()
+{
+	gbVarABC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ShowABC(cbRenderMode->ItemIndex);
+
+	if (gbVarABC->Visible)
+	{
+		lVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
+		eVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
+		lVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
+		eVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
+
+		lVarA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
+		lVarB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
+		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
+	}
+}
+
+
+void TfrmMain::UpdateZoomPanel()
+{
+	history->History.clear();
+
+	sbReset->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+	sbZoom->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+	sbZoomCrop->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+	sbBack->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+	sbForward->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+}
+
+
 void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 {
 	sbMain->SimpleText = "Rendering...";
@@ -376,67 +406,78 @@ void TfrmMain::SaveFractalParameters(const std::wstring file_name)
 void __fastcall TfrmMain::iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
 		  int X, int Y)
 {
-	switch (ZoomMode)
+	if (Shift.Contains(ssRight) && miRMBSetParameters->Checked)
 	{
-	case 0:
-	{
-		if (FirstPoint)
-		{
-			FirstPoint = false;
+		double x = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin + (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->x_resolution * X);
+		double y = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin + (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->y_resolution * Y);
 
-			ZPoint1x = X;
-			ZPoint1y = Y;
-		}
-		else
-		{
-			ZoomMode = -1;
-
-			ZPoint2x = X;
-			ZPoint2y = Y;
-
-			if (ZPoint2x < ZPoint1x) std::swap(ZPoint1x, ZPoint2x);
-			if (ZPoint2y < ZPoint1y) std::swap(ZPoint1y, ZPoint2y);
-
-			Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
-
-			double xmin = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)ZPoint1x);
-			double xmax = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)ZPoint2x);
-
-			double ymin = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)ZPoint1y);
-			double ymax = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)ZPoint2y);
-
-			fractal->FitToView(xmin, xmax, ymin, ymax);
-
-			history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
-
-			UpdateFractalPanel();
-
-			iRender->Cursor = crDefault;
-		}
-		break;
+		eVarA->Text = x;
+        eVarB->Text = y;
 	}
-	case 1:
+	else
 	{
-		if (FirstPoint)
+		switch (ZoomMode)
 		{
-			FirstPoint = false;
-			ZoomMode = -1;
+		case 0:
+		{
+			if (FirstPoint)
+			{
+				FirstPoint = false;
 
-			Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
+				ZPoint1x = X;
+				ZPoint1y = Y;
+			}
+			else
+			{
+				ZoomMode = -1;
 
-			double xmin = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)X);
-			double ymin = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)Y);
+				ZPoint2x = X;
+				ZPoint2y = Y;
 
-			fractal->ZoomAtPoint(xmin, ymin);
+				if (ZPoint2x < ZPoint1x) std::swap(ZPoint1x, ZPoint2x);
+				if (ZPoint2y < ZPoint1y) std::swap(ZPoint1y, ZPoint2y);
 
-			history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
+				Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
 
-			UpdateFractalPanel();
+				double xmin = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)ZPoint1x);
+				double xmax = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)ZPoint2x);
 
-			iRender->Cursor = crDefault;
+				double ymin = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)ZPoint1y);
+				double ymax = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)ZPoint2y);
+
+				fractal->FitToView(xmin, xmax, ymin, ymax);
+
+				history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
+
+				UpdateFractalPanel();
+
+				iRender->Cursor = crDefault;
+			}
+			break;
 		}
-		break;
-	}
+		case 1:
+		{
+			if (FirstPoint)
+			{
+				FirstPoint = false;
+				ZoomMode = -1;
+
+				Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
+
+				double xmin = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)X);
+				double ymin = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)Y);
+
+				fractal->ZoomAtPoint(xmin, ymin);
+
+				history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
+
+				UpdateFractalPanel();
+
+				iRender->Cursor = crDefault;
+			}
+			break;
+		}
+		}
 	}
 }
 
@@ -520,7 +561,10 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 
 		UpdatePalette();
 
-        CopyFromFractalToScreen();
+		if (cbAutoRender->Checked)
+		{
+	        CopyFromFractalToScreen();
+		}
 	}
 }
 
@@ -568,19 +612,9 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
 
-	gbVarABC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC;
+	UpdateZoomPanel();
 
-	if (gbVarABC->Visible)
-	{
-		lVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
-		eVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
-		lVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
-		eVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
-
-		lVarA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
-		lVarB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
-		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
-	}
+	UpdateABCPanel();
 
 	UpdateDimension();
 
@@ -593,6 +627,8 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 void __fastcall TfrmMain::cbRenderModeChange(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
+
+    UpdateABCPanel();
 }
 
 
@@ -695,3 +731,27 @@ void __fastcall TfrmMain::miExampleM1Click(TObject *Sender)
 	eVarB->Text = MartinExamples[mi->Tag][1];
 	eVarC->Text = MartinExamples[mi->Tag][2];
 }
+
+
+void __fastcall TfrmMain::iRenderMouseMove(TObject *Sender, TShiftState Shift, int X,
+		  int Y)
+{
+	double x = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin + (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->x_resolution * X);
+	double y = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin + (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->y_resolution * Y);
+
+	std::wstring s = std::to_wstring(x) + L", " + std::to_wstring(y);
+
+	lCursor->Caption = s.c_str();
+
+	lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]);
+}
+
+
+void __fastcall TfrmMain::Panel3MouseMove(TObject *Sender, TShiftState Shift, int X,
+		  int Y)
+{
+	lCursor->Caption = "-";
+
+	lCursorColour->Caption = "-";
+}
+

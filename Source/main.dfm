@@ -111,7 +111,7 @@ object frmMain: TfrmMain
       Images = ImageList1
       OnClick = sbBackClick
     end
-    object SpeedButton1: TSpeedButton
+    object sbForward: TSpeedButton
       Left = 556
       Top = 1
       Width = 30
@@ -388,6 +388,14 @@ object frmMain: TfrmMain
         Width = 125
         Height = 20
       end
+      object cbAutoRender: TCheckBox
+        Left = 74
+        Top = 26
+        Width = 80
+        Height = 17
+        Caption = 'Auto-render'
+        TabOrder = 0
+      end
     end
     object GroupBox3: TGroupBox
       Left = 6
@@ -520,13 +528,39 @@ object frmMain: TfrmMain
       end
     end
     object cbFractalSelector: TComboBox
-      Left = 59
-      Top = 14
+      Left = 53
+      Top = 12
       Width = 113
       Height = 21
       Style = csDropDownList
       TabOrder = 4
       OnChange = cbFractalSelectorChange
+    end
+    object GroupBox4: TGroupBox
+      Left = 6
+      Top = 623
+      Width = 171
+      Height = 92
+      Caption = 'Cursor'
+      DoubleBuffered = True
+      ParentDoubleBuffered = False
+      TabOrder = 5
+      object lCursor: TLabel
+        Left = 15
+        Top = 32
+        Width = 146
+        Height = 13
+        AutoSize = False
+        Caption = '...'
+      end
+      object lCursorColour: TLabel
+        Left = 15
+        Top = 51
+        Width = 146
+        Height = 13
+        AutoSize = False
+        Caption = '...'
+      end
     end
   end
   object Panel3: TPanel
@@ -536,6 +570,7 @@ object frmMain: TfrmMain
     Height = 735
     Align = alClient
     TabOrder = 2
+    OnMouseMove = Panel3MouseMove
     ExplicitWidth = 962
     ExplicitHeight = 734
     object iRender: TImage
@@ -544,6 +579,7 @@ object frmMain: TfrmMain
       Width = 640
       Height = 640
       OnMouseDown = iRenderMouseDown
+      OnMouseMove = iRenderMouseMove
     end
   end
   object sbMain: TStatusBar
@@ -1178,12 +1214,26 @@ object frmMain: TfrmMain
         ShortCut = 32858
         OnClick = sbZoomCropClick
       end
+      object N8: TMenuItem
+        Caption = '-'
+      end
+      object miRMBSetParameters: TMenuItem
+        AutoCheck = True
+        Caption = 'RMB on image sets parameters'
+      end
     end
     object Render1: TMenuItem
       Caption = 'Render'
       object Render2: TMenuItem
         Caption = 'Render'
         ShortCut = 116
+      end
+    end
+    object Help1: TMenuItem
+      Caption = 'Help'
+      object About1: TMenuItem
+        Caption = 'About'
+        OnClick = sbAboutClick
       end
     end
   end
@@ -1309,6 +1359,16 @@ object frmMain: TfrmMain
       object N11767506451: TMenuItem
         Tag = 23
         Caption = '-1.17675, 0.645'
+        OnClick = miExampleJS1Click
+      end
+      object N101: TMenuItem
+        Tag = 24
+        Caption = '-1, 0'
+        OnClick = miExampleJS1Click
+      end
+      object N102: TMenuItem
+        Tag = 25
+        Caption = '0.3, 0.6'
         OnClick = miExampleJS1Click
       end
     end

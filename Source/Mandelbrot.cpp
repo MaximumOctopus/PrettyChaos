@@ -8,6 +8,8 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+// https://en.wikipedia.org/wiki/Orbit_trap
+
 #include <string>
 
 #include "Constants.h"
@@ -18,17 +20,29 @@ Mandelbrot::Mandelbrot() : Fractal()
 {
 	Name = L"Mandelbrot";
 
+   	AcceptsABC = true;
+	AcceptsVarA = true;
+	AcceptsVarB = true;
+
+	AcceptsABCSpectificRenderModeBegin = 4;
+	AcceptsABCSpectificRenderModeEnd = 5;
+
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
 	RenderModes.push_back(L"Distance");
 	RenderModes.push_back(L"Distance II");
+	RenderModes.push_back(L"Orbit Trap");
+	RenderModes.push_back(L"Orbit Trap (filled)");
 	RenderModes.push_back(L"Two-tone");
 	RenderModes.push_back(L"Three-tone");
 	RenderModes.push_back(L"Four-tone");
 	RenderModes.push_back(L"Five-tone");
 
-	NameA = L"real";
-	NameB = L"imaginary";
+	NameA = L"orbit x";
+	NameB = L"orbit y";
+
+	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
+	Var.b = ymin + ((ymax - ymin) / 2);     //
 
 	ResetView();
 }
@@ -60,6 +74,7 @@ void Mandelbrot::Render()
 
 			int it = 0;
 
+			Data[y * Width + x] = 10000000000000;
 			double x1 = 0;
 			double y1 = 0;
 			double x2 = 0;
@@ -76,12 +91,26 @@ void Mandelbrot::Render()
 
 				w = (x1 + y1) * (x1 + y1);
 
+				if (RenderMode == 4 || RenderMode == 5)
+				{
+					double cr = x1 - Var.a;
+					double ci = y1 - Var.b;
+
+					double magnitude = std::sqrt(cr * cr + ci * ci);
+
+					if (magnitude < Data[y * Width + x])
+					{
+						Data[y * Width + x] = magnitude;
+					}
+				}
+
 				it++;
 			}
 
 			switch (RenderMode)
 			{
 			case 0:
+			case 5:
 			{
 				Iteration[y * Width + x] = it;
 				break;
@@ -189,16 +218,22 @@ void Mandelbrot::Render()
 	case 3:                                                                     // distance II
 		ColourDistanceII(max_d);
 		break;
-	case 4:                                                                     // two-tone
+	case 4:
+		OrbitTrap(false);
+		break;
+	case 5:
+		OrbitTrap(true);
+		break;
+	case 6:                                                                     // two-tone
 		ColourNTone(2);
 		break;
-	case 5:                                                                     // three-tone
+	case 7:                                                                     // three-tone
 		ColourNTone(3);
 		break;
-	case 6:                                                                     // four-tone
+	case 8:                                                                     // four-tone
 		ColourNTone(4);
 		break;
-	case 7:                                                                     // five-tone
+	case 9:                                                                     // five-tone
 		ColourNTone(5);
 		break;
 	}
@@ -288,6 +323,49 @@ void Mandelbrot::ColourDistanceII(double max_d)
 }
 
 
+void Mandelbrot::OrbitTrap(bool fill)
+{
+	double maxx = 0;
+
+	for (int y = 0; y < Height; y++)
+	{
+		for (int x = 0; x < Width; x++)
+		{
+			if (Data[y * Width + x] > maxx)
+			{
+				maxx = Data[y * Width + x];
+			}
+		}
+	}
+
+	for (int y = 0; y < Height; y++)
+	{
+		for (int x = 0; x < Width; x++)
+		{
+			if (fill)
+			{
+				if (Iteration[y * Width + x] != max_iterations)
+				{
+					int index =  std::floor(std::pow((Data[y * Width + x] / maxx), n_coeff) * __PaletteCount);
+
+					Canvas[y * Width + x] = index;
+				}
+				else
+				{
+					Canvas[y * Width + x] = __PaletteInfinity;
+				}
+			}
+			else
+			{
+				int index =  std::floor(std::pow((Data[y * Width + x] / maxx), n_coeff) * __PaletteCount);
+
+				Canvas[y * Width + x] = index;
+			}
+		}
+	}
+}
+
+
 void Mandelbrot::Preview()
 {
 	//
@@ -296,10 +374,7 @@ void Mandelbrot::Preview()
 
 void Mandelbrot::ResetView()
 {
-	ymin = -1.22;
-	ymax =  1.22;
-	xmin = -2.00;
-	xmax =  0.47;
+	SetView(-2.00, 0.47, -1.22, 1.22);
 }
 
 
@@ -307,7 +382,7 @@ void Mandelbrot::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Mandelbrot fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + std::to_wstring(RenderMode) + L"\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
