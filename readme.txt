@@ -1,5 +1,5 @@
 ==========================================================================================================================
-PrettyChaos 0.4
+PrettyChaos 0.5
 (c) Paul Alan Freshney 2023
 
 paul@freshney.org
@@ -7,7 +7,7 @@ paul@freshney.org
 Source code and portable install
   https://github.com/MaximumOctopus/PrettyChaos
 
-September 28th 2023
+October 1st 2023
 ==========================================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
@@ -34,6 +34,18 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.5 / October 1st 2023
+
+Added more render modes. 
+Added cursor x/y location to right hand panel
+Added stepping option to colour palette generator
+Added menu with shortcut keys
+
+Use the new Tools option "RMB on image sets parameters" to set the orbit point for the Mandelbrot
+"orbit track" render method.
+
+Lots of minor tweaks and improvements.
 
 0.4 / September 28th 2023
 
