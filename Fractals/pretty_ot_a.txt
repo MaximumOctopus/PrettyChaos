@@ -1,0 +1,11 @@
+Mandelbrot fractal
+    Size       : 640 x 640
+    Rendermode : Orbit Trap (filled) (5)
+    Iterations : 1000.000000
+    n coeff    : 1.000000
+    r bailout  : 256.000000
+
+    x min      : -0.417656
+    x max      : 0.199844
+    y min      : -1.147562
+    y max      : -0.537563
