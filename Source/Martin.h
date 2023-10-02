@@ -16,6 +16,9 @@
 
 class Martin : public Fractal
 {
+	static const int __RMAverage = 0;
+	static const int __RMTime = 1;
+	static const int __RMDistance = 2;
 
 public:
 

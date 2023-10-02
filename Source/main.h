@@ -191,6 +191,7 @@ __published:	// IDE-managed Components
 	TMenuItem *miRMBSetParameters;
 	TMenuItem *Help1;
 	TMenuItem *About1;
+	TShape *sInfinity;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,

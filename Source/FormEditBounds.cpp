@@ -49,30 +49,30 @@ void TfrmEditBounds::SetBoundsValues(int _width, int _height, double _xmin, doub
 void __fastcall TfrmEditBounds::bOKClick(TObject *Sender)
 {
 	xmin = eXMin->Text.ToDouble();
-	ymax = eXMax->Text.ToDouble();
-	xmin = eYMin->Text.ToDouble();
+	xmax = eXMax->Text.ToDouble();
+	ymin = eYMin->Text.ToDouble();
 	ymax = eYMax->Text.ToDouble();
 
 	if (rbAutoFitting->Checked)
 	{
 		if (fwidth > fheight || fwidth == fheight)
 		{
-			double c_yaxis = ymin + ((ymax - ymin) / 2); // centre point of y-axis
+			double c_yaxis = ymin + ((ymax - ymin) / 2); 			// centre point of y-axis
 
 			double x_coeff = (xmax - xmin) / (double)fwidth;
 
-			double y_range = x_coeff / (1 / (double)fheight);      // gets new y range
+			double y_range = x_coeff / (1 / (double)fheight);      	// gets new y range
 
 			ymin = c_yaxis - (y_range / 2);
 			ymax = c_yaxis + (y_range / 2);
 		}
 		else
 		{
-			double c_xaxis = xmin + ((xmax - xmin) / 2); // centre point of x-axis
+			double c_xaxis = xmin + ((xmax - xmin) / 2); 			// centre point of x-axis
 
 			double y_coeff = (ymax - ymin) / (double)fheight;
 
-			double x_range = y_coeff / (1 / (double)fwidth);      // gets new y range
+			double x_range = y_coeff / (1 / (double)fwidth);      	// gets new x range
 
 			xmin = c_xaxis - (x_range / 2);
 			xmax = c_xaxis + (x_range / 2);

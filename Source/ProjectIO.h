@@ -47,7 +47,7 @@ class ProjectIO
 	static const int kPropertyListCount = 14;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
-		L"Width", L"Name", L"Height", L"RenderMode", L"nCoeff",
+    	L"Name", L"Width", L"Height", L"RenderMode", L"nCoeff",
 		L"MaxIterations", L"BailoutRadius",
 		L"xmin", L"xmax", L"ymin", L"ymax",
 		L"var_a", L"var_b", L"var_c"

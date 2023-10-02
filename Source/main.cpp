@@ -106,12 +106,12 @@ void TfrmMain::SetFromProjectFile(PCProject &project)
 {
 	for (int t = 0; t < cbFractalSelector->Items->Count; t++)
 	{
-		if (cbFractalSelector->Items[t].Text == project.Name.c_str())
+		if (cbFractalSelector->Items->Strings[t] == project.Name.c_str())
 		{
 			cbFractalSelector->ItemIndex = t;
-            cbFractalSelectorChange(nullptr);
+			cbFractalSelectorChange(nullptr);
 		}
-    }
+	}
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width = project.Width;
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height = project.Height;
@@ -127,12 +127,17 @@ void TfrmMain::SetFromProjectFile(PCProject &project)
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin = project.ymin;
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax = project.ymax;
 
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a = project.var_a;
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b = project.var_b;
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c = project.var_c;
+
 	iRender->Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
 	iRender->Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
 
-	// ====
+	// =========================================================================
 
 	cbRenderMode->ItemIndex = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderMode;
+    cbRenderModeChange(nullptr);
 
 	eCoeffN->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
 	eWidth->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
@@ -142,7 +147,9 @@ void TfrmMain::SetFromProjectFile(PCProject &project)
 	eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
 	eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
 
-    UpdateFractalPanel();
+	// =========================================================================
+
+	UpdateFractalPanel();
 }
 
 
@@ -599,6 +606,8 @@ void TfrmMain::UpdatePalette()
 	{
 		pbPalette->Canvas->Draw(0, t, PaletteBitmap);
 	}
+
+    sInfinity->Brush->Color = TColor(GFractalHandler->Palette[__PaletteInfinity]);
 }
 
 
@@ -618,7 +627,7 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 
 	UpdateDimension();
 
-    CopyPaletteToFractal();
+	CopyPaletteToFractal();
 
 	UpdateFromFractalChange();
 }
@@ -683,7 +692,7 @@ void __fastcall TfrmMain::sbEditBoundsClick(TObject *Sender)
 	if (frmEditBounds->ShowModal() == mrOk)
 	{
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetView(frmEditBounds->xmin,
-			frmEditBounds->xmin,
+			frmEditBounds->xmax,
 			frmEditBounds->ymin,
 			frmEditBounds->ymax);
 

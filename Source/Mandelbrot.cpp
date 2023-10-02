@@ -59,7 +59,7 @@ void Mandelbrot::Render()
 
 	StartTime = std::chrono::system_clock::now();
 
-	if (RenderMode == 0)
+	if (RenderMode == __RMEscapeTime)
 	{
 		NumIterationsPerPixel = new int[max_iterations];
 		for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
@@ -109,13 +109,13 @@ void Mandelbrot::Render()
 
 			switch (RenderMode)
 			{
-			case 0:
-			case 5:
+			case __RMEscapeTime:
+			case __RMOrbitTrapFilled:
 			{
 				Iteration[y * Width + x] = it;
 				break;
 			}
-			case 1:
+			case __RMContinuous:
 			{
 				if (it < max_iterations)
 				{
@@ -137,7 +137,7 @@ void Mandelbrot::Render()
 
 				break;
 			}
-			case 2:
+			case __RMDistance:
 			{
 				if (it < max_iterations)
 				{
@@ -150,7 +150,7 @@ void Mandelbrot::Render()
 				Iteration[y * Width + x] = it;
 				break;
 			}
-			case 3:
+			case __RMDistanceII:
 			{
 				if (it < max_iterations)
 				{
@@ -170,7 +170,7 @@ void Mandelbrot::Render()
 
 	switch (RenderMode)
 	{
-	case 0:
+	case __RMEscapeTime:
 	{
 		for (int y = 0; y < Height; y++)
 		{
@@ -212,35 +212,35 @@ void Mandelbrot::Render()
 		}
 		break;
 	}
-	case 2:                                                                     // distance I
+	case __RMDistance:                                                                     // distance I
 		ColourDistanceI(max_d);
 		break;
-	case 3:                                                                     // distance II
+	case __RMDistanceII:                                                                     // distance II
 		ColourDistanceII(max_d);
 		break;
-	case 4:
+	case __RMOrbitTrap:
 		OrbitTrap(false);
 		break;
-	case 5:
+	case __RMOrbitTrapFilled:
 		OrbitTrap(true);
 		break;
-	case 6:                                                                     // two-tone
+	case __RMTwoTone:                                                                     // two-tone
 		ColourNTone(2);
 		break;
-	case 7:                                                                     // three-tone
+	case __RMThreeTone:                                                                     // three-tone
 		ColourNTone(3);
 		break;
-	case 8:                                                                     // four-tone
+	case __RMFourTone:                                                                     // four-tone
 		ColourNTone(4);
 		break;
-	case 9:                                                                     // five-tone
+	case __RMFiveTone:                                                                     // five-tone
 		ColourNTone(5);
 		break;
 	}
 
 	CalculateRenderTime();
 
-	if (RenderMode == 0)
+	if (RenderMode == __RMEscapeTime)
 		delete[] NumIterationsPerPixel;
 }
 
@@ -391,4 +391,10 @@ void Mandelbrot::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    x max      : " + std::to_wstring(xmax) + L"\n");
 	ofile << Formatting::to_utf8(L"    y min      : " + std::to_wstring(ymin) + L"\n");
 	ofile << Formatting::to_utf8(L"    y max      : " + std::to_wstring(ymax) + L"\n");
+
+	if (RenderMode == __RMOrbitTrap || RenderMode == __RMOrbitTrapFilled)
+	{
+		ofile << Formatting::to_utf8(L"    Orbit x    : " + std::to_wstring(Var.a) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit y    : " + std::to_wstring(Var.b) + L"\n");
+	}
 }

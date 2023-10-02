@@ -135,7 +135,7 @@ bool ProjectIO::Save(std::wstring file_name, PCProject &project)
 
 		file << Formatting::to_utf8(L"Name=" + project.Name + L"\n");
 		file << Formatting::to_utf8(L"Width=" + std::to_wstring(project.Width) + L"\n");
-		file << Formatting::to_utf8(L"Height=" + std::to_wstring(project.Width) + L"\n");
+		file << Formatting::to_utf8(L"Height=" + std::to_wstring(project.Height) + L"\n");
 
 		file << Formatting::to_utf8(L"RenderMode=" + std::to_wstring(project.RenderMode) + L"\n");
 		file << Formatting::to_utf8(L"nCoeff=" + std::to_wstring(project.nCoeff) + L"\n");

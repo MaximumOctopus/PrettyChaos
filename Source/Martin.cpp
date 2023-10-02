@@ -83,10 +83,10 @@ void Martin::Render()
 		{
 			switch (RenderMode)
 			{
-			case 0:
+			case __RMAverage:
 				Iteration[y * Width + x]++;
 				break;
-			case 1:
+			case __RMTime:
 			{
 				Canvas[y * Width + x] = index;
 
@@ -99,7 +99,7 @@ void Martin::Render()
 				}
 				break;
 			}
-			case 2:
+			case __RMDistance:
 				int index = std::floor((std::sqrt(xold * xold + yold * yold) / maxdim) * __PaletteCount);
 
 				Canvas[y * Width + x] = index;
@@ -113,7 +113,7 @@ void Martin::Render()
 		yold = ynew;
 	}
 
-	if (RenderMode == 0)
+	if (RenderMode == __RMAverage)
 	{
 		int max = 0;
 		int min = max_iterations + 1;

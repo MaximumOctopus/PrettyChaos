@@ -16,6 +16,17 @@
 
 class Mandelbrot : public Fractal
 {
+	static const int __RMEscapeTime = 0;
+	static const int __RMContinuous = 1;
+	static const int __RMDistance = 2;
+	static const int __RMDistanceII = 3;
+	static const int __RMOrbitTrap = 4;
+	static const int __RMOrbitTrapFilled = 5;
+	static const int __RMTwoTone = 6;
+	static const int __RMThreeTone = 7;
+	static const int __RMFourTone = 8;
+	static const int __RMFiveTone = 9;
+
 	void ColourNTone(int);
 	void ColourTwoTone();
 	void ColourThreeTone();

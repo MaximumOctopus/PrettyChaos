@@ -80,12 +80,12 @@ void Julia::Render()
 
 			switch (RenderMode)
 			{
-			case 0:
+			case __RMEscapeTime:
 			{
 				Iteration[y * Width + x] = it;
 				break;
 			}
-			case 1:
+			case __RMContinuous:
 			{
 				if (it < max_iterations)
 				{
@@ -107,7 +107,7 @@ void Julia::Render()
 
 				break;
 			}
-			case 2:
+			case __RMDistance:
 			{
 				Data[y * Width + x] = std::sqrt(std::pow(p + q, 2));
 
@@ -115,7 +115,7 @@ void Julia::Render()
 
 				break;
 			}
-			case 3:
+			case __RMDistanceOrigin:
 				int nx = std::floor(x - (Width / 2));
 				int ny = std::floor(y - (Height / 2));
 
@@ -130,7 +130,7 @@ void Julia::Render()
 
 	switch (RenderMode)
 	{
-	case 0:
+	case __RMEscapeTime:
 	{
 		int max = 0;
 		int min = max_iterations + 1;
@@ -164,19 +164,19 @@ void Julia::Render()
 		}
 		break;
 	}
-	case 2:                                                                     // distance II
+	case __RMDistance:                                                                     // distance II
 		ColourDistanceII(max_d);
 		break;
-	case 4:                                                                     // two-tone
+	case __RMTwoTone:                                                                     // two-tone
 		ColourNTone(2);
 		break;
-	case 5:                                                                     // three-tone
+	case __RMThreeTone:                                                                     // three-tone
 		ColourNTone(3);
 		break;
-	case 6:                                                                     // four-tone
+	case __RMFourTone:                                                                     // four-tone
 		ColourNTone(4);
 		break;
-	case 7:                                                                     // five-tone
+	case __RMFiveTone:                                                                     // five-tone
 		ColourNTone(5);
 		break;
 	}

@@ -145,13 +145,13 @@ object frmMain: TfrmMain
     end
   end
   object Panel2: TPanel
-    Left = 966
+    Left = 959
     Top = 34
-    Width = 184
+    Width = 191
     Height = 735
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 962
+    ExplicitLeft = 955
     ExplicitHeight = 734
     object Label16: TLabel
       Left = 14
@@ -163,14 +163,14 @@ object frmMain: TfrmMain
     object Bevel1: TBevel
       Left = 6
       Top = 48
-      Width = 171
+      Width = 179
       Height = 10
       Shape = bsTopLine
     end
     object GroupBox2: TGroupBox
       Left = 6
-      Top = 319
-      Width = 171
+      Top = 442
+      Width = 178
       Height = 174
       Caption = 'Dimensions'
       TabOrder = 1
@@ -318,7 +318,7 @@ object frmMain: TfrmMain
         Caption = 'Size'
       end
       object Label9: TLabel
-        Left = 87
+        Left = 94
         Top = 27
         Width = 6
         Height = 13
@@ -345,7 +345,7 @@ object frmMain: TfrmMain
       object eWidth: TEdit
         Left = 41
         Top = 24
-        Width = 40
+        Width = 45
         Height = 21
         NumbersOnly = True
         PopupMenu = puDimensions
@@ -354,9 +354,9 @@ object frmMain: TfrmMain
         OnExit = eWidthExit
       end
       object eHeight: TEdit
-        Left = 99
+        Left = 108
         Top = 24
-        Width = 40
+        Width = 45
         Height = 21
         NumbersOnly = True
         PopupMenu = puDimensions
@@ -367,8 +367,8 @@ object frmMain: TfrmMain
     end
     object GroupBox1: TGroupBox
       Left = 6
-      Top = 221
-      Width = 171
+      Top = 344
+      Width = 178
       Height = 92
       Caption = 'Palette'
       TabOrder = 0
@@ -383,9 +383,15 @@ object frmMain: TfrmMain
         OnClick = bEditPaletteClick
       end
       object pbPalette: TPaintBox
-        Left = 26
-        Top = 60
+        Left = 11
+        Top = 58
         Width = 125
+        Height = 20
+      end
+      object sInfinity: TShape
+        Left = 148
+        Top = 58
+        Width = 20
         Height = 20
       end
       object cbAutoRender: TCheckBox
@@ -400,7 +406,7 @@ object frmMain: TfrmMain
     object GroupBox3: TGroupBox
       Left = 6
       Top = 64
-      Width = 171
+      Width = 178
       Height = 150
       Caption = 'Render'
       TabOrder = 2
@@ -428,7 +434,7 @@ object frmMain: TfrmMain
       object cbRenderMode: TComboBox
         Left = 11
         Top = 24
-        Width = 150
+        Width = 155
         Height = 21
         Style = csDropDownList
         TabOrder = 0
@@ -437,7 +443,7 @@ object frmMain: TfrmMain
       object eCoeffN: TEdit
         Left = 72
         Top = 59
-        Width = 65
+        Width = 85
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
         TabOrder = 1
@@ -447,7 +453,7 @@ object frmMain: TfrmMain
       object eIterations: TEdit
         Left = 72
         Top = 86
-        Width = 65
+        Width = 85
         Height = 21
         NumbersOnly = True
         TabOrder = 2
@@ -457,7 +463,7 @@ object frmMain: TfrmMain
       object eBailoutRadius: TEdit
         Left = 72
         Top = 113
-        Width = 65
+        Width = 85
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
         NumbersOnly = True
@@ -468,10 +474,10 @@ object frmMain: TfrmMain
     end
     object gbVarABC: TGroupBox
       Left = 6
-      Top = 499
-      Width = 171
+      Top = 220
+      Width = 179
       Height = 118
-      Caption = 'Parameters'
+      Caption = 'Extra Parameters'
       TabOrder = 3
       object lVarA: TLabel
         Left = 16
@@ -497,7 +503,7 @@ object frmMain: TfrmMain
       object eVarA: TEdit
         Left = 72
         Top = 27
-        Width = 65
+        Width = 85
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
         PopupMenu = puExamples
@@ -508,7 +514,7 @@ object frmMain: TfrmMain
       object eVarB: TEdit
         Left = 72
         Top = 54
-        Width = 65
+        Width = 85
         Height = 21
         PopupMenu = puExamples
         TabOrder = 1
@@ -518,7 +524,7 @@ object frmMain: TfrmMain
       object eVarC: TEdit
         Left = 72
         Top = 81
-        Width = 65
+        Width = 85
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
         PopupMenu = puExamples
@@ -530,7 +536,7 @@ object frmMain: TfrmMain
     object cbFractalSelector: TComboBox
       Left = 53
       Top = 12
-      Width = 113
+      Width = 132
       Height = 21
       Style = csDropDownList
       TabOrder = 4
@@ -539,7 +545,7 @@ object frmMain: TfrmMain
     object GroupBox4: TGroupBox
       Left = 6
       Top = 623
-      Width = 171
+      Width = 178
       Height = 92
       Caption = 'Cursor'
       DoubleBuffered = True
@@ -566,12 +572,12 @@ object frmMain: TfrmMain
   object Panel3: TPanel
     Left = 0
     Top = 34
-    Width = 966
+    Width = 959
     Height = 735
     Align = alClient
     TabOrder = 2
     OnMouseMove = Panel3MouseMove
-    ExplicitWidth = 962
+    ExplicitWidth = 955
     ExplicitHeight = 734
     object iRender: TImage
       Left = 0
