@@ -192,6 +192,8 @@ __published:	// IDE-managed Components
 	TMenuItem *Help1;
 	TMenuItem *About1;
 	TShape *sInfinity;
+	TMenuItem *N9;
+	TMenuItem *miSaveFractalParameters;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -218,6 +220,9 @@ __published:	// IDE-managed Components
 	void __fastcall eWidthExit(TObject *Sender);
 	void __fastcall iRenderMouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
 	void __fastcall Panel3MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+	void __fastcall sInfinityMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
+	void __fastcall miSaveFractalParametersClick(TObject *Sender);
 
 
 private:	// User declarations

@@ -11,6 +11,7 @@
 #include "FractalHandler.h"
 
 #include "Constants.h"
+#include "Dragon.h"
 #include "Julia.h"
 #include "JuliaCubic.h"
 #include "Mandelbrot.h"
@@ -19,11 +20,13 @@
 
 FractalHandler::FractalHandler()
 {
+	Fractal* dn = new Dragon();
 	Fractal* ja = new Julia();
 	Fractal* jc = new JuliaCubic();
 	Fractal* mt = new Mandelbrot();
 	Fractal* mn = new Martin();
 
+	Fractals.push_back(dn);
 	Fractals.push_back(ja);
 	Fractals.push_back(jc);
 	Fractals.push_back(mt);
@@ -42,6 +45,7 @@ FractalHandler::FractalHandler()
 
 FractalHandler::~FractalHandler()
 {
+	delete Fractals[4];
 	delete Fractals[3];
 	delete Fractals[2];
 	delete Fractals[1];

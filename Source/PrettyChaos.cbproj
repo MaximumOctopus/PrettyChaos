@@ -6,7 +6,7 @@
         <AppType>Application</AppType>
         <MainSource>PrettyChaos.cpp</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Release</Config>
+        <Config Condition="'$(Config)'==''">Debug</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
@@ -151,6 +151,7 @@
         <VerInfo_Locale>1033</VerInfo_Locale>
         <UsePackages>false</UsePackages>
         <LinkPackageStatics>rtl.lib;vcl.lib;vclimg.lib;VclSmp.lib;vclx.lib</LinkPackageStatics>
+        <Icon_MainIcon>PrettyChaos_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <ItemGroup>
         <CppCompile Include="ColourUtility.cpp">
@@ -164,6 +165,14 @@
         <None Include="Constants.h">
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
             <BuildOrder>15</BuildOrder>
+        </None>
+        <CppCompile Include="Dragon.cpp">
+            <VirtualFolder>{23FBDFF5-6240-4159-81D9-03F9995582AA}</VirtualFolder>
+            <BuildOrder>33</BuildOrder>
+        </CppCompile>
+        <None Include="Dragon.h">
+            <VirtualFolder>{23FBDFF5-6240-4159-81D9-03F9995582AA}</VirtualFolder>
+            <BuildOrder>34</BuildOrder>
         </None>
         <CppCompile Include="FormAbout.cpp">
             <VirtualFolder>{6F195188-9F40-4F70-B1F3-F2BFE6978011}</VirtualFolder>
@@ -300,9 +309,9 @@
         </None>
         <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
+        <FormResources Include="FormAbout.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
         <FormResources Include="FormEditBounds.dfm"/>
-        <FormResources Include="FormAbout.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -341,6 +350,7 @@
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>
+                        <VFOLDER ID="{23FBDFF5-6240-4159-81D9-03F9995582AA}" name="Dragon"/>
                     </VFOLDER>
                     <VFOLDER ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}" name="Utility"/>
                 </VFOLDERS>
@@ -410,12 +420,7 @@
                 </DeployFile>
                 <DeployFile LocalName=".\Win32\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName=".\Win64\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput"/>
-                <DeployFile LocalName=".\Win64\Release\PrettyChaos.exe" Configuration="Release" Class="ProjectOutput">
-                    <Platform Name="Win64">
-                        <RemoteName>PrettyChaos.exe</RemoteName>
-                        <Overwrite>true</Overwrite>
-                    </Platform>
-                </DeployFile>
+                <DeployFile LocalName=".\Win64\Release\PrettyChaos.exe" Configuration="Release" Class="ProjectOutput"/>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

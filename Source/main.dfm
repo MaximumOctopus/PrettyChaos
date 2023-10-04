@@ -393,6 +393,7 @@ object frmMain: TfrmMain
         Top = 58
         Width = 20
         Height = 20
+        OnMouseDown = sInfinityMouseDown
       end
       object cbAutoRender: TCheckBox
         Left = 74
@@ -1172,6 +1173,13 @@ object frmMain: TfrmMain
       object Saveproject1: TMenuItem
         Caption = 'Save Project...'
         OnClick = bSaveProjectClick
+      end
+      object N9: TMenuItem
+        Caption = '-'
+      end
+      object miSaveFractalParameters: TMenuItem
+        Caption = 'Save fractal parameters...'
+        OnClick = miSaveFractalParametersClick
       end
       object N1: TMenuItem
         Caption = '-'

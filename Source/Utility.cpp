@@ -45,6 +45,9 @@ namespace Utility
 		case 2:
 			ofn.lpstrFilter = _T("Palette files\0*.palette\0");
 			break;
+		case 3:
+			ofn.lpstrFilter = _T("Text files\0*.txt\0");
+			break;
 		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
@@ -72,14 +75,17 @@ namespace Utility
 		switch (mode)
 		{
 		case 0:
-			ofn.lpstrFilter = _T("Twnkl scene files\0*.twnkl\0");
+			ofn.lpstrFilter = _T("PrettyChaos project files\0*.prttychs\0");
 			break;
 		case 1:
 			ofn.lpstrFilter = _T("PNG image files\0*.png\0");
 			break;
 		case 2:
 			ofn.lpstrFilter = _T("Palette files\0*.palette\0");
-            break;
+			break;
+		case 3:
+			ofn.lpstrFilter = _T("Text files\0*.txt\0");
+			break;
 		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;

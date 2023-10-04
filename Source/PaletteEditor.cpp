@@ -66,6 +66,8 @@ void __fastcall TfrmPaletteEditor::FormDestroy(TObject *Sender)
 void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
 {
 	RenderGradient();
+
+	sInfinity->Brush->Color = TColor(Palette[__PaletteInfinity]);
 }
 
 

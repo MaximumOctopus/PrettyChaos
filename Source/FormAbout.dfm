@@ -3,8 +3,8 @@ object frmAbout: TfrmAbout
   Top = 0
   BorderStyle = bsDialog
   Caption = 'About'
-  ClientHeight = 226
-  ClientWidth = 532
+  ClientHeight = 268
+  ClientWidth = 556
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -14,9 +14,16 @@ object frmAbout: TfrmAbout
   Position = poMainFormCenter
   OnCreate = FormCreate
   TextHeight = 13
-  object Label1: TLabel
+  object Bevel1: TBevel
     Left = 8
-    Top = 8
+    Top = 16
+    Width = 545
+    Height = 241
+    Shape = bsFrame
+  end
+  object Label1: TLabel
+    Left = 24
+    Top = 33
     Width = 166
     Height = 33
     Caption = 'PrettyChaos'
@@ -28,29 +35,29 @@ object frmAbout: TfrmAbout
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 269
-    Top = 120
+    Left = 285
+    Top = 145
     Width = 242
     Height = 13
     Caption = 'https://github.com/MaximumOctopus/PrettyChaos'
   end
   object Label3: TLabel
-    Left = 269
-    Top = 64
+    Left = 285
+    Top = 89
     Width = 92
     Height = 13
     Caption = 'Paul Alan Freshney'
   end
   object Label4: TLabel
-    Left = 269
-    Top = 83
+    Left = 285
+    Top = 108
     Width = 168
     Height = 13
     Caption = 'Rutherford, Freeman, and Maxwell'
   end
   object Label5: TLabel
-    Left = 152
-    Top = 64
+    Left = 168
+    Top = 89
     Width = 28
     Height = 13
     Caption = 'Code'
@@ -62,8 +69,8 @@ object frmAbout: TfrmAbout
     ParentFont = False
   end
   object Label6: TLabel
-    Left = 152
-    Top = 83
+    Left = 168
+    Top = 108
     Width = 104
     Height = 13
     Caption = 'Development Cats'
@@ -75,15 +82,15 @@ object frmAbout: TfrmAbout
     ParentFont = False
   end
   object lVersion: TLabel
-    Left = 180
-    Top = 24
+    Left = 196
+    Top = 49
     Width = 12
     Height = 13
     Caption = '...'
   end
   object Image1: TImage
-    Left = 21
-    Top = 64
+    Left = 37
+    Top = 89
     Width = 105
     Height = 105
     Picture.Data = {
@@ -406,8 +413,8 @@ object frmAbout: TfrmAbout
       82}
   end
   object OK: TBitBtn
-    Left = 449
-    Top = 193
+    Left = 465
+    Top = 218
     Width = 75
     Height = 25
     Caption = 'OK'

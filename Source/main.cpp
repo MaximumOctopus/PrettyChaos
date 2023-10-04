@@ -17,6 +17,7 @@
 #include "main.h"
 
 #include "FormAbout.h"
+#include "FormColourDialog.h"
 #include "FormEditBounds.h"
 #include "PaletteEditor.h"
 
@@ -307,6 +308,22 @@ void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::miSaveFractalParametersClick(TObject *Sender)
+{
+	std::wstring file_name = Utility::GetSaveFileName(3);
+
+	if (!file_name.empty())
+	{
+		if (file_name.find(L".txt") == std::wstring::npos)
+		{
+			file_name += L".txt";
+		}
+
+		SaveFractalParameters(file_name);
+	}
+}
+
+
 void TfrmMain::CopyFromFractalToScreen()
 {
 	TBitmap* bit = new TBitmap();
@@ -576,6 +593,23 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::sInfinityMouseDown(TObject *Sender, TMouseButton Button,
+		  TShiftState Shift, int X, int Y)
+{
+	if (frmColourDialog->ShowModal() == mrOk)
+	{
+		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
+
+		GFractalHandler->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
+
+		if (frmPaletteEditor != nullptr)
+		{
+			frmPaletteEditor->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
+		}
+	}
+}
+
+
 void TfrmMain::CopyPaletteToFractal()
 {
 	if (frmPaletteEditor != nullptr)
@@ -752,7 +786,7 @@ void __fastcall TfrmMain::iRenderMouseMove(TObject *Sender, TShiftState Shift, i
 
 	lCursor->Caption = s.c_str();
 
-	lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]);
+	lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]]);
 }
 
 
@@ -763,4 +797,3 @@ void __fastcall TfrmMain::Panel3MouseMove(TObject *Sender, TShiftState Shift, in
 
 	lCursorColour->Caption = "-";
 }
-
