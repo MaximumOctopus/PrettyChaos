@@ -381,6 +381,8 @@ void __fastcall TfrmPaletteEditor::sbClearClick(TObject *Sender)
 	ResetUI();
 
 	UpdateKeyDisplay(KeySelected);
+
+	RenderGradient();
 }
 
 

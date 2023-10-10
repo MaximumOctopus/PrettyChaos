@@ -18,10 +18,12 @@
 #include <Vcl.ExtCtrls.hpp>
 #include <Vcl.Buttons.hpp>
 
+
+#include "Animation.h"
 #include "FractalHandler.h"
 #include "HistoryHandler.h"
 #include "Mandelbrot.h"
-#include "Martin.h"
+#include "MartinClassic.h"
 #include "ProjectIO.h"
 
 #include <Vcl.ComCtrls.hpp>
@@ -183,7 +185,6 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbAbout;
 	TMenuItem *N101;
 	TMenuItem *N102;
-	TCheckBox *cbAutoRender;
 	TGroupBox *GroupBox4;
 	TLabel *lCursor;
 	TLabel *lCursorColour;
@@ -194,6 +195,16 @@ __published:	// IDE-managed Components
 	TShape *sInfinity;
 	TMenuItem *N9;
 	TMenuItem *miSaveFractalParameters;
+	TMenuItem *miRenderAnimation;
+	TMenuItem *N10;
+	TMenuItem *N11;
+	TMenuItem *miConfigAnimation;
+	TSpeedButton *eAnimation;
+	TSpeedButton *sbReZoom;
+	TMenuItem *N12;
+	TMenuItem *N0801562;
+	TEdit *eVarD;
+	TLabel *lVarD;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -223,6 +234,9 @@ __published:	// IDE-managed Components
 	void __fastcall sInfinityMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
 	void __fastcall miSaveFractalParametersClick(TObject *Sender);
+	void __fastcall miConfigAnimationClick(TObject *Sender);
+	void __fastcall eAnimationClick(TObject *Sender);
+	void __fastcall sbReZoomClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -230,15 +244,21 @@ private:	// User declarations
     FractalHandler* GFractalHandler = nullptr;
 
 	HistoryHandler* history = nullptr;
-    ProjectIO* projectio = nullptr;
+	ProjectIO* projectio = nullptr;
 
 	Graphics::TBitmap* PaletteBitmap;
+
+	Animation AnimationConfiguration;
 
 	int ZoomMode = -1;
 	bool FirstPoint = True;
 
 	double ZPoint1x, ZPoint1y;
 	double ZPoint2x, ZPoint2y;
+
+	double LastZoomX, LastZoomY;
+
+	void ZoomPointClick(double, double);
 
 	void SaveFractal(const std::wstring);
 	void SaveFractalParameters(const std::wstring);
@@ -247,7 +267,7 @@ private:	// User declarations
 	void UpdateABCPanel();
     void UpdateZoomPanel();
 
-	void SetFromProjectFile(PCProject&);
+	void SetFromProjectFile(PCProject&, Animation&);
 	PCProject GetProjectSettings();
 
 	void CopyFromFractalToScreen();

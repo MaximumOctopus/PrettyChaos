@@ -14,8 +14,12 @@
 #include "Dragon.h"
 #include "Julia.h"
 #include "JuliaCubic.h"
+#include "JuliaQuartic.h"
 #include "Mandelbrot.h"
-#include "Martin.h"
+#include "MartinClassic.h"
+#include "MartinAdditive.h"
+#include "MartinPositive.h"
+#include "MartinSinusoidal.h"
 
 
 FractalHandler::FractalHandler()
@@ -23,33 +27,31 @@ FractalHandler::FractalHandler()
 	Fractal* dn = new Dragon();
 	Fractal* ja = new Julia();
 	Fractal* jc = new JuliaCubic();
+	Fractal* jq = new JuliaQuartic();
 	Fractal* mt = new Mandelbrot();
-	Fractal* mn = new Martin();
+	Fractal* mc = new Martin();
+	Fractal* ma = new MartinAdditive();
+	Fractal* mp = new MartinPositive();
+	Fractal* ms = new MartinSinusoidal();
 
 	Fractals.push_back(dn);
 	Fractals.push_back(ja);
 	Fractals.push_back(jc);
+	Fractals.push_back(jq);
 	Fractals.push_back(mt);
-	Fractals.push_back(mn);
-
-	for (int t = 0; t < __PaletteCount; t++)
-	{
-		int colour = std::floor(((double)t / __PaletteCount) * 255);
-
-		Palette[t] = colour + (colour << 8) + (colour << 16);
-	}
-
-	Palette[__PaletteInfinity] = 0x000000;
+	Fractals.push_back(mc);
+	Fractals.push_back(ma);
+	Fractals.push_back(mp);
+	Fractals.push_back(ms);
 }
 
 
 FractalHandler::~FractalHandler()
 {
-	delete Fractals[4];
-	delete Fractals[3];
-	delete Fractals[2];
-	delete Fractals[1];
-	delete Fractals[0];
+	for (int t = 0; t < Fractals.size(); t++)
+	{
+		delete Fractals[t];
+	}
 
     Fractals.clear();
 }

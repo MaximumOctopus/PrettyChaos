@@ -39,6 +39,8 @@ Dragon::Dragon() : Fractal()
 	RenderModes.push_back(L"Distance Alt");
 
 	NameA = L"Recursions";
+
+    ResetView();
 }
 
 
@@ -80,7 +82,7 @@ void Dragon::Render()
 	int from_y = 0;
 	int colour = 0;
 
-	for (int t = 0; t < Width * Height; t++) Canvas[t] = __PaletteInfinity;
+	for (int t = 0; t < Width * Height; t++) Canvas[t] = Palette[__PaletteInfinity];
 
 	int palette_range = std::floor(500 / (double)max_iterations) - 1;
 
@@ -215,7 +217,7 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 		if (y < Height && y >= 0 && x < Width && x >= 0)
 		{
-			Canvas[y * Width + x] = colour;
+			Canvas[y * Width + x] = Palette[colour];
 		}
 
 		for (int i = 0; x < xe; i++)
@@ -242,7 +244,7 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 			if (y < Height && y >= 0 && x < Width && x >= 0)
 			{
-				Canvas[y * Width + x] = colour;
+				Canvas[y * Width + x] = Palette[colour];
 			}
 		}
 	}
@@ -263,7 +265,7 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 		if (y < Height && y >= 0 && x < Width && x >= 0)
 		{
-			Canvas[y * Width + x] = colour;
+			Canvas[y * Width + x] = Palette[colour];
 		}
 
 		for (int i = 0; y < ye; i++)
@@ -290,7 +292,7 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 			if (y < Height && y >= 0 && x < Width && x >= 0)
 			{
-				Canvas[y * Width + x] = colour;
+				Canvas[y * Width + x] = Palette[colour];
 			}
 		}
 	}
@@ -299,7 +301,13 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 void Dragon::ResetView()
 {
+	int x_min = std::floor(-(double)Width / (2 * Var.d));
+	int x_max = std::floor((double)Width / (2 * Var.d));
 
+	int y_min = std::floor(-(double)Height / (2 * Var.d));
+	int y_max = std::floor((double)Height / (2 * Var.d));
+
+	SetView(x_min, x_max, y_min, x_max);
 }
 
 

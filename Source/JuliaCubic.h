@@ -8,6 +8,8 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+// https://en.wikipedia.org/wiki/Julia_set
+
 #pragma once
 
 

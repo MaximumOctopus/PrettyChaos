@@ -22,8 +22,6 @@ public:
 
 	std::vector<std::wstring> Names;
 
-	int Palette[501];
-
 	FractalHandler();
     ~FractalHandler();
 

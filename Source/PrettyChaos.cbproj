@@ -154,6 +154,10 @@
         <Icon_MainIcon>PrettyChaos_Icon.ico</Icon_MainIcon>
     </PropertyGroup>
     <ItemGroup>
+        <None Include="Animation.h">
+            <VirtualFolder>{4C4C43A1-9CD0-4FE2-850D-242A2F59A052}</VirtualFolder>
+            <BuildOrder>36</BuildOrder>
+        </None>
         <CppCompile Include="ColourUtility.cpp">
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
             <BuildOrder>31</BuildOrder>
@@ -180,6 +184,13 @@
             <FormType>dfm</FormType>
             <DependentOn>FormAbout.h</DependentOn>
             <BuildOrder>32</BuildOrder>
+        </CppCompile>
+        <CppCompile Include="FormAnimate.cpp">
+            <VirtualFolder>{6F195188-9F40-4F70-B1F3-F2BFE6978011}</VirtualFolder>
+            <Form>frmAnimate</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>FormAnimate.h</DependentOn>
+            <BuildOrder>35</BuildOrder>
         </CppCompile>
         <CppCompile Include="Formatting.cpp">
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
@@ -243,6 +254,14 @@
             <VirtualFolder>{FC06D070-0AEB-4B26-88BC-53285A85579E}</VirtualFolder>
             <BuildOrder>28</BuildOrder>
         </None>
+        <CppCompile Include="JuliaQuartic.cpp">
+            <VirtualFolder>{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}</VirtualFolder>
+            <BuildOrder>37</BuildOrder>
+        </CppCompile>
+        <None Include="JuliaQuartic.h">
+            <VirtualFolder>{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}</VirtualFolder>
+            <BuildOrder>38</BuildOrder>
+        </None>
         <CppCompile Include="main.cpp">
             <Form>Form1</Form>
             <FormType>dfm</FormType>
@@ -257,13 +276,37 @@
             <VirtualFolder>{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}</VirtualFolder>
             <BuildOrder>3</BuildOrder>
         </None>
-        <CppCompile Include="Martin.cpp">
+        <CppCompile Include="MartinAdditive.cpp">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>39</BuildOrder>
+        </CppCompile>
+        <None Include="MartinAdditive.h">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>40</BuildOrder>
+        </None>
+        <CppCompile Include="MartinClassic.cpp">
             <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
             <BuildOrder>23</BuildOrder>
         </CppCompile>
-        <None Include="Martin.h">
+        <None Include="MartinClassic.h">
             <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
             <BuildOrder>24</BuildOrder>
+        </None>
+        <CppCompile Include="MartinPositive.cpp">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>41</BuildOrder>
+        </CppCompile>
+        <None Include="MartinPositive.h">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>42</BuildOrder>
+        </None>
+        <CppCompile Include="MartinSinusoidal.cpp">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>43</BuildOrder>
+        </CppCompile>
+        <None Include="MartinSinusoidal.h">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>44</BuildOrder>
         </None>
         <CppCompile Include="Newton.cpp">
             <VirtualFolder>{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}</VirtualFolder>
@@ -310,6 +353,7 @@
         <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
         <FormResources Include="FormAbout.dfm"/>
+        <FormResources Include="FormAnimate.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
         <FormResources Include="FormEditBounds.dfm"/>
         <BuildConfiguration Include="Base">
@@ -339,18 +383,20 @@
                     <Source Name="MainSource">PrettyChaos.cpp</Source>
                 </Source>
                 <VFOLDERS>
+                    <VFOLDER ID="{4C4C43A1-9CD0-4FE2-850D-242A2F59A052}" name="Animation"/>
                     <VFOLDER ID="{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}" name="File I/O"/>
                     <VFOLDER ID="{6F195188-9F40-4F70-B1F3-F2BFE6978011}" name="Forms"/>
                     <VFOLDER ID="{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}" name="History"/>
                     <VFOLDER ID="{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}" name="Palette"/>
                     <VFOLDER ID="{64C7C5C2-487C-4A13-995B-F058C27D22E0}" name="Renderers">
                         <VFOLDER ID="{CBC6E249-27A9-4600-9ED7-EEE1DE006581}" name="Base"/>
+                        <VFOLDER ID="{23FBDFF5-6240-4159-81D9-03F9995582AA}" name="Dragon"/>
                         <VFOLDER ID="{8FFEB68A-C801-4430-885E-1783CF9ED09A}" name="Julia"/>
                         <VFOLDER ID="{FC06D070-0AEB-4B26-88BC-53285A85579E}" name="JuliaCubic"/>
+                        <VFOLDER ID="{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}" name="JuliaQuartic"/>
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>
-                        <VFOLDER ID="{23FBDFF5-6240-4159-81D9-03F9995582AA}" name="Dragon"/>
                     </VFOLDER>
                     <VFOLDER ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}" name="Utility"/>
                 </VFOLDERS>
@@ -420,7 +466,19 @@
                 </DeployFile>
                 <DeployFile LocalName=".\Win32\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput"/>
                 <DeployFile LocalName=".\Win64\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput"/>
+                <DeployFile LocalName=".\Win64\Debug\PrettyChaos.exe" Configuration="Debug" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>PrettyChaos.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployFile LocalName=".\Win64\Release\PrettyChaos.exe" Configuration="Release" Class="ProjectOutput"/>
+                <DeployFile LocalName=".\Win64\Release\PrettyChaos.exe" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win64">
+                        <RemoteName>PrettyChaos.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
                 <DeployClass Name="AdditionalDebugSymbols">
                     <Platform Name="iOSSimulator">
                         <Operation>1</Operation>

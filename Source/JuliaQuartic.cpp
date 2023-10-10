@@ -8,14 +8,16 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+// https://en.wikipedia.org/wiki/Julia_set
+
 #include <string>
 
 #include "ColourUtility.h"
 #include "Constants.h"
-#include "Julia.h"
+#include "JuliaQuartic.h"
 
 
-Julia::Julia() : Fractal()
+JuliaQuartic::JuliaQuartic() : Fractal()
 {
 	AcceptsABC = true;
 	AcceptsVarA = true;
@@ -23,10 +25,10 @@ Julia::Julia() : Fractal()
 
     bailout_radius = 4;
 
-	Var.a = -0.7;
-	Var.b = 0.27015;
+	Var.a = -0.79;
+	Var.b = 0.15;
 
-	Name = L"Julia Set";
+	Name = L"Julia Set (Quartic)";
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
@@ -44,18 +46,18 @@ Julia::Julia() : Fractal()
 }
 
 
-Julia::~Julia()
+JuliaQuartic::~JuliaQuartic()
 {
 }
 
 
-void Julia::Render()
+void JuliaQuartic::Render()
 {
 	double max_d = 0;
 
 	StartTime = std::chrono::system_clock::now();
 
-    // maximum distance from the centre of the image
+	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = 0; y < Height; y++)
@@ -73,9 +75,8 @@ void Julia::Render()
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
-				w = p * p - q * q + Var.a;
-				q = 2 * p * q + Var.b;
-
+				w = std::pow(p * p + q * q, 2) * std::cos(4 * std::atan2(q, p)) + Var.a;
+				q = std::pow(p * p + q * q, 2) * std::sin(4 * std::atan2(q, p)) + Var.b;
 				p = w;
 
 				it++;
@@ -84,7 +85,7 @@ void Julia::Render()
 			switch (RenderMode)
 			{
 			case __RMEscapeTime:
-	 	    case __RMTwoTone:
+			case __RMTwoTone:
 			case __RMThreeTone:
 			case __RMFourTone:
 			case __RMFiveTone:
@@ -101,12 +102,15 @@ void Julia::Render()
 
 					double itnew = it + 1 - nu;
 
-					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * __PaletteCount;
-					double it_d = (double)it + 1 - nu;
+					if (itnew < 0) itnew = 0;
+
+					itnew = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
+
+					it = std::floor(itnew);
 
 					Canvas[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
 																			 Palette[it + 1],
-																			 it_d - (std::floorl(it_d)));
+																			 itnew - (std::floor(itnew)));
 				}
 				else
 				{
@@ -121,6 +125,7 @@ void Julia::Render()
 
 				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
 
+				Iteration[ydotwidth + x] = it;
 				break;
 			}
 			case __RMDistanceOrigin:
@@ -145,18 +150,16 @@ void Julia::Render()
 
 		for (int y = 0; y < Height; y++)
 		{
-			int ydotwidth = y * Width;
-
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[ydotwidth + x] > max) max = Iteration[ydotwidth + x];
-				if (Iteration[ydotwidth + x] < min && Iteration[ydotwidth + x] != 0) min = Iteration[ydotwidth + x];
+				if (Iteration[y * Width + x] > max) max = Iteration[y * Width + x];
+				if (Iteration[y * Width + x] < min && Iteration[y * Width + x] != 0) min = Iteration[y * Width + x];
 			}
 		}
 
 		for (int y = 0; y < Height; y++)
 		{
-	        int ydotwidth = y * Width;
+			int ydotwidth = y * Width;
 
 			for (int x = 0; x < Width; x++)
 			{
@@ -176,19 +179,19 @@ void Julia::Render()
 		}
 		break;
 	}
-	case __RMDistance:
+	case __RMDistance:                                                                     // distance II
 		ColourDistanceII(max_d);
 		break;
-	case __RMTwoTone:
+	case __RMTwoTone:                                                                     // two-tone
 		ColourNTone(2);
 		break;
-	case __RMThreeTone:
+	case __RMThreeTone:                                                                     // three-tone
 		ColourNTone(3);
 		break;
-	case __RMFourTone:
+	case __RMFourTone:                                                                     // four-tone
 		ColourNTone(4);
 		break;
-	case __RMFiveTone:
+	case __RMFiveTone:                                                                     // five-tone
 		ColourNTone(5);
 		break;
 	}
@@ -197,12 +200,12 @@ void Julia::Render()
 }
 
 
-void Julia::ColourNTone(int n)
+void JuliaQuartic::ColourNTone(int n)
 {
 	int* colours = new int[n];
 
 	colours[0] = 0;
-	colours[n - 1] = __PaletteCount - 1;
+	colours[n - 1] = 499;
 
 	if (n > 2)
 	{
@@ -235,36 +238,38 @@ void Julia::ColourNTone(int n)
 }
 
 
-void Julia::ColourDistanceII(double max_d)
+void JuliaQuartic::ColourDistanceII(double max_d)
 {
 	for (int y = 0; y < Height; y++)
 	{
+		int ydotwidth = y * Width;
+
 		for (int x = 0; x < Width; x++)
 		{
-			if (Iteration[y * Width + x] != max_iterations)
+			if (Iteration[ydotwidth + x] != max_iterations)
 			{
-				int index = std::floor(std::pow((Data[y * Width + x] / max_d), n_coeff) * __PaletteCount);
+				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[y * Width + x] = Palette[index];
+				Canvas[ydotwidth + x] = Palette[index];
 			}
 			else
 			{
-				Canvas[y * Width + x] = Palette[__PaletteInfinity];
+				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
 			}
 		}
 	}
 }
 
 
-void Julia::ResetView()
+void JuliaQuartic::ResetView()
 {
 	SetView(-2.00, 2.00, -2.00, 2.00);
 }
 
 
-void Julia::ToFile(std::ofstream& ofile)
+void JuliaQuartic::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Julia Set\n");
+	ofile << Formatting::to_utf8(L"Julie Set (Quartic)\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");

@@ -11,6 +11,7 @@
 
 #include <string>
 
+#include "Constants.h"
 #include "Fractal.h"
 
 
@@ -20,6 +21,15 @@ Fractal::Fractal()
 	Canvas = new int[640 * 640];
 	Iteration = new int[640 * 640];
 	Data = new double[640 * 640];
+
+	for (int t = 0; t < __PaletteCount; t++)
+	{
+		int colour = std::floor(((double)t / __PaletteCount) * 255);
+
+		Palette[t] = colour + (colour << 8) + (colour << 16);
+	}
+
+	Palette[__PaletteInfinity] = 0x000000;
 }
 
 
@@ -134,7 +144,7 @@ void Fractal::SetDimensions(int _width, int _height)
 		Iteration = new int[Width * Height];
 		Data = new double[Width * Height];
 
-		if (Width > Height || Width == Height)
+		if (Width >= Height)
 		{
 			double c_yaxis = ymin + ((ymax - ymin) / 2); // centre point of y-axis
 
@@ -211,11 +221,12 @@ void Fractal::SetParameters(double n, int i, int b)
 }
 
 
-void Fractal::SetABC(double a, double b, double c)
+void Fractal::SetABC(double a, double b, double c, double d)
 {
 	Var.a = a;
 	Var.b = b;
 	Var.c = c;
+	Var.d = d;
 }
 
 

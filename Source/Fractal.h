@@ -25,6 +25,7 @@ struct Variables
 	double a = 0;
 	double b = 0;
 	double c = 0;
+    double d = 0;
 };
 
 
@@ -56,7 +57,9 @@ public:
 	double max_iterations = 1000;
 	double bailout_radius = 256;
 
-    Variables Var;
+	Variables Var;
+
+	int Palette[501];
 
 	int AcceptsABCSpectificRenderModeBegin = -1;
 	int AcceptsABCSpectificRenderModeEnd = -1;
@@ -64,12 +67,14 @@ public:
 	bool AcceptsVarA = false;
 	bool AcceptsVarB = false;
 	bool AcceptsVarC = false;
+	bool AcceptsVarD = false;
 
 	bool AcceptsZoom = true;
 
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
 	std::wstring NameC = L"";
+	std::wstring NameD = L"";
 
 	int RenderMode = 0;
 
@@ -106,7 +111,7 @@ public:
 	void SetParameters(double, int, int);
 	void SetRenderMode(int);
 
-	void SetABC(double, double, double);
+	void SetABC(double, double, double, double);
 	bool ShowABC(int);
 
 	virtual void ToFile(std::ofstream&);

@@ -17,6 +17,7 @@
 #include "main.h"
 
 #include "FormAbout.h"
+#include "FormAnimate.h"
 #include "FormColourDialog.h"
 #include "FormEditBounds.h"
 #include "PaletteEditor.h"
@@ -24,7 +25,7 @@
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Mandelbrot.h"
-#include "Martin.h"
+#include "MartinClassic.h"
 #include "Utility.h"
 
 #pragma package(smart_init)
@@ -88,6 +89,7 @@ void TfrmMain::UpdateFromFractalChange()
 		eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
 		eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
 		eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
+		eVarD->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
     }
 
 	cbRenderMode->Clear();
@@ -103,7 +105,7 @@ void TfrmMain::UpdateFromFractalChange()
 }
 
 
-void TfrmMain::SetFromProjectFile(PCProject &project)
+void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 {
 	for (int t = 0; t < cbFractalSelector->Items->Count; t++)
 	{
@@ -147,6 +149,26 @@ void TfrmMain::SetFromProjectFile(PCProject &project)
 	eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
 	eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
 	eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
+
+	// =========================================================================
+
+	if (animation.Configured)
+	{
+		AnimationConfiguration.Configured = true;
+
+		AnimationConfiguration.Steps = animation.Steps;
+
+		AnimationConfiguration.DeltaA = animation.DeltaA;
+		AnimationConfiguration.DeltaB = animation.DeltaB;
+		AnimationConfiguration.DeltaC = animation.DeltaC;
+
+		AnimationConfiguration.Parameters = animation.Parameters;
+		AnimationConfiguration.Zoom = animation.Zoom;
+
+		AnimationConfiguration.Prefix = animation.Prefix;
+	}
+
+	sbReZoom->Enabled = animation.Configured;
 
 	// =========================================================================
 
@@ -220,10 +242,13 @@ void TfrmMain::UpdateABCPanel()
 		eVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
 		lVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
 		eVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
+		lVarD->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarD;
+		eVarD->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarD;
 
 		lVarA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
 		lVarB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
 		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
+		lVarD->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameD.c_str();
 	}
 }
 
@@ -242,11 +267,16 @@ void TfrmMain::UpdateZoomPanel()
 
 void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 {
+	auto StartTime = std::chrono::system_clock::now();
+
 	sbMain->SimpleText = "Rendering...";
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC)
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(), eVarB->Text.ToDouble(), eVarC->Text.ToDouble());
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(),
+																		eVarB->Text.ToDouble(),
+																		eVarC->Text.ToDouble(),
+																		eVarD->Text.ToDouble());
 	}
 
     eCoeffNExit(nullptr);
@@ -255,10 +285,6 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Render();
 
-	std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds.";// + fractal->debug;
-
-	sbMain->SimpleText = c.c_str();
-
 	CopyFromFractalToScreen();
 
 	if (miSaveAllImages->Checked)
@@ -266,6 +292,57 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 		std::wstring file_name = Utility::ProcessFileName(__AutoSaveTemplate);
 
 		SaveFractal(file_name);
+	}
+
+	std::chrono::system_clock::time_point EndTime = std::chrono::system_clock::now();
+
+	std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
+
+	std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds (" + std::to_wstring(elapsed_seconds.count()) + L" seconds)";
+
+	sbMain->SimpleText = c.c_str();
+
+}
+
+
+void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
+{
+	for (int i = 0; i < AnimationConfiguration.Steps; i++)
+	{
+		sbRenderClick(nullptr);
+
+		std::wstring file_name = L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + L".png";
+
+		SaveFractal(Utility::ProcessFileName(file_name));
+
+		if (AnimationConfiguration.Parameters)
+		{
+			double a = eVarA->Text.ToDouble();
+			a += AnimationConfiguration.DeltaA;
+			eVarA->Text = a;
+
+			if (eVarB->Visible)
+			{
+				double b = eVarB->Text.ToDouble();
+				b += AnimationConfiguration.DeltaB;
+				eVarB->Text = b;
+			}
+
+			if (eVarC->Visible)
+			{
+				double c = eVarC->Text.ToDouble();
+				c += AnimationConfiguration.DeltaC;
+				eVarC->Text = c;
+			}
+		}
+
+		if (AnimationConfiguration.Zoom)
+		{
+			if (sbReZoom->Enabled)
+			{
+				sbReZoomClick(nullptr);
+			}
+		}
 	}
 }
 
@@ -282,10 +359,11 @@ void __fastcall TfrmMain::bOpenProjectClick(TObject *Sender)
 		}
 
 		PCProject project;
+		Animation animation;
 
-		projectio->Load(file_name, project);
+		projectio->Load(file_name, project, animation);
 
-		SetFromProjectFile(project);
+		SetFromProjectFile(project, animation);
 	}
 }
 
@@ -303,7 +381,7 @@ void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 
 		PCProject project = GetProjectSettings();
 
-		projectio->Save(file_name, project);
+		projectio->Save(file_name, project, AnimationConfiguration);
 	}
 }
 
@@ -333,37 +411,19 @@ void TfrmMain::CopyFromFractalToScreen()
 
 	TRGBTriple *ptr;
 
-	// only julia+cubic and mandelbrot have this mode that uses more data to build the palette...
-	if (cbRenderMode->ItemIndex == 1 && cbFractalSelector->ItemIndex < 3)
+	int* Canvas = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas;
+
+	for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
 	{
-		for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
+		ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
+
+		int yy = y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
+
+		for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
 		{
-			ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
-
-			for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
-			{
-				int colour = ColourUtility::LinearInterpolate(GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]],
-											GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x] + 1],
-											GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Data[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]);
-
-				ptr[x].rgbtRed = colour & 0x0000ff;
-				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = colour >> 16 & 0x0000ff;
-			}
-		}
-	}
-	else
-	{
-		for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
-		{
-			ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
-
-			for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
-			{
-				ptr[x].rgbtRed = GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]] & 0x0000ff;
-				ptr[x].rgbtGreen = GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width + x]] >> 16 & 0x0000ff;
-			}
+			ptr[x].rgbtRed = Canvas[yy + x] & 0x0000ff;
+			ptr[x].rgbtGreen = Canvas[yy + x] >> 8 & 0x0000ff;
+			ptr[x].rgbtBlue = Canvas[yy + x] >> 16;// & 0x0000ff;
 		}
 	}
 
@@ -486,16 +546,14 @@ void __fastcall TfrmMain::iRenderMouseDown(TObject *Sender, TMouseButton Button,
 				FirstPoint = false;
 				ZoomMode = -1;
 
-				Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
+				sbReZoom->Enabled = true;
+
+                Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
 
 				double xmin = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)X);
 				double ymin = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)Y);
 
-				fractal->ZoomAtPoint(xmin, ymin);
-
-				history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
-
-				UpdateFractalPanel();
+				ZoomPointClick(xmin, ymin);
 
 				iRender->Cursor = crDefault;
 			}
@@ -503,6 +561,32 @@ void __fastcall TfrmMain::iRenderMouseDown(TObject *Sender, TMouseButton Button,
 		}
 		}
 	}
+}
+
+
+void TfrmMain::ZoomPointClick(double X, double Y)
+{
+	Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
+
+	LastZoomX = X;
+	LastZoomY = Y;
+
+	fractal->ZoomAtPoint(LastZoomX, LastZoomY);
+
+	history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
+
+	UpdateFractalPanel();
+}
+
+
+void __fastcall TfrmMain::miConfigAnimationClick(TObject *Sender)
+{
+	if (frmAnimate->ShowModal() == mrOk)
+	{
+		AnimationConfiguration = frmAnimate->AnimationConfiguration;
+
+        eAnimation->Enabled = true;
+    }
 }
 
 
@@ -529,6 +613,12 @@ void __fastcall TfrmMain::sbZoomClick(TObject *Sender)
 
 		iRender->Cursor = crCross;
 	}
+}
+
+
+void __fastcall TfrmMain::sbReZoomClick(TObject *Sender)
+{
+	ZoomPointClick(LastZoomX, LastZoomY);
 }
 
 
@@ -584,11 +674,6 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 		CopyPaletteToFractal();
 
 		UpdatePalette();
-
-		if (cbAutoRender->Checked)
-		{
-	        CopyFromFractalToScreen();
-		}
 	}
 }
 
@@ -600,7 +685,7 @@ void __fastcall TfrmMain::sInfinityMouseDown(TObject *Sender, TMouseButton Butto
 	{
 		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
-		GFractalHandler->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
 
 		if (frmPaletteEditor != nullptr)
 		{
@@ -616,9 +701,10 @@ void TfrmMain::CopyPaletteToFractal()
 	{
 		if (frmPaletteEditor->HasPalette)
 		{
+            // 0 - 499, main palette; 500, infinity colour
 			for (int t = 0; t < 501; t++)
 			{
-				GFractalHandler->Palette[t] = frmPaletteEditor->Palette[t];
+				GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t] = frmPaletteEditor->Palette[t];
 			}
 		}
 	}
@@ -631,9 +717,9 @@ void TfrmMain::UpdatePalette()
 
 	for (int t = 0; t < 125; t++)
 	{
-		ptr[t].rgbtBlue = GFractalHandler->Palette[t * 4] >> 16 & 0x0000ff;
-		ptr[t].rgbtGreen = GFractalHandler->Palette[t * 4] >> 8 & 0x0000ff;
-		ptr[t].rgbtRed = GFractalHandler->Palette[t * 4] & 0x0000ff;
+		ptr[t].rgbtBlue = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] >> 16 & 0x0000ff;
+		ptr[t].rgbtGreen = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] >> 8 & 0x0000ff;
+		ptr[t].rgbtRed = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] & 0x0000ff;
 	}
 
 	for (int t = 0; t < 20; t++)
@@ -641,7 +727,7 @@ void TfrmMain::UpdatePalette()
 		pbPalette->Canvas->Draw(0, t, PaletteBitmap);
 	}
 
-    sInfinity->Brush->Color = TColor(GFractalHandler->Palette[__PaletteInfinity]);
+	sInfinity->Brush->Color = TColor(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[__PaletteInfinity]);
 }
 
 
@@ -654,6 +740,8 @@ void __fastcall TfrmMain::FormPaint(TObject *Sender)
 void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
+
+    sbReZoom->Enabled = false;
 
 	UpdateZoomPanel();
 
@@ -786,7 +874,7 @@ void __fastcall TfrmMain::iRenderMouseMove(TObject *Sender, TShiftState Shift, i
 
 	lCursor->Caption = s.c_str();
 
-	lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Palette[GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]]);
+	lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]);
 }
 
 

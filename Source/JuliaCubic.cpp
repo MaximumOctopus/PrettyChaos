@@ -10,6 +10,7 @@
 
 #include <string>
 
+#include "ColourUtility.h"
 #include "Constants.h"
 #include "JuliaCubic.h"
 
@@ -59,6 +60,8 @@ void JuliaCubic::Render()
 
 	for (int y = 0; y < Height; y++)
 	{
+		int ydotwidth = y * Width;
+
 		for (int x = 0; x < Width; x++)
 		{
 			double p = xmin + (double)x * (xmax - xmin) / (double)Width;    // real part
@@ -71,7 +74,7 @@ void JuliaCubic::Render()
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
 				w = std::pow(p * p + q * q, 1.5) * std::cos(3 * std::atan2(q, p)) + Var.a;
-				q = std::pow(p * p + q * q, 1.5) * std::sin(3 * std::atan2l(q, p)) + Var.b;
+				q = std::pow(p * p + q * q, 1.5) * std::sin(3 * std::atan2(q, p)) + Var.b;
 				p = w;
 
 				it++;
@@ -80,8 +83,12 @@ void JuliaCubic::Render()
 			switch (RenderMode)
 			{
 			case __RMEscapeTime:
+	 	    case __RMTwoTone:
+			case __RMThreeTone:
+			case __RMFourTone:
+			case __RMFiveTone:
 			{
-				Iteration[y * Width + x] = it;
+				Iteration[ydotwidth + x] = it;
 				break;
 			}
 			case __RMContinuous:
@@ -93,26 +100,30 @@ void JuliaCubic::Render()
 
 					double itnew = it + 1 - nu;
 
-					it = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
-					double it_d = (double)it + 1 - nu;
+					if (itnew < 0) itnew = 0;
 
-					Canvas[y * Width + x] = it;
-					Data[y * Width + x] = it_d - (std::floorl(it_d));
+					itnew = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
+
+					it = std::floor(itnew);
+
+					Canvas[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
+																			 Palette[it + 1],
+																			 itnew - (std::floor(itnew)));
 				}
 				else
 				{
-					Canvas[y * Width + x] = __PaletteInfinity;
+					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
 
 				break;
 			}
 			case __RMDistance:
 			{
-				Data[y * Width + x] = std::sqrt(std::pow(p + q, 2));
+				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
 
-				if (Data[y * Width + x] > max_d) max_d = Data[y * Width + x];
+				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
 
-				Iteration[y * Width + x] = it;
+				Iteration[ydotwidth + x] = it;
 				break;
 			}
 			case __RMDistanceOrigin:
@@ -120,7 +131,8 @@ void JuliaCubic::Render()
 				int ny = std::floor(y - (Height / 2));
 
 				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((double)it / max_iterations, n_coeff)) * __PaletteCount);
-				Canvas[y * Width + x] = index;
+
+				Canvas[ydotwidth + x] = Palette[index];
 
 				break;
 			}
@@ -145,19 +157,21 @@ void JuliaCubic::Render()
 
 		for (int y = 0; y < Height; y++)
 		{
+			int ydotwidth = y * Width;
+
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[y * Width + x] == 0)
+				if (Iteration[ydotwidth + x] == 0)
 				{
-					Canvas[y * Width + x] = __PaletteInfinity;
+					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
 				else
 				{
-					int it = Iteration[y * Width + x] - min;
+					int it = Iteration[ydotwidth + x] - min;
 
 					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
 
-					Canvas[y * Width + x] = index;
+					Canvas[ydotwidth + x] = Palette[index];
 				}
 			}
 		}
@@ -197,21 +211,23 @@ void JuliaCubic::ColourNTone(int n)
 
 		for (int t = 1; t < n - 1; t++)
 		{
-			colours[t] = delta * t;
+			colours[t] = Palette[delta * t];
 		}
 	}
 
 	for (int y = 0; y < Height; y++)
 	{
+		int ydotwidth = y * Width;
+
 		for (int x = 0; x < Width; x++)
 		{
-			if (Iteration[y * Width + x] != max_iterations)
+			if (Iteration[ydotwidth + x] != max_iterations)
 			{
-				Canvas[y * Width + x] = colours[Iteration[y * Width + x] % n];
+				Canvas[ydotwidth + x] = Palette[colours[Iteration[ydotwidth + x] % n]];
 			}
 			else
 			{
-				Canvas[y * Width + x] = __PaletteInfinity;
+				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
 			}
 		}
 	}
@@ -224,17 +240,19 @@ void JuliaCubic::ColourDistanceII(double max_d)
 {
 	for (int y = 0; y < Height; y++)
 	{
+		int ydotwidth = y * Width;
+
 		for (int x = 0; x < Width; x++)
 		{
-			if (Iteration[y * Width + x] != max_iterations)
+			if (Iteration[ydotwidth + x] != max_iterations)
 			{
-				int index = std::floor(std::pow((Data[y * Width + x] / max_d), n_coeff) * __PaletteCount);
+				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[y * Width + x] = index;
+				Canvas[ydotwidth + x] = Palette[index];
 			}
 			else
 			{
-				Canvas[y * Width + x] = __PaletteInfinity;
+				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
 			}
 		}
 	}

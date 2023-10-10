@@ -20,13 +20,15 @@ ProjectIO::ProjectIO()
 }
 
 
-bool ProjectIO::Load(std::wstring file_name, PCProject &project)
+bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &animation)
 {
 	std::wifstream file(file_name);
 
 	if (file)
 	{
 		std::wstring s(L"");
+
+		animation.Configured = false;
 
 		while (std::getline(file, s))
 		{
@@ -97,6 +99,29 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project)
 					case FileProperty::var_c:
 						project.var_c = stod(value);
 						break;
+
+					case FileProperty::Steps:
+						animation.Configured = true;
+						animation.Steps = stoi(value);
+						break;
+					case FileProperty::DeltaA:
+						animation.DeltaA = stod(value);
+						break;
+					case FileProperty::DeltaB:
+						animation.DeltaB = stod(value);
+						break;
+					case FileProperty::DeltaC:
+						animation.DeltaC = stod(value);
+						break;
+					case FileProperty::Parameters:
+						animation.Parameters = stoi(value);
+						break;
+					case FileProperty::Zoom:
+						animation.Zoom = stoi(value);
+						break;
+					case FileProperty::Prefix:
+						animation.Prefix = value;
+						break;
                     }
 				}
 			}
@@ -125,7 +150,7 @@ ProjectIO::FileProperty ProjectIO::GetInputProperty(std::wstring input)
 }
 
 
-bool ProjectIO::Save(std::wstring file_name, PCProject &project)
+bool ProjectIO::Save(std::wstring file_name, PCProject &project, Animation &animation)
 {
 	std::ofstream file(file_name);
 
@@ -152,6 +177,24 @@ bool ProjectIO::Save(std::wstring file_name, PCProject &project)
 		file << Formatting::to_utf8(L"var_c=" + std::to_wstring(project.var_c) + L"\n");
 
 		file << Formatting::to_utf8(L"]\n");
+
+		if (animation.Configured)
+		{
+			file << Formatting::to_utf8(L"{\n");
+
+			file << Formatting::to_utf8(L"Steps=" + std::to_wstring(animation.Steps) + L"\n");
+
+			file << Formatting::to_utf8(L"DeltaA=" + std::to_wstring(animation.DeltaA) + L"\n");
+			file << Formatting::to_utf8(L"DeltaB=" + std::to_wstring(animation.DeltaB) + L"\n");
+			file << Formatting::to_utf8(L"DeltaC=" + std::to_wstring(animation.DeltaC) + L"\n");
+
+			file << Formatting::to_utf8(L"Parameters=" + std::to_wstring(animation.Parameters) + L"\n");
+			file << Formatting::to_utf8(L"Zoom=" + std::to_wstring(animation.Zoom) + L"\n");
+
+			file << Formatting::to_utf8(L"Prefix=" + animation.Prefix + L"\n");
+
+			file << Formatting::to_utf8(L"}\n");
+		}
 
 		file.close();
 

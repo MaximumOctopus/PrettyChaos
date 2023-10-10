@@ -8,15 +8,13 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
-// https://en.wikipedia.org/wiki/Julia_set
-
 #pragma once
 
 
 #include "Fractal.h"
 
 
-class Julia : public Fractal
+class JuliaQuartic : public Fractal
 {
 	static const int __RMEscapeTime = 0;
 	static const int __RMContinuous = 1;
@@ -32,13 +30,13 @@ class Julia : public Fractal
 
 public:
 
-	Julia();
+	JuliaQuartic();
 
-	~Julia();
+	~JuliaQuartic();
 
 	void Render() override;
 
 	void ResetView() override;
 
-   	void ToFile(std::ofstream&) override;
+    void ToFile(std::ofstream&) override;
 };
