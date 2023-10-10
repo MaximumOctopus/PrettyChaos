@@ -1,5 +1,5 @@
 ==========================================================================================================================
-PrettyChaos 0.6
+PrettyChaos 0.7
 (c) Paul Alan Freshney 2023
 
 paul@freshney.org
@@ -7,7 +7,7 @@ paul@freshney.org
 Source code and portable install
   https://github.com/MaximumOctopus/PrettyChaos
 
-October 4th 2023
+October 10th 2023
 ==========================================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
