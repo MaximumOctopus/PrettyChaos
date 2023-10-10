@@ -170,8 +170,7 @@ void MartinPositive::ResetView()
 	int y_min = std::floor(-(double)Height / (2 * Var.d));
 	int y_max = std::floor((double)Height / (2 * Var.d));
 
-    SetView(x_min, x_max, y_min, x_max);
-}
+	SetView(x_min, x_max, y_min, x_max);
 }
 
 
@@ -185,4 +184,5 @@ void MartinPositive::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");
 	ofile << Formatting::to_utf8(L"    b          : " + std::to_wstring(Var.b) + L"\n");
 	ofile << Formatting::to_utf8(L"    c          : " + std::to_wstring(Var.c) + L"\n");
+	ofile << Formatting::to_utf8(L"    d          : " + std::to_wstring(Var.d) + L"\n");
 }

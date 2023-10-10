@@ -99,6 +99,9 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &anim
 					case FileProperty::var_c:
 						project.var_c = stod(value);
 						break;
+					case FileProperty::var_d:
+						project.var_d = stod(value);
+						break;
 
 					case FileProperty::Steps:
 						animation.Configured = true;
@@ -175,6 +178,7 @@ bool ProjectIO::Save(std::wstring file_name, PCProject &project, Animation &anim
 		file << Formatting::to_utf8(L"var_a=" + std::to_wstring(project.var_a) + L"\n");
 		file << Formatting::to_utf8(L"var_b=" + std::to_wstring(project.var_b) + L"\n");
 		file << Formatting::to_utf8(L"var_c=" + std::to_wstring(project.var_c) + L"\n");
+		file << Formatting::to_utf8(L"var_d=" + std::to_wstring(project.var_d) + L"\n");
 
 		file << Formatting::to_utf8(L"]\n");
 

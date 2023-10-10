@@ -149,6 +149,7 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
 	eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
 	eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
+	eVarD->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
 
 	// =========================================================================
 
@@ -199,6 +200,7 @@ PCProject TfrmMain::GetProjectSettings()
 	project.var_a = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
 	project.var_b = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
 	project.var_c = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
+	project.var_d = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
 
 	return project;
 }
@@ -333,6 +335,13 @@ void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 				double c = eVarC->Text.ToDouble();
 				c += AnimationConfiguration.DeltaC;
 				eVarC->Text = c;
+			}
+
+			if (eVarD->Visible)
+			{
+				double d = eVarD->Text.ToDouble();
+				d += AnimationConfiguration.DeltaD;
+				eVarD->Text = D;
 			}
 		}
 
