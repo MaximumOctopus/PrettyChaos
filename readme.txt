@@ -35,6 +35,13 @@ All of my software is free and open source; please consider donating to a local 
 
 Release History
 
+0.7 / October 2023
+
+Added Rendering performance improvements
+Added Julia Set (Quartic)
+Added Three Martin fractal types
+Added Simple animation system (by zoom, and/or parameter(s)) 
+
 0.6 / October 4th 2023
 
 Added nice icon!
