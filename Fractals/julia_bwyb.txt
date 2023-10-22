@@ -1,0 +1,14 @@
+Julie Set (Quartic)
+    Size       : 3440 x 1440
+    Rendermode : Escape time (0)
+    Iterations : 1000.000000
+    n coeff    : 0.500000
+    r bailout  : 4.000000
+
+    a          : -0.790000
+    b          : 0.150000
+
+    x min      : -0.089648
+    x max      : -0.058398
+    y min      : -0.644138
+    y max      : -0.631057

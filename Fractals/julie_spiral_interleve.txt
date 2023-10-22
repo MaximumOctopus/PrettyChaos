@@ -1,0 +1,14 @@
+Julia Set
+    Size       : 640 x 640
+    Rendermode : Escape time (0)
+    Iterations : 1000.000000
+    n coeff    : 1.000000
+    r bailout  : 4.000000
+
+    a          : -0.700000
+    b          : 0.270150
+
+    x min      : 0.480469
+    x max      : 0.488281
+    y min      : -0.141016
+    y max      : -0.133203
