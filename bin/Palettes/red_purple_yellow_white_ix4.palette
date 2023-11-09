@@ -2,6 +2,8 @@
 infinity=0
 colourspace=1
 steps=1
+interleve=1
+interlevex=1
 ]
 {
 colour=255
@@ -16,8 +18,14 @@ method=0
 position=499
 }
 {
-colour=16726015
+colour=65535
 mode=0
 method=0
-position=250
+position=376
+}
+{
+colour=16715007
+mode=0
+method=0
+position=148
 }
