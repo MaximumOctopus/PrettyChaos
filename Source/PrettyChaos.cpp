@@ -14,8 +14,8 @@
 
 USEFORM("main.cpp", frmMain);
 USEFORM("PaletteEditor.cpp", frmPaletteEditor);
-USEFORM("FormAbout.cpp", frmAbout);
 USEFORM("FormAnimate.cpp", frmAnimate);
+USEFORM("FormAbout.cpp", frmAbout);
 USEFORM("FormColourDialog.cpp", frmColourDialog);
 USEFORM("FormEditBounds.cpp", frmEditBounds);
 //---------------------------------------------------------------------------
@@ -26,7 +26,6 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
-		Application->CreateForm(__classid(TfrmPaletteEditor), &frmPaletteEditor);
 		Application->CreateForm(__classid(TfrmColourDialog), &frmColourDialog);
 		Application->CreateForm(__classid(TfrmEditBounds), &frmEditBounds);
 		Application->CreateForm(__classid(TfrmAbout), &frmAbout);

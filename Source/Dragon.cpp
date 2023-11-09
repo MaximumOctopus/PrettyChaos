@@ -301,11 +301,11 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 void Dragon::ResetView()
 {
-	int x_min = std::floor(-(double)Width / (2 * Var.d));
-	int x_max = std::floor((double)Width / (2 * Var.d));
+	int x_min = std::floor(-(double)Width / (2 * 1));
+	int x_max = std::floor((double)Width / (2 * 1));
 
-	int y_min = std::floor(-(double)Height / (2 * Var.d));
-	int y_max = std::floor((double)Height / (2 * Var.d));
+	int y_min = std::floor(-(double)Height / (2 * 1));
+	int y_max = std::floor((double)Height / (2 * 1));
 
 	SetView(x_min, x_max, y_min, x_max);
 }
@@ -318,5 +318,5 @@ void Dragon::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
-	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");
+	ofile << Formatting::to_utf8(L"    recursions : " + std::to_wstring(Var.a) + L"\n");
 }

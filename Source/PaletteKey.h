@@ -31,13 +31,12 @@ struct CombinedColour
 
 class PaletteKey
 {
+
 public:
 
 	int Colour = 0;
 	CombinedColour SuperColour;
 	int Position = 0;
-
-	TShape* Shape = nullptr;
 
 	int Method = 0;
 	int Mode = modeRGB;               // 0 = RGB, 1 = HSV
@@ -45,4 +44,6 @@ public:
 	int SubParameterR = 0;
 	int SubParameterG = 0;
 	int SubParameterB = 0;
+
+	bool Locked = false;
 };

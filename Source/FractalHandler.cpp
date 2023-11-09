@@ -15,6 +15,8 @@
 #include "Julia.h"
 #include "JuliaCubic.h"
 #include "JuliaQuartic.h"
+#include "JuliaQuintic.h"
+#include "JuliaNtic.h"
 #include "Mandelbrot.h"
 #include "MartinClassic.h"
 #include "MartinAdditive.h"
@@ -28,6 +30,8 @@ FractalHandler::FractalHandler()
 	Fractal* ja = new Julia();
 	Fractal* jc = new JuliaCubic();
 	Fractal* jq = new JuliaQuartic();
+	Fractal* jn = new JuliaQuintic();
+	Fractal* jx = new JuliaNtic();
 	Fractal* mt = new Mandelbrot();
 	Fractal* mc = new Martin();
 	Fractal* ma = new MartinAdditive();
@@ -38,6 +42,8 @@ FractalHandler::FractalHandler()
 	Fractals.push_back(ja);
 	Fractals.push_back(jc);
 	Fractals.push_back(jq);
+	Fractals.push_back(jn);
+	Fractals.push_back(jx);
 	Fractals.push_back(mt);
 	Fractals.push_back(mc);
 	Fractals.push_back(ma);

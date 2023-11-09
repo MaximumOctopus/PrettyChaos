@@ -19,6 +19,7 @@ struct Animation
 	double DeltaA = 0;
 	double DeltaB = 0;
 	double DeltaC = 0;
+    double DeltaD = 0;
 
 	bool Parameters = false;
     bool Zoom = false;

@@ -13,6 +13,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   Font.Name = 'Tahoma'
   Font.Style = []
   Position = poMainFormCenter
+  OnClose = FormClose
   OnDestroy = FormDestroy
   OnPaint = FormPaint
   OnShow = FormShow
@@ -141,7 +142,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object iPointer: TImage
       Left = 12
-      Top = 96
+      Top = 108
       Width = 10
       Height = 10
       AutoSize = True
@@ -162,7 +163,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Transparent = True
     end
     object sbColour: TSpeedButton
-      Left = 467
+      Left = 167
       Top = 24
       Width = 23
       Height = 22
@@ -173,8 +174,8 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbColourClick
     end
     object sbBW: TSpeedButton
-      Left = 496
-      Top = 24
+      Left = 196
+      Top = 25
       Width = 23
       Height = 22
       GroupIndex = 1
@@ -192,8 +193,8 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbDeleteSelectedKeyClick
     end
     object Label1: TLabel
-      Left = 136
-      Top = 27
+      Left = 19
+      Top = 63
       Width = 37
       Height = 13
       Caption = 'Position'
@@ -208,7 +209,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbClearClick
     end
     object sbAlignAll: TSpeedButton
-      Left = 234
+      Left = 131
       Top = 24
       Width = 23
       Height = 22
@@ -218,13 +219,13 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object pbGradient: TPaintBox
       Left = 12
-      Top = 118
+      Top = 129
       Width = 500
       Height = 25
     end
     object sbRGB: TSpeedButton
-      Left = 277
-      Top = 24
+      Left = 119
+      Top = 62
       Width = 40
       Height = 22
       GroupIndex = 2
@@ -234,8 +235,8 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object sbHSV: TSpeedButton
       Tag = 1
-      Left = 318
-      Top = 24
+      Left = 165
+      Top = 62
       Width = 40
       Height = 22
       GroupIndex = 2
@@ -269,8 +270,8 @@ object frmPaletteEditor: TfrmPaletteEditor
       ParentFont = False
     end
     object Label6: TLabel
-      Left = 376
-      Top = 27
+      Left = 223
+      Top = 66
       Width = 27
       Height = 13
       Caption = 'Steps'
@@ -559,9 +560,9 @@ object frmPaletteEditor: TfrmPaletteEditor
       end
     end
     object sePosition: TSpinEdit
-      Left = 179
-      Top = 24
-      Width = 49
+      Left = 62
+      Top = 60
+      Width = 42
       Height = 22
       MaxValue = 499
       MinValue = 0
@@ -599,14 +600,15 @@ object frmPaletteEditor: TfrmPaletteEditor
       end
     end
     object cbSteps: TComboBox
-      Left = 409
-      Top = 24
+      Left = 256
+      Top = 63
       Width = 45
       Height = 21
       Style = csDropDownList
       ItemIndex = 0
       TabOrder = 3
       Text = '1'
+      OnChange = cbStepsChange
       OnClick = sbColourClick
       Items.Strings = (
         '1'
@@ -620,6 +622,44 @@ object frmPaletteEditor: TfrmPaletteEditor
         '100'
         '125'
         '250')
+    end
+    object cbInterleve: TCheckBox
+      Left = 320
+      Top = 65
+      Width = 71
+      Height = 17
+      Caption = 'Interleve'
+      TabOrder = 4
+      OnClick = cbInterleveClick
+    end
+    object rbInterleveX2: TRadioButton
+      Left = 397
+      Top = 65
+      Width = 35
+      Height = 17
+      Caption = 'x2'
+      Checked = True
+      TabOrder = 5
+      TabStop = True
+      OnClick = rbInterleveX2Click
+    end
+    object rbInterleveX4: TRadioButton
+      Left = 434
+      Top = 65
+      Width = 35
+      Height = 17
+      Caption = 'x4'
+      TabOrder = 6
+      OnClick = rbInterleveX2Click
+    end
+    object cbInterleveReverse: TCheckBox
+      Left = 475
+      Top = 65
+      Width = 37
+      Height = 17
+      Caption = '><'
+      TabOrder = 7
+      OnClick = cbInterleveReverseClick
     end
   end
   object iPalette: TImageList

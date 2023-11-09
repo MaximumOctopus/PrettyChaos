@@ -1,4 +1,12 @@
-//---------------------------------------------------------------------------
+//
+// PrettyChaos 1.0
+//
+// (c) Paul Alan Freshney 2023
+//
+// paul@freshney.org
+//
+// https://github.com/MaximumOctopus/PrettyChaos
+//
 
 #ifndef FormAnimateH
 #define FormAnimateH
@@ -31,10 +39,17 @@ __published:	// IDE-managed Components
 	TLabel *Label3;
 	TCheckBox *cbAnimateParameters;
 	TCheckBox *cbAnimateZoom;
+	TLabel *Label4;
+	TEdit *eDeltaD;
+	TLabel *lWarning;
 	void __fastcall bOKClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
-private:	// User declarations
-public:		// User declarations
+	void __fastcall eDeltaAChange(TObject *Sender);
+private:
+
+	double ToDouble(const std::wstring, double);
+
+public:
 
 	Animation AnimationConfiguration;
 

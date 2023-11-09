@@ -91,6 +91,10 @@ __published:	// IDE-managed Components
 	TLabel *lLog;
 	TLabel *Label6;
 	TComboBox *cbSteps;
+	TCheckBox *cbInterleve;
+	TRadioButton *rbInterleveX2;
+	TRadioButton *rbInterleveX4;
+	TCheckBox *cbInterleveReverse;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall sbAddNewKeyClick(TObject *Sender);
 	void __fastcall shapeStartColourMouseDown(TObject *Sender, TMouseButton Button,
@@ -128,11 +132,22 @@ __published:	// IDE-managed Components
 	void __fastcall pbHuePaint(TObject *Sender);
 	void __fastcall pbValuePaint(TObject *Sender);
 	void __fastcall pbSaturationPaint(TObject *Sender);
+	void __fastcall cbStepsChange(TObject *Sender);
+	void __fastcall cbInterleveClick(TObject *Sender);
+	void __fastcall rbInterleveX2Click(TObject *Sender);
+	void __fastcall cbInterleveReverseClick(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
 
 private:
 
+	int PaletteR[500];
+	int PaletteG[500];
+	int PaletteB[500];
+
+	std::vector<TShape*> Shapes;
+
 	static const int __KeyOffset = 12;
-	static const int __KeyTop = 78;
+	static const int __KeyTop = 90;
 
 	bool IsRendering = false;
 	bool SliderUpdating = false;
@@ -142,12 +157,17 @@ private:
 	int KeyInitialX = 0;
 	int KeySelected = 0;
 
+    TShape *Selected = nullptr;
+
 	TBitmap* RGBGradients[3];
-	TBitmap* bGradient;
 
-	std::vector<PaletteKey> PaletteKeys;
+    void BuildGuiForPalette();
 
-	void AddNewKey(int, int, int);
+	void AddNewPaletteKey(int, int, int);
+
+    void AddShape(int);
+
+    void UpdateAllKeys();
 
 	void UpdateKeyDisplay(int);
 	void BuildRGBGradients();
@@ -155,22 +175,14 @@ private:
 
 	void RenderGradient();
 
-	int GradientKeyAt(int);
-	int GetNextGradientKey(int);
-
-	void ClearPalette();
+	void ClearPalette(bool);
 	void ResetUI();
 
 	void SavePalette(std::wstring);
-	bool LoadPalette(std::wstring);
-
-	int GetKeyType(const std::wstring);
 
 public:
 
-	bool HasPalette = false;
-
-	int Palette[501];
+	std::wstring PaletteFileName = L"";    // relative to \palettes\
 
 	__fastcall TfrmPaletteEditor(TComponent* Owner);
 };

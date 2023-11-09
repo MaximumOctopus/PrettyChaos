@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.7 (debug) :: October 10th 2023";
+static const std::wstring __PrettyChaosVersion = L"0.8 (debug) :: November 9th 2023";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.7 :: October 10th 2023";
+static const std::wstring __PrettyChaosVersion = L"0.8 :: November 9th 2023";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
@@ -56,6 +56,8 @@ static const int DimensionsPhone[12][2] = {
 	{ 1080, 2340 },
 	{ 1170, 2532 },
 	{ 1284, 2778 } };
+
+static const int DimensionsTexture[6] =	{ 128, 256, 512, 1024, 2048, 4096 };
 
 static const double JuliaSetExamples[27][2] = {
 	{ -0.79, 0.15 },

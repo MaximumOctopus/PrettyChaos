@@ -54,7 +54,7 @@ object frmMain: TfrmMain
     end
     object bOpenProject: TSpeedButton
       Left = 7
-      Top = 2
+      Top = 1
       Width = 89
       Height = 27
       Caption = 'Open'
@@ -416,6 +416,16 @@ object frmMain: TfrmMain
         Width = 20
         Height = 20
         OnMouseDown = sInfinityMouseDown
+      end
+      object sbLoadPalette: TSpeedButton
+        Left = 74
+        Top = 24
+        Width = 62
+        Height = 22
+        Caption = 'Open'
+        ImageIndex = 7
+        Images = ImageList1
+        OnClick = sbLoadPaletteClick
       end
     end
     object GroupBox3: TGroupBox
@@ -1327,6 +1337,41 @@ object frmMain: TfrmMain
         OnClick = miMobileDimensionsClick
       end
     end
+    object N13: TMenuItem
+      Caption = '-'
+    end
+    object exture1: TMenuItem
+      Caption = 'Texture'
+      object miTextureDimensions: TMenuItem
+        Caption = '128 x 128'
+        OnClick = miTextureDimensionsClick
+      end
+      object N128x1282: TMenuItem
+        Tag = 1
+        Caption = '256 x 256'
+        OnClick = miTextureDimensionsClick
+      end
+      object N128x1283: TMenuItem
+        Tag = 2
+        Caption = '512 x 512'
+        OnClick = miTextureDimensionsClick
+      end
+      object N128x1284: TMenuItem
+        Tag = 3
+        Caption = '1024 x 1024'
+        OnClick = miTextureDimensionsClick
+      end
+      object N128x1285: TMenuItem
+        Tag = 4
+        Caption = '2048 x 2048'
+        OnClick = miTextureDimensionsClick
+      end
+      object N128x1286: TMenuItem
+        Tag = 5
+        Caption = '4096 x 4096'
+        OnClick = miTextureDimensionsClick
+      end
+    end
   end
   object MainMenu1: TMainMenu
     Left = 712
@@ -1618,5 +1663,11 @@ object frmMain: TfrmMain
         OnClick = miExampleM1Click
       end
     end
+  end
+  object odPalette: TOpenDialog
+    DefaultExt = 'palette'
+    Filter = 'Pretty Chaos Palette files (*.palette)|*.palette'
+    Left = 896
+    Top = 8
   end
 end

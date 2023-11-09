@@ -21,12 +21,15 @@
 #include "FormColourDialog.h"
 #include "FormEditBounds.h"
 #include "PaletteEditor.h"
+#include "PaletteHandler.h"
 
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Mandelbrot.h"
 #include "MartinClassic.h"
 #include "Utility.h"
+
+extern PaletteHandler *GPaletteHandler;
 
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -42,6 +45,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 		PaletteBitmap->PixelFormat = pf24bit;
 		PaletteBitmap->Width = 125;
 		PaletteBitmap->Height = 1;
+
+	GPaletteHandler = new PaletteHandler();
 
 	GFractalHandler = new FractalHandler();
 
@@ -69,6 +74,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
+    delete GPaletteHandler;
 	delete GFractalHandler;
 	delete history;
 	delete projectio;
@@ -170,6 +176,28 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	}
 
 	sbReZoom->Enabled = animation.Configured;
+
+	// =========================================================================
+
+	if (!project.PaletteFileName.empty())
+	{
+		std::wstring path = ExtractFilePath(Application->ExeName).c_str();
+
+		path += L"Palettes\\" + project.PaletteFileName;
+
+		if (FileExists(path.c_str()))
+		{
+	        GPaletteHandler->Clear(false);
+
+			LoadAndSetPalette(path);
+		}
+		else
+		{
+			std::wstring error = L"Unable to load palette \"" + project.PaletteFileName + L"\" :(";
+
+			sbMain->SimpleText = error.c_str();
+		}
+	}
 
 	// =========================================================================
 
@@ -313,7 +341,9 @@ void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 	{
 		sbRenderClick(nullptr);
 
-		std::wstring file_name = L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + L".png";
+		std::wstring path = ExtractFilePath(Application->ExeName).c_str();
+
+		std::wstring file_name = path + L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + L".png";
 
 		SaveFractal(Utility::ProcessFileName(file_name));
 
@@ -341,7 +371,7 @@ void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 			{
 				double d = eVarD->Text.ToDouble();
 				d += AnimationConfiguration.DeltaD;
-				eVarD->Text = D;
+				eVarD->Text = d;
 			}
 		}
 
@@ -678,13 +708,42 @@ void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
 
 void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 {
+	TfrmPaletteEditor *frmPaletteEditor = new TfrmPaletteEditor(Application);
+
 	if (frmPaletteEditor->ShowModal() == mrOk)
 	{
 		CopyPaletteToFractal();
 
 		UpdatePalette();
 	}
+
+	delete frmPaletteEditor;
 }
+
+
+void __fastcall TfrmMain::sbLoadPaletteClick(TObject *Sender)
+{
+	GPaletteHandler->Clear(false);
+
+	if  (odPalette->Execute())
+	{
+		LoadAndSetPalette(odPalette->FileName.c_str());
+	}
+}
+
+
+void TfrmMain::LoadAndSetPalette(const std::wstring file_name)
+{
+	GPaletteHandler->Load(file_name);
+
+	GPaletteHandler->Render();
+	GPaletteHandler->CopyPublic();
+
+	CopyPaletteToFractal();
+
+	UpdatePalette();
+}
+
 
 
 void __fastcall TfrmMain::sInfinityMouseDown(TObject *Sender, TMouseButton Button,
@@ -696,47 +755,26 @@ void __fastcall TfrmMain::sInfinityMouseDown(TObject *Sender, TMouseButton Butto
 
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
 
-		if (frmPaletteEditor != nullptr)
-		{
-			frmPaletteEditor->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
-		}
+		GPaletteHandler->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
 	}
 }
 
 
 void TfrmMain::CopyPaletteToFractal()
 {
-	if (frmPaletteEditor != nullptr)
+	// 0 - 499, main palette; 500, infinity colour
+	for (int t = 0; t < 501; t++)
 	{
-		if (frmPaletteEditor->HasPalette)
-		{
-            // 0 - 499, main palette; 500, infinity colour
-			for (int t = 0; t < 501; t++)
-			{
-				GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t] = frmPaletteEditor->Palette[t];
-			}
-		}
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t] = GPaletteHandler->Palette[t];
 	}
 }
 
 
 void TfrmMain::UpdatePalette()
 {
-	TRGBTriple *ptr = reinterpret_cast<TRGBTriple *>(PaletteBitmap->ScanLine[0]);
+	pbPalette->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Gradient);
 
-	for (int t = 0; t < 125; t++)
-	{
-		ptr[t].rgbtBlue = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] >> 16 & 0x0000ff;
-		ptr[t].rgbtGreen = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] >> 8 & 0x0000ff;
-		ptr[t].rgbtRed = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t * 4] & 0x0000ff;
-	}
-
-	for (int t = 0; t < 20; t++)
-	{
-		pbPalette->Canvas->Draw(0, t, PaletteBitmap);
-	}
-
-	sInfinity->Brush->Color = TColor(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[__PaletteInfinity]);
+	sInfinity->Brush->Color = TColor(GPaletteHandler->Palette[__PaletteInfinity]);
 }
 
 
@@ -849,6 +887,17 @@ void __fastcall TfrmMain::miMobileDimensionsClick(TObject *Sender)
 
 	eWidth->Text = DimensionsPhone[mi->Tag][0];
 	eHeight->Text = DimensionsPhone[mi->Tag][1];
+
+	UpdateDimension();
+}
+
+
+void __fastcall TfrmMain::miTextureDimensionsClick(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	eWidth->Text = DimensionsTexture[mi->Tag];
+	eHeight->Text = DimensionsTexture[mi->Tag];
 
 	UpdateDimension();
 }

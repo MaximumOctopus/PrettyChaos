@@ -73,8 +73,11 @@ void JuliaCubic::Render()
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
-				w = std::pow(p * p + q * q, 1.5) * std::cos(3 * std::atan2(q, p)) + Var.a;
-				q = std::pow(p * p + q * q, 1.5) * std::sin(3 * std::atan2(q, p)) + Var.b;
+				double atan2pq = 3 * std::atan2(q, p);
+				double pow15 = std::pow(p * p + q * q, 1.5);
+
+				w = pow15 * std::cos(atan2pq) + Var.a;
+				q = pow15 * std::sin(atan2pq) + Var.b;
 				p = w;
 
 				it++;
@@ -273,8 +276,8 @@ void JuliaCubic::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
-	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");
-	ofile << Formatting::to_utf8(L"    b          : " + std::to_wstring(Var.b) + L"\n\n");
+	ofile << Formatting::to_utf8(L"    real       : " + std::to_wstring(Var.a) + L"\n");
+	ofile << Formatting::to_utf8(L"    imaginary  : " + std::to_wstring(Var.b) + L"\n\n");
 
 	ofile << Formatting::to_utf8(L"    x min      : " + std::to_wstring(xmin) + L"\n");
 	ofile << Formatting::to_utf8(L"    x max      : " + std::to_wstring(xmax) + L"\n");

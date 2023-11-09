@@ -14,6 +14,7 @@
 
 #include "ColourUtility.h"
 #include "Constants.h"
+#include "Fast.h"
 #include "Mandelbrot.h"
 
 
@@ -72,10 +73,11 @@ void Mandelbrot::Render()
 	{
 		int ydotwidth = y * Width;
 
+		double q = ymin + (double)y * (ymax - ymin) / (double)Height;   // imaginary part
+
 		for (int x = 0; x < Width; x++)
 		{
 			double p = xmin + (double)x * (xmax - xmin) / (double)Width;    // real part
-			double q = ymin + (double)y * (ymax - ymin) / (double)Height;   // imaginary part
 
 			int it = 0;
 
@@ -115,6 +117,7 @@ void Mandelbrot::Render()
 			switch (RenderMode)
 			{
 			case __RMEscapeTime:
+			case __RMOrbitTrap:
 			case __RMOrbitTrapFilled:
 	 	    case __RMTwoTone:
 			case __RMThreeTone:
@@ -212,10 +215,10 @@ void Mandelbrot::Render()
 					c += (double)NumIterationsPerPixel[i] / (double)total;
 				}
 
-				int index = std::round(std::pow(c, n_coeff) * __PaletteCount);
-
 				if (Iteration[ydotwidth + x] != max_iterations)
 				{
+					int index = Fast::Floor(std::pow(c, n_coeff) * __PaletteCount);
+
 					Canvas[ydotwidth + x] = Palette[index];
 				}
 				else

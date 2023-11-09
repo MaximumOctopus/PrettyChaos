@@ -3,8 +3,8 @@ object frmAnimate: TfrmAnimate
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Animate'
-  ClientHeight = 344
-  ClientWidth = 468
+  ClientHeight = 350
+  ClientWidth = 472
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -15,9 +15,9 @@ object frmAnimate: TfrmAnimate
   OnShow = FormShow
   TextHeight = 15
   object Bevel1: TBevel
-    Left = 0
+    Left = 8
     Top = 8
-    Width = 465
+    Width = 457
     Height = 333
   end
   object lVariableA: TLabel
@@ -50,7 +50,7 @@ object frmAnimate: TfrmAnimate
   end
   object Label2: TLabel
     Left = 24
-    Top = 224
+    Top = 248
     Width = 66
     Height = 15
     Caption = 'Image Prefix'
@@ -62,6 +62,29 @@ object frmAnimate: TfrmAnimate
     Height = 15
     Caption = 'delta / step'
   end
+  object Label4: TLabel
+    Left = 24
+    Top = 190
+    Width = 65
+    Height = 15
+    Caption = 'Parameter D'
+  end
+  object lWarning: TLabel
+    Left = 24
+    Top = 308
+    Width = 231
+    Height = 15
+    Caption = 'Error with settings or no animate source set!'
+    Color = clBtnFace
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clMaroon
+    Font.Height = -12
+    Font.Name = 'Segoe UI'
+    Font.Style = []
+    ParentColor = False
+    ParentFont = False
+    Visible = False
+  end
   object eDeltaA: TEdit
     Left = 112
     Top = 100
@@ -70,6 +93,7 @@ object frmAnimate: TfrmAnimate
     Alignment = taRightJustify
     TabOrder = 0
     Text = '0'
+    OnChange = eDeltaAChange
   end
   object eDeltaB: TEdit
     Left = 112
@@ -79,6 +103,7 @@ object frmAnimate: TfrmAnimate
     Alignment = taRightJustify
     TabOrder = 1
     Text = '0'
+    OnChange = eDeltaAChange
   end
   object eDeltaC: TEdit
     Left = 112
@@ -88,6 +113,7 @@ object frmAnimate: TfrmAnimate
     Alignment = taRightJustify
     TabOrder = 2
     Text = '0'
+    OnChange = eDeltaAChange
   end
   object eSteps: TEdit
     Left = 112
@@ -105,7 +131,6 @@ object frmAnimate: TfrmAnimate
     Width = 75
     Height = 25
     Caption = 'OK'
-    ModalResult = 1
     TabOrder = 4
     OnClick = bOKClick
   end
@@ -120,7 +145,7 @@ object frmAnimate: TfrmAnimate
   end
   object ePrefix: TEdit
     Left = 112
-    Top = 221
+    Top = 245
     Width = 228
     Height = 23
     TabOrder = 6
@@ -141,5 +166,15 @@ object frmAnimate: TfrmAnimate
     Height = 17
     Caption = 'Animate  zoom'
     TabOrder = 8
+  end
+  object eDeltaD: TEdit
+    Left = 112
+    Top = 187
+    Width = 80
+    Height = 23
+    Alignment = taRightJustify
+    TabOrder = 9
+    Text = '0'
+    OnChange = eDeltaAChange
   end
 end

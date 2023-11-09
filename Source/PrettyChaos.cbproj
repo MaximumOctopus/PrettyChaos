@@ -6,7 +6,7 @@
         <AppType>Application</AppType>
         <MainSource>PrettyChaos.cpp</MainSource>
         <Base>True</Base>
-        <Config Condition="'$(Config)'==''">Debug</Config>
+        <Config Condition="'$(Config)'==''">Release</Config>
         <Platform Condition="'$(Platform)'==''">Win64</Platform>
         <TargetedPlatforms>3</TargetedPlatforms>
     </PropertyGroup>
@@ -152,6 +152,8 @@
         <UsePackages>false</UsePackages>
         <LinkPackageStatics>rtl.lib;vcl.lib;vclimg.lib;VclSmp.lib;vclx.lib</LinkPackageStatics>
         <Icon_MainIcon>PrettyChaos_Icon.ico</Icon_MainIcon>
+        <BCC_OptimizeMaximum>true</BCC_OptimizeMaximum>
+        <BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
     </PropertyGroup>
     <ItemGroup>
         <None Include="Animation.h">
@@ -177,6 +179,10 @@
         <None Include="Dragon.h">
             <VirtualFolder>{23FBDFF5-6240-4159-81D9-03F9995582AA}</VirtualFolder>
             <BuildOrder>34</BuildOrder>
+        </None>
+        <None Include="Fast.h">
+            <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
+            <BuildOrder>45</BuildOrder>
         </None>
         <CppCompile Include="FormAbout.cpp">
             <VirtualFolder>{6F195188-9F40-4F70-B1F3-F2BFE6978011}</VirtualFolder>
@@ -254,6 +260,14 @@
             <VirtualFolder>{FC06D070-0AEB-4B26-88BC-53285A85579E}</VirtualFolder>
             <BuildOrder>28</BuildOrder>
         </None>
+        <CppCompile Include="JuliaNtic.cpp">
+            <VirtualFolder>{37375AD3-E4A8-4001-95E1-9424661FA254}</VirtualFolder>
+            <BuildOrder>50</BuildOrder>
+        </CppCompile>
+        <None Include="JuliaNtic.h">
+            <VirtualFolder>{37375AD3-E4A8-4001-95E1-9424661FA254}</VirtualFolder>
+            <BuildOrder>51</BuildOrder>
+        </None>
         <CppCompile Include="JuliaQuartic.cpp">
             <VirtualFolder>{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}</VirtualFolder>
             <BuildOrder>37</BuildOrder>
@@ -261,6 +275,14 @@
         <None Include="JuliaQuartic.h">
             <VirtualFolder>{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}</VirtualFolder>
             <BuildOrder>38</BuildOrder>
+        </None>
+        <CppCompile Include="JuliaQuintic.cpp">
+            <VirtualFolder>{74E76172-3D9A-4426-B71F-8E48BA01D0E9}</VirtualFolder>
+            <BuildOrder>47</BuildOrder>
+        </CppCompile>
+        <None Include="JuliaQuintic.h">
+            <VirtualFolder>{74E76172-3D9A-4426-B71F-8E48BA01D0E9}</VirtualFolder>
+            <BuildOrder>46</BuildOrder>
         </None>
         <CppCompile Include="main.cpp">
             <Form>Form1</Form>
@@ -323,6 +345,14 @@
             <DependentOn>PaletteEditor.h</DependentOn>
             <BuildOrder>11</BuildOrder>
         </CppCompile>
+        <CppCompile Include="PaletteHandler.cpp">
+            <VirtualFolder>{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}</VirtualFolder>
+            <BuildOrder>49</BuildOrder>
+        </CppCompile>
+        <None Include="PaletteHandler.h">
+            <VirtualFolder>{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}</VirtualFolder>
+            <BuildOrder>48</BuildOrder>
+        </None>
         <None Include="PaletteKey.h">
             <VirtualFolder>{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}</VirtualFolder>
             <BuildOrder>12</BuildOrder>
@@ -352,10 +382,10 @@
         </None>
         <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
-        <FormResources Include="FormAbout.dfm"/>
         <FormResources Include="FormAnimate.dfm"/>
-        <FormResources Include="FormColourDialog.dfm"/>
+        <FormResources Include="FormAbout.dfm"/>
         <FormResources Include="FormEditBounds.dfm"/>
+        <FormResources Include="FormColourDialog.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -394,6 +424,8 @@
                         <VFOLDER ID="{8FFEB68A-C801-4430-885E-1783CF9ED09A}" name="Julia"/>
                         <VFOLDER ID="{FC06D070-0AEB-4B26-88BC-53285A85579E}" name="JuliaCubic"/>
                         <VFOLDER ID="{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}" name="JuliaQuartic"/>
+                        <VFOLDER ID="{74E76172-3D9A-4426-B71F-8E48BA01D0E9}" name="JuliaQuintic"/>
+                        <VFOLDER ID="{37375AD3-E4A8-4001-95E1-9424661FA254}" name="JuliaNtic"/>
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>

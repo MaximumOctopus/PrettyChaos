@@ -31,6 +31,7 @@
 #include <System.ImageList.hpp>
 #include <Vcl.ImgList.hpp>
 #include <Vcl.Menus.hpp>
+#include <Vcl.Dialogs.hpp>
 
 
 class TfrmMain : public TForm
@@ -205,6 +206,16 @@ __published:	// IDE-managed Components
 	TMenuItem *N0801562;
 	TEdit *eVarD;
 	TLabel *lVarD;
+	TMenuItem *exture1;
+	TMenuItem *N13;
+	TMenuItem *miTextureDimensions;
+	TMenuItem *N128x1282;
+	TMenuItem *N128x1283;
+	TMenuItem *N128x1284;
+	TMenuItem *N128x1285;
+	TMenuItem *N128x1286;
+	TSpeedButton *sbLoadPalette;
+	TOpenDialog *odPalette;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -237,6 +248,8 @@ __published:	// IDE-managed Components
 	void __fastcall miConfigAnimationClick(TObject *Sender);
 	void __fastcall eAnimationClick(TObject *Sender);
 	void __fastcall sbReZoomClick(TObject *Sender);
+	void __fastcall miTextureDimensionsClick(TObject *Sender);
+	void __fastcall sbLoadPaletteClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -279,6 +292,8 @@ private:	// User declarations
 	void UpdatePalette();
 
 	void CopyPaletteToFractal();
+
+	void LoadAndSetPalette(const std::wstring);
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);

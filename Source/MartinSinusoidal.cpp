@@ -180,9 +180,9 @@ void MartinSinusoidal::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
-	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
+	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n\n");
 	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");
 	ofile << Formatting::to_utf8(L"    b          : " + std::to_wstring(Var.b) + L"\n");
 	ofile << Formatting::to_utf8(L"    c          : " + std::to_wstring(Var.c) + L"\n");
-	ofile << Formatting::to_utf8(L"    d          : " + std::to_wstring(Var.d) + L"\n");
+	ofile << Formatting::to_utf8(L"    zoom       : " + std::to_wstring(Var.d) + L"\n");
 }

@@ -19,7 +19,10 @@
 #include "ColourUtility.h"
 #include "Formatting.h"
 #include "PaletteEditor.h"
+#include "PaletteHandler.h"
 #include "Utility.h"
+
+extern PaletteHandler *GPaletteHandler;
 
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -30,11 +33,6 @@ TfrmPaletteEditor *frmPaletteEditor;
 __fastcall TfrmPaletteEditor::TfrmPaletteEditor(TComponent* Owner)
 	: TForm(Owner)
 {
-	bGradient = new TBitmap();
-	bGradient->PixelFormat = pf24bit;
-	bGradient->Width = __PaletteCount;
-	bGradient->Height = 1;
-
 	for (int t = 0; t < 3; t++)
 	{
 		RGBGradients[t] = new TBitmap();
@@ -43,23 +41,21 @@ __fastcall TfrmPaletteEditor::TfrmPaletteEditor(TComponent* Owner)
 		RGBGradients[t]->Height = 1;
 	}
 
-	AddNewKey(0x000000, 0, 0);
-	AddNewKey(0xffffff, 0, 499);
-
-	KeySelected = 0;
-
-	UpdateKeyDisplay(KeySelected);
-
-	RenderGradient();
+	BuildGuiForPalette();
 }
 
 
 void __fastcall TfrmPaletteEditor::FormDestroy(TObject *Sender)
 {
-	delete bGradient;
     delete RGBGradients[2];
 	delete RGBGradients[1];
 	delete RGBGradients[0];
+}
+
+
+void __fastcall TfrmPaletteEditor::FormClose(TObject *Sender, TCloseAction &Action)
+{
+	Action = caFree;
 }
 
 
@@ -67,7 +63,7 @@ void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
 {
 	RenderGradient();
 
-	sInfinity->Brush->Color = TColor(Palette[__PaletteInfinity]);
+	sInfinity->Brush->Color = TColor(GPaletteHandler->Palette[__PaletteInfinity]);
 }
 
 
@@ -203,36 +199,14 @@ void __fastcall TfrmPaletteEditor::pbValuePaint(TObject *Sender)
 }
 
 
-void TfrmPaletteEditor::AddNewKey(int colour, int mode, int position)
+void TfrmPaletteEditor::UpdateAllKeys()
 {
-	TShape* ts = new TShape(this);
-	ts->Parent = gbColour;
-	ts->Width = 10;
-	ts->Height = 10;
-	ts->Top = __KeyTop;
-	ts->Left = position + __KeyOffset;
-	ts->Brush->Color = TColor(colour);
-	ts->Tag = PaletteKeys.size();
-	ts->OnMouseDown = shapeStartColourMouseDown;
-	ts->OnMouseUp = shapeStartColourMouseUp;
-
-	if (PaletteKeys.size() < 2)
+	for (int t = 0; t < Shapes.size(); t++)
 	{
-		ts->Shape = stSquare;
-	}
-	else
-	{
-		ts->Shape = stCircle;
-		ts->OnMouseMove = shapeStartColourMouseMove;
+        Shapes[t]->Left = GPaletteHandler->Keys[Shapes[t]->Tag].Position + __KeyOffset;
 	}
 
-	PaletteKey pk;
-	pk.Colour = ts->Brush->Color;
-    pk.Mode = mode;
-	pk.Shape = ts;
-	pk.Position = position;
-
-	PaletteKeys.push_back(pk);
+   	iPointer->Left = Selected->Left;
 }
 
 
@@ -242,7 +216,7 @@ void TfrmPaletteEditor::UpdateKeyDisplay(int key_index)
 {
 	KeyDisplayUpdating = true;
 
-	PaletteKey &pk = PaletteKeys[key_index];
+	PaletteKey &pk = GPaletteHandler->Keys[key_index];
 
 	if (pcColourSpace->TabIndex == 0)
 	{
@@ -305,10 +279,10 @@ void __fastcall TfrmPaletteEditor::tbRedChange(TObject *Sender)
 		seGreen->Value = tbGreen->Position;
 		seBlue->Value = tbBlue->Position;
 
-		PaletteKey &pk = PaletteKeys[KeySelected];
+		PaletteKey &pk = GPaletteHandler->Keys[KeySelected];
 
-		pk.Shape->Brush->Color = TColor(tbRed->Position + (tbGreen->Position << 8) + (tbBlue->Position << 16));
-		pk.Colour = pk.Shape->Brush->Color;
+		Selected->Brush->Color = TColor(tbRed->Position + (tbGreen->Position << 8) + (tbBlue->Position << 16));
+		pk.Colour = Selected->Brush->Color;
 
 		lHexRed->Caption = IntToHex(tbRed->Position, 2);
 		lHexGreen->Caption = IntToHex(tbGreen->Position, 2);
@@ -337,8 +311,8 @@ void __fastcall TfrmPaletteEditor::tbHueChange(TObject *Sender)
 
 		int colour = (r) + (g << 8) + (b << 16);
 
-		PaletteKeys[KeySelected].Shape->Brush->Color = TColor(colour);
-		PaletteKeys[KeySelected].Colour = colour;
+		Selected->Brush->Color = TColor(colour);
+		GPaletteHandler->Keys[KeySelected].Colour = colour;
 
 		lColourHex->Caption = "0x" + IntToHex(colour, 6);
 
@@ -373,12 +347,16 @@ void TfrmPaletteEditor::BuildHSVGradients()
 
 void __fastcall TfrmPaletteEditor::sbClearClick(TObject *Sender)
 {
-	ClearPalette();
+	GPaletteHandler->Clear(true);
 
-	AddNewKey(0x000000, 0, 0);
-	AddNewKey(0xffffff, 0, 499);
+	ClearPalette(true);
 
 	ResetUI();
+
+	cbSteps->ItemIndex = 0;
+	cbInterleve->Checked = false;
+	rbInterleveX2->Checked = true;
+    cbInterleveReverse->Checked = false;
 
 	UpdateKeyDisplay(KeySelected);
 
@@ -388,7 +366,16 @@ void __fastcall TfrmPaletteEditor::sbClearClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbAddNewKeyClick(TObject *Sender)
 {
-	AddNewKey(0xaaaaaa, 0, 200);
+	int index = GPaletteHandler->AddNewKey(0xaaaaaa, 0, 200, false);
+
+	AddShape(index);
+
+	Selected = Shapes.back();
+	KeySelected = index;
+
+	iPointer->Left = Shapes.back()->Left;
+
+    UpdateKeyDisplay(KeySelected);
 
 	RenderGradient();
 }
@@ -398,43 +385,47 @@ void __fastcall TfrmPaletteEditor::sbDeleteSelectedKeyClick(TObject *Sender)
 {
 	if (KeySelected > 1)
 	{
-		delete PaletteKeys[KeySelected].Shape;
-		PaletteKeys.erase(PaletteKeys.begin() + KeySelected);
+		int index = -1;
 
-		for (int t = 0; t < PaletteKeys.size(); t++)
+		for (int t = 0; t < Shapes.size(); t++)
 		{
-			PaletteKeys[t].Shape->Tag = t;
+			if (Shapes[t]->Tag == KeySelected)
+			{
+				index = t;
+				break;
+			}
 		}
 
-		if (KeySelected != 0)
+		if (index != -1)
 		{
-			KeySelected--;
+			delete Shapes[index];
+			Shapes.erase(Shapes.begin() + index);
 		}
-		else
+
+		GPaletteHandler->Keys.erase(GPaletteHandler->Keys.begin() + KeySelected);
+
+		for (int t = 0; t < GPaletteHandler->Keys.size(); t++)
 		{
-			KeySelected = 0;
+			Shapes[t]->Tag = t;
 		}
+
+		KeySelected = 0;
+		Selected = Shapes[0];
+
+        UpdateAllKeys();
 
 		UpdateKeyDisplay(KeySelected);
 
 		RenderGradient();
-    }
+	}
 }
 
 
 void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 {
-	if (PaletteKeys.size() > 2)         // nothing to align if only two keys
+	if (GPaletteHandler->Align())
 	{
-		int delta = std::floor(__PaletteCount / (PaletteKeys.size() - 1));
-
-		for (int t = 2; t < PaletteKeys.size(); t++)
-		{
-			PaletteKeys[t].Shape->Left = (delta * (t - 1)) + __KeyOffset;
-			PaletteKeys[t].Position = delta * (t - 1);
-		}
-
-		iPointer->Left = PaletteKeys[KeySelected].Shape->Left;
+		UpdateAllKeys();
 
 		RenderGradient();
     }
@@ -443,6 +434,8 @@ void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbColourClick(TObject *Sender)
 {
+	GPaletteHandler->ColourSpace = sbColour->Down;
+
 	RenderGradient();
 }
 
@@ -467,6 +460,8 @@ void __fastcall TfrmPaletteEditor::shapeStartColourMouseDown(TObject *Sender, TM
 		iPointer->Left = shape->Left;
 
 		KeySelected = shape->Tag;
+
+        Selected = shape;
 
         UpdateKeyDisplay(KeySelected);
     }
@@ -498,7 +493,9 @@ void __fastcall TfrmPaletteEditor::shapeStartColourMouseMove(TObject *Sender, TS
 				iPointer->Left = shape->Left;
 			}
 
-			PaletteKeys[KeySelected].Position = shape->Left - __KeyOffset;
+			sePosition->Value = shape->Left - __KeyOffset;
+
+			GPaletteHandler->Keys[KeySelected].Position = shape->Left - __KeyOffset;
 
             RenderGradient();
         }
@@ -513,239 +510,24 @@ void __fastcall TfrmPaletteEditor::shapeStartColourMouseUp(TObject *Sender, TMou
 }
 
 
-int TfrmPaletteEditor::GradientKeyAt(int xpos)
-{
-	for (int t = 0; t < PaletteKeys.size(); t++)
-	{
-		if (PaletteKeys[t].Position == xpos)
-		{
-			return t;
-		}
-	}
-
-	return -1;
- }
-
-
- int TfrmPaletteEditor::GetNextGradientKey(int xpos)
- {
-	int found = -1;
-	int low = 9999;
-
-	for (int t = 0; t < PaletteKeys.size(); t++)
-	{
-		if (PaletteKeys[t].Position > xpos &&
-		   PaletteKeys[t].Position < low)
-		{
-			found = t;
-			low = PaletteKeys[t].Position;
-		}
-	}
-
-	return found;
-}
-
-
 void TfrmPaletteEditor::RenderGradient()
 {
-	if (IsRendering) return;
+	if (GPaletteHandler->IsRendering) return;
 
-	IsRendering = true;
+	GPaletteHandler->Render();
 
-   	int colstart = 0;
-	int colend = 0;
-	int method = 0;
-	int mode = 0;
-	int gradheight = 0;
-	int gradstart = 0;
-
-	double r_delta = 0;
-	double g_delta = 0;
-	double b_delta = 0;
-	int rdy = 0;
-	int gdy = 0;
-	int bdy = 0;
-	double newr = 0;
-	double newg = 0;
-	double newb = 0;
-
-	int newri = 0;
-	int newgi = 0;
-	int newbi = 0;
-
-	int newrout = 0;
-	int newgout = 0;
-	int newbout = 0;
-
-	double sr = 0;
-	double sg = 0;
-	double sb = 0;
-
-	int step = 1;
-	int step_count = cbSteps->Text.ToInt();
-
-	// ===========================================================================
-
-	for (int y = 0; y < __PaletteCount; y++)
-	{
-		int keyat = GradientKeyAt(y);
-
-		if (keyat != -1)
-		{
-			colstart = PaletteKeys[keyat].Colour;
-			method = PaletteKeys[keyat].Method;
-			mode = PaletteKeys[keyat].Mode;
-
-			keyat = GetNextGradientKey(y);
-
-			if (keyat != -1)
-			{
-				colend = PaletteKeys[keyat].Colour;
-
-				gradheight = PaletteKeys[keyat].Position - y;
-				gradstart = y;
-			}
-			else
-			{
-				colend = PaletteKeys[1].Colour;
-
-				gradheight = __PaletteCount - y;
-				gradstart = y;
-			}
-
-			if (mode == modeRGB)
-			{
-				bdy = (((colend & 0xff0000) >> 16) - ((colstart & 0xff0000) >> 16));
-				gdy = (((colend & 0x00ff00) >> 8) - ((colstart & 0x00ff00) >> 8));
-				rdy = ((colend & 0x0000ff) - (colstart & 0x0000ff));
-
-				newb = (colstart & 0xff0000) >> 16;
-				newg = (colstart & 0x00ff00) >> 8;
-				newr = (colstart & 0x0000ff);
-			}
-			else
-			{
-				int hdy1 = 0;
-				int sdy1 = 0;
-				int vdy1 = 0;
-				int hdy2 = 0;
-				int sdy2 = 0;
-				int vdy2 = 0;
-
-				ColourUtility::BGRtoHSV(colend, hdy1, sdy1, vdy1);
-				ColourUtility::BGRtoHSV(colstart, hdy2, sdy2, vdy2);
-
-				rdy = hdy1 - hdy2;
-				gdy = sdy1 - sdy2;
-				bdy = vdy1 - vdy2;
-
-				newr = hdy2;
-				newg = sdy2;
-				newb = vdy2;
-			}
-
-			newbout = (colstart & 0xff0000) >> 16;
-			newgout = (colstart & 0x00ff00) >> 8;
-			newrout = (colstart & 0x0000ff);
-
-			r_delta = (double)rdy / (double)gradheight;
-			g_delta = (double)gdy / (double)gradheight;
-			b_delta = (double)bdy / (double)gradheight;
-		}
-
-		// =====================================================================
-
-		TRGBTriple *ptr;
-
-		if (sbColour->Down)									// colour mode
-		{
-			ptr = reinterpret_cast<TRGBTriple *>(bGradient->ScanLine[0]);
-
-			ptr[y].rgbtRed   = newrout;
-			ptr[y].rgbtGreen = newgout;
-			ptr[y].rgbtBlue  = newbout;
-		}
-		else                                                // grayscale mode
-		{
-			int newgrayscale = floor((newrout * 0.3) + (newgout * 0.59) + (newbout * 0.11));
-
-			ptr = reinterpret_cast<TRGBTriple *>(bGradient->ScanLine[0]);
-
-			ptr[y].rgbtRed   = newgrayscale;
-			ptr[y].rgbtGreen = newgrayscale;
-			ptr[y].rgbtBlue  = newgrayscale;
-		}
-
-		// =====================================================================
-
-		if (method == 0)
-		{
-			newr += r_delta;
-			newg += g_delta;
-			newb += b_delta;
-
-			newri = std::floor(newr);
-			newgi = std::floor(newg);
-			newbi = std::floor(newb);
-		}
-		else
-		{
-			sr = std::pow(((double)y - (double)gradstart) / (double)gradheight, (double)tbLog->Position / 50) * rdy;
-			sg = std::pow(((double)y - (double)gradstart) / (double)gradheight, (double)tbLog->Position / 50) * gdy;
-			sb = std::pow(((double)y - (double)gradstart) / (double)gradheight, (double)tbLog->Position / 50) * bdy;
-
-			newri = std::floor(newr + sr);
-			newgi = std::floor(newg + sg);
-			newbi = std::floor(newb + sb);
-		}
-
-		// =====================================================================
-
-		if (step == step_count)
-		{
-			step = 1;
-
-			if (mode == modeRGB)
-			{
-				newrout = newri;
-				newgout = newgi;
-				newbout = newbi;
-			}
-			else
-			{
-				ColourUtility::HSVtoRGB(newri, newgi, newbi, newrout, newgout, newbout);
-			}
-		}
-		else
-		{
-            step++;
-        }
-	}
+	// now copy the single row across the paintbox
 
 	for (int t = 0; t < 25; t++)
 	{
-		pbGradient->Canvas->Draw(0, t, bGradient);
+		pbGradient->Canvas->Draw(0, t, GPaletteHandler->Gradient);
 	}
-
-	IsRendering = false;
 }
 
 
 void __fastcall TfrmPaletteEditor::bAcceptClick(TObject *Sender)
 {
-	TRGBTriple *ptr;
-
-	ptr = reinterpret_cast<TRGBTriple *>(bGradient->ScanLine[0]);
-
-	// render palette to public
-	for (int t = 0; t < __PaletteCount; t++)
-	{
-		Palette[t] = ptr[t].rgbtRed + (ptr[t].rgbtGreen << 8) + (ptr[t].rgbtBlue << 16);
-	}
-
-	Palette[__PaletteInfinity] = sInfinity->Brush->Color;
-
-    HasPalette = true;
+	GPaletteHandler->CopyPublic();
 }
 
 
@@ -765,6 +547,52 @@ void __fastcall TfrmPaletteEditor::bSaveClick(TObject *Sender)
 }
 
 
+void TfrmPaletteEditor::BuildGuiForPalette()
+{
+	if (GPaletteHandler->ColourSpace)
+	{
+		sbColour->Down = true;
+	}
+	else
+	{
+		sbBW->Down = true;
+	}
+
+	cbInterleve->Checked = GPaletteHandler->Interleve;
+	cbInterleveReverse->Checked = GPaletteHandler->InterleveReverse;
+
+	if (GPaletteHandler->InterleveMode == 0)
+	{
+		rbInterleveX2->Checked = true;
+	}
+	else
+	{
+		rbInterleveX4->Checked = true;
+	}
+
+	for (int t = 0; t < cbSteps->Items->Count; t++)
+	{
+		if (cbSteps->Items->Strings[t] == IntToStr(GPaletteHandler->Steps))
+		{
+			cbSteps->ItemIndex = t;
+			break;
+        }
+	}
+
+	for (int t = 0; t < GPaletteHandler->Keys.size(); t++)
+	{
+		AddShape(t);
+	}
+
+	KeySelected = 0;
+	Selected = Shapes[0];
+
+	RenderGradient();
+
+	UpdateKeyDisplay(KeySelected);
+}
+
+
 void __fastcall TfrmPaletteEditor::bLoadClick(TObject *Sender)
 {
 	std::wstring file_name = Utility::GetOpenFileName(2);
@@ -776,27 +604,65 @@ void __fastcall TfrmPaletteEditor::bLoadClick(TObject *Sender)
 			file_name += L".palette";
 		}
 
-		ClearPalette();
+		ClearPalette(false);
 		ResetUI();
 
-		if (LoadPalette(file_name))
+		if (GPaletteHandler->Load(file_name))
 		{
-			RenderGradient();
-
-			UpdateKeyDisplay(KeySelected);
+			BuildGuiForPalette();
         }
 	}
 }
 
 
-void TfrmPaletteEditor::ClearPalette()
+void TfrmPaletteEditor::ClearPalette(bool autoadd)
 {
-	for (int t = PaletteKeys.size() - 1; t >= 0; t--)
-	{
-		delete PaletteKeys[t].Shape;
+	GPaletteHandler->Clear(autoadd);
 
-		PaletteKeys.pop_back();
+	for (int t = Shapes.size() - 1; t >= 0; t--)
+	{
+		delete Shapes[t];
+
+		Shapes.pop_back();
 	}
+
+    Shapes.clear();
+
+	if (autoadd)
+	{
+		AddShape(0);
+		AddShape(1);
+    }
+
+	Selected = Shapes[0];
+}
+
+
+void TfrmPaletteEditor::AddShape(int index)
+{
+	TShape *shape = new TShape(this);
+	shape->Parent = gbColour;
+	shape->Width = 10;
+	shape->Height = 10;
+	shape->Top = __KeyTop;
+	shape->Left = GPaletteHandler->Keys[index].Position + __KeyOffset;
+	shape->Brush->Color = TColor(GPaletteHandler->Keys[index].Colour);
+	shape->Tag = index;
+	shape->Shape = stSquare;
+	shape->OnMouseDown = shapeStartColourMouseDown;
+	shape->OnMouseUp = shapeStartColourMouseUp;
+
+	if (index > 1)
+	{
+		shape->Shape = stCircle;
+		shape->OnMouseMove = shapeStartColourMouseMove;
+	}
+	else
+	{
+		shape->Shape = stSquare;
+	}
+
+	Shapes.push_back(shape);
 }
 
 
@@ -810,144 +676,7 @@ void TfrmPaletteEditor::ResetUI()
 
 void TfrmPaletteEditor::SavePalette(std::wstring file_name)
 {
-	std::ofstream file(file_name);
-
-	if (file)
-	{
-		std::wstring steps = cbSteps->Text.c_str();
-
-		file << Formatting::to_utf8(L"[\n");
-		file << Formatting::to_utf8(L"infinity=" + std::to_wstring(sbColour->Down) + L"\n");
-		file << Formatting::to_utf8(L"steps=" + steps + L"\n");
-		file << Formatting::to_utf8(L"]\n");
-
-		for (int t = 0; t < PaletteKeys.size(); t++)
-		{
-			file << Formatting::to_utf8(L"{\n");
-			file << Formatting::to_utf8(L"colour=" + std::to_wstring(PaletteKeys[t].Colour) + L"\n");
-			file << Formatting::to_utf8(L"mode=" + std::to_wstring(PaletteKeys[t].Mode) + L"\n");
-			file << Formatting::to_utf8(L"method=" + std::to_wstring(PaletteKeys[t].Method) + L"\n");
-			file << Formatting::to_utf8(L"position=" + std::to_wstring(PaletteKeys[t].Position) + L"\n");
-			file << Formatting::to_utf8(L"}\n");
-        }
-
-		file.close();
-	}
-}
-
-
-bool TfrmPaletteEditor::LoadPalette(std::wstring file_name)
-{
-	std::wifstream file(file_name);
-
-	if (file)
-	{
-		std::wstring s(L"");
-
-		int colour(0);
-        int method(0);
-		int mode(0);
-		int position(0);
-		int infinity(0);
-		std::wstring steps(L"");
-
-		while (std::getline(file, s))
-		{
-			if (s != L"")
-			{
-				if (s[0] == L'/' || s[0] == L'#')
-				{
-					// comment, do nothing
-				}
-				else
-				{
-					auto equals = s.find(L'=');
-
-					std::wstring key = s.substr(0, equals);
-					std::wstring value = s.substr(equals + 1);
-
-					if (equals == std::wstring::npos)
-					{
-						key = s;
-					}
-
-					switch (GetKeyType(key))
-					{
-					case 0:
-						break;
-					case 1:
-						break;
-					case 2:
-					{
-						AddNewKey(colour, mode, position);
-
-						break;
-					}
-					case 3:
-						break;
-					case 4:
-						break;
-					case 5:
-						infinity = stoi(value);
-						break;
-					case 6:
-						colour = stoi(value);
-						break;
-					case 7:
-						method = stoi(value);
-						break;
-					case 8:
-						mode = stoi(value);
-						break;
-					case 9:
-						position = stoi(value);
-						break;
-					case 10:
-						steps = value;
-						break;
-                    }
-				}
-			}
-		}
-
-		file.close();
-
-		sInfinity->Brush->Color = TColor(infinity);
-		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(infinity);
-
-		cbSteps->Text = steps.c_str();
-
-		return true;
-	}
-
-	return false;
-}
-
-
-int TfrmPaletteEditor::GetKeyType(const std::wstring key)
-{
-	if (key == L"{")
-		return 1;
-	else if (key == L"}")
-		return 2;
-	else if (key == L"[")
-		return 3;
-	else if (key == L"]")
-		return 4;
-	else if (key == L"infinity")
-		return 5;
-	else if (key == L"colour")
-		return 6;
-	else if (key == L"method")
-		return 7;
-	else if (key == L"mode")
-		return 8;
-	else if (key == L"position")
-		return 9;
-	else if (key == L"steps")
-		return 10;
-
-	return 0;
+	GPaletteHandler->Save(file_name);
 }
 
 
@@ -955,11 +684,11 @@ void __fastcall TfrmPaletteEditor::sePositionChange(TObject *Sender)
 {
 	if (KeySelected != -1 && KeySelected >= 2)
 	{
-		PaletteKeys[KeySelected].Position = sePosition->Value;
+		GPaletteHandler->Keys[KeySelected].Position = sePosition->Value;
 
-		PaletteKeys[KeySelected].Shape->Left = sePosition->Value + 20;
-		iPointer->Left = PaletteKeys[KeySelected].Shape->Left;
-    }
+		Selected->Left = sePosition->Value + 20;
+		iPointer->Left = sePosition->Value + 20;
+	}
 }
 
 
@@ -971,6 +700,8 @@ void __fastcall TfrmPaletteEditor::sInfinityMouseDown(TObject *Sender, TMouseBut
 		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
 		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(frmColourDialog->SelectedColour);
+
+		GPaletteHandler->Palette[__PaletteInfinity] = frmColourDialog->SelectedColour;
     }
 }
 
@@ -1003,7 +734,7 @@ void __fastcall TfrmPaletteEditor::sbRGBClick(TObject *Sender)
 {
 	TSpeedButton* sb = (TSpeedButton*)Sender;
 
-	PaletteKeys[KeySelected].Mode = sb->Tag;
+	GPaletteHandler->Keys[KeySelected].Mode = sb->Tag;
 
 	RenderGradient();
 }
@@ -1037,7 +768,7 @@ void __fastcall TfrmPaletteEditor::sbLinearClick(TObject *Sender)
 {
 	TSpeedButton* sb = (TSpeedButton*)Sender;
 
-	PaletteKeys[KeySelected].Method = sb->Tag;
+	GPaletteHandler->Keys[KeySelected].Method = sb->Tag;
 
 	RenderGradient();
 }
@@ -1071,4 +802,43 @@ void __fastcall TfrmPaletteEditor::pcColourSpaceChange(TObject *Sender)
 
 		tbHueChange(nullptr);
 	}
+}
+
+
+void __fastcall TfrmPaletteEditor::cbStepsChange(TObject *Sender)
+{
+    GPaletteHandler->Steps = cbSteps->Text.ToInt();
+
+	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::cbInterleveClick(TObject *Sender)
+{
+	GPaletteHandler->Interleve = cbInterleve->Checked;
+
+	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::rbInterleveX2Click(TObject *Sender)
+{
+	if (rbInterleveX2->Checked)
+	{
+		GPaletteHandler->InterleveMode = 0;
+	}
+	else
+	{
+		GPaletteHandler->InterleveMode = 1;
+	}
+
+    RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::cbInterleveReverseClick(TObject *Sender)
+{
+	GPaletteHandler->InterleveReverse = cbInterleveReverse->Checked;
+
+	RenderGradient();
 }

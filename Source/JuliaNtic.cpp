@@ -14,21 +14,23 @@
 
 #include "ColourUtility.h"
 #include "Constants.h"
-#include "JuliaQuartic.h"
+#include "JuliaNtic.h"
 
 
-JuliaQuartic::JuliaQuartic() : Fractal()
+JuliaNtic::JuliaNtic() : Fractal()
 {
 	AcceptsABC = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
+	AcceptsVarC = true;
 
-    bailout_radius = 4;
+	bailout_radius = 4;
 
 	Var.a = -0.79;
 	Var.b = 0.15;
+    Var.c = 6;
 
-	Name = L"Julia Set (Quartic)";
+	Name = L"Julia Set (n-tic)";
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
@@ -41,21 +43,24 @@ JuliaQuartic::JuliaQuartic() : Fractal()
 
 	NameA = L"real";
 	NameB = L"imaginary";
+	NameC = L"n";
 
 	ResetView();
 }
 
 
-JuliaQuartic::~JuliaQuartic()
+JuliaNtic::~JuliaNtic()
 {
 }
 
 
-void JuliaQuartic::Render()
+void JuliaNtic::Render()
 {
 	double max_d = 0;
 
 	StartTime = std::chrono::system_clock::now();
+
+	double halfn = Var.c / 2;
 
 	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
@@ -75,11 +80,11 @@ void JuliaQuartic::Render()
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
-				double atan2pq = 4 * std::atan2(q, p);
-				double pow2 = std::pow(p * p + q * q, 2);
+				double atan2pq = Var.c * std::atan2(q, p);
+				double pow25 = std::pow(p * p + q * q, halfn);
 
-				w = pow2 * std::cos(atan2pq) + Var.a;
-				q = pow2 * std::sin(atan2pq) + Var.b;
+				w = pow25 * std::cos(atan2pq) + Var.a;
+				q = pow25 * std::sin(atan2pq) + Var.b;
 				p = w;
 
 				it++;
@@ -203,7 +208,7 @@ void JuliaQuartic::Render()
 }
 
 
-void JuliaQuartic::ColourNTone(int n)
+void JuliaNtic::ColourNTone(int n)
 {
 	int* colours = new int[n];
 
@@ -241,7 +246,7 @@ void JuliaQuartic::ColourNTone(int n)
 }
 
 
-void JuliaQuartic::ColourDistanceII(double max_d)
+void JuliaNtic::ColourDistanceII(double max_d)
 {
 	for (int y = 0; y < Height; y++)
 	{
@@ -264,22 +269,23 @@ void JuliaQuartic::ColourDistanceII(double max_d)
 }
 
 
-void JuliaQuartic::ResetView()
+void JuliaNtic::ResetView()
 {
 	SetView(-2.00, 2.00, -2.00, 2.00);
 }
 
 
-void JuliaQuartic::ToFile(std::ofstream& ofile)
+void JuliaNtic::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Julie Set (Quartic)\n");
+	ofile << Formatting::to_utf8(L"Julie Set (n-tic)\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
 	ofile << Formatting::to_utf8(L"    real       : " + std::to_wstring(Var.a) + L"\n");
-	ofile << Formatting::to_utf8(L"    imaginary  : " + std::to_wstring(Var.b) + L"\n\n");
+	ofile << Formatting::to_utf8(L"    imaginary  : " + std::to_wstring(Var.b) + L"\n");
+	ofile << Formatting::to_utf8(L"    n          : " + std::to_wstring(Var.c) + L"\n\n");
 
 	ofile << Formatting::to_utf8(L"    x min      : " + std::to_wstring(xmin) + L"\n");
 	ofile << Formatting::to_utf8(L"    x max      : " + std::to_wstring(xmax) + L"\n");

@@ -10,8 +10,13 @@
 
 #include <fstream>
 
+#include <Vcl.Dialogs.hpp>
+
 #include "Formatting.h"
+#include "PaletteHandler.h"
 #include "ProjectIO.h"
+
+extern PaletteHandler *GPaletteHandler;
 
 
 ProjectIO::ProjectIO()
@@ -20,7 +25,7 @@ ProjectIO::ProjectIO()
 }
 
 
-bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &animation)
+bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation &animation)
 {
 	std::wifstream file(file_name);
 
@@ -56,6 +61,7 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &anim
 					switch (PropertyName)
 					{
 					case FileProperty::None:
+						//ShowMessage(key.c_str());
 						break;
 					case FileProperty::Name:
 						project.Name = value;
@@ -116,6 +122,9 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &anim
 					case FileProperty::DeltaC:
 						animation.DeltaC = stod(value);
 						break;
+					case FileProperty::DeltaD:
+						animation.DeltaD = stod(value);
+						break;
 					case FileProperty::Parameters:
 						animation.Parameters = stoi(value);
 						break;
@@ -124,6 +133,10 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &anim
 						break;
 					case FileProperty::Prefix:
 						animation.Prefix = value;
+						break;
+
+					case FileProperty::PaletteFileName:
+                        project.PaletteFileName = value;
 						break;
                     }
 				}
@@ -139,7 +152,7 @@ bool ProjectIO::Load(std::wstring file_name, PCProject &project, Animation &anim
 }
 
 
-ProjectIO::FileProperty ProjectIO::GetInputProperty(std::wstring input)
+ProjectIO::FileProperty ProjectIO::GetInputProperty(const std::wstring input)
 {
 	for (int t = 0; t < kPropertyListCount; t++)
 	{
@@ -153,7 +166,7 @@ ProjectIO::FileProperty ProjectIO::GetInputProperty(std::wstring input)
 }
 
 
-bool ProjectIO::Save(std::wstring file_name, PCProject &project, Animation &animation)
+bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation &animation)
 {
 	std::ofstream file(file_name);
 
@@ -169,6 +182,11 @@ bool ProjectIO::Save(std::wstring file_name, PCProject &project, Animation &anim
 		file << Formatting::to_utf8(L"nCoeff=" + std::to_wstring(project.nCoeff) + L"\n");
 		file << Formatting::to_utf8(L"MaxIterations=" + std::to_wstring(project.MaxIterations) + L"\n");
 		file << Formatting::to_utf8(L"BailoutRadius=" + std::to_wstring(project.BailoutRadius) + L"\n");
+
+		if (!GPaletteHandler->FileName.empty())
+		{
+			file << Formatting::to_utf8(L"Palette=" + GPaletteHandler->FileName + L"\n");
+		}
 
 		file << Formatting::to_utf8(L"xmin=" + std::to_wstring(project.xmin) + L"\n");
 		file << Formatting::to_utf8(L"xmax=" + std::to_wstring(project.xmax) + L"\n");
