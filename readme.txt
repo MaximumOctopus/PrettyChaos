@@ -1,13 +1,13 @@
 ==========================================================================================================================
-PrettyChaos 0.7
-(c) Paul Alan Freshney 2023
+  PrettyChaos 0.8
+  (c) Paul Alan Freshney 2023
 
-paul@freshney.org
+  paul@freshney.org / https://maximumoctopus.hashnode.dev/
 
-Source code and portable install
-  https://github.com/MaximumOctopus/PrettyChaos
+  Source code and portable install
+    https://github.com/MaximumOctopus/PrettyChaos
 
-October 10th 2023
+  November 9th 2023
 ==========================================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
@@ -35,7 +35,23 @@ All of my software is free and open source; please consider donating to a local 
 
 Release History
 
-0.7 / October 2023
+0.8 / November 9th 2023
+
+Added Julia Set (Quintic)
+Added Julia Set (n-tic) for all Julia Sets of the form Z^n + C (eg Quintic is Z^5 + C)
+Added Load palette option to main tool panel
+Added Palette name to save files (will attempt to reopen palette upon load)
+Added Interleve options to palette (allows for some very nice patterns)
+Added Performance improvements to all Julia Sets
+
+A few minor bug fixes and tweaks.
+
+Moved the palette handling code to a new class for flexibility and unlocks functionality for the future.
+
+Multi-threading coming in a future update.
+
+
+0.7 / October 10th 2023
 
 Added Rendering performance improvements
 Added Julia Set (Quartic)
