@@ -1,18 +1,19 @@
 ==========================================================================================================================
-  PrettyChaos 0.8
-  (c) Paul Alan Freshney 2023
+PrettyChaos 0.9
+(c) Paul Alan Freshney 2023-2024
 
-  paul@freshney.org / https://maximumoctopus.hashnode.dev/
+paul@freshney.org
 
-  Source code and portable install
-    https://github.com/MaximumOctopus/PrettyChaos
+Source code and portable install
+  https://github.com/MaximumOctopus/PrettyChaos
 
-  November 9th 2023
+March 25th 2024
+
 ==========================================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
 
-Currently supports Dragon curve, Julia Set, Julia Set (cubic), Mandelbrot, and Martin fractals.
+Currently supports Julia Set, Julia Set (cubic), Mandelbrot, and Martin fractals.
 
 ==========================================================================================================================
 
@@ -27,13 +28,21 @@ Written with C++ Builder 11 (Update 3) Community Edition (free).
    Development Cats : Rutherford, Freeman, and Maxwell
    Icon             : https://icon-icons.com
 
-   Dedicated to Julie, Adam, and Dyanne.
+   Dedicated to Dad, Julie, Adam, and Dyanne.
 
 All of my software is free and open source; please consider donating to a local cat charity or shelter. Thanks.
 
 ==========================================================================================================================
 
 Release History
+
+0.9 / March 25th 2024
+
+Added minor performance improvement when generating image
+Added multi-threading for Mandelbrot and Julia sets.
+      Locked to four threads at the moment, performance improvement upto 4x
+
+Fixed a bug which effected fractal aspect ratios and rendering.
 
 0.8 / November 9th 2023
 
