@@ -423,9 +423,9 @@
                         <VFOLDER ID="{23FBDFF5-6240-4159-81D9-03F9995582AA}" name="Dragon"/>
                         <VFOLDER ID="{8FFEB68A-C801-4430-885E-1783CF9ED09A}" name="Julia"/>
                         <VFOLDER ID="{FC06D070-0AEB-4B26-88BC-53285A85579E}" name="JuliaCubic"/>
+                        <VFOLDER ID="{37375AD3-E4A8-4001-95E1-9424661FA254}" name="JuliaNtic"/>
                         <VFOLDER ID="{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}" name="JuliaQuartic"/>
                         <VFOLDER ID="{74E76172-3D9A-4426-B71F-8E48BA01D0E9}" name="JuliaQuintic"/>
-                        <VFOLDER ID="{37375AD3-E4A8-4001-95E1-9424661FA254}" name="JuliaNtic"/>
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>

@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -30,13 +30,18 @@ class JuliaCubic : public Fractal
 	void ColourNTone(int);
 	void ColourDistanceII(double);
 
+	double max_d = 0;
+
+	void FinaliseRender();
+
 public:
 
 	JuliaCubic();
 
 	~JuliaCubic();
 
-	void Render() override;
+	void MultiThreadRender() override;
+	void Render(int, int) override;
 
 	void ResetView() override;
 

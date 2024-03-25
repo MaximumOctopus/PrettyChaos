@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -18,9 +18,13 @@
 
 Fractal::Fractal()
 {
-	Canvas = new int[640 * 640];
-	Iteration = new int[640 * 640];
-	Data = new double[640 * 640];
+	Iteration = new int[1280 * 1024];
+	Data = new double[1280 * 1024];
+
+	RenderCanvas = new TBitmap();
+    RenderCanvas->PixelFormat = pf24bit;
+	RenderCanvas->Width = 1280;
+	RenderCanvas->Height = 1024;
 
 	for (int t = 0; t < __PaletteCount; t++)
 	{
@@ -35,9 +39,9 @@ Fractal::Fractal()
 
 Fractal::~Fractal()
 {
-	delete Canvas;
 	delete Iteration;
-    delete Data;
+	delete Data;
+    delete RenderCanvas;
 }
 
 
@@ -51,7 +55,13 @@ void Fractal::CalculateRenderTime()
 }
 
 
-void Fractal::Render()
+void Fractal::MultiThreadRender()
+{
+
+}
+
+
+void Fractal::Render(int hs, int he)
 {
 	// handled by subclass
 }
@@ -136,13 +146,18 @@ void Fractal::SetDimensions(int _width, int _height)
 		Width = _width;
 		Height = _height;
 
-		delete[] Canvas;
 		delete[] Iteration;
 		delete[] Data;
 
-		Canvas = new int[Width * Height];
+		delete RenderCanvas;
+
 		Iteration = new int[Width * Height];
 		Data = new double[Width * Height];
+
+		RenderCanvas = new TBitmap();
+		RenderCanvas->PixelFormat = pf24bit;
+		RenderCanvas->Width = Width;
+		RenderCanvas->Height = Height;
 
 		if (Width >= Height)
 		{

@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'PrettyChaos'
-  ClientHeight = 787
-  ClientWidth = 1146
+  ClientHeight = 1147
+  ClientWidth = 1483
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -19,11 +19,11 @@ object frmMain: TfrmMain
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 1146
+    Width = 1483
     Height = 34
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 1142
+    ExplicitWidth = 1479
     object sbRender: TSpeedButton
       Left = 311
       Top = 2
@@ -165,14 +165,14 @@ object frmMain: TfrmMain
     end
   end
   object Panel2: TPanel
-    Left = 955
+    Left = 1292
     Top = 34
     Width = 191
-    Height = 734
+    Height = 1094
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 951
-    ExplicitHeight = 733
+    ExplicitLeft = 1288
+    ExplicitHeight = 1093
     object Label16: TLabel
       Left = 14
       Top = 17
@@ -371,7 +371,7 @@ object frmMain: TfrmMain
         NumbersOnly = True
         PopupMenu = puDimensions
         TabOrder = 0
-        Text = '640'
+        Text = '1280'
         OnExit = eWidthExit
       end
       object eHeight: TEdit
@@ -383,7 +383,7 @@ object frmMain: TfrmMain
         NumbersOnly = True
         PopupMenu = puDimensions
         TabOrder = 1
-        Text = '640'
+        Text = '1024'
         OnExit = eWidthExit
       end
     end
@@ -618,31 +618,31 @@ object frmMain: TfrmMain
   object Panel3: TPanel
     Left = 0
     Top = 34
-    Width = 955
-    Height = 734
+    Width = 1292
+    Height = 1094
     Align = alClient
     TabOrder = 2
     OnMouseMove = Panel3MouseMove
-    ExplicitWidth = 951
-    ExplicitHeight = 733
+    ExplicitWidth = 1288
+    ExplicitHeight = 1093
     object iRender: TImage
       Left = 0
       Top = 0
-      Width = 640
-      Height = 640
+      Width = 1280
+      Height = 1024
       OnMouseDown = iRenderMouseDown
       OnMouseMove = iRenderMouseMove
     end
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 768
-    Width = 1146
+    Top = 1128
+    Width = 1483
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 767
-    ExplicitWidth = 1142
+    ExplicitTop = 1127
+    ExplicitWidth = 1479
   end
   object ImageList1: TImageList
     Left = 784
@@ -1272,6 +1272,11 @@ object frmMain: TfrmMain
       object N3440x14401: TMenuItem
         Tag = 15
         Caption = '3440 x 1440'
+        OnClick = miDesktopDimensionClick
+      end
+      object N3840x21601: TMenuItem
+        Tag = 16
+        Caption = '3840 x 2160'
         OnClick = miDesktopDimensionClick
       end
     end

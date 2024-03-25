@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -10,7 +10,7 @@
 
 #pragma once
 
-//#include <Vcl.Graphics.hpp>
+#include <Vcl.Graphics.hpp>
 
 #include <chrono>
 #include <fstream>
@@ -71,6 +71,8 @@ public:
 
 	bool AcceptsZoom = true;
 
+    bool MultiThread = false;
+
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
 	std::wstring NameC = L"";
@@ -80,9 +82,10 @@ public:
 
 	std::wstring RenderTime = L"0";
 
-	int* Canvas = nullptr;
 	int* Iteration = nullptr;
 	double* Data = nullptr;
+
+	TBitmap *RenderCanvas = nullptr;
 
 	double ymin = 0;    // fractal objects must set these in their constructor
 	double ymax = 0;    //
@@ -91,14 +94,15 @@ public:
 	double x_resolution = 0;
 	double y_resolution = 0;
 
-	int Width = 640;
-    int Height = 640;
+	int Width = 1280;
+	int Height = 1024;
 
 	Fractal();
 
 	~Fractal();
 
-	virtual void Render();
+	virtual void MultiThreadRender();
+	virtual void Render(int, int);
     virtual void Preview();
 
 	virtual void ResetView();

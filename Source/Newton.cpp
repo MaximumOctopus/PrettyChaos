@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -38,7 +38,7 @@ Newton::~Newton()
 }
 
 
-void Newton::Render()
+void Newton::Render(int hs, int he)
 {
 	StartTime = std::chrono::system_clock::now();
 

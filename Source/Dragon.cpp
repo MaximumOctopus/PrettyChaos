@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -69,7 +69,7 @@ void Dragon::Generate(int iterations)
 }
 
 
-void Dragon::Render()
+void Dragon::Render(int hstart, int hend)
 {
 	StartTime = std::chrono::system_clock::now();
 
@@ -82,7 +82,19 @@ void Dragon::Render()
 	int from_y = 0;
 	int colour = 0;
 
-	for (int t = 0; t < Width * Height; t++) Canvas[t] = Palette[__PaletteInfinity];
+	TRGBTriple *ptr;
+
+	for (int y = 0; y < Height; y++)
+	{
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+		for (int x = 0; x < Width; x++)
+		{
+			ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+			ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+			ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
+		}
+	}
 
 	int palette_range = std::floor(500 / (double)max_iterations) - 1;
 
@@ -192,6 +204,8 @@ void Dragon::Render()
 
 void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 {
+	TRGBTriple *ptr;
+
 	int x,y,dx,dy,dx1,dy1,px,py,xe,ye;
 	dx = x2 - x1;
 	dy = y2 - y1;
@@ -217,7 +231,11 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 		if (y < Height && y >= 0 && x < Width && x >= 0)
 		{
-			Canvas[y * Width + x] = Palette[colour];
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
+			ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
+			ptr[x].rgbtBlue = Palette[colour] >> 16;
 		}
 
 		for (int i = 0; x < xe; i++)
@@ -244,7 +262,11 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 			if (y < Height && y >= 0 && x < Width && x >= 0)
 			{
-				Canvas[y * Width + x] = Palette[colour];
+				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+				ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[colour] >> 16;
 			}
 		}
 	}
@@ -265,7 +287,11 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 		if (y < Height && y >= 0 && x < Width && x >= 0)
 		{
-			Canvas[y * Width + x] = Palette[colour];
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
+			ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
+			ptr[x].rgbtBlue = Palette[colour] >> 16;
 		}
 
 		for (int i = 0; y < ye; i++)
@@ -292,7 +318,11 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 			if (y < Height && y >= 0 && x < Width && x >= 0)
 			{
-				Canvas[y * Width + x] = Palette[colour];
+				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+				ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[colour] >> 16;
 			}
 		}
 	}
@@ -307,7 +337,7 @@ void Dragon::ResetView()
 	int y_min = std::floor(-(double)Height / (2 * 1));
 	int y_max = std::floor((double)Height / (2 * 1));
 
-	SetView(x_min, x_max, y_min, x_max);
+	SetView(x_min, x_max, y_min, y_max);
 }
 
 

@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.8 (debug) :: November 9th 2023";
+static const std::wstring __PrettyChaosVersion = L"0.9 (debug) :: March 25th 2024";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.8 :: November 9th 2023";
+static const std::wstring __PrettyChaosVersion = L"0.9 :: March 25th 2024";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
@@ -25,7 +25,7 @@ static const int __PaletteCount = 500;      // 0-499
 static const int __PaletteInfinity = 500;
 
 
-static const int DimensionsDesktop[16][2] = {
+static const int DimensionsDesktop[17][2] = {
 	{ 1024, 768 },
 	{ 1280, 720 },
 	{ 1280, 800 },
@@ -41,7 +41,8 @@ static const int DimensionsDesktop[16][2] = {
 	{ 2560, 1080 },
 	{ 2560, 1600 },
 	{ 2880, 1800 },
-	{ 3440, 1440 }};
+	{ 3440, 1440 },
+	{ 3840, 2160 }};
 
 static const int DimensionsPhone[12][2] = {
 	{ 828, 1792 },

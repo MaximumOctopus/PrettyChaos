@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -216,6 +216,7 @@ __published:	// IDE-managed Components
 	TMenuItem *N128x1286;
 	TSpeedButton *sbLoadPalette;
 	TOpenDialog *odPalette;
+	TMenuItem *N3840x21601;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,

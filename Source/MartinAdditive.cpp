@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -60,7 +60,7 @@ MartinAdditive::~MartinAdditive()
 }
 
 
-void MartinAdditive::Render()
+void MartinAdditive::Render(int hstart, int hend)
 {
 	StartTime = std::chrono::system_clock::now();
 
@@ -73,15 +73,22 @@ void MartinAdditive::Render()
 	int count = 0;
 	int index = 0;
 
-    // maximum distance from the centre of the image
+	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+
+	TRGBTriple *ptr;
 
 	for (int y = 0; y < Height; y++)
 	{
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
 		for (int x = 0; x < Width; x++)
 		{
 			Iteration[y * Width + x] = 0;
-			Canvas[y * Width + x] = Palette[__PaletteInfinity];
+
+			ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+			ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+			ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 		}
 	}
 
@@ -99,7 +106,10 @@ void MartinAdditive::Render()
 				break;
 			case __RMTime:
 			{
-				Canvas[y * Width + x] = Palette[index];
+				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 
 				count++;
 
@@ -113,7 +123,10 @@ void MartinAdditive::Render()
 			case __RMDistance:
 				int index = std::floor((std::sqrt(xold * xold + yold * yold) / maxdim) * __PaletteCount);
 
-				Canvas[y * Width + x] = Palette[index];
+				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 				break;
 			}
 		}
@@ -138,13 +151,19 @@ void MartinAdditive::Render()
 			}
 		}
 
+		TRGBTriple *ptr;
+
 		for (int y = 0; y < Height; y++)
 		{
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
 			for (int x = 0; x < Width; x++)
 			{
 				if (Iteration[y * Width + x] == 0)
 				{
-					Canvas[y * Width + x] = Palette[__PaletteInfinity];
+					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 				}
 				else
 				{
@@ -152,7 +171,9 @@ void MartinAdditive::Render()
 
 					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
 
-					Canvas[y * Width + x] = Palette[index];
+					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[index] >> 16;
 				}
 			}
 		}
@@ -170,7 +191,7 @@ void MartinAdditive::ResetView()
 	int y_min = std::floor(-(double)Height / (2 * Var.d));
 	int y_max = std::floor((double)Height / (2 * Var.d));
 
-    SetView(x_min, x_max, y_min, x_max);
+    SetView(x_min, x_max, y_min, y_max);
 }
 
 

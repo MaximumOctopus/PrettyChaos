@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2024
 //
 // paul@freshney.org
 //
@@ -12,11 +12,7 @@
 
 #include <thread>
 
-#include "Fractal.h"
-#include "MandelbrotRenderCore.h"
-
-
-class Mandelbrot : public Fractal
+class MandelbrotRenderCore
 {
 	static const int __RMEscapeTime = 0;
 	static const int __RMContinuous = 1;
@@ -29,6 +25,19 @@ class Mandelbrot : public Fractal
 	static const int __RMFourTone = 8;
 	static const int __RMFiveTone = 9;
 
+	int YStart = 0;
+	int YEnd = 0;
+	int Width = 0;
+	int Height = 0;
+	double xmin = 0;
+	double xmax = 0;
+	double ymin = 0;
+	double ymax = 0;
+
+	double max_iterations = 1000;
+	double bailout_radius = 256;
+	int RenderMode = 0;
+
 	void ColourNTone(int);
 	void ColourTwoTone();
 	void ColourThreeTone();
@@ -36,21 +45,18 @@ class Mandelbrot : public Fractal
 	void ColourDistanceII(double);
 	void OrbitTrap(bool);
 
-	double max_d = 0;
-
-    void FinaliseRender();
-
 public:
 
-	Mandelbrot();
+	std::thread fred;
 
-	~Mandelbrot();
+	int* Iteration = nullptr;
 
-	void MultiThreadRender() override;
-	void Render(int, int) override;
-    void Preview() override;
+	MandelbrotRenderCore();
 
-	void ResetView() override;
+	~MandelbrotRenderCore();
 
-    void ToFile(std::ofstream&) override;
+	void Render();
+
+	void SetRenderBounds(int, int, int);
+	void SetFractalBounds(double, double, double, double);
 };

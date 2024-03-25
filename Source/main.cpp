@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -313,7 +313,14 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetDimensions(iRender->Width, iRender->Height);
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Render();
+	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender();
+	}
+	else
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Render(0, 0);
+	}
 
 	CopyFromFractalToScreen();
 
@@ -443,32 +450,7 @@ void __fastcall TfrmMain::miSaveFractalParametersClick(TObject *Sender)
 
 void TfrmMain::CopyFromFractalToScreen()
 {
-	TBitmap* bit = new TBitmap();
-	bit->PixelFormat = pf24bit;
-	bit->Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-	bit->Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
-
-	TRGBTriple *ptr;
-
-	int* Canvas = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas;
-
-	for (int y = 0; y < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height; y++)
-	{
-		ptr = reinterpret_cast<TRGBTriple *>(bit->ScanLine[y]);
-
-		int yy = y * GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-
-		for (int x = 0; x < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width; x++)
-		{
-			ptr[x].rgbtRed = Canvas[yy + x] & 0x0000ff;
-			ptr[x].rgbtGreen = Canvas[yy + x] >> 8 & 0x0000ff;
-			ptr[x].rgbtBlue = Canvas[yy + x] >> 16;// & 0x0000ff;
-		}
-	}
-
-	iRender->Picture->Assign(bit);
-
-	delete bit;
+	iRender->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderCanvas);
 }
 
 
@@ -932,7 +914,7 @@ void __fastcall TfrmMain::iRenderMouseMove(TObject *Sender, TShiftState Shift, i
 
 	lCursor->Caption = s.c_str();
 
-	lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]);
+	///lCursorColour->Caption = ColourUtility::BRGtoRGBHex(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]); TO DO
 }
 
 

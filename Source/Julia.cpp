@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -9,6 +9,7 @@
 //
 
 #include <string>
+#include <thread>
 
 #include "ColourUtility.h"
 #include "Constants.h"
@@ -20,6 +21,8 @@ Julia::Julia() : Fractal()
 	AcceptsABC = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
+
+	MultiThread = true;
 
     bailout_radius = 4;
 
@@ -49,16 +52,36 @@ Julia::~Julia()
 }
 
 
-void Julia::Render()
+void Julia::MultiThreadRender()
 {
-	double max_d = 0;
-
 	StartTime = std::chrono::system_clock::now();
+
+	int h_delta = std::round((double)Height / 4);
+
+	std::thread t1(Render, 0, h_delta);
+	std::thread t2(Render, h_delta, 2 * h_delta);
+	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
+	std::thread t4(Render, 3 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+
+	FinaliseRender();
+
+	CalculateRenderTime();
+}
+
+
+void Julia::Render(int hstart, int hend)
+{
+	max_d = 0;
 
     // maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
-	for (int y = 0; y < Height; y++)
+	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
 
@@ -104,13 +127,13 @@ void Julia::Render()
 					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * __PaletteCount;
 					double it_d = (double)it + 1 - nu;
 
-					Canvas[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																			 Palette[it + 1],
-																			 it_d - (std::floorl(it_d)));
+					Iteration[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
+																  Palette[it + 1],
+																  it_d - (std::floorl(it_d)));
 				}
 				else
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					Iteration[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
 
 				break;
@@ -129,13 +152,16 @@ void Julia::Render()
 
 				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((double)it / max_iterations, n_coeff)) * __PaletteCount);
 
-				Canvas[ydotwidth + x] = Palette[index];
-
+				Iteration[ydotwidth + x] = Palette[index];
 				break;
 			}
 		}
 	}
+}
 
+
+void Julia::FinaliseRender()
+{
 	switch (RenderMode)
 	{
 	case __RMEscapeTime:
@@ -154,15 +180,21 @@ void Julia::Render()
 			}
 		}
 
+		TRGBTriple *ptr;
+
 		for (int y = 0; y < Height; y++)
 		{
-	        int ydotwidth = y * Width;
+			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 			for (int x = 0; x < Width; x++)
 			{
 				if (Iteration[ydotwidth + x] == 0)
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 				}
 				else
 				{
@@ -170,12 +202,32 @@ void Julia::Render()
 
 					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
 
-					Canvas[ydotwidth + x] = Palette[index];
+					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[index] >> 16;
 				}
 			}
 		}
 		break;
 	}
+	case __RMContinuous:
+	case __RMDistanceOrigin:
+		TRGBTriple *ptr;
+
+		for (int y = 0; y < Height; y++)
+		{
+			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			for (int x = 0; x < Width; x++)
+			{
+				ptr[x].rgbtRed = Iteration[ydotwidth + x] & 0x0000ff;
+				ptr[x].rgbtGreen = Iteration[ydotwidth + x] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Iteration[ydotwidth + x] >> 16;
+			}
+		}
+		break;
 	case __RMDistance:
 		ColourDistanceII(max_d);
 		break;
@@ -192,8 +244,6 @@ void Julia::Render()
 		ColourNTone(5);
 		break;
 	}
-
-	CalculateRenderTime();
 }
 
 
@@ -214,19 +264,28 @@ void Julia::ColourNTone(int n)
 		}
 	}
 
+	TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
 			if (Iteration[ydotwidth + x] != max_iterations)
 			{
-				Canvas[ydotwidth + x] = Palette[colours[Iteration[ydotwidth + x] % n]];
+				int colour = Palette[colours[Iteration[ydotwidth + x] % n]];
+				ptr[x].rgbtRed = colour & 0x0000ff;
+				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = colour >> 16;
 			}
 			else
 			{
-				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -237,19 +296,27 @@ void Julia::ColourNTone(int n)
 
 void Julia::ColourDistanceII(double max_d)
 {
+	TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
 		for (int x = 0; x < Width; x++)
 		{
 			if (Iteration[y * Width + x] != max_iterations)
 			{
 				int index = std::floor(std::pow((Data[y * Width + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[y * Width + x] = Palette[index];
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 			}
 			else
 			{
-				Canvas[y * Width + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -258,7 +325,7 @@ void Julia::ColourDistanceII(double max_d)
 
 void Julia::ResetView()
 {
-	SetView(-2.00, 2.00, -2.00, 2.00);
+	SetView(-2.00, 2.00, -1.6, 1.6);
 }
 
 

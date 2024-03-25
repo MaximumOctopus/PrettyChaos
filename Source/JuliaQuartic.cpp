@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -11,6 +11,7 @@
 // https://en.wikipedia.org/wiki/Julia_set
 
 #include <string>
+#include <thread>
 
 #include "ColourUtility.h"
 #include "Constants.h"
@@ -22,6 +23,8 @@ JuliaQuartic::JuliaQuartic() : Fractal()
 	AcceptsABC = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
+
+	MultiThread = true;
 
     bailout_radius = 4;
 
@@ -51,16 +54,36 @@ JuliaQuartic::~JuliaQuartic()
 }
 
 
-void JuliaQuartic::Render()
+void JuliaQuartic::MultiThreadRender()
 {
-	double max_d = 0;
-
 	StartTime = std::chrono::system_clock::now();
+
+	int h_delta = std::round((double)Height / 4);
+
+	std::thread t1(Render, 0, h_delta);
+	std::thread t2(Render, h_delta, 2 * h_delta);
+	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
+	std::thread t4(Render, 3 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+
+	FinaliseRender();
+
+	CalculateRenderTime();
+}
+
+
+void JuliaQuartic::Render(int hstart, int hend)
+{
+	max_d = 0;
 
 	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
-	for (int y = 0; y < Height; y++)
+	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
 
@@ -111,13 +134,13 @@ void JuliaQuartic::Render()
 
 					it = std::floor(itnew);
 
-					Canvas[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																			 Palette[it + 1],
-																			 itnew - (std::floor(itnew)));
+					Iteration[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
+																				Palette[it + 1],
+																				itnew - (std::floor(itnew)));
 				}
 				else
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					Iteration[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
 
 				break;
@@ -137,13 +160,16 @@ void JuliaQuartic::Render()
 
 				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((double)it / max_iterations, n_coeff)) * __PaletteCount);
 
-				Canvas[ydotwidth + x] = Palette[index];
-
+				Iteration[ydotwidth + x] = Palette[index];
 				break;
 			}
 		}
 	}
+}
 
+
+void JuliaQuartic::FinaliseRender()
+{
 	switch (RenderMode)
 	{
 	case __RMEscapeTime:
@@ -160,15 +186,21 @@ void JuliaQuartic::Render()
 			}
 		}
 
+		TRGBTriple *ptr;
+
 		for (int y = 0; y < Height; y++)
 		{
 			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 			for (int x = 0; x < Width; x++)
 			{
 				if (Iteration[ydotwidth + x] == 0)
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 				}
 				else
 				{
@@ -176,12 +208,32 @@ void JuliaQuartic::Render()
 
 					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
 
-					Canvas[ydotwidth + x] = Palette[index];
+					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[index] >> 16;
 				}
 			}
 		}
 		break;
 	}
+	case __RMContinuous:
+	case __RMDistanceOrigin:
+		TRGBTriple *ptr;
+
+		for (int y = 0; y < Height; y++)
+		{
+			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			for (int x = 0; x < Width; x++)
+			{
+				ptr[x].rgbtRed = Iteration[ydotwidth + x] & 0x0000ff;
+				ptr[x].rgbtGreen = Iteration[ydotwidth + x] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Iteration[ydotwidth + x] >> 16;
+			}
+		}
+		break;
 	case __RMDistance:                                                                     // distance II
 		ColourDistanceII(max_d);
 		break;
@@ -198,8 +250,6 @@ void JuliaQuartic::Render()
 		ColourNTone(5);
 		break;
 	}
-
-	CalculateRenderTime();
 }
 
 
@@ -220,19 +270,29 @@ void JuliaQuartic::ColourNTone(int n)
 		}
 	}
 
+    TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+        ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
 			if (Iteration[ydotwidth + x] != max_iterations)
 			{
-				Canvas[ydotwidth + x] = Palette[colours[Iteration[ydotwidth + x] % n]];
+				int colour = Palette[colours[Iteration[ydotwidth + x] % n]];
+
+				ptr[x].rgbtRed = colour & 0x0000ff;
+				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = colour >> 16;
 			}
 			else
 			{
-				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -243,9 +303,13 @@ void JuliaQuartic::ColourNTone(int n)
 
 void JuliaQuartic::ColourDistanceII(double max_d)
 {
+	TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
@@ -253,11 +317,15 @@ void JuliaQuartic::ColourDistanceII(double max_d)
 			{
 				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[ydotwidth + x] = Palette[index];
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 			}
 			else
 			{
-				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -266,7 +334,7 @@ void JuliaQuartic::ColourDistanceII(double max_d)
 
 void JuliaQuartic::ResetView()
 {
-	SetView(-2.00, 2.00, -2.00, 2.00);
+	SetView(-2.00, 2.00, -1.6, 1.6);
 }
 
 

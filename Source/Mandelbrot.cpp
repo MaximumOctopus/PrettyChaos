@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023
+// (c) Paul Alan Freshney 2023-2024
 //
 // paul@freshney.org
 //
@@ -11,6 +11,7 @@
 // https://en.wikipedia.org/wiki/Orbit_trap
 
 #include <string>
+#include <thread>
 
 #include "ColourUtility.h"
 #include "Constants.h"
@@ -25,6 +26,8 @@ Mandelbrot::Mandelbrot() : Fractal()
    	AcceptsABC = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
+
+	MultiThread = true;
 
     bailout_radius = 4;
 
@@ -57,10 +60,9 @@ Mandelbrot::~Mandelbrot()
 }
 
 
-void Mandelbrot::Render()
-{
-	double max_d = 0;
 
+void Mandelbrot::MultiThreadRender()
+{
 	StartTime = std::chrono::system_clock::now();
 
 	if (RenderMode == __RMEscapeTime)
@@ -69,7 +71,30 @@ void Mandelbrot::Render()
 		for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
 	}
 
-	for (int y = 0; y < Height; y++)
+	int h_delta = std::round((double)Height / 4);
+
+	std::thread t1(Render, 0, h_delta);
+	std::thread t2(Render, h_delta, 2 * h_delta);
+	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
+	std::thread t4(Render, 3 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+
+	FinaliseRender();
+
+	CalculateRenderTime();
+
+	if (RenderMode == __RMEscapeTime)
+		delete[] NumIterationsPerPixel;
+}
+
+
+void Mandelbrot::Render(int hstart, int hend)
+{
+	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
 
@@ -139,13 +164,13 @@ void Mandelbrot::Render()
 					it = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
 					double it_d = (double)it + 1 - nu;
 
-					Canvas[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																			 Palette[it + 1],
-																			 it_d - (std::floorl(it_d)));
+					Iteration[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
+																  Palette[it + 1],
+																  it_d - (std::floorl(it_d)));
 				}
 				else
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					Iteration[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
 
 				break;
@@ -181,6 +206,12 @@ void Mandelbrot::Render()
 		}
 	}
 
+
+}
+
+
+void Mandelbrot::FinaliseRender()
+{
 	switch (RenderMode)
 	{
 	case __RMEscapeTime:
@@ -202,9 +233,13 @@ void Mandelbrot::Render()
 			total += NumIterationsPerPixel[i];
 		}
 
+		TRGBTriple *ptr;
+
 		for (int y = 0; y < Height; y++)
 		{
 			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 			for (int x = 0; x < Width; x++)
 			{
@@ -219,16 +254,37 @@ void Mandelbrot::Render()
 				{
 					int index = Fast::Floor(std::pow(c, n_coeff) * __PaletteCount);
 
-					Canvas[ydotwidth + x] = Palette[index];
+					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[index] >> 16;
 				}
 				else
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 				}
 			}
 		}
 		break;
 	}
+	case __RMContinuous:
+		TRGBTriple *ptr;
+
+		for (int y = 0; y < Height; y++)
+		{
+			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			for (int x = 0; x < Width; x++)
+			{
+				ptr[x].rgbtRed = Iteration[ydotwidth + x] & 0x0000ff;
+				ptr[x].rgbtGreen = Iteration[ydotwidth + x] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Iteration[ydotwidth + x] >> 16;
+			}
+		}
+		break;
 	case __RMDistance:                                                                     // distance I
 		ColourDistanceI(max_d);
 		break;
@@ -254,11 +310,6 @@ void Mandelbrot::Render()
 		ColourNTone(5);
 		break;
 	}
-
-	CalculateRenderTime();
-
-	if (RenderMode == __RMEscapeTime)
-		delete[] NumIterationsPerPixel;
 }
 
 
@@ -279,19 +330,29 @@ void Mandelbrot::ColourNTone(int n)
 		}
 	}
 
+    TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
 			if (Iteration[ydotwidth + x] != max_iterations)
 			{
-				Canvas[ydotwidth + x] = colours[Iteration[ydotwidth + x] % n];
+				int colour =  colours[Iteration[ydotwidth + x] % n];
+
+				ptr[x].rgbtRed = colour & 0x0000ff;
+				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = colour >> 16;
 			}
 			else
 			{
-				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -302,9 +363,13 @@ void Mandelbrot::ColourNTone(int n)
 
 void Mandelbrot::ColourDistanceI(double max_d)
 {
+	TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
@@ -312,11 +377,15 @@ void Mandelbrot::ColourDistanceI(double max_d)
 			{
 				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[ydotwidth + x] = Palette[index];
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 			}
 			else
 			{
-				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -325,9 +394,13 @@ void Mandelbrot::ColourDistanceI(double max_d)
 
 void Mandelbrot::ColourDistanceII(double max_d)
 {
+	TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
@@ -335,11 +408,15 @@ void Mandelbrot::ColourDistanceII(double max_d)
 			{
 				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				Canvas[ydotwidth + x] = Palette[index];
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 			}
 			else
 			{
-				Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 			}
 		}
 	}
@@ -361,9 +438,13 @@ void Mandelbrot::OrbitTrap(bool fill)
 		}
 	}
 
+	TRGBTriple *ptr;
+
 	for (int y = 0; y < Height; y++)
 	{
 		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 		for (int x = 0; x < Width; x++)
 		{
@@ -373,18 +454,24 @@ void Mandelbrot::OrbitTrap(bool fill)
 				{
 					int index =  std::floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * __PaletteCount);
 
-					Canvas[ydotwidth + x] = Palette[index];
+					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[index] >> 16;
 				}
 				else
 				{
-					Canvas[ydotwidth + x] = Palette[__PaletteInfinity];
+					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
 				}
 			}
 			else
 			{
 				int index =  std::floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * __PaletteCount);
 
-				Canvas[ydotwidth + x] = Palette[index];
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
 			}
 		}
 	}
@@ -399,7 +486,7 @@ void Mandelbrot::Preview()
 
 void Mandelbrot::ResetView()
 {
-	SetView(-2.00, 0.47, -1.22, 1.22);
+	SetView(-2.00, 0.47, -0.988, 0.988);
 }
 
 
