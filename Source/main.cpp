@@ -735,7 +735,7 @@ void __fastcall TfrmMain::sInfinityMouseDown(TObject *Sender, TMouseButton Butto
 	{
 		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetPaletteInfinity(sInfinity->Brush->Color);
 
 		GPaletteHandler->Palette[__PaletteInfinity] = sInfinity->Brush->Color;
 	}
@@ -745,10 +745,12 @@ void __fastcall TfrmMain::sInfinityMouseDown(TObject *Sender, TMouseButton Butto
 void TfrmMain::CopyPaletteToFractal()
 {
 	// 0 - 499, main palette; 500, infinity colour
-	for (int t = 0; t < 501; t++)
+	for (int t = 0; t < 500; t++)
 	{
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Palette[t] = GPaletteHandler->Palette[t];
 	}
+
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetPaletteInfinity(GPaletteHandler->Palette[__PaletteInfinity]);
 }
 
 

@@ -273,12 +273,132 @@ void Fractal::SetRenderMode(int new_mode)
 }
 
 
+void Fractal::SetPaletteInfinity(int colour)
+{
+	PaletteInfintyR = colour & 0x0000ff;
+	PaletteInfintyG = colour >> 8 & 0x0000ff;
+	PaletteInfintyB = colour >> 16;
+
+	Palette[__PaletteInfinity] = colour;
+}
+
+
 double Fractal::Sign(double n)
 {
 	if (n > 0) return 1;
 	if (n < 0) return -1;
 
 	return 0;
+}
+
+
+void Fractal::ColourDistanceI(double max_d)
+{
+	TRGBTriple *ptr;
+
+	for (int y = 0; y < Height; y++)
+	{
+		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+		for (int x = 0; x < Width; x++)
+		{
+			if (Iteration[ydotwidth + x] != max_iterations)
+			{
+				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
+
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
+			}
+			else
+			{
+				ptr[x].rgbtRed = PaletteInfintyR;
+				ptr[x].rgbtGreen = PaletteInfintyG;
+				ptr[x].rgbtBlue = PaletteInfintyB;
+			}
+		}
+	}
+}
+
+
+void Fractal::ColourDistanceII(double max_d)
+{
+	TRGBTriple *ptr;
+
+	for (int y = 0; y < Height; y++)
+	{
+		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+		for (int x = 0; x < Width; x++)
+		{
+			if (Iteration[ydotwidth + x] != max_iterations)
+			{
+				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
+
+				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
+				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = Palette[index] >> 16;
+			}
+			else
+			{
+				ptr[x].rgbtRed = PaletteInfintyR;
+				ptr[x].rgbtGreen = PaletteInfintyG;
+				ptr[x].rgbtBlue = PaletteInfintyB;
+			}
+		}
+	}
+}
+
+
+void Fractal::ColourNTone(int n)
+{
+	int* colours = new int[n];
+
+	colours[0] = Palette[0];
+	colours[n - 1] = Palette[499];
+
+	if (n > 2)
+	{
+		int delta = std::floor(__PaletteCount / (n - 1));
+
+		for (int t = 1; t < n - 1; t++)
+		{
+			colours[t] = Palette[delta * t];
+		}
+	}
+
+    TRGBTriple *ptr;
+
+	for (int y = 0; y < Height; y++)
+	{
+		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+		for (int x = 0; x < Width; x++)
+		{
+			if (Iteration[ydotwidth + x] != max_iterations)
+			{
+				int colour = colours[Iteration[ydotwidth + x] % n];
+
+				ptr[x].rgbtRed = colour & 0x0000ff;
+				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
+				ptr[x].rgbtBlue = colour >> 16;
+			}
+			else
+			{
+				ptr[x].rgbtRed = PaletteInfintyR;
+				ptr[x].rgbtGreen = PaletteInfintyG;
+				ptr[x].rgbtBlue = PaletteInfintyB;
+			}
+		}
+	}
+
+	delete[] colours;
 }
 
 

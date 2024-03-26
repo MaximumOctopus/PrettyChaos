@@ -180,10 +180,12 @@ void JuliaQuintic::FinaliseRender()
 
 		for (int y = 0; y < Height; y++)
 		{
+			int ydotwidth = y * Width;
+
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[y * Width + x] > max) max = Iteration[y * Width + x];
-				if (Iteration[y * Width + x] < min && Iteration[y * Width + x] != 0) min = Iteration[y * Width + x];
+				if (Iteration[ydotwidth + x] > max) max = Iteration[ydotwidth + x];
+				if (Iteration[ydotwidth + x] < min && Iteration[ydotwidth + x] != 0) min = Iteration[ydotwidth + x];
 			}
 		}
 
@@ -199,9 +201,9 @@ void JuliaQuintic::FinaliseRender()
 			{
 				if (Iteration[ydotwidth + x] == 0)
 				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
+					ptr[x].rgbtRed = PaletteInfintyR;
+					ptr[x].rgbtGreen = PaletteInfintyG;
+					ptr[x].rgbtBlue = PaletteInfintyB;
 				}
 				else
 				{
@@ -250,85 +252,6 @@ void JuliaQuintic::FinaliseRender()
 	case __RMFiveTone:                                                                     // five-tone
 		ColourNTone(5);
 		break;
-	}
-}
-
-
-void JuliaQuintic::ColourNTone(int n)
-{
-	TRGBTriple *ptr;
-
-	int* colours = new int[n];
-
-	colours[0] = 0;
-	colours[n - 1] = 499;
-
-	if (n > 2)
-	{
-		int delta = std::floor(__PaletteCount / (n - 1));
-
-		for (int t = 1; t < n - 1; t++)
-		{
-			colours[t] = Palette[delta * t];
-		}
-	}
-
-	for (int y = 0; y < Height; y++)
-	{
-		int ydotwidth = y * Width;
-
-		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-		for (int x = 0; x < Width; x++)
-		{
-			if (Iteration[ydotwidth + x] != max_iterations)
-			{
-				int colour = Palette[colours[Iteration[ydotwidth + x] % n]];
-
-				ptr[x].rgbtRed = colour & 0x0000ff;
-				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = colour >> 16;
-			}
-			else
-			{
-				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
-			}
-		}
-	}
-
-	delete[] colours;
-}
-
-
-void JuliaQuintic::ColourDistanceII(double max_d)
-{
-	TRGBTriple *ptr;
-
-	for (int y = 0; y < Height; y++)
-	{
-		int ydotwidth = y * Width;
-
-		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-		for (int x = 0; x < Width; x++)
-		{
-			if (Iteration[ydotwidth + x] != max_iterations)
-			{
-				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
-
-				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[index] >> 16;
-			}
-			else
-			{
-				ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
-			}
-		}
 	}
 }
 

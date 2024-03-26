@@ -27,9 +27,6 @@ class JuliaCubic : public Fractal
 	static const int __RMFourTone = 6;
 	static const int __RMFiveTone = 7;
 
-	void ColourNTone(int);
-	void ColourDistanceII(double);
-
 	double max_d = 0;
 
 	void FinaliseRender();

@@ -29,11 +29,6 @@ class Mandelbrot : public Fractal
 	static const int __RMFourTone = 8;
 	static const int __RMFiveTone = 9;
 
-	void ColourNTone(int);
-	void ColourTwoTone();
-	void ColourThreeTone();
-	void ColourDistanceI(double);
-	void ColourDistanceII(double);
 	void OrbitTrap(bool);
 
 	double max_d = 0;

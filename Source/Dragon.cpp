@@ -90,9 +90,9 @@ void Dragon::Render(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-			ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-			ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
+			ptr[x].rgbtRed = PaletteInfintyR;
+			ptr[x].rgbtGreen = PaletteInfintyG;
+			ptr[x].rgbtBlue = PaletteInfintyB;
 		}
 	}
 

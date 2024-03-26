@@ -159,9 +159,9 @@ void MartinPositive::Render(int hstart, int hend)
 			{
 				if (Iteration[y * Width + x] == 0)
 				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
+					ptr[x].rgbtRed = PaletteInfintyR;
+					ptr[x].rgbtGreen = PaletteInfintyG;
+					ptr[x].rgbtBlue = PaletteInfintyB;
 				}
 				else
 				{

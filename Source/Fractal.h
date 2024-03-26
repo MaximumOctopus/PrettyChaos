@@ -34,6 +34,10 @@ class Fractal
 
 protected:
 
+	int PaletteInfintyR = 0;
+	int PaletteInfintyG = 0;
+	int PaletteInfintyB = 0;
+
 	int* NumIterationsPerPixel = nullptr;
 
 	std::chrono::system_clock::time_point StartTime;
@@ -43,6 +47,10 @@ protected:
 	void CalculateRenderTime();
 
 	double Sign(double);
+
+    void ColourDistanceI(double);
+	void ColourDistanceII(double);
+	void ColourNTone(int);
 
 public:
 
@@ -71,7 +79,8 @@ public:
 
 	bool AcceptsZoom = true;
 
-    bool MultiThread = false;
+	bool MultiThread = false;
+    int ThreadCount = 4;
 
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
@@ -117,6 +126,8 @@ public:
 
 	void SetABC(double, double, double, double);
 	bool ShowABC(int);
+
+	void SetPaletteInfinity(int);
 
 	virtual void ToFile(std::ofstream&);
 };

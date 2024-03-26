@@ -86,9 +86,9 @@ void Martin::Render(int hstart, int hend)
 		{
 			Iteration[y * Width + x] = 0;
 
-			ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-			ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-			ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
+			ptr[x].rgbtRed = PaletteInfintyR;
+			ptr[x].rgbtGreen = PaletteInfintyG;
+			ptr[x].rgbtBlue = PaletteInfintyB;
 		}
 	}
 
@@ -146,10 +146,12 @@ void Martin::Render(int hstart, int hend)
 
 		for (int y = 0; y < Height; y++)
 		{
+			int ydotwidth = y * Width;
+
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[y * Width + x] > max) max = Iteration[y * Width + x];
-				if (Iteration[y * Width + x] < min && Iteration[y * Width + x] != 0) min = Iteration[y * Width + x];
+				if (Iteration[ydotwidth + x] > max) max = Iteration[ydotwidth + x];
+				if (Iteration[ydotwidth + x] < min && Iteration[ydotwidth + x] != 0) min = Iteration[ydotwidth + x];
 			}
 		}
 
@@ -157,19 +159,21 @@ void Martin::Render(int hstart, int hend)
 
 		for (int y = 0; y < Height; y++)
 		{
+			int ydotwidth = y * Width;
+
 			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[y * Width + x] == 0)
+				if (Iteration[ydotwidth + x] == 0)
 				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity] & 0x0000ff;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity] >> 8 & 0x0000ff;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity] >> 16;
+					ptr[x].rgbtRed = PaletteInfintyR;
+					ptr[x].rgbtGreen = PaletteInfintyG;
+					ptr[x].rgbtBlue = PaletteInfintyB;
 				}
 				else
 				{
-					int it = Iteration[y * Width + x] - min;
+					int it = Iteration[ydotwidth + x] - min;
 
 					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
 
