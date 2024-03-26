@@ -1,5 +1,5 @@
 ==========================================================================================================================
-PrettyChaos 0.9
+PrettyChaos 0.10
 (c) Paul Alan Freshney 2023-2024
 
 paul@freshney.org
@@ -7,7 +7,7 @@ paul@freshney.org
 Source code and portable install
   https://github.com/MaximumOctopus/PrettyChaos
 
-March 25th 2024
+March 26th 2024
 
 ==========================================================================================================================
 
@@ -35,6 +35,10 @@ All of my software is free and open source; please consider donating to a local 
 ==========================================================================================================================
 
 Release History
+
+0.10 / March 26th 2024
+
+A few minor fixes and some code refactoring.
 
 0.9 / March 25th 2024
 
