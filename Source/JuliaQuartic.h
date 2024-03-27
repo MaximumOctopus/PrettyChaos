@@ -35,7 +35,7 @@ public:
 
 	~JuliaQuartic();
 
-	void MultiThreadRender() override;
+	bool MultiThreadRender() override;
 	void Render(int, int) override;
 
     void ResetAll() override;

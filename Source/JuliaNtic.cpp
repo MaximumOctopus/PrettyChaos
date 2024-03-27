@@ -60,7 +60,7 @@ JuliaNtic::~JuliaNtic()
 bool JuliaNtic::MultiThreadRender()
 {
 	// nothing to render, point isn't valid
-	if (!PointGoesToInfinity(Var.a, Var.b))
+	if (PointGoesToInfinity(Var.a, Var.b))
 	{
 		return false;
 	}

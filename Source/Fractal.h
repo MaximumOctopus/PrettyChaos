@@ -110,12 +110,14 @@ public:
 
 	~Fractal();
 
-	virtual void MultiThreadRender();
+	virtual bool MultiThreadRender();
 	virtual void Render(int, int);
     virtual void Preview();
 
 	virtual void ResetAll();
 	virtual void ResetView();
+
+	bool PointGoesToInfinity(double, double);
 
 	void SetView(double, double, double, double);
 	void FitToView(double, double, double, double);

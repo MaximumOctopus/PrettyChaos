@@ -54,8 +54,14 @@ Julia::~Julia()
 }
 
 
-void Julia::MultiThreadRender()
+bool Julia::MultiThreadRender()
 {
+	// nothing to render, point isn't valid
+	if (PointGoesToInfinity(Var.a, Var.b))
+	{
+		return false;
+	}
+
 	StartTime = std::chrono::system_clock::now();
 
 	int h_delta = std::round((double)Height / 4);
@@ -73,14 +79,13 @@ void Julia::MultiThreadRender()
 	FinaliseRender();
 
 	CalculateRenderTime();
+
+	return true;
 }
 
 
 void Julia::Render(int hstart, int hend)
 {
-	if (!PointGoesToInfinity(Var.a, Var.b))
-		ShowMessage("fish");
-
 	max_d = 0;
 
     // maximum distance from the centre of the image

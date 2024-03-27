@@ -102,7 +102,7 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 		}
 		else if (Shift.Contains(ssCtrl))
 		{
-			double b = eVarA->Text.ToDouble();
+			double b = eVarB->Text.ToDouble();
 
 			double delta = 0.1;
 

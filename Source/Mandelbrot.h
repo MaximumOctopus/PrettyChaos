@@ -41,7 +41,7 @@ public:
 
 	~Mandelbrot();
 
-	void MultiThreadRender() override;
+	bool MultiThreadRender() override;
 	void Render(int, int) override;
     void Preview() override;
 

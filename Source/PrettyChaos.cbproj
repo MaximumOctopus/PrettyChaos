@@ -169,7 +169,7 @@
             <BuildOrder>22</BuildOrder>
         </None>
         <None Include="Constants.h">
-            <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
+            <VirtualFolder>{71E52FCC-187C-4BB1-8E62-C3D352E18A05}</VirtualFolder>
             <BuildOrder>15</BuildOrder>
         </None>
         <CppCompile Include="Dragon.cpp">
@@ -414,6 +414,7 @@
                 </Source>
                 <VFOLDERS>
                     <VFOLDER ID="{4C4C43A1-9CD0-4FE2-850D-242A2F59A052}" name="Animation"/>
+                    <VFOLDER ID="{71E52FCC-187C-4BB1-8E62-C3D352E18A05}" name="Constants"/>
                     <VFOLDER ID="{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}" name="File I/O"/>
                     <VFOLDER ID="{6F195188-9F40-4F70-B1F3-F2BFE6978011}" name="Forms"/>
                     <VFOLDER ID="{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}" name="History"/>
