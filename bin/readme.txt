@@ -1,5 +1,5 @@
-==========================================================================================================================
-PrettyChaos 0.10
+=================================================================================================
+PrettyChaos 0.11
 (c) Paul Alan Freshney 2023-2024
 
 paul@freshney.org
@@ -7,20 +7,20 @@ paul@freshney.org
 Source code and portable install
   https://github.com/MaximumOctopus/PrettyChaos
 
-March 26th 2024
+March 27th 2024
 
-==========================================================================================================================
+=================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
 
 Currently supports Julia Set, Julia Set (cubic), Mandelbrot, and Martin fractals.
 
-==========================================================================================================================
+=================================================================================================
 
 Written with C++ Builder 11 (Update 3) Community Edition (free).
    https://www.embarcadero.com/products/cbuilder/starter
 
-==========================================================================================================================
+=================================================================================================
 
  Credits:
 
@@ -32,9 +32,24 @@ Written with C++ Builder 11 (Update 3) Community Edition (free).
 
 All of my software is free and open source; please consider donating to a local cat charity or shelter. Thanks.
 
-==========================================================================================================================
+=================================================================================================
 
 Release History
+
+0.11 / March 27th 2024
+
+Added a test before rendering a Julia Set to ensure the real and imaginary values form a valid set (and you don't wait
+20+ seconds for a blank image because each point tends to infinity!!).
+
+Added the ability to quickly change the top two parameters (real and imaginary for the Julia sets) and render the result:
+
+SHIFT + UP ARROW: increase parameter a (real) by 0.1
+SHIFT + DOWN_ARRROW: decrease parameter a by 0.1
+
+CTRL + UP_ARROW: increase parameter b (imaginary) by 0.1
+CTRL + DOWN_ARROW: decrease paramrter b by 0.1
+
+Hold down the ALT key in addition to either SHIFT or CTRL to increase/decrease by 0.01
 
 0.10 / March 26th 2024
 
