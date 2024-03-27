@@ -217,6 +217,8 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbLoadPalette;
 	TOpenDialog *odPalette;
 	TMenuItem *N3840x21601;
+	TSpeedButton *sbResetAll;
+	TBevel *Bevel6;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -251,6 +253,8 @@ __published:	// IDE-managed Components
 	void __fastcall sbReZoomClick(TObject *Sender);
 	void __fastcall miTextureDimensionsClick(TObject *Sender);
 	void __fastcall sbLoadPaletteClick(TObject *Sender);
+	void __fastcall sbResetAllClick(TObject *Sender);
+	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 
 
 private:	// User declarations
@@ -295,6 +299,8 @@ private:	// User declarations
 	void CopyPaletteToFractal();
 
 	void LoadAndSetPalette(const std::wstring);
+
+	void SetWarning(bool);
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);

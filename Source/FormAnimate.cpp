@@ -38,7 +38,7 @@ void __fastcall TfrmAnimate::bOKClick(TObject *Sender)
 
 	if (cbAnimateParameters->Checked)
 	{
-		if (a != 0 && b != 0 && c != 0 && d != 0 && steps != 0)
+		if (!(a == 0 && b == 0 && c == 0 && d == 0 && steps == 0))
 		{
 			AnimationConfiguration.Configured = true;
 

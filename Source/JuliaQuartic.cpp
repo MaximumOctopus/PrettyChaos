@@ -26,7 +26,7 @@ JuliaQuartic::JuliaQuartic() : Fractal()
 
 	MultiThread = true;
 
-    bailout_radius = 4;
+	bailout_radius = 4;
 
 	Var.a = -0.79;
 	Var.b = 0.15;
@@ -258,6 +258,21 @@ void JuliaQuartic::FinaliseRender()
 void JuliaQuartic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
+}
+
+
+void JuliaQuartic::ResetAll()
+{
+	bailout_radius = 4;
+
+	Var.a = -0.79;
+	Var.b = 0.15;
+
+	n_coeff = 1;
+	max_iterations = 1000;
+	bailout_radius = 256;
+
+	ResetView();
 }
 
 

@@ -27,7 +27,7 @@ JuliaQuintic::JuliaQuintic() : Fractal()
 
 	MultiThread = true;
 
-    bailout_radius = 4;
+	bailout_radius = 4;
 
 	Var.a = -0.79;
 	Var.b = 0.15;
@@ -55,8 +55,14 @@ JuliaQuintic::~JuliaQuintic()
 }
 
 
-void JuliaQuintic::MultiThreadRender()
+bool JuliaQuintic::MultiThreadRender()
 {
+	// nothing to render, point isn't valid
+	if (!PointGoesToInfinity(Var.a, Var.b))
+	{
+		return false;
+	}
+
 	StartTime = std::chrono::system_clock::now();
 
 	int h_delta = std::round((double)Height / 4);
@@ -71,9 +77,11 @@ void JuliaQuintic::MultiThreadRender()
 	t3.join();
 	t4.join();
 
-    FinaliseRender();
+	FinaliseRender();
 
 	CalculateRenderTime();
+
+    return true;
 }
 
 
@@ -259,6 +267,21 @@ void JuliaQuintic::FinaliseRender()
 void JuliaQuintic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
+}
+
+
+void JuliaQuintic::ResetAll()
+{
+	bailout_radius = 4;
+
+	Var.a = -0.79;
+	Var.b = 0.15;
+
+	n_coeff = 1;
+	max_iterations = 1000;
+	bailout_radius = 256;
+
+	ResetView();
 }
 
 

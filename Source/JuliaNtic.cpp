@@ -31,7 +31,7 @@ JuliaNtic::JuliaNtic() : Fractal()
 
 	Var.a = 0.89;
 	Var.b = -0.19;
-    Var.c = 6;
+	Var.c = 6;
 
 	Name = L"Julia Set (n-tic)";
 
@@ -57,8 +57,14 @@ JuliaNtic::~JuliaNtic()
 }
 
 
-void JuliaNtic::MultiThreadRender()
+bool JuliaNtic::MultiThreadRender()
 {
+	// nothing to render, point isn't valid
+	if (!PointGoesToInfinity(Var.a, Var.b))
+	{
+		return false;
+	}
+
 	StartTime = std::chrono::system_clock::now();
 
 	int h_delta = std::round((double)Height / 4);
@@ -76,6 +82,8 @@ void JuliaNtic::MultiThreadRender()
 	FinaliseRender();
 
 	CalculateRenderTime();
+
+    return true;
 }
 
 
@@ -263,6 +271,22 @@ void JuliaNtic::FinaliseRender()
 void JuliaNtic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
+}
+
+
+void JuliaNtic::ResetAll()
+{
+	bailout_radius = 4;
+
+	Var.a = 0.89;
+	Var.b = -0.19;
+	Var.c = 6;
+
+	n_coeff = 1;
+	max_iterations = 1000;
+	bailout_radius = 256;
+
+	ResetView();
 }
 
 

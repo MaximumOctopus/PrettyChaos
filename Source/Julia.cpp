@@ -8,6 +8,8 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+#include <Vcl.Dialogs.hpp>
+
 #include <string>
 #include <thread>
 
@@ -24,7 +26,7 @@ Julia::Julia() : Fractal()
 
 	MultiThread = true;
 
-    bailout_radius = 4;
+	bailout_radius = 4;
 
 	Var.a = -0.7;
 	Var.b = 0.27015;
@@ -76,6 +78,9 @@ void Julia::MultiThreadRender()
 
 void Julia::Render(int hstart, int hend)
 {
+	if (!PointGoesToInfinity(Var.a, Var.b))
+		ShowMessage("fish");
+
 	max_d = 0;
 
     // maximum distance from the centre of the image
@@ -250,6 +255,21 @@ void Julia::FinaliseRender()
 void Julia::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
+}
+
+
+void Julia::ResetAll()
+{
+	bailout_radius = 4;
+
+	Var.a = -0.7;
+	Var.b = 0.27015;
+
+	n_coeff = 1;
+	max_iterations = 1000;
+	bailout_radius = 256;
+
+	ResetView();
 }
 
 

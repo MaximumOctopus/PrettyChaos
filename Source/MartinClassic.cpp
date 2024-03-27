@@ -34,7 +34,7 @@ Martin::Martin() : Fractal()
 	Var.a = 45;
 	Var.b = 2;
 	Var.c = -300;
-    Var.d = 1;
+	Var.d = 1;
 
 	// we need a LOT of iterations here because we're not calculating a function on a per pixel basis,
     // but bouncing around the screen hitting pixels as we go
@@ -198,6 +198,19 @@ void Martin::ResetView()
 	int y_max = std::floor((double)Height / (2 * Var.d));
 
     SetView(x_min, x_max, y_min, y_max);
+}
+
+
+void Martin::ResetAll()
+{
+	Var.a = 45;
+	Var.b = 2;
+	Var.c = -300;
+	Var.d = 1;
+
+	max_iterations = 1000000;
+
+	ResetView();
 }
 
 

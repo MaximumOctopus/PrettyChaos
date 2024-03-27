@@ -29,7 +29,7 @@ Mandelbrot::Mandelbrot() : Fractal()
 
 	MultiThread = true;
 
-    bailout_radius = 4;
+	bailout_radius = 4;
 
 	AcceptsABCSpectificRenderModeBegin = 4;
 	AcceptsABCSpectificRenderModeEnd = 5;
@@ -49,9 +49,6 @@ Mandelbrot::Mandelbrot() : Fractal()
 	NameB = L"orbit y";
 
 	ResetView();
-
-	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
-	Var.b = ymin + ((ymax - ymin) / 2);     //
 }
 
 
@@ -61,7 +58,7 @@ Mandelbrot::~Mandelbrot()
 
 
 
-void Mandelbrot::MultiThreadRender()
+bool Mandelbrot::MultiThreadRender()
 {
     max_d = 0;
 
@@ -93,6 +90,8 @@ void Mandelbrot::MultiThreadRender()
 
 	if (RenderMode == __RMEscapeTime)
 		delete[] NumIterationsPerPixel;
+
+    return true;
 }
 
 
@@ -376,6 +375,21 @@ void Mandelbrot::Preview()
 void Mandelbrot::ResetView()
 {
 	SetView(-2.00, 0.47, -0.988, 0.988);
+
+	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
+	Var.b = ymin + ((ymax - ymin) / 2);     //
+}
+
+
+void Mandelbrot::ResetAll()
+{
+	bailout_radius = 4;
+
+	n_coeff = 1;
+	max_iterations = 1000;
+	bailout_radius = 256;
+
+	ResetView();
 }
 
 

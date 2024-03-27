@@ -114,6 +114,7 @@ public:
 	virtual void Render(int, int);
     virtual void Preview();
 
+	virtual void ResetAll();
 	virtual void ResetView();
 
 	void SetView(double, double, double, double);

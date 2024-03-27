@@ -55,9 +55,10 @@ void Fractal::CalculateRenderTime()
 }
 
 
-void Fractal::MultiThreadRender()
+bool Fractal::MultiThreadRender()
 {
-
+	// handled by subclass
+    return false;
 }
 
 
@@ -74,6 +75,12 @@ void Fractal::Preview()
 
 
 void Fractal::ResetView()
+{
+	// handled by subclass
+}
+
+
+void Fractal::ResetAll()
 {
 	// handled by subclass
 }
@@ -280,6 +287,39 @@ void Fractal::SetPaletteInfinity(int colour)
 	PaletteInfintyB = colour >> 16;
 
 	Palette[__PaletteInfinity] = colour;
+}
+
+
+// returns true if the point p, q on a mandelbrot set goes to infinity
+bool Fractal::PointGoesToInfinity(double p, double q)
+{
+	int it = 0;
+
+	double x1 = 0;
+	double y1 = 0;
+	double x2 = 0;
+	double y2 = 0;
+	double w = 0;
+
+	while (x2 + y2 <= 4 && it < 1000)
+	{
+		x1 = x2 - y2 + p;
+		y1 = w - x2 - y2 + q;
+
+		x2 = x1 * x1;
+		y2 = y1 * y1;
+
+		w = (x1 + y1) * (x1 + y1);
+
+		it++;
+	}
+
+	if (it < 1000)
+	{
+		return false;
+	}
+
+    return true;
 }
 
 

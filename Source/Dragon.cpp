@@ -341,6 +341,16 @@ void Dragon::ResetView()
 }
 
 
+void Dragon::ResetAll()
+{
+	Var.a = 16;
+
+	max_iterations = 4;
+
+	ResetView();
+}
+
+
 void Dragon::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Dragon fractal\n");

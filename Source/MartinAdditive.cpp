@@ -195,6 +195,19 @@ void MartinAdditive::ResetView()
 }
 
 
+void MartinAdditive::ResetAll()
+{
+	Var.a = 21;
+	Var.b = 40;
+	Var.c = 20;
+	Var.d = 1;
+
+	max_iterations = 1000000;
+
+	ResetView();
+}
+
+
 void MartinAdditive::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Additive) fractal\n");

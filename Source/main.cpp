@@ -72,6 +72,62 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	UpdatePalette();
 }
 
+
+void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+
+{
+	if (Key == VK_UP || Key == VK_DOWN)
+	{
+		if (Shift.Contains(ssShift))
+		{
+			double a = eVarA->Text.ToDouble();
+
+			double delta = 0.1;
+
+			if (Shift.Contains(ssAlt))
+			{
+				delta = 0.01;
+			}
+
+			if (Key == VK_UP)
+			{
+				a += delta;
+			}
+			else if (Key == VK_DOWN)
+			{
+				a -= delta;
+			}
+
+			eVarA->Text = a;
+		}
+		else if (Shift.Contains(ssCtrl))
+		{
+			double b = eVarA->Text.ToDouble();
+
+			double delta = 0.1;
+
+			if (Shift.Contains(ssAlt))
+			{
+				delta = 0.01;
+			}
+
+			if (Key == VK_UP)
+			{
+				b += delta;
+			}
+			else if (Key == VK_DOWN)
+			{
+				b -= delta;
+			}
+
+			eVarB->Text = b;
+		}
+
+		sbRenderClick(nullptr);
+	}
+}
+
+
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
     delete GPaletteHandler;
@@ -297,6 +353,8 @@ void TfrmMain::UpdateZoomPanel()
 
 void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 {
+	bool rendered = true;
+
 	auto StartTime = std::chrono::system_clock::now();
 
 	sbMain->SimpleText = "Rendering...";
@@ -315,30 +373,38 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender();
+		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender();
+
+		SetWarning(!rendered);
 	}
 	else
 	{
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Render(0, 0);
 	}
 
-	CopyFromFractalToScreen();
-
-	if (miSaveAllImages->Checked)
+	if (rendered)
 	{
-		std::wstring file_name = Utility::ProcessFileName(__AutoSaveTemplate);
+		CopyFromFractalToScreen();
 
-		SaveFractal(file_name);
+		if (miSaveAllImages->Checked)
+		{
+			std::wstring file_name = Utility::ProcessFileName(__AutoSaveTemplate);
+
+			SaveFractal(file_name);
+		}
+
+		std::chrono::system_clock::time_point EndTime = std::chrono::system_clock::now();
+
+		std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
+
+		std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds (" + std::to_wstring(elapsed_seconds.count()) + L" seconds)";
+
+		sbMain->SimpleText = c.c_str();
 	}
-
-	std::chrono::system_clock::time_point EndTime = std::chrono::system_clock::now();
-
-	std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
-
-	std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds (" + std::to_wstring(elapsed_seconds.count()) + L" seconds)";
-
-	sbMain->SimpleText = c.c_str();
-
+	else
+	{
+		sbMain->SimpleText = "Invalid real and imaginary points.";
+	}
 }
 
 
@@ -676,6 +742,14 @@ void __fastcall TfrmMain::sbBackClick(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::sbResetAllClick(TObject *Sender)
+{
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetAll();
+
+	UpdateFractalPanel();
+}
+
+
 void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
 {
 	frmAbout->ShowModal();
@@ -783,6 +857,8 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 	CopyPaletteToFractal();
 
 	UpdateFromFractalChange();
+
+	SetWarning(false);
 }
 
 
@@ -926,4 +1002,25 @@ void __fastcall TfrmMain::Panel3MouseMove(TObject *Sender, TShiftState Shift, in
 	lCursor->Caption = "-";
 
 	lCursorColour->Caption = "-";
+}
+
+
+void TfrmMain::SetWarning(bool warning)
+{
+	if (warning)
+	{
+		if (!lVarA->Font->Color != clMaroon)
+		{
+			lVarA->Font->Color = clMaroon;
+			lVarB->Font->Color = clMaroon;
+		}
+	}
+	else
+	{
+		if (lVarA->Font->Color != clWindowText)
+		{
+			lVarA->Font->Color = clWindowText;
+			lVarB->Font->Color = clWindowText;
+		}
+	}
 }

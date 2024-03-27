@@ -193,6 +193,19 @@ void MartinSinusoidal::ResetView()
 }
 
 
+void MartinSinusoidal::ResetAll()
+{
+	Var.a = 15;
+	Var.b = 30;
+	Var.c = 4;
+	Var.d = 1;
+
+	max_iterations = 1000000;
+
+	ResetView();
+}
+
+
 void MartinSinusoidal::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Sinusoidal) fractal\n");

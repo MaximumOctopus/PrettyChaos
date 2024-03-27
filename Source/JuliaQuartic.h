@@ -38,6 +38,7 @@ public:
 	void MultiThreadRender() override;
 	void Render(int, int) override;
 
+    void ResetAll() override;
 	void ResetView() override;
 
     void ToFile(std::ofstream&) override;

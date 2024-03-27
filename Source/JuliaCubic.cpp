@@ -24,7 +24,7 @@ JuliaCubic::JuliaCubic() : Fractal()
 
 	MultiThread = true;
 
-    bailout_radius = 4;
+	bailout_radius = 4;
 
 	Var.a = -0.7;
 	Var.b = 0.27015;
@@ -52,8 +52,14 @@ JuliaCubic::~JuliaCubic()
 }
 
 
-void JuliaCubic::MultiThreadRender()
+bool JuliaCubic::MultiThreadRender()
 {
+	// nothing to render, point isn't valid
+	if (!PointGoesToInfinity(Var.a, Var.b))
+	{
+		return false;
+	}
+
 	StartTime = std::chrono::system_clock::now();
 
 	int h_delta = std::round((double)Height / 4);
@@ -71,6 +77,8 @@ void JuliaCubic::MultiThreadRender()
 	FinaliseRender();
 
 	CalculateRenderTime();
+
+    return true;
 }
 
 
@@ -256,6 +264,21 @@ void JuliaCubic::FinaliseRender()
 void JuliaCubic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
+}
+
+
+void JuliaCubic::ResetAll()
+{
+	bailout_radius = 4;
+
+	Var.a = -0.7;
+	Var.b = 0.27015;
+
+	n_coeff = 1;
+	max_iterations = 1000;
+	bailout_radius = 256;
+
+	ResetView();
 }
 
 

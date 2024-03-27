@@ -193,6 +193,19 @@ void MartinPositive::ResetView()
 }
 
 
+void MartinPositive::ResetAll()
+{
+	Var.a = 45;
+	Var.b = 2;
+	Var.c = -300;
+	Var.d = 1;
+
+	max_iterations = 1000000;
+
+	ResetView();
+}
+
+
 void MartinPositive::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Positive) fractal\n");
