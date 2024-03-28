@@ -219,6 +219,10 @@ __published:	// IDE-managed Components
 	TMenuItem *N3840x21601;
 	TSpeedButton *sbResetAll;
 	TBevel *Bevel6;
+	TSpeedButton *sbZoomOnPoint;
+	TMenuItem *Edity1;
+	TMenuItem *Copyboundstoclipboard1;
+	TMenuItem *miCopyAllToClipboard;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -255,6 +259,8 @@ __published:	// IDE-managed Components
 	void __fastcall sbLoadPaletteClick(TObject *Sender);
 	void __fastcall sbResetAllClick(TObject *Sender);
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+	void __fastcall sbZoomOnPointClick(TObject *Sender);
+	void __fastcall miCopyAllToClipboardClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -290,11 +296,10 @@ private:	// User declarations
 
 	void CopyFromFractalToScreen();
 
-    void UpdateFromFractalChange();
-
+	void UpdateFromFractalChange();
 	void UpdateFractalPanel();
-
 	void UpdatePalette();
+    void UpdateAllParameters();
 
 	void CopyPaletteToFractal();
 

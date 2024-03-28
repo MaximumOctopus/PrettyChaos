@@ -89,7 +89,7 @@ object frmMain: TfrmMain
       OnClick = sbResetClick
     end
     object sbZoom: TSpeedButton
-      Left = 545
+      Left = 581
       Top = 2
       Width = 30
       Height = 27
@@ -99,7 +99,7 @@ object frmMain: TfrmMain
       OnClick = sbZoomClick
     end
     object sbZoomCrop: TSpeedButton
-      Left = 617
+      Left = 653
       Top = 2
       Width = 30
       Height = 27
@@ -109,7 +109,7 @@ object frmMain: TfrmMain
       OnClick = sbZoomCropClick
     end
     object sbBack: TSpeedButton
-      Left = 653
+      Left = 689
       Top = 2
       Width = 30
       Height = 27
@@ -119,7 +119,7 @@ object frmMain: TfrmMain
       OnClick = sbBackClick
     end
     object sbForward: TSpeedButton
-      Left = 689
+      Left = 725
       Top = 2
       Width = 30
       Height = 27
@@ -136,14 +136,14 @@ object frmMain: TfrmMain
       Shape = bsLeftLine
     end
     object Bevel5: TBevel
-      Left = 727
+      Left = 763
       Top = 2
       Width = 6
       Height = 28
       Shape = bsLeftLine
     end
     object sbAbout: TSpeedButton
-      Left = 780
+      Left = 816
       Top = 2
       Width = 30
       Height = 27
@@ -162,7 +162,7 @@ object frmMain: TfrmMain
       OnClick = eAnimationClick
     end
     object sbReZoom: TSpeedButton
-      Left = 581
+      Left = 617
       Top = 2
       Width = 30
       Height = 27
@@ -173,7 +173,7 @@ object frmMain: TfrmMain
       OnClick = sbReZoomClick
     end
     object sbResetAll: TSpeedButton
-      Left = 735
+      Left = 771
       Top = 2
       Width = 30
       Height = 27
@@ -183,11 +183,21 @@ object frmMain: TfrmMain
       OnClick = sbResetAllClick
     end
     object Bevel6: TBevel
-      Left = 772
+      Left = 808
       Top = 2
       Width = 6
       Height = 28
       Shape = bsLeftLine
+    end
+    object sbZoomOnPoint: TSpeedButton
+      Left = 545
+      Top = 2
+      Width = 30
+      Height = 27
+      Hint = 'reset zoom'
+      ImageIndex = 13
+      Images = ImageList1
+      OnClick = sbZoomOnPointClick
     end
   end
   object Panel2: TPanel
@@ -652,7 +662,7 @@ object frmMain: TfrmMain
     ExplicitWidth = 1288
     ExplicitHeight = 1093
     object iRender: TImage
-      Left = 0
+      Left = 6
       Top = 0
       Width = 1280
       Height = 1024
@@ -674,7 +684,7 @@ object frmMain: TfrmMain
     Left = 920
     Top = 8
     Bitmap = {
-      494C01010D001800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C01010E001800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1190,11 +1200,11 @@ object frmMain: TfrmMain
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000424D3E000000000000003E000000
       2800000040000000400000000100010000000000000200000000000000000000
-      000000000000000000000000FFFFFF00FFFF000000000000FFFF000000000000
-      9FFF0000000000000800000000000000CFFF0000000000001FFF000000000000
-      0800000000000000CFFF0000000000001FFF0000000000000800000000000000
-      CFFF0000000000001FFF0000000000000800000000000000CFFF000000000000
-      FFFF000000000000FFFF000000000000FFFFFE01F3FFFC7F99998001F3F9F83F
+      000000000000000000000000FFFFFF00FFFFFE7F00000000FFFFFC3F00000000
+      9FFFF99F000000000800FBDF00000000CFFFFFFF000000001FFFCFF300000000
+      08009FF900000000CFFF3E7C000000001FFF3E7C0000000008009FF900000000
+      CFFFCFF3000000001FFFFFFF000000000800FBDF00000000CFFFF99F00000000
+      FFFFFC3F00000000FFFFFE7F00000000FFFFFE01F3FFFC7F99998001F3F9F83F
       99998001F3F1F83FFFFF8001F3E3F83FFFFF80010007F01F9FF98001000FF01F
       9FF98001C01FE00FFFFF8001800FC007FFFF8001800FC0079FF98001800FC007
       9FF98007800FC007FFFF8007800FC007FFFF8007C01FC00799998007C01FC007
@@ -1436,6 +1446,17 @@ object frmMain: TfrmMain
       end
       object N4: TMenuItem
         Caption = 'Exit'
+      end
+    end
+    object Edity1: TMenuItem
+      Caption = 'Edit'
+      object Copyboundstoclipboard1: TMenuItem
+        Caption = 'Copy bounds to clipboard'
+        OnClick = sbCopyBoundsToClipboardClick
+      end
+      object miCopyAllToClipboard: TMenuItem
+        Caption = 'Copy all parameters to clipboard'
+        OnClick = miCopyAllToClipboardClick
       end
     end
     object Export1: TMenuItem

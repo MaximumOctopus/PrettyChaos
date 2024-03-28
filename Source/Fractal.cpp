@@ -131,6 +131,21 @@ void Fractal::FitToView(double _xmin, double _xmax, double _ymin, double _ymax)
 }
 
 
+void Fractal::CentreOnPoint(double _x, double _y)
+{
+	double delta_x = xmax - xmin;
+	double delta_y = ymax - ymin;
+
+	double _xmin = _x - (delta_x / 2);
+	double _xmax = _x + (delta_x / 2);
+
+	double _ymin = _y - (delta_y / 2);
+	double _ymax = _y + (delta_y / 2);
+
+	SetView(_xmin, _xmax, _ymin, _ymax);
+}
+
+
 void Fractal::ZoomAtPoint(double _x, double _y)
 {
 	double x_range = ((xmax - xmin) / 2);
@@ -439,6 +454,12 @@ void Fractal::ColourNTone(int n)
 	}
 
 	delete[] colours;
+}
+
+
+std::wstring Fractal::GetParameters()
+{
+    return L"";
 }
 
 

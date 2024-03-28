@@ -22,6 +22,8 @@ JuliaCubic::JuliaCubic() : Fractal()
 	AcceptsVarA = true;
 	AcceptsVarB = true;
 
+	QuickParamterMode = 1;	// A+B + fine control
+
 	MultiThread = true;
 
 	bailout_radius = 4;
@@ -279,6 +281,15 @@ void JuliaCubic::ResetAll()
 	bailout_radius = 256;
 
 	ResetView();
+}
+
+
+std::wstring JuliaCubic::GetParameters()
+{
+	return L"render mode: " + RenderModes[RenderMode] +
+		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
+		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
+		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
 
 

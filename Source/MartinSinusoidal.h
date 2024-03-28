@@ -31,5 +31,7 @@ public:
     void ResetAll() override;
 	void ResetView() override;
 
+    std::wstring GetParameters() override;
+
     void ToFile(std::ofstream&) override;
 };

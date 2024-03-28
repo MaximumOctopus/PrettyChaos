@@ -393,6 +393,15 @@ void Mandelbrot::ResetAll()
 }
 
 
+std::wstring Mandelbrot::GetParameters()
+{
+	return L"render mode: " + RenderModes[RenderMode] +
+		   L"; orbit x: " + std::to_wstring(Var.a) + L"; orbit y " + std::to_wstring(Var.b) +
+		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
+		   L"; coeff n: " + std::to_wstring(n_coeff);
+}
+
+
 void Mandelbrot::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Mandelbrot fractal\n");

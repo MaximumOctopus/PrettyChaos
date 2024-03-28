@@ -351,6 +351,13 @@ void Dragon::ResetAll()
 }
 
 
+std::wstring Dragon::GetParameters()
+{
+	return L"render mode: " + RenderModes[RenderMode] +
+		   L"; recursions: " + std::to_wstring(Var.a) + L"; max iterations: " + std::to_wstring(max_iterations);
+}
+
+
 void Dragon::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Dragon fractal\n");

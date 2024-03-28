@@ -209,6 +209,7 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 			file << Formatting::to_utf8(L"DeltaA=" + std::to_wstring(animation.DeltaA) + L"\n");
 			file << Formatting::to_utf8(L"DeltaB=" + std::to_wstring(animation.DeltaB) + L"\n");
 			file << Formatting::to_utf8(L"DeltaC=" + std::to_wstring(animation.DeltaC) + L"\n");
+			file << Formatting::to_utf8(L"DeltaD=" + std::to_wstring(animation.DeltaD) + L"\n");
 
 			file << Formatting::to_utf8(L"Parameters=" + std::to_wstring(animation.Parameters) + L"\n");
 			file << Formatting::to_utf8(L"Zoom=" + std::to_wstring(animation.Zoom) + L"\n");

@@ -532,6 +532,8 @@ bool PaletteHandler::Save(const std::wstring file_name)
 
 		FileName = ExtractFileName(file_name.c_str()).c_str();
 	}
+
+    return true;
 }
 
 

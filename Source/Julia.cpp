@@ -26,6 +26,8 @@ Julia::Julia() : Fractal()
 
 	MultiThread = true;
 
+    QuickParamterMode = 1;	// A+B + fine control
+
 	bailout_radius = 4;
 
 	Var.a = -0.7;
@@ -275,6 +277,15 @@ void Julia::ResetAll()
 	bailout_radius = 256;
 
 	ResetView();
+}
+
+
+std::wstring Julia::GetParameters()
+{
+	return L"render mode: " + RenderModes[RenderMode] +
+		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
+		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
+		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
 
 

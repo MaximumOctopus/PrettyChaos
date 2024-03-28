@@ -29,6 +29,8 @@ MartinPositive::MartinPositive() : Fractal()
 	AcceptsVarC = true;
 	AcceptsVarD = true;
 
+	QuickParamterMode = 2;  // 2 = A+B+C
+
 	AcceptsZoom = false;
 
 	Var.a = 45;
@@ -203,6 +205,15 @@ void MartinPositive::ResetAll()
 	max_iterations = 1000000;
 
 	ResetView();
+}
+
+
+std::wstring MartinPositive::GetParameters()
+{
+	return L"render mode: " + RenderModes[RenderMode] +
+		   L"; a: " + std::to_wstring(Var.a) + L"; b " + std::to_wstring(Var.b) + L"; c: " + std::to_wstring(Var.c) + L"; Zoom " + std::to_wstring(Var.d) +
+		   L"; max iterations: " + std::to_wstring(max_iterations) +
+		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
 
 

@@ -76,24 +76,40 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 
 {
-	if (Key == VK_UP || Key == VK_DOWN)
+	if (Key == VK_UP || Key == VK_DOWN || Key == VK_LEFT || Key == VK_RIGHT)
 	{
-		if (Shift.Contains(ssShift))
+		double delta = 0.1;
+
+		switch (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->QuickParamterMode)
 		{
-			double a = eVarA->Text.ToDouble();
-
-			double delta = 0.1;
-
-			if (Shift.Contains(ssAlt))
+		case 0:
+			break;
+		case 1:
+			if (Key == VK_LEFT || Key == VK_RIGHT)
 			{
 				delta = 0.01;
 			}
 
-			if (Key == VK_UP)
+			break;
+		case 2:
+			delta = 1;
+
+			if (Key == VK_LEFT || Key == VK_RIGHT)
+			{
+				delta = 0.1;
+			}
+			break;
+		}
+
+		if (Shift.Contains(ssShift))
+		{
+			double a = eVarA->Text.ToDouble();
+
+			if (Key == VK_UP || Key == VK_LEFT)
 			{
 				a += delta;
 			}
-			else if (Key == VK_DOWN)
+			else if (Key == VK_DOWN || Key == VK_RIGHT)
 			{
 				a -= delta;
 			}
@@ -104,23 +120,31 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 		{
 			double b = eVarB->Text.ToDouble();
 
-			double delta = 0.1;
-
-			if (Shift.Contains(ssAlt))
-			{
-				delta = 0.01;
-			}
-
-			if (Key == VK_UP)
+			if (Key == VK_UP || Key == VK_LEFT)
 			{
 				b += delta;
 			}
-			else if (Key == VK_DOWN)
+			else if (Key == VK_DOWN || Key == VK_RIGHT)
 			{
 				b -= delta;
 			}
 
 			eVarB->Text = b;
+		}
+		else if (Shift.Contains(ssAlt))
+		{
+			double c = eVarC->Text.ToDouble();
+
+			if (Key == VK_UP || Key == VK_LEFT)
+			{
+				c += delta;
+			}
+			else if (Key == VK_DOWN || Key == VK_RIGHT)
+			{
+				c -= delta;
+			}
+
+			eVarC->Text = c;
 		}
 
 		sbRenderClick(nullptr);
@@ -130,7 +154,7 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
-    delete GPaletteHandler;
+	delete GPaletteHandler;
 	delete GFractalHandler;
 	delete history;
 	delete projectio;
@@ -139,20 +163,7 @@ void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 
 void TfrmMain::UpdateFromFractalChange()
 {
-	eCoeffN->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
-	eIterations->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
-	eBailoutRadius->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius;
-
-	eWidth->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-	eHeight->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
-
-	if (gbVarABC->Visible)
-	{
-		eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
-		eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
-		eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
-		eVarD->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
-    }
+	UpdateAllParameters();
 
 	cbRenderMode->Clear();
 
@@ -178,8 +189,7 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 		}
 	}
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width = project.Width;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height = project.Height;
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetDimensions(project.Width, project.Height);
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(project.RenderMode);
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff = project.nCoeff;
@@ -224,6 +234,7 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 		AnimationConfiguration.DeltaA = animation.DeltaA;
 		AnimationConfiguration.DeltaB = animation.DeltaB;
 		AnimationConfiguration.DeltaC = animation.DeltaC;
+		AnimationConfiguration.DeltaD = animation.DeltaD;
 
 		AnimationConfiguration.Parameters = animation.Parameters;
 		AnimationConfiguration.Zoom = animation.Zoom;
@@ -290,6 +301,25 @@ PCProject TfrmMain::GetProjectSettings()
 }
 
 
+void TfrmMain::UpdateAllParameters()
+{
+	eCoeffN->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
+	eIterations->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
+	eBailoutRadius->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius;
+
+	eWidth->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
+	eHeight->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
+
+	if (gbVarABC->Visible)
+	{
+		eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
+		eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
+		eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
+		eVarD->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
+	}
+}
+
+
 void TfrmMain::UpdateFractalPanel()
 {
 	lXMin->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin;
@@ -344,6 +374,7 @@ void TfrmMain::UpdateZoomPanel()
 	history->History.clear();
 
 	sbReset->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+	sbZoomOnPoint->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
 	sbZoom->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
 	sbZoomCrop->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
 	sbBack->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
@@ -646,6 +677,26 @@ void __fastcall TfrmMain::iRenderMouseDown(TObject *Sender, TMouseButton Button,
 			}
 			break;
 		}
+		case 2:
+		{
+			if (FirstPoint)
+			{
+				FirstPoint = false;
+				ZoomMode = -1;
+
+				Fractal* &fractal = GFractalHandler->Fractals[cbFractalSelector->ItemIndex];
+
+				double xmin = fractal->xmin + (((fractal->xmax - fractal->xmin) / fractal->Width) * (double)X);
+				double ymin = fractal->ymin + (((fractal->ymax - fractal->ymin) / fractal->Height) * (double)Y);
+
+				fractal->CentreOnPoint(xmin, ymin);
+
+               	UpdateFractalPanel();
+
+				iRender->Cursor = crDefault;
+			}
+			break;
+		}
 		}
 	}
 }
@@ -682,6 +733,24 @@ void __fastcall TfrmMain::sbResetClick(TObject *Sender)
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetView();
 
 	UpdateFractalPanel();
+}
+
+
+void __fastcall TfrmMain::sbZoomOnPointClick(TObject *Sender)
+{
+	if (ZoomMode != -1)
+	{
+		ZoomMode = -1;
+
+		iRender->Cursor = crDefault;
+	}
+	else
+	{
+		ZoomMode = 2;
+		FirstPoint = true;
+
+		iRender->Cursor = crCross;
+	}
 }
 
 
@@ -746,7 +815,7 @@ void __fastcall TfrmMain::sbResetAllClick(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetAll();
 
-	UpdateFractalPanel();
+	UpdateAllParameters();
 }
 
 
@@ -908,6 +977,17 @@ void __fastcall TfrmMain::sbCopyBoundsToClipboardClick(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::miCopyAllToClipboardClick(TObject *Sender)
+{
+	TClipboard *clippy = Clipboard();
+
+	std::wstring parameters(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->GetParameters());
+
+	clippy->AsText = parameters.c_str();
+}
+
+
+
 void __fastcall TfrmMain::sbEditBoundsClick(TObject *Sender)
 {
 	frmEditBounds->SetBoundsValues(
@@ -1009,7 +1089,7 @@ void TfrmMain::SetWarning(bool warning)
 {
 	if (warning)
 	{
-		if (!lVarA->Font->Color != clMaroon)
+		if (lVarA->Font->Color != clMaroon)
 		{
 			lVarA->Font->Color = clMaroon;
 			lVarB->Font->Color = clMaroon;
@@ -1024,3 +1104,4 @@ void TfrmMain::SetWarning(bool warning)
 		}
 	}
 }
+

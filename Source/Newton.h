@@ -25,5 +25,5 @@ public:
 
 	void Render(int, int) override;
 
-    void ResetView() override;
+	void ResetView() override;
 };

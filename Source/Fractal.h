@@ -80,7 +80,9 @@ public:
 	bool AcceptsZoom = true;
 
 	bool MultiThread = false;
-    int ThreadCount = 4;
+	int ThreadCount = 4;
+
+	int QuickParamterMode = 0;  // 0 = none, 1 = A+B + fine control, 2 = A+B+C
 
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
@@ -121,7 +123,8 @@ public:
 
 	void SetView(double, double, double, double);
 	void FitToView(double, double, double, double);
-    void ZoomAtPoint(double, double);
+	void ZoomAtPoint(double, double);
+    void CentreOnPoint(double, double);
 
 	void SetDimensions(int, int);
 	void SetParameters(double, int, int);
@@ -131,6 +134,8 @@ public:
 	bool ShowABC(int);
 
 	void SetPaletteInfinity(int);
+
+	virtual std::wstring GetParameters();
 
 	virtual void ToFile(std::ofstream&);
 };

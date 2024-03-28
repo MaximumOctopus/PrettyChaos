@@ -25,6 +25,8 @@ JuliaNtic::JuliaNtic() : Fractal()
 	AcceptsVarB = true;
 	AcceptsVarC = true;
 
+	QuickParamterMode = 1;	// A+B + fine control
+
 	MultiThread = true;
 
 	bailout_radius = 4;
@@ -72,12 +74,14 @@ bool JuliaNtic::MultiThreadRender()
 	std::thread t1(Render, 0, h_delta);
 	std::thread t2(Render, h_delta, 2 * h_delta);
 	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
-	std::thread t4(Render, 3 * h_delta, Height);
+	std::thread t4(Render, 3 * h_delta, 4 * h_delta);
+	std::thread t5(Render, 4 * h_delta, Height);
 
 	t1.join();
 	t2.join();
 	t3.join();
 	t4.join();
+	t5.join();
 
 	FinaliseRender();
 
@@ -287,6 +291,15 @@ void JuliaNtic::ResetAll()
 	bailout_radius = 256;
 
 	ResetView();
+}
+
+
+std::wstring JuliaNtic::GetParameters()
+{
+	return L"render mode: " + RenderModes[RenderMode] +
+		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
+		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
+		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
 
 
