@@ -1,5 +1,5 @@
 =================================================================================================
-PrettyChaos 0.11
+PrettyChaos 0.12
 (c) Paul Alan Freshney 2023-2024
 
 paul@freshney.org
@@ -7,7 +7,7 @@ paul@freshney.org
 Source code and portable install
   https://github.com/MaximumOctopus/PrettyChaos
 
-March 27th 2024
+March 28th 2024
 
 =================================================================================================
 
@@ -35,6 +35,26 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.12 / March 28th 2024
+
+Added a new menu item to copy current paramters to the clipboard.
+Added a new button on the toolbar to centre the display at a specific point in the fractal (no zoom, just a recentre).
+Fixed a few minor issues (including loading a project)
+
+Modified the quick parameter change key combinations:
+
+SHIFT + UP ARROW: increase parameter a by 0.1 (for Julia sets, 1 for Martins)
+SHIFT + DOWN_ARRROW: decrease parameter a by 0.1 (for Julia sets, 1 for Martins)
+
+CTRL + UP_ARROW: increase parameter b by 0.1 (for Julia sets, 1 for Martins)
+CTRL + DOWN_ARROW: decrease paramrter b by 0.1 (for Julia sets, 1 for Martins)
+
+ALT + UP_ARROW: increase parameter c by 0.1 (for Julia sets, 1 for Martins)
+ALT + DOWN_ARROW: decrease paramrter c by 0.1 (for Julia sets, 1 for Martins)
+
+With the specified modifier (SHIFT, CTRL, or ALT) hold the LEFT ARROW instead to increase the paramter by 0.01 (for
+Julia sets, 0.1 for Martins); the RIGHT ARROW to decreease the paramter by 0.01 (for Julia sets, 0.1 for Martins).
 
 0.11 / March 27th 2024
 
