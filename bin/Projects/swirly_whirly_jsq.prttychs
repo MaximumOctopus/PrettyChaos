@@ -1,0 +1,18 @@
+[
+Name=Julia Set (Quartic)
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=1
+MaxIterations=1000.000000
+BailoutRadius=256.000000
+Palette=pastel_interleve_nice.palette
+xmin=-0.200000
+xmax=0.050000
+ymin=-0.692951
+ymax=-0.588299
+var_a=-0.790000
+var_b=0.140000
+var_c=0.000000
+var_d=0.000000
+]
