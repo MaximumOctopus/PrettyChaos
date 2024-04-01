@@ -1,19 +1,19 @@
 =================================================================================================
-PrettyChaos 0.12
-(c) Paul Alan Freshney 2023-2024
+  PrettyChaos 0.13
+  (c) Paul Alan Freshney 2023-2024
 
-paul@freshney.org
+  paul@freshney.org
 
-Source code and portable install
-  https://github.com/MaximumOctopus/PrettyChaos
+  Source code and portable install
+    https://github.com/MaximumOctopus/PrettyChaos
 
-March 28th 2024
+  April 1st 2024
 
 =================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
 
-Currently supports Julia Set, Julia Set (cubic), Mandelbrot, and Martin fractals.
+Currently supports Julia Set, Julia Set, Mandelbrot, and Martin fractals.
 
 =================================================================================================
 
@@ -35,6 +35,16 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.13 / April 1st 2024
+
+Fixed a bug where the palette would be deleted if the load palette dialog was cancelled!
+
+Added a "copy render image buffer" button to the toolbar, used in conjunction with...
+Added a "merge with buffer" button to the toolbar. Merges the rendered output to the copy buffer
+        pixels set to the "infinity" colour will be replaced with the new render
+
+A few minor tweaks and fixes
 
 0.12 / March 28th 2024
 
