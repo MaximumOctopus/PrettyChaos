@@ -585,11 +585,15 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 	}
 
 	KeySelected = 0;
-	Selected = Shapes[0];
 
-	RenderGradient();
+	if (GPaletteHandler->Keys.size() == 0)
+	ShowMessage(L"help!!");
 
-	UpdateKeyDisplay(KeySelected);
+		Selected = Shapes[0];
+
+		RenderGradient();
+
+		UpdateKeyDisplay(KeySelected);
 }
 
 

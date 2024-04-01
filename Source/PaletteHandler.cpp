@@ -490,6 +490,8 @@ bool PaletteHandler::Load(const std::wstring file_name)
 		return true;
 	}
 
+    Clear(true);
+
 	return false;
 }
 

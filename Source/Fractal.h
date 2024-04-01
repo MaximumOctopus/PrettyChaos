@@ -97,6 +97,7 @@ public:
 	double* Data = nullptr;
 
 	TBitmap *RenderCanvas = nullptr;
+    TBitmap *CopyCanvas = nullptr;
 
 	double ymin = 0;    // fractal objects must set these in their constructor
 	double ymax = 0;    //
@@ -136,6 +137,9 @@ public:
 	void SetPaletteInfinity(int);
 
 	virtual std::wstring GetParameters();
+
+	void CopyImage();
+	void MergeImage();
 
 	virtual void ToFile(std::ofstream&);
 };

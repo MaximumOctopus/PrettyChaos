@@ -39,7 +39,9 @@ TfrmMain *frmMain;
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner)
 {
-	Caption = __PrettyChaosVersion.c_str();
+	std::wstring title = L"PrettyChaos " + __PrettyChaosVersion;
+
+	Caption = title.c_str();
 
 	PaletteBitmap = new Graphics::TBitmap;
 		PaletteBitmap->PixelFormat = pf24bit;
@@ -60,8 +62,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	history = new HistoryHandler();
     projectio = new ProjectIO();
 
-	history->Add(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin, GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax,
-				 GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin, GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
+	history->AddZoom(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin, GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax,
+					 GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin, GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
 
 	System::WideChar k = VK_RETURN;
 
@@ -256,7 +258,12 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 		{
 	        GPaletteHandler->Clear(false);
 
-			LoadAndSetPalette(path);
+			if (!LoadAndSetPalette(path))
+			{
+				std::wstring error = L"Error loading palette \"" + project.PaletteFileName + L"\" :( Using default.";
+
+				sbMain->SimpleText = error.c_str();
+			}
 		}
 		else
 		{
@@ -371,7 +378,7 @@ void TfrmMain::UpdateABCPanel()
 
 void TfrmMain::UpdateZoomPanel()
 {
-	history->History.clear();
+	history->Zoom.clear();
 
 	sbReset->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
 	sbZoomOnPoint->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
@@ -548,6 +555,16 @@ void __fastcall TfrmMain::miSaveFractalParametersClick(TObject *Sender)
 void TfrmMain::CopyFromFractalToScreen()
 {
 	iRender->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderCanvas);
+
+	sbSwapImage->Tag = 0;
+}
+
+
+void TfrmMain::CopyFromBackupToScreen()
+{
+	iRender->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->CopyCanvas);
+
+	sbSwapImage->Tag = 1;
 }
 
 
@@ -649,7 +666,7 @@ void __fastcall TfrmMain::iRenderMouseDown(TObject *Sender, TMouseButton Button,
 
 				fractal->FitToView(xmin, xmax, ymin, ymax);
 
-				history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
+				history->AddZoom(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
 
 				UpdateFractalPanel();
 
@@ -711,7 +728,7 @@ void TfrmMain::ZoomPointClick(double X, double Y)
 
 	fractal->ZoomAtPoint(LastZoomX, LastZoomY);
 
-	history->Add(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
+	history->AddZoom(fractal->xmin, fractal->xmax, fractal->ymin, fractal->ymax);
 
 	UpdateFractalPanel();
 }
@@ -798,11 +815,11 @@ void __fastcall TfrmMain::sbZoomCropClick(TObject *Sender)
 
 void __fastcall TfrmMain::sbBackClick(TObject *Sender)
 {
-	if (history->History.size() > 1)
+	if (history->Zoom.size() > 1)
 	{
-		history->History.pop_back();
+		history->Zoom.pop_back();
 
-		ZoomHistory& zh = history->History.back();
+		ZoomHistory& zh = history->Zoom.back();
 
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetView(zh.xmin, zh.xmax, zh.ymin, zh.ymax);
 
@@ -816,6 +833,33 @@ void __fastcall TfrmMain::sbResetAllClick(TObject *Sender)
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetAll();
 
 	UpdateAllParameters();
+}
+
+
+void __fastcall TfrmMain::sbCopyImageClick(TObject *Sender)
+{
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->CopyImage();
+}
+
+
+void __fastcall TfrmMain::sbMergeImageClick(TObject *Sender)
+{
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MergeImage();
+
+	CopyFromFractalToScreen();
+}
+
+
+void __fastcall TfrmMain::sbSwapImageClick(TObject *Sender)
+{
+	if (sbSwapImage->Tag == 0)
+	{
+		CopyFromBackupToScreen();
+	}
+	else
+	{
+		CopyFromFractalToScreen();
+	}
 }
 
 
@@ -848,18 +892,23 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 
 void __fastcall TfrmMain::sbLoadPaletteClick(TObject *Sender)
 {
-	GPaletteHandler->Clear(false);
-
-	if  (odPalette->Execute())
+	if (odPalette->Execute())
 	{
-		LoadAndSetPalette(odPalette->FileName.c_str());
+		GPaletteHandler->Clear(false);
+
+		if (!LoadAndSetPalette(odPalette->FileName.c_str()))
+		{
+			std::wstring error = L"Error loading palette, using default.";
+
+   			sbMain->SimpleText = error.c_str();
+		}
 	}
 }
 
 
-void TfrmMain::LoadAndSetPalette(const std::wstring file_name)
+bool TfrmMain::LoadAndSetPalette(const std::wstring file_name)
 {
-	GPaletteHandler->Load(file_name);
+	bool result = GPaletteHandler->Load(file_name);
 
 	GPaletteHandler->Render();
 	GPaletteHandler->CopyPublic();
@@ -867,6 +916,8 @@ void TfrmMain::LoadAndSetPalette(const std::wstring file_name)
 	CopyPaletteToFractal();
 
 	UpdatePalette();
+
+	return result;
 }
 
 
@@ -1104,4 +1155,3 @@ void TfrmMain::SetWarning(bool warning)
 		}
 	}
 }
-

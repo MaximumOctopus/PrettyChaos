@@ -223,6 +223,10 @@ __published:	// IDE-managed Components
 	TMenuItem *Edity1;
 	TMenuItem *Copyboundstoclipboard1;
 	TMenuItem *miCopyAllToClipboard;
+	TSpeedButton *sbCopyImage;
+	TSpeedButton *sbMergeImage;
+	TBevel *Bevel7;
+	TSpeedButton *sbSwapImage;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -261,6 +265,9 @@ __published:	// IDE-managed Components
 	void __fastcall FormKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 	void __fastcall sbZoomOnPointClick(TObject *Sender);
 	void __fastcall miCopyAllToClipboardClick(TObject *Sender);
+	void __fastcall sbCopyImageClick(TObject *Sender);
+	void __fastcall sbMergeImageClick(TObject *Sender);
+	void __fastcall sbSwapImageClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -295,6 +302,7 @@ private:	// User declarations
 	PCProject GetProjectSettings();
 
 	void CopyFromFractalToScreen();
+    void CopyFromBackupToScreen();
 
 	void UpdateFromFractalChange();
 	void UpdateFractalPanel();
@@ -303,7 +311,7 @@ private:	// User declarations
 
 	void CopyPaletteToFractal();
 
-	void LoadAndSetPalette(const std::wstring);
+	bool LoadAndSetPalette(const std::wstring);
 
 	void SetWarning(bool);
 

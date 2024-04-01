@@ -22,9 +22,14 @@ Fractal::Fractal()
 	Data = new double[1280 * 1024];
 
 	RenderCanvas = new TBitmap();
-    RenderCanvas->PixelFormat = pf24bit;
+	RenderCanvas->PixelFormat = pf24bit;
 	RenderCanvas->Width = 1280;
 	RenderCanvas->Height = 1024;
+
+	CopyCanvas = new TBitmap();
+	CopyCanvas->PixelFormat = pf24bit;
+	CopyCanvas->Width = 1280;
+	CopyCanvas->Height = 1024;
 
 	for (int t = 0; t < __PaletteCount; t++)
 	{
@@ -41,7 +46,8 @@ Fractal::~Fractal()
 {
 	delete Iteration;
 	delete Data;
-    delete RenderCanvas;
+	delete RenderCanvas;
+	delete CopyCanvas;
 }
 
 
@@ -172,6 +178,7 @@ void Fractal::SetDimensions(int _width, int _height)
 		delete[] Data;
 
 		delete RenderCanvas;
+		delete CopyCanvas;
 
 		Iteration = new int[Width * Height];
 		Data = new double[Width * Height];
@@ -180,6 +187,11 @@ void Fractal::SetDimensions(int _width, int _height)
 		RenderCanvas->PixelFormat = pf24bit;
 		RenderCanvas->Width = Width;
 		RenderCanvas->Height = Height;
+
+		CopyCanvas = new TBitmap();
+		CopyCanvas->PixelFormat = pf24bit;
+		CopyCanvas->Width = Width;
+		CopyCanvas->Height = Height;
 
 		if (Width >= Height)
 		{
@@ -426,7 +438,7 @@ void Fractal::ColourNTone(int n)
 		}
 	}
 
-    TRGBTriple *ptr;
+	TRGBTriple *ptr;
 
 	for (int y = 0; y < Height; y++)
 	{
@@ -463,7 +475,36 @@ std::wstring Fractal::GetParameters()
 }
 
 
+void Fractal::CopyImage()
+{
+	CopyCanvas->Assign(RenderCanvas);
+}
+
+
+void Fractal::MergeImage()
+{
+	TRGBTriple *ptra;
+	TRGBTriple *ptrb;
+
+	for (int y = 0; y < RenderCanvas->Height; y++)
+	{
+		ptra = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+		ptrb = reinterpret_cast<TRGBTriple *>(CopyCanvas->ScanLine[y]);
+
+		for (int x = 0; x  < RenderCanvas->Width; x++)
+		{
+			if (ptra[x].rgbtRed == PaletteInfintyR &&
+				ptra[x].rgbtGreen == PaletteInfintyG &&
+				ptra[x].rgbtBlue == PaletteInfintyB)
+			{
+                ptra[x] = ptrb[x];
+			}
+		}
+	}
+}
+
+
 void Fractal::ToFile(std::ofstream& ofile)
 {
-
+	// handled by subclass
 }

@@ -17,9 +17,21 @@ HistoryHandler::HistoryHandler()
 }
 
 
-void HistoryHandler::Add(double _xmin, double _xmax, double _ymin, double _ymax)
+void HistoryHandler::AddZoom(double _xmin, double _xmax, double _ymin, double _ymax)
 {
 	ZoomHistory zh(_xmin, _xmax, _ymin, _ymax);
 
-    History.push_back(zh);
+	Zoom.push_back(zh);
+}
+
+
+void HistoryHandler::AddProject(int _fractal, double _xmin, double _xmax, double _ymin, double _ymax,
+								double _VarA, double _VarB, double _VarC, double _VarD,
+								double _Coeff, double _MaxIterations, double _Bailout)
+{
+	ProjectHistory zp(_fractal, _xmin, _xmax, _ymin, _ymax,
+					  _VarA, _VarB, _VarC, _VarD,
+				      _Coeff, _MaxIterations, _Bailout);
+
+    Project.push_back(zp);
 }
