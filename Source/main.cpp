@@ -366,11 +366,12 @@ void TfrmMain::UpdateDimension()
 		iRender->Width = Width;
 		iRender->Height = Height;
 
+		iPreview->Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreviewWidth;
+		iPreview->Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreviewHeight;
+
 		UpdateFractalPanel();
 
-		IsBusy = false;
-
-		if (miShowPreview->Checked) RenderPreview();
+		if (miShowPreview->Checked && !IsBusy) RenderPreview();
 	}
 }
 
