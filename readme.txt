@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.13
+  PrettyChaos 0.14
   (c) Paul Alan Freshney 2023-2024
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  April 1st 2024
+  June 9th 2024
 
 =================================================================================================
 
@@ -35,6 +35,13 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.14 / June 9th 2024
+
+Added: Quick parameter value options via the Edit menu.
+Added: Render preview (activate via the Render menu).
+
+The usual minor tweaks and fixes.
 
 0.13 / April 1st 2024
 
