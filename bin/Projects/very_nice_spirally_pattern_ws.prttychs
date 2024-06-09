@@ -1,0 +1,17 @@
+[
+Name=Julia Set (n-tic)
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=1
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+xmin=0.536510
+xmax=0.536632
+ymin=-0.368913
+ymax=-0.368862
+var_a=0.500000
+var_b=0.650000
+var_c=4.000000
+var_d=0.000000
+]

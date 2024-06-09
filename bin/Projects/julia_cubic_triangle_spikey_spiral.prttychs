@@ -1,0 +1,17 @@
+[
+Name=Julia Set (Cubic)
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=1
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+xmin=0.017187
+xmax=0.079687
+ymin=-0.320313
+ymax=-0.270313
+var_a=-0.000200
+var_b=1.091850
+var_c=0.000000
+var_d=0.000000
+]

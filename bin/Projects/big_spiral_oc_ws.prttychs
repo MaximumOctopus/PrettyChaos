@@ -1,0 +1,18 @@
+[
+Name=Julia Set (Quartic)
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=0
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+Palette=_default_greyscale.palette
+xmin=0.021873
+xmax=0.021873
+ymin=-0.665793
+ymax=-0.665793
+var_a=-0.780000
+var_b=0.140000
+var_c=0.000000
+var_d=0.000000
+]
