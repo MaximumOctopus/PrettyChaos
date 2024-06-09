@@ -25,7 +25,7 @@ object frmMain: TfrmMain
     Height = 34
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 1479
+    ExplicitWidth = 1580
     object sbRender: TSpeedButton
       Left = 311
       Top = 2
@@ -244,7 +244,8 @@ object frmMain: TfrmMain
     Height = 1038
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 1374
+    ExplicitLeft = 1368
+    ExplicitHeight = 1037
     object Label16: TLabel
       Left = 14
       Top = 17
@@ -705,7 +706,7 @@ object frmMain: TfrmMain
     Align = alClient
     TabOrder = 2
     OnMouseMove = Panel3MouseMove
-    ExplicitWidth = 1288
+    ExplicitWidth = 1368
     ExplicitHeight = 1037
     object iRender: TImage
       Left = 6
@@ -724,7 +725,7 @@ object frmMain: TfrmMain
     Panels = <>
     SimplePanel = True
     ExplicitTop = 1071
-    ExplicitWidth = 1479
+    ExplicitWidth = 1580
   end
   object ImageList1: TImageList
     Left = 1016

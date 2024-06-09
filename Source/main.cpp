@@ -354,7 +354,7 @@ void TfrmMain::UpdateFractalPanel()
 }
 
 
-void TfrmMain::UpdateDimension(bool quiet)
+void TfrmMain::UpdateDimension()
 {
 	int Width = eWidth->Text.ToIntDef(-1);
 	int Height = eHeight->Text.ToIntDef(-1);
@@ -368,10 +368,9 @@ void TfrmMain::UpdateDimension(bool quiet)
 
 		UpdateFractalPanel();
 
-		if (!quiet)
-		{
-			if (miShowPreview->Checked) RenderPreview();
-		}
+		IsBusy = false;
+
+		if (miShowPreview->Checked) RenderPreview();
 	}
 }
 
@@ -469,6 +468,8 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 
 void TfrmMain::RenderPreview()
 {
+    if (IsBusy) return;
+
 	bool rendered = true;
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC)
@@ -563,6 +564,8 @@ void __fastcall TfrmMain::bOpenProjectClick(TObject *Sender)
 
 	if (!file_name.empty())
 	{
+		IsBusy = true;
+
 		if (file_name.find(L".prttychs") == std::wstring::npos)
 		{
 			file_name += L".prttychs";
@@ -576,6 +579,10 @@ void __fastcall TfrmMain::bOpenProjectClick(TObject *Sender)
 		SetFromProjectFile(project, animation);
 
 		ProjectPath = ExtractFilePath(file_name.c_str());
+
+		IsBusy = false;
+
+        if (miShowPreview->Checked) RenderPreview();
 	}
 }
 
@@ -943,7 +950,7 @@ void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
 
  void __fastcall TfrmMain::eWidthExit(TObject *Sender)
 {
-	UpdateDimension(false);
+	UpdateDimension();
 }
 
 
@@ -1048,15 +1055,17 @@ void __fastcall TfrmMain::FormPaint(TObject *Sender)
 
 void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 {
+	IsBusy = true;
+
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
 
-    sbReZoom->Enabled = false;
+	sbReZoom->Enabled = false;
 
 	UpdateZoomPanel();
 
 	UpdateABCPanel();
 
-	UpdateDimension(true);
+	UpdateDimension();
 
 	CopyPaletteToFractal();
 
@@ -1064,7 +1073,7 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 
 	SetWarning(false);
 
-	//if (miShowPreview->Checked) RenderPreview();
+	IsBusy = false;
 }
 
 
@@ -1185,7 +1194,7 @@ void __fastcall TfrmMain::miDesktopDimensionClick(TObject *Sender)
 	eWidth->Text = DimensionsDesktop[mi->Tag][0];
 	eHeight->Text = DimensionsDesktop[mi->Tag][1];
 
-	UpdateDimension(false);
+	UpdateDimension();
 }
 
 
@@ -1196,7 +1205,7 @@ void __fastcall TfrmMain::miMobileDimensionsClick(TObject *Sender)
 	eWidth->Text = DimensionsPhone[mi->Tag][0];
 	eHeight->Text = DimensionsPhone[mi->Tag][1];
 
-	UpdateDimension(false);
+	UpdateDimension();
 }
 
 
@@ -1207,7 +1216,7 @@ void __fastcall TfrmMain::miTextureDimensionsClick(TObject *Sender)
 	eWidth->Text = DimensionsTexture[mi->Tag];
 	eHeight->Text = DimensionsTexture[mi->Tag];
 
-	UpdateDimension(false);
+	UpdateDimension();
 }
 
 

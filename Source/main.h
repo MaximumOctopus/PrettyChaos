@@ -283,6 +283,8 @@ __published:	// IDE-managed Components
 
 private:	// User declarations
 
+	bool IsBusy = false;
+
     double QPFine = 0.1;
 
     FractalHandler* GFractalHandler = nullptr;
@@ -313,7 +315,7 @@ private:	// User declarations
 	void SaveFractal(const std::wstring);
 	void SaveFractalParameters(const std::wstring);
 
-	void UpdateDimension(bool);
+	void UpdateDimension();
 	void UpdateABCPanel();
     void UpdateZoomPanel();
 
