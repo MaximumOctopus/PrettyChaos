@@ -13,7 +13,7 @@
 
 PrettyChaos is an open source fractal generation tool.
 
-Currently supports Julia Set, Julia Set, Mandelbrot, and Martin fractals.
+Currently supports Julia Set, Julia Set (with any polynomial degree), Mandelbrot, Dragon, and Martin fractals.
 
 =================================================================================================
 
