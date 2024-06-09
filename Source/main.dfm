@@ -2,8 +2,8 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'PrettyChaos'
-  ClientHeight = 1147
-  ClientWidth = 1483
+  ClientHeight = 1091
+  ClientWidth = 1584
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -21,14 +21,14 @@ object frmMain: TfrmMain
   object Panel1: TPanel
     Left = 0
     Top = 0
-    Width = 1483
+    Width = 1584
     Height = 34
     Align = alTop
     TabOrder = 0
     ExplicitWidth = 1479
     object sbRender: TSpeedButton
       Left = 311
-      Top = 1
+      Top = 2
       Width = 89
       Height = 27
       Caption = 'Render'
@@ -56,7 +56,7 @@ object frmMain: TfrmMain
     end
     object bOpenProject: TSpeedButton
       Left = 7
-      Top = 1
+      Top = 2
       Width = 89
       Height = 27
       Caption = 'Open'
@@ -154,7 +154,7 @@ object frmMain: TfrmMain
     end
     object eAnimation: TSpeedButton
       Left = 406
-      Top = 2
+      Top = 1
       Width = 89
       Height = 27
       Caption = 'Animation'
@@ -191,7 +191,7 @@ object frmMain: TfrmMain
     end
     object sbZoomOnPoint: TSpeedButton
       Left = 545
-      Top = 2
+      Top = 1
       Width = 30
       Height = 27
       Hint = 'reset zoom'
@@ -238,14 +238,13 @@ object frmMain: TfrmMain
     end
   end
   object Panel2: TPanel
-    Left = 1292
+    Left = 1372
     Top = 34
-    Width = 191
-    Height = 1094
+    Width = 212
+    Height = 1038
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 1288
-    ExplicitHeight = 1093
+    ExplicitLeft = 1374
     object Label16: TLabel
       Left = 14
       Top = 17
@@ -256,14 +255,20 @@ object frmMain: TfrmMain
     object Bevel1: TBevel
       Left = 6
       Top = 48
-      Width = 179
+      Width = 195
       Height = 10
       Shape = bsTopLine
+    end
+    object iPreview: TImage
+      Left = 6
+      Top = 727
+      Width = 200
+      Height = 200
     end
     object GroupBox2: TGroupBox
       Left = 6
       Top = 474
-      Width = 178
+      Width = 200
       Height = 174
       Caption = 'Dimensions'
       TabOrder = 1
@@ -411,7 +416,7 @@ object frmMain: TfrmMain
         Caption = 'Size'
       end
       object Label9: TLabel
-        Left = 94
+        Left = 118
         Top = 27
         Width = 6
         Height = 13
@@ -436,7 +441,7 @@ object frmMain: TfrmMain
         OnClick = sbEditBoundsClick
       end
       object eWidth: TEdit
-        Left = 41
+        Left = 65
         Top = 24
         Width = 45
         Height = 21
@@ -448,7 +453,7 @@ object frmMain: TfrmMain
         OnExit = eWidthExit
       end
       object eHeight: TEdit
-        Left = 108
+        Left = 132
         Top = 24
         Width = 45
         Height = 21
@@ -463,7 +468,7 @@ object frmMain: TfrmMain
     object GroupBox1: TGroupBox
       Left = 6
       Top = 376
-      Width = 178
+      Width = 200
       Height = 92
       Caption = 'Palette'
       TabOrder = 0
@@ -504,7 +509,7 @@ object frmMain: TfrmMain
     object GroupBox3: TGroupBox
       Left = 6
       Top = 64
-      Width = 178
+      Width = 200
       Height = 150
       Caption = 'Render'
       TabOrder = 2
@@ -530,9 +535,9 @@ object frmMain: TfrmMain
         Caption = 'Bailout (r)'
       end
       object cbRenderMode: TComboBox
-        Left = 11
+        Left = 16
         Top = 24
-        Width = 155
+        Width = 174
         Height = 21
         Style = csDropDownList
         TabOrder = 0
@@ -541,7 +546,7 @@ object frmMain: TfrmMain
       object eCoeffN: TEdit
         Left = 72
         Top = 59
-        Width = 70
+        Width = 115
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
         Alignment = taRightJustify
@@ -552,7 +557,7 @@ object frmMain: TfrmMain
       object eIterations: TEdit
         Left = 72
         Top = 86
-        Width = 70
+        Width = 115
         Height = 21
         Alignment = taRightJustify
         NumbersOnly = True
@@ -563,7 +568,7 @@ object frmMain: TfrmMain
       object eBailoutRadius: TEdit
         Left = 72
         Top = 113
-        Width = 70
+        Width = 115
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
         Alignment = taRightJustify
@@ -576,7 +581,7 @@ object frmMain: TfrmMain
     object gbVarABC: TGroupBox
       Left = 6
       Top = 220
-      Width = 179
+      Width = 200
       Height = 141
       Caption = 'Extra Parameters'
       TabOrder = 3
@@ -611,9 +616,10 @@ object frmMain: TfrmMain
       object eVarA: TEdit
         Left = 72
         Top = 27
-        Width = 85
+        Width = 115
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
+        Alignment = taRightJustify
         PopupMenu = puExamples
         TabOrder = 0
         Text = '1'
@@ -622,8 +628,9 @@ object frmMain: TfrmMain
       object eVarB: TEdit
         Left = 72
         Top = 54
-        Width = 85
+        Width = 115
         Height = 21
+        Alignment = taRightJustify
         PopupMenu = puExamples
         TabOrder = 1
         Text = '1000'
@@ -632,9 +639,10 @@ object frmMain: TfrmMain
       object eVarC: TEdit
         Left = 72
         Top = 81
-        Width = 85
+        Width = 115
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
+        Alignment = taRightJustify
         PopupMenu = puExamples
         TabOrder = 2
         Text = '256'
@@ -643,9 +651,10 @@ object frmMain: TfrmMain
       object eVarD: TEdit
         Left = 72
         Top = 108
-        Width = 85
+        Width = 115
         Height = 21
         Hint = 'maps linear palette to exponential palette (default is 1)'
+        Alignment = taRightJustify
         PopupMenu = puExamples
         TabOrder = 3
         Text = '1'
@@ -654,8 +663,8 @@ object frmMain: TfrmMain
     end
     object cbFractalSelector: TComboBox
       Left = 53
-      Top = 12
-      Width = 132
+      Top = 13
+      Width = 140
       Height = 21
       Style = csDropDownList
       TabOrder = 4
@@ -664,7 +673,7 @@ object frmMain: TfrmMain
     object GroupBox4: TGroupBox
       Left = 6
       Top = 654
-      Width = 178
+      Width = 200
       Height = 67
       Caption = 'Cursor'
       DoubleBuffered = True
@@ -691,16 +700,16 @@ object frmMain: TfrmMain
   object Panel3: TPanel
     Left = 0
     Top = 34
-    Width = 1292
-    Height = 1094
+    Width = 1372
+    Height = 1038
     Align = alClient
     TabOrder = 2
     OnMouseMove = Panel3MouseMove
     ExplicitWidth = 1288
-    ExplicitHeight = 1093
+    ExplicitHeight = 1037
     object iRender: TImage
       Left = 6
-      Top = 0
+      Top = 1
       Width = 1280
       Height = 1024
       OnMouseDown = iRenderMouseDown
@@ -709,12 +718,12 @@ object frmMain: TfrmMain
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 1128
-    Width = 1483
+    Top = 1072
+    Width = 1584
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 1127
+    ExplicitTop = 1071
     ExplicitWidth = 1479
   end
   object ImageList1: TImageList
@@ -1627,6 +1636,42 @@ object frmMain: TfrmMain
         Caption = 'Copy all parameters to clipboard'
         OnClick = miCopyAllToClipboardClick
       end
+      object N14: TMenuItem
+        Caption = '-'
+      end
+      object QuickParameter1: TMenuItem
+        Caption = 'Quick Parameter (fine)'
+        object miQPA: TMenuItem
+          Caption = '0.01'
+          Checked = True
+          RadioItem = True
+          OnClick = miQPAClick
+        end
+        object miQPB: TMenuItem
+          Tag = 1
+          Caption = '0.001'
+          RadioItem = True
+          OnClick = miQPAClick
+        end
+        object miQPC: TMenuItem
+          Tag = 2
+          Caption = '0.0001'
+          RadioItem = True
+          OnClick = miQPAClick
+        end
+        object miQPD: TMenuItem
+          Tag = 3
+          Caption = '0.00001'
+          RadioItem = True
+          OnClick = miQPAClick
+        end
+        object miQPE: TMenuItem
+          Tag = 4
+          Caption = '0.000001'
+          RadioItem = True
+          OnClick = miQPAClick
+        end
+      end
     end
     object Export1: TMenuItem
       Caption = 'Export'
@@ -1689,6 +1734,13 @@ object frmMain: TfrmMain
       object miRenderAnimation: TMenuItem
         Caption = 'Animation'
         OnClick = eAnimationClick
+      end
+      object N15: TMenuItem
+        Caption = '-'
+      end
+      object miShowPreview: TMenuItem
+        AutoCheck = True
+        Caption = 'Show preview'
       end
     end
     object Help1: TMenuItem

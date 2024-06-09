@@ -62,16 +62,26 @@ MartinPositive::~MartinPositive()
 }
 
 
+void MartinPositive::PreRender(bool preview)
+{
+	if (preview) SwapDimensions();
+
+	Render(-1, -1);
+
+	if (preview) SwapDimensions();
+}
+
+
 void MartinPositive::Render(int hstart, int hend)
 {
 	StartTime = std::chrono::system_clock::now();
 
-	double xold = 0;
-	double yold = 0;
-	double xnew = 0;
-	double ynew = 0;
+	long double xold = 0;
+	long double yold = 0;
+	long double xnew = 0;
+	long double ynew = 0;
 
-	int delta = std::floor((double)max_iterations / __PaletteCount);
+	int delta = std::floor((long double)max_iterations / __PaletteCount);
 	int count = 0;
 	int index = 0;
 
@@ -96,8 +106,8 @@ void MartinPositive::Render(int hstart, int hend)
 
 	for (int i = 0; i < max_iterations; i++)
 	{
-		int x = std::floor((Var.d * (double)xold) + ((double)Width / 2));
-		int y = std::floor((Var.d * (double)yold) + ((double)Height / 2));
+		int x = std::floor((Var.d * (long double)xold) + ((long double)Width / 2));
+		int y = std::floor((Var.d * (long double)yold) + ((long double)Height / 2));
 
 		if (x < Width && y < Height && x >= 0 && y >= 0)
 		{
@@ -169,7 +179,7 @@ void MartinPositive::Render(int hstart, int hend)
 				{
 					int it = Iteration[y * Width + x] - min;
 
-					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
+					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
 
 					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
 					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;

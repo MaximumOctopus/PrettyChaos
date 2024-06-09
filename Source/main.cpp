@@ -41,12 +41,16 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 {
 	std::wstring title = L"PrettyChaos " + __PrettyChaosVersion;
 
+	PalettePath = ExtractFilePath(Application->ExeName) + L"Palettes\\";
+	ProjectPath = ExtractFilePath(Application->ExeName) + L"Projects\\";
+	RenderPath = ExtractFilePath(Application->ExeName) + L"Renders\\";
+
 	Caption = title.c_str();
 
 	PaletteBitmap = new Graphics::TBitmap;
-		PaletteBitmap->PixelFormat = pf24bit;
-		PaletteBitmap->Width = 125;
-		PaletteBitmap->Height = 1;
+	PaletteBitmap->PixelFormat = pf24bit;
+	PaletteBitmap->Width = 125;
+	PaletteBitmap->Height = 1;
 
 	GPaletteHandler = new PaletteHandler();
 
@@ -84,16 +88,16 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 
 		switch (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->QuickParamterMode)
 		{
-		case 0:
+		case __QPMNone:
 			break;
-		case 1:
+		case __QPMABPlusFine:
 			if (Key == VK_LEFT || Key == VK_RIGHT)
 			{
-				delta = 0.01;
+				delta = QPFine;
 			}
 
 			break;
-		case 2:
+		case __QPMABC:
 			delta = 1;
 
 			if (Key == VK_LEFT || Key == VK_RIGHT)
@@ -149,7 +153,14 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 			eVarC->Text = c;
 		}
 
-		sbRenderClick(nullptr);
+		if (miShowPreview->Checked)
+		{
+			RenderPreview();
+		}
+		else
+		{
+			sbRenderClick(nullptr);
+        }
 	}
 }
 
@@ -214,16 +225,16 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	// =========================================================================
 
 	cbRenderMode->ItemIndex = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderMode;
-    cbRenderModeChange(nullptr);
+	cbRenderModeChange(nullptr);
 
-	eCoeffN->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
-	eWidth->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-	eHeight->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
+	eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff);
+	eWidth->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width);
+	eHeight->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height);
 
-	eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
-	eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
-	eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
-	eVarD->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
+	eVarA->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a);
+	eVarB->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b);
+	eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
+	eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
 
 	// =========================================================================
 
@@ -237,6 +248,11 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 		AnimationConfiguration.DeltaB = animation.DeltaB;
 		AnimationConfiguration.DeltaC = animation.DeltaC;
 		AnimationConfiguration.DeltaD = animation.DeltaD;
+
+		AnimationConfiguration.IncludeA = animation.IncludeA;
+		AnimationConfiguration.IncludeB = animation.IncludeB;
+		AnimationConfiguration.IncludeC = animation.IncludeC;
+		AnimationConfiguration.IncludeD = animation.IncludeD;
 
 		AnimationConfiguration.Parameters = animation.Parameters;
 		AnimationConfiguration.Zoom = animation.Zoom;
@@ -310,35 +326,35 @@ PCProject TfrmMain::GetProjectSettings()
 
 void TfrmMain::UpdateAllParameters()
 {
-	eCoeffN->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
-	eIterations->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
-	eBailoutRadius->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius;
+	eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff);
+	eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
+	eBailoutRadius->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius);
 
 	eWidth->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
 	eHeight->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
 
 	if (gbVarABC->Visible)
 	{
-		eVarA->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
-		eVarB->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
-		eVarC->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
-		eVarD->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
+		eVarA->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a);
+		eVarB->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b);
+		eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
+		eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
 	}
 }
 
 
 void TfrmMain::UpdateFractalPanel()
 {
-	lXMin->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin;
-	lXMax->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax;
-	lYMin->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin;
-	lYMax->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax;
+	lXMin->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin);
+	lXMax->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax);
+	lYMin->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin);
+	lYMax->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
 
 	//Caption = (fractal->xmax - fractal->xmin) / (fractal->ymax - fractal->ymin); ratio
 }
 
 
-void TfrmMain::UpdateDimension()
+void TfrmMain::UpdateDimension(bool quiet)
 {
 	int Width = eWidth->Text.ToIntDef(-1);
 	int Height = eHeight->Text.ToIntDef(-1);
@@ -351,6 +367,11 @@ void TfrmMain::UpdateDimension()
 		iRender->Height = Height;
 
 		UpdateFractalPanel();
+
+		if (!quiet)
+		{
+			if (miShowPreview->Checked) RenderPreview();
+		}
 	}
 }
 
@@ -405,13 +426,13 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 																		eVarD->Text.ToDouble());
 	}
 
-    eCoeffNExit(nullptr);
+	eCoeffNExit(eCoeffN);
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetDimensions(iRender->Width, iRender->Height);
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
 	{
-		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender();
+		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(false);
 
 		SetWarning(!rendered);
 	}
@@ -446,41 +467,80 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 }
 
 
+void TfrmMain::RenderPreview()
+{
+	bool rendered = true;
+
+	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC)
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(),
+																		eVarB->Text.ToDouble(),
+																		eVarC->Text.ToDouble(),
+																		eVarD->Text.ToDouble());
+	}
+
+	eCoeffNExit(nullptr);
+
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetDimensions(iRender->Width, iRender->Height);
+
+	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
+	{
+		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(true);
+
+		SetWarning(!rendered);
+	}
+	else
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreRender(true);
+	}
+
+	if (rendered)
+	{
+		CopyFromFractalToPreview();
+	}
+	else
+	{
+		sbMain->SimpleText = "Invalid real and imaginary points.";
+	}
+}
+
+
 void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 {
 	for (int i = 0; i < AnimationConfiguration.Steps; i++)
 	{
 		sbRenderClick(nullptr);
 
+		double a = eVarA->Text.ToDouble();
+		double b = eVarB->Text.ToDouble();
+		double c = eVarC->Text.ToDouble();
+		double d = eVarD->Text.ToDouble();
+
 		std::wstring path = ExtractFilePath(Application->ExeName).c_str();
 
-		std::wstring file_name = path + L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + L".png";
+		std::wstring file_name = path + L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + AnimationConfiguration.ParametersForFile(a, b, c, d) + L".png";
 
 		SaveFractal(Utility::ProcessFileName(file_name));
 
 		if (AnimationConfiguration.Parameters)
 		{
-			double a = eVarA->Text.ToDouble();
 			a += AnimationConfiguration.DeltaA;
 			eVarA->Text = a;
 
 			if (eVarB->Visible)
 			{
-				double b = eVarB->Text.ToDouble();
 				b += AnimationConfiguration.DeltaB;
 				eVarB->Text = b;
 			}
 
 			if (eVarC->Visible)
 			{
-				double c = eVarC->Text.ToDouble();
 				c += AnimationConfiguration.DeltaC;
 				eVarC->Text = c;
 			}
 
 			if (eVarD->Visible)
 			{
-				double d = eVarD->Text.ToDouble();
 				d += AnimationConfiguration.DeltaD;
 				eVarD->Text = d;
 			}
@@ -499,7 +559,7 @@ void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 
 void __fastcall TfrmMain::bOpenProjectClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetOpenFileName(0);
+	std::wstring file_name = Utility::GetOpenFileName(0, ProjectPath);
 
 	if (!file_name.empty())
 	{
@@ -514,13 +574,15 @@ void __fastcall TfrmMain::bOpenProjectClick(TObject *Sender)
 		projectio->Load(file_name, project, animation);
 
 		SetFromProjectFile(project, animation);
+
+		ProjectPath = ExtractFilePath(file_name.c_str());
 	}
 }
 
 
 void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetSaveFileName(0);
+	std::wstring file_name = Utility::GetSaveFileName(0, ProjectPath);
 
 	if (!file_name.empty())
 	{
@@ -532,13 +594,15 @@ void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 		PCProject project = GetProjectSettings();
 
 		projectio->Save(file_name, project, AnimationConfiguration);
+
+		ProjectPath = ExtractFilePath(file_name.c_str());
 	}
 }
 
 
 void __fastcall TfrmMain::miSaveFractalParametersClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetSaveFileName(3);
+	std::wstring file_name = Utility::GetSaveFileName(3, ProjectPath);
 
 	if (!file_name.empty())
 	{
@@ -560,6 +624,12 @@ void TfrmMain::CopyFromFractalToScreen()
 }
 
 
+void TfrmMain::CopyFromFractalToPreview()
+{
+	iPreview->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderCanvas);
+}
+
+
 void TfrmMain::CopyFromBackupToScreen()
 {
 	iRender->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->CopyCanvas);
@@ -570,7 +640,7 @@ void TfrmMain::CopyFromBackupToScreen()
 
 void __fastcall TfrmMain::sbSaveImageClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetSaveFileName(1);
+	std::wstring file_name = Utility::GetSaveFileName(1, RenderPath);
 
 	if (!file_name.empty())
 	{
@@ -580,6 +650,8 @@ void __fastcall TfrmMain::sbSaveImageClick(TObject *Sender)
 		}
 
 		SaveFractal(file_name);
+
+		RenderPath = ExtractFilePath(file_name.c_str());
 	}
 }
 
@@ -871,7 +943,7 @@ void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
 
  void __fastcall TfrmMain::eWidthExit(TObject *Sender)
 {
-	UpdateDimension();
+	UpdateDimension(false);
 }
 
 
@@ -879,11 +951,15 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 {
 	TfrmPaletteEditor *frmPaletteEditor = new TfrmPaletteEditor(Application);
 
+    frmPaletteEditor->PalettePath = PalettePath;
+
 	if (frmPaletteEditor->ShowModal() == mrOk)
 	{
 		CopyPaletteToFractal();
 
 		UpdatePalette();
+
+		if (miShowPreview->Checked) RenderPreview();
 	}
 
 	delete frmPaletteEditor;
@@ -892,15 +968,23 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 
 void __fastcall TfrmMain::sbLoadPaletteClick(TObject *Sender)
 {
+	odPalette->InitialDir = PalettePath.c_str();
+
 	if (odPalette->Execute())
 	{
 		GPaletteHandler->Clear(false);
 
-		if (!LoadAndSetPalette(odPalette->FileName.c_str()))
+		if (LoadAndSetPalette(odPalette->FileName.c_str()))
+		{
+			PalettePath = ExtractFilePath(odPalette->FileName);
+
+			if (miShowPreview->Checked) RenderPreview();
+		}
+		else
 		{
 			std::wstring error = L"Error loading palette, using default.";
 
-   			sbMain->SimpleText = error.c_str();
+			sbMain->SimpleText = error.c_str();
 		}
 	}
 }
@@ -972,13 +1056,15 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 
 	UpdateABCPanel();
 
-	UpdateDimension();
+	UpdateDimension(true);
 
 	CopyPaletteToFractal();
 
 	UpdateFromFractalChange();
 
 	SetWarning(false);
+
+	//if (miShowPreview->Checked) RenderPreview();
 }
 
 
@@ -986,7 +1072,9 @@ void __fastcall TfrmMain::cbRenderModeChange(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
 
-    UpdateABCPanel();
+	UpdateABCPanel();
+
+    if (miShowPreview->Checked) RenderPreview();
 }
 
 
@@ -1000,17 +1088,22 @@ void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 
 	if (n <= 0)
 	{
-		eCoeffN->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
+		eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff);
 	}
 
 	if (i <= 0)
 	{
-		eIterations->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
+		eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
 	}
 
 	if (rb < 4)
 	{
-		eBailoutRadius->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius;
+		eBailoutRadius->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius);
+	}
+
+	if (Sender != nullptr)
+	{
+		if (miShowPreview->Checked) RenderPreview();
 	}
 }
 
@@ -1037,6 +1130,30 @@ void __fastcall TfrmMain::miCopyAllToClipboardClick(TObject *Sender)
 	clippy->AsText = parameters.c_str();
 }
 
+
+void __fastcall TfrmMain::miQPAClick(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	switch (mi->Tag)
+	{
+	case 0:
+		QPFine = 0.01;
+		break;
+	case 1:
+		QPFine = 0.001;
+		break;
+	case 2:
+		QPFine = 0.0001;
+		break;
+	case 3:
+		QPFine = 0.00001;
+		break;
+	case 4:
+		QPFine = 0.000001;
+		break;
+	}
+}
 
 
 void __fastcall TfrmMain::sbEditBoundsClick(TObject *Sender)
@@ -1068,7 +1185,7 @@ void __fastcall TfrmMain::miDesktopDimensionClick(TObject *Sender)
 	eWidth->Text = DimensionsDesktop[mi->Tag][0];
 	eHeight->Text = DimensionsDesktop[mi->Tag][1];
 
-	UpdateDimension();
+	UpdateDimension(false);
 }
 
 
@@ -1079,7 +1196,7 @@ void __fastcall TfrmMain::miMobileDimensionsClick(TObject *Sender)
 	eWidth->Text = DimensionsPhone[mi->Tag][0];
 	eHeight->Text = DimensionsPhone[mi->Tag][1];
 
-	UpdateDimension();
+	UpdateDimension(false);
 }
 
 
@@ -1090,7 +1207,7 @@ void __fastcall TfrmMain::miTextureDimensionsClick(TObject *Sender)
 	eWidth->Text = DimensionsTexture[mi->Tag];
 	eHeight->Text = DimensionsTexture[mi->Tag];
 
-	UpdateDimension();
+	UpdateDimension(false);
 }
 
 

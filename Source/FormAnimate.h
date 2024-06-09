@@ -42,6 +42,10 @@ __published:	// IDE-managed Components
 	TLabel *Label4;
 	TEdit *eDeltaD;
 	TLabel *lWarning;
+	TCheckBox *cbIncludeA;
+	TCheckBox *cbIncludeB;
+	TCheckBox *cbIncludeC;
+	TCheckBox *cbIncludeD;
 	void __fastcall bOKClick(TObject *Sender);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall eDeltaAChange(TObject *Sender);

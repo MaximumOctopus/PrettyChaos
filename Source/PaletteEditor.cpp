@@ -533,7 +533,7 @@ void __fastcall TfrmPaletteEditor::bAcceptClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::bSaveClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetSaveFileName(2);
+	std::wstring file_name = Utility::GetSaveFileName(2, PalettePath);
 
 	if (!file_name.empty())
 	{
@@ -587,19 +587,19 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 	KeySelected = 0;
 
 	if (GPaletteHandler->Keys.size() == 0)
-	ShowMessage(L"help!!");
+		ShowMessage(L"help!!");
 
-		Selected = Shapes[0];
+	Selected = Shapes[0];
 
-		RenderGradient();
+	RenderGradient();
 
-		UpdateKeyDisplay(KeySelected);
+	UpdateKeyDisplay(KeySelected);
 }
 
 
 void __fastcall TfrmPaletteEditor::bLoadClick(TObject *Sender)
 {
-	std::wstring file_name = Utility::GetOpenFileName(2);
+	std::wstring file_name = Utility::GetOpenFileName(2, PalettePath);
 
 	if (!file_name.empty())
 	{

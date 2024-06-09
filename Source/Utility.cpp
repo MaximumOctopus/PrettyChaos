@@ -25,7 +25,7 @@ namespace Utility
 	static const std::wstring ShortDays[7] = { L"Sun", L"Mon", L"Tue", L"Wed", L"Thu", L"Fri", L"Sat" };
 	static const std::wstring Months[12] = { L"Jan", L"Feb", L"Mar", L"Apr", L"May", L"Jun", L"Jul", L"Aug", L"Sep", L"Oct", L"Nov", L"Dec" };
 
-	std::wstring GetOpenFileName(int mode)
+	std::wstring GetOpenFileName(int mode, std::wstring folder)
 	{
 		OPENFILENAME ofn = { 0 };
 		TCHAR szFile[260] = { 0 };
@@ -52,7 +52,7 @@ namespace Utility
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
+		ofn.lpstrInitialDir = folder.c_str();
 		ofn.Flags = OFN_PATHMUSTEXIST | OFN_FILEMUSTEXIST;
 
 		if (GetOpenFileName(&ofn) == TRUE)
@@ -63,7 +63,7 @@ namespace Utility
 		return L"";
 	}
 
-	std::wstring GetSaveFileName(int mode)
+	std::wstring GetSaveFileName(int mode, std::wstring folder)
 	{
 		OPENFILENAME ofn = { 0 };
 		TCHAR szFile[260] = { 0 };
@@ -90,7 +90,7 @@ namespace Utility
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
-		ofn.lpstrInitialDir = NULL;
+		ofn.lpstrInitialDir = folder.c_str();
 		ofn.Flags = 0;
 
 		if (GetSaveFileName(&ofn) == TRUE)

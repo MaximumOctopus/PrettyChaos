@@ -28,6 +28,7 @@ JuliaQuintic::JuliaQuintic() : Fractal()
 	QuickParamterMode = 1;	// A+B + fine control
 
 	MultiThread = true;
+    ThreadCount  = 4;
 
 	bailout_radius = 4;
 
@@ -57,7 +58,7 @@ JuliaQuintic::~JuliaQuintic()
 }
 
 
-bool JuliaQuintic::MultiThreadRender()
+bool JuliaQuintic::MultiThreadRender(bool preview)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
@@ -66,6 +67,8 @@ bool JuliaQuintic::MultiThreadRender()
 	}
 
 	StartTime = std::chrono::system_clock::now();
+
+	if (preview) SwapDimensions();
 
 	int h_delta = std::round((double)Height / 4);
 
@@ -82,6 +85,8 @@ bool JuliaQuintic::MultiThreadRender()
 	FinaliseRender();
 
 	CalculateRenderTime();
+
+	if (preview) SwapDimensions();
 
     return true;
 }
@@ -100,17 +105,17 @@ void JuliaQuintic::Render(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			double p = xmin + (double)x * (xmax - xmin) / (double)Width;    // real part
-			double q = ymin + (double)y * (ymax - ymin) / (double)Height;   // imaginary part
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
 
 			int it = 0;
 
-			double w = 0;
+			long double w = 0;
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
-				double atan2pq = 5 * std::atan2(q, p);
-				double pow25 = std::pow(p * p + q * q, 2.5);
+				long double atan2pq = 5 * std::atan2(q, p);
+				long double pow25 = std::pow(p * p + q * q, 2.5);
 
 				w = pow25 * std::cos(atan2pq) + Var.a;
 				q = pow25 * std::sin(atan2pq) + Var.b;
@@ -134,10 +139,10 @@ void JuliaQuintic::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					double log_zn = std::log(p * p + q * q) / 2;
-					double nu = std::log(log_zn / std::log(2)) / std::log(2);
+					long double log_zn = std::log(p * p + q * q) / 2;
+					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
-					double itnew = it + 1 - nu;
+					long double itnew = it + 1 - nu;
 
 					if (itnew < 0) itnew = 0;
 
@@ -169,7 +174,7 @@ void JuliaQuintic::Render(int hstart, int hend)
 				int nx = std::floor(x - (Width / 2));
 				int ny = std::floor(y - (Height / 2));
 
-				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((double)it / max_iterations, n_coeff)) * __PaletteCount);
+				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 				Iteration[ydotwidth + x] = Palette[index];
 				break;
@@ -219,7 +224,7 @@ void JuliaQuintic::FinaliseRender()
 				{
 					int it = Iteration[ydotwidth + x] - min;
 
-					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
+					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
 
 					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
 					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;

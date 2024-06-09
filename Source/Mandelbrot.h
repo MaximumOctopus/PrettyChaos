@@ -31,7 +31,7 @@ class Mandelbrot : public Fractal
 
 	void OrbitTrap(bool);
 
-	double max_d = 0;
+	long double max_d = 0;
 
     void FinaliseRender();
 
@@ -41,7 +41,7 @@ public:
 
 	~Mandelbrot();
 
-	bool MultiThreadRender() override;
+	bool MultiThreadRender(bool) override;
 	void Render(int, int) override;
     void Preview() override;
 

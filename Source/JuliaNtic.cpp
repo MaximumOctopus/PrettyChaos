@@ -28,6 +28,7 @@ JuliaNtic::JuliaNtic() : Fractal()
 	QuickParamterMode = 1;	// A+B + fine control
 
 	MultiThread = true;
+	ThreadCount  = 6;
 
 	bailout_radius = 4;
 
@@ -59,7 +60,7 @@ JuliaNtic::~JuliaNtic()
 }
 
 
-bool JuliaNtic::MultiThreadRender()
+bool JuliaNtic::MultiThreadRender(bool preview)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
@@ -69,23 +70,29 @@ bool JuliaNtic::MultiThreadRender()
 
 	StartTime = std::chrono::system_clock::now();
 
-	int h_delta = std::round((double)Height / 4);
+	if (preview) SwapDimensions();
+
+	int h_delta = std::round((double)Height / 6);
 
 	std::thread t1(Render, 0, h_delta);
 	std::thread t2(Render, h_delta, 2 * h_delta);
 	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
 	std::thread t4(Render, 3 * h_delta, 4 * h_delta);
-	std::thread t5(Render, 4 * h_delta, Height);
+	std::thread t5(Render, 4 * h_delta, 5 * h_delta);
+	std::thread t6(Render, 5 * h_delta, Height);
 
 	t1.join();
 	t2.join();
 	t3.join();
 	t4.join();
 	t5.join();
+	t6.join();
 
 	FinaliseRender();
 
 	CalculateRenderTime();
+
+	if (preview) SwapDimensions();
 
     return true;
 }
@@ -95,7 +102,7 @@ void JuliaNtic::Render(int hstart, int hend)
 {
 	max_d = 0;
 
-	double halfn = Var.c / 2;
+	long double halfn = Var.c / 2;
 
 	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
@@ -106,17 +113,17 @@ void JuliaNtic::Render(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			double p = xmin + (double)x * (xmax - xmin) / (double)Width;    // real part
-			double q = ymin + (double)y * (ymax - ymin) / (double)Height;   // imaginary part
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
 
 			int it = 0;
 
-			double w = 0;
+			long double w = 0;
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
-				double atan2pq = Var.c * std::atan2(q, p);
-				double pow25 = std::pow(p * p + q * q, halfn);
+				long double atan2pq = Var.c * std::atan2(q, p);
+				long double pow25 = std::pow(p * p + q * q, halfn);
 
 				w = pow25 * std::cos(atan2pq) + Var.a;
 				q = pow25 * std::sin(atan2pq) + Var.b;
@@ -140,10 +147,10 @@ void JuliaNtic::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					double log_zn = std::log(p * p + q * q) / 2;
-					double nu = std::log(log_zn / std::log(2)) / std::log(2);
+					long double log_zn = std::log(p * p + q * q) / 2;
+					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
-					double itnew = it + 1 - nu;
+					long double itnew = it + 1 - nu;
 
 					if (itnew < 0) itnew = 0;
 
@@ -175,7 +182,7 @@ void JuliaNtic::Render(int hstart, int hend)
 				int nx = std::floor(x - (Width / 2));
 				int ny = std::floor(y - (Height / 2));
 
-				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((double)it / max_iterations, n_coeff)) * __PaletteCount);
+				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 				Iteration[ydotwidth + x] = Palette[index];
 				break;
@@ -225,7 +232,7 @@ void JuliaNtic::FinaliseRender()
 				{
 					int it = Iteration[ydotwidth + x] - min;
 
-					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
+					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
 
 					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
 					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;

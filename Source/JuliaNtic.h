@@ -25,7 +25,7 @@ class JuliaNtic : public Fractal
 	static const int __RMFourTone = 6;
 	static const int __RMFiveTone = 7;
 
-	double max_d = 0;
+	long double max_d = 0;
 
 	void FinaliseRender();
 
@@ -35,7 +35,7 @@ public:
 
 	~JuliaNtic();
 
-	bool MultiThreadRender() override;
+	bool MultiThreadRender(bool) override;
 	void Render(int, int) override;
 
     void ResetAll() override;

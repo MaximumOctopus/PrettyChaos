@@ -49,6 +49,11 @@ void __fastcall TfrmAnimate::bOKClick(TObject *Sender)
 			AnimationConfiguration.DeltaC = c;
 			AnimationConfiguration.DeltaD = d;
 
+			AnimationConfiguration.IncludeA = cbIncludeA->Checked;
+			AnimationConfiguration.IncludeB = cbIncludeB->Checked;
+			AnimationConfiguration.IncludeC = cbIncludeC->Checked;
+			AnimationConfiguration.IncludeD = cbIncludeD->Checked;
+
 			AnimationConfiguration.Parameters = cbAnimateParameters->Checked;
 			AnimationConfiguration.Zoom = cbAnimateZoom->Checked;
 
@@ -88,6 +93,11 @@ void __fastcall TfrmAnimate::FormShow(TObject *Sender)
 	eDeltaB->Text = AnimationConfiguration.DeltaB;
 	eDeltaC->Text = AnimationConfiguration.DeltaC;
 	eDeltaD->Text = AnimationConfiguration.DeltaD;
+
+	cbIncludeA->Checked = AnimationConfiguration.IncludeA;
+	cbIncludeB->Checked = AnimationConfiguration.IncludeB;
+	cbIncludeC->Checked = AnimationConfiguration.IncludeC;
+	cbIncludeD->Checked = AnimationConfiguration.IncludeD;
 
 	cbAnimateParameters->Checked = AnimationConfiguration.Parameters;
 	cbAnimateZoom->Checked = AnimationConfiguration.Zoom;

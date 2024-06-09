@@ -26,6 +26,7 @@ public:
 
 	~MartinAdditive();
 
+	void PreRender(bool) override;
 	void Render(int, int) override;
 
     void ResetAll() override;

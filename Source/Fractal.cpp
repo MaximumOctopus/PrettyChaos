@@ -7,6 +7,7 @@
 //
 // https://github.com/MaximumOctopus/PrettyChaos
 //
+
 #include <Vcl.Dialogs.hpp>
 
 #include <string>
@@ -19,7 +20,7 @@
 Fractal::Fractal()
 {
 	Iteration = new int[1280 * 1024];
-	Data = new double[1280 * 1024];
+	Data = new long double[1280 * 1024];
 
 	RenderCanvas = new TBitmap();
 	RenderCanvas->PixelFormat = pf24bit;
@@ -61,10 +62,23 @@ void Fractal::CalculateRenderTime()
 }
 
 
-bool Fractal::MultiThreadRender()
+void Fractal::SwapDimensions()
+{
+	std::swap(Width, PreviewWidth);
+    std::swap(Height, PreviewHeight);
+}
+
+
+bool Fractal::MultiThreadRender(bool preview)
 {
 	// handled by subclass
     return false;
+}
+
+
+void Fractal::PreRender(bool preview)
+{
+	// handled by subclass
 }
 
 
@@ -92,7 +106,7 @@ void Fractal::ResetAll()
 }
 
 
-void Fractal::SetView(double _xmin, double _xmax, double _ymin, double _ymax)
+void Fractal::SetView(long double _xmin, long double _xmax, long double _ymin, long double _ymax)
 {
 	xmin = _xmin;
 	xmax = _xmax;
@@ -108,26 +122,26 @@ void Fractal::SetView(double _xmin, double _xmax, double _ymin, double _ymax)
 
 
 // sets the view to the correct aspect ratio based on the incoming co-ordinates
-void Fractal::FitToView(double _xmin, double _xmax, double _ymin, double _ymax)
+void Fractal::FitToView(long double _xmin, long double _xmax, long double _ymin, long double _ymax)
 {
 	if (Width > Height || Width == Height)
 	{
-		double c_yaxis = _ymin + ((_ymax - _ymin) / 2); // centre point of y-axis
+		long double c_yaxis = _ymin + ((_ymax - _ymin) / 2); // centre point of y-axis
 
-		double x_coeff = (_xmax - _xmin) / (double)Width;
+		long double x_coeff = (_xmax - _xmin) / (double)Width;
 
-		double y_range = x_coeff / (1 / (double)Height);      // gets new y range
+		long double y_range = x_coeff / (1 / (double)Height);      // gets new y range
 
 		_ymin = c_yaxis - (y_range / 2);
 		_ymax = c_yaxis + (y_range / 2);
 	}
 	else
 	{
-		double c_xaxis = _xmin + ((_xmax - _xmin) / 2); // centre point of x-axis
+		long double c_xaxis = _xmin + ((_xmax - _xmin) / 2); // centre point of x-axis
 
-		double y_coeff = (_ymax - _ymin) / (double)Height;
+		long double y_coeff = (_ymax - _ymin) / (double)Height;
 
-		double x_range = y_coeff / (1 / (double)Width);      // gets new y range
+		long double x_range = y_coeff / (1 / (double)Width);      // gets new y range
 
 		_xmin = c_xaxis - (x_range / 2);
 		_xmax = c_xaxis + (x_range / 2);
@@ -137,31 +151,31 @@ void Fractal::FitToView(double _xmin, double _xmax, double _ymin, double _ymax)
 }
 
 
-void Fractal::CentreOnPoint(double _x, double _y)
+void Fractal::CentreOnPoint(long double _x, long double _y)
 {
-	double delta_x = xmax - xmin;
-	double delta_y = ymax - ymin;
+	long double delta_x = xmax - xmin;
+	long double delta_y = ymax - ymin;
 
-	double _xmin = _x - (delta_x / 2);
-	double _xmax = _x + (delta_x / 2);
+	long double _xmin = _x - (delta_x / 2);
+	long double _xmax = _x + (delta_x / 2);
 
-	double _ymin = _y - (delta_y / 2);
-	double _ymax = _y + (delta_y / 2);
+	long double _ymin = _y - (delta_y / 2);
+	long double _ymax = _y + (delta_y / 2);
 
 	SetView(_xmin, _xmax, _ymin, _ymax);
 }
 
 
-void Fractal::ZoomAtPoint(double _x, double _y)
+void Fractal::ZoomAtPoint(long double _x, long double _y)
 {
-	double x_range = ((xmax - xmin) / 2);
-	double y_range = ((ymax - ymin) / 2);
+	long double x_range = ((xmax - xmin) / 2);
+	long double y_range = ((ymax - ymin) / 2);
 
-	double new_xmin = _x - (x_range / 2);
-	double new_xmax = _x + (x_range / 2);
+	long double new_xmin = _x - (x_range / 2);
+	long double new_xmax = _x + (x_range / 2);
 
-	double new_ymin = _y - (y_range / 2);
-	double new_ymax = _y + (y_range / 2);
+	long double new_ymin = _y - (y_range / 2);
+	long double new_ymax = _y + (y_range / 2);
 
 	SetView(new_xmin, new_xmax, new_ymin, new_ymax);
 }
@@ -181,7 +195,7 @@ void Fractal::SetDimensions(int _width, int _height)
 		delete CopyCanvas;
 
 		Iteration = new int[Width * Height];
-		Data = new double[Width * Height];
+		Data = new long double[Width * Height];
 
 		RenderCanvas = new TBitmap();
 		RenderCanvas->PixelFormat = pf24bit;
@@ -195,22 +209,22 @@ void Fractal::SetDimensions(int _width, int _height)
 
 		if (Width >= Height)
 		{
-			double c_yaxis = ymin + ((ymax - ymin) / 2); // centre point of y-axis
+			long double c_yaxis = ymin + ((ymax - ymin) / 2); // centre point of y-axis
 
-			double x_coeff = (xmax - xmin) / (double)Width;
+			long double x_coeff = (xmax - xmin) / (long double)Width;
 
-			double y_range = x_coeff / (1 / (double)Height);      // gets new y range
+			long double y_range = x_coeff / (1 / (long double)Height);      // gets new y range
 
 			ymin = c_yaxis - (y_range / 2);
 			ymax = c_yaxis + (y_range / 2);
 		}
 		else
 		{
-			double c_xaxis = xmin + ((xmax - xmin) / 2); // centre point of x-axis
+			long double c_xaxis = xmin + ((xmax - xmin) / 2); // centre point of x-axis
 
-			double y_coeff = (ymax - ymin) / (double)Height;
+			long double y_coeff = (ymax - ymin) / (long double)Height;
 
-			double x_range = y_coeff / (1 / (double)Width);      // gets new y range
+			long double x_range = y_coeff / (1 / (long double)Width);      // gets new y range
 
 			xmin = c_xaxis - (x_range / 2);
 			xmax = c_xaxis + (x_range / 2);
@@ -219,12 +233,31 @@ void Fractal::SetDimensions(int _width, int _height)
 		x_resolution = (xmax - xmin) / Width;
 		y_resolution = (ymax - ymin) / Height;
 
-       	HasChanged = true;
+		HasChanged = true;
+
+		SetPreviewDimensions();
 	}
 }
 
 
-void Fractal::SetParameters(double n, int i, int b)
+void Fractal::SetPreviewDimensions()
+{
+	if (Width >= Height)
+	{
+		PreviewWidth = __PreviewWidth;
+
+		PreviewHeight = (int)std::floor((double)Height * ((double)PreviewWidth / (double)Width));
+	}
+	else
+	{
+		PreviewHeight = __PreviewHeight;
+
+		PreviewWidth = (int)std::floor((double)Width * ((double)PreviewHeight / (double)Height));
+	}
+}
+
+
+void Fractal::SetParameters(long double n, int i, int b)
 {
 	if (n != n_coeff)
 	{
@@ -270,7 +303,7 @@ void Fractal::SetParameters(double n, int i, int b)
 }
 
 
-void Fractal::SetABC(double a, double b, double c, double d)
+void Fractal::SetABC(long double a, long double b, long double c, long double d)
 {
 	Var.a = a;
 	Var.b = b;
@@ -317,8 +350,8 @@ void Fractal::SetPaletteInfinity(int colour)
 }
 
 
-// returns true if the point p, q on a mandelbrot set goes to infinity
-bool Fractal::PointGoesToInfinity(double p, double q)
+// returns true if the point p,q on a mandelbrot set goes to infinity
+bool Fractal::PointGoesToInfinity(long double p, long double q)
 {
 	int it = 0;
 
@@ -350,7 +383,7 @@ bool Fractal::PointGoesToInfinity(double p, double q)
 }
 
 
-double Fractal::Sign(double n)
+double Fractal::Sign(long double n)
 {
 	if (n > 0) return 1;
 	if (n < 0) return -1;
@@ -359,7 +392,7 @@ double Fractal::Sign(double n)
 }
 
 
-void Fractal::ColourDistanceI(double max_d)
+void Fractal::ColourDistanceI(long double max_d)
 {
 	TRGBTriple *ptr;
 
@@ -390,7 +423,7 @@ void Fractal::ColourDistanceI(double max_d)
 }
 
 
-void Fractal::ColourDistanceII(double max_d)
+void Fractal::ColourDistanceII(long double max_d)
 {
 	TRGBTriple *ptr;
 

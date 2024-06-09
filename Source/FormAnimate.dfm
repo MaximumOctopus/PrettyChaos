@@ -177,4 +177,36 @@ object frmAnimate: TfrmAnimate
     Text = '0'
     OnChange = eDeltaAChange
   end
+  object cbIncludeA: TCheckBox
+    Left = 198
+    Top = 103
+    Width = 123
+    Height = 17
+    Caption = 'include in filename'
+    TabOrder = 10
+  end
+  object cbIncludeB: TCheckBox
+    Left = 198
+    Top = 132
+    Width = 123
+    Height = 17
+    Caption = 'include in filename'
+    TabOrder = 11
+  end
+  object cbIncludeC: TCheckBox
+    Left = 198
+    Top = 161
+    Width = 123
+    Height = 17
+    Caption = 'include in filename'
+    TabOrder = 12
+  end
+  object cbIncludeD: TCheckBox
+    Left = 198
+    Top = 190
+    Width = 123
+    Height = 17
+    Caption = 'include in filename'
+    TabOrder = 13
+  end
 end

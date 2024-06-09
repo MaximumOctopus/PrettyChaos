@@ -184,6 +184,8 @@ public:
 
 	std::wstring PaletteFileName = L"";    // relative to \palettes\
 
+    std::wstring PalettePath = L"";
+
 	__fastcall TfrmPaletteEditor(TComponent* Owner);
 };
 

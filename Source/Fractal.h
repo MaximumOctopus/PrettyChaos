@@ -22,15 +22,18 @@
 
 struct Variables
 {
-	double a = 0;
-	double b = 0;
-	double c = 0;
-    double d = 0;
+	long double a = 0;
+	long double b = 0;
+	long double c = 0;
+    long double d = 0;
 };
 
 
 class Fractal
 {
+
+	static const int __PreviewWidth = 200;
+	static const int __PreviewHeight = 200;
 
 protected:
 
@@ -44,12 +47,14 @@ protected:
 
 	int HasChanged = true;
 
+	void SwapDimensions();
+
 	void CalculateRenderTime();
 
-	double Sign(double);
+	double Sign(long double);
 
-    void ColourDistanceI(double);
-	void ColourDistanceII(double);
+	void ColourDistanceI(long double);
+	void ColourDistanceII(long double);
 	void ColourNTone(int);
 
 public:
@@ -61,9 +66,9 @@ public:
 	std::vector<std::wstring> RenderModes;
 	std::wstring Name;
 
-	double n_coeff = 1;  // used to map the linear range of palette colours to an exponential range (very cool)
-	double max_iterations = 1000;
-	double bailout_radius = 256;
+	long double n_coeff = 1;  		// used to map the linear range of palette colours to an exponential range (very cool)
+	long double max_iterations = 1000;
+	long double bailout_radius = 256;
 
 	Variables Var;
 
@@ -80,9 +85,9 @@ public:
 	bool AcceptsZoom = true;
 
 	bool MultiThread = false;
-	int ThreadCount = 4;
+	int ThreadCount = 0;
 
-	int QuickParamterMode = 0;  // 0 = none, 1 = A+B + fine control, 2 = A+B+C
+	int QuickParamterMode = 0;  	// 0 = none, 1 = A+B + fine control, 2 = A+B+C
 
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
@@ -94,44 +99,49 @@ public:
 	std::wstring RenderTime = L"0";
 
 	int* Iteration = nullptr;
-	double* Data = nullptr;
+	long double* Data = nullptr;
 
 	TBitmap *RenderCanvas = nullptr;
     TBitmap *CopyCanvas = nullptr;
 
-	double ymin = 0;    // fractal objects must set these in their constructor
-	double ymax = 0;    //
-	double xmin = 0;    //
-	double xmax = 0;    //
-	double x_resolution = 0;
-	double y_resolution = 0;
+	long double ymin = 0;    		// fractal objects must set these in their constructor
+	long double ymax = 0;    		//
+	long double xmin = 0;    		//
+	long double xmax = 0;    		//
+	long double x_resolution = 0;
+	long double y_resolution = 0;
 
 	int Width = 1280;
 	int Height = 1024;
+
+	int PreviewWidth = __PreviewWidth;
+	int PreviewHeight = 160;
 
 	Fractal();
 
 	~Fractal();
 
-	virtual bool MultiThreadRender();
+	virtual bool MultiThreadRender(bool);
+	virtual void PreRender(bool);
 	virtual void Render(int, int);
     virtual void Preview();
 
 	virtual void ResetAll();
 	virtual void ResetView();
 
-	bool PointGoesToInfinity(double, double);
+	bool PointGoesToInfinity(long double, long double);
 
-	void SetView(double, double, double, double);
-	void FitToView(double, double, double, double);
-	void ZoomAtPoint(double, double);
-    void CentreOnPoint(double, double);
+	void SetView(long double, long double, long double, long double);
+	void FitToView(long double, long double, long double, long double);
+	void ZoomAtPoint(long double, long double);
+	void CentreOnPoint(long double, long double);
 
 	void SetDimensions(int, int);
-	void SetParameters(double, int, int);
+    void SetPreviewDimensions();
+	void SetParameters(long double, int, int);
 	void SetRenderMode(int);
 
-	void SetABC(double, double, double, double);
+	void SetABC(long double, long double, long double, long double);
 	bool ShowABC(int);
 
 	void SetPaletteInfinity(int);

@@ -23,18 +23,18 @@ struct PCProject
 	int RenderMode = 0;
 	int nCoeff = 1;
 
-	double MaxIterations = 1000;
-	double BailoutRadius = 256;
+	long double MaxIterations = 1000;
+	long double BailoutRadius = 256;
 
-	double xmin = 0;
-	double xmax = 0;
-	double ymin = 0;
-	double ymax = 0;
+	long double xmin = 0;
+	long double xmax = 0;
+	long double ymin = 0;
+	long double ymax = 0;
 
-	double var_a = 0;
-	double var_b = 0;
-	double var_c = 0;
-	double var_d = 0;
+	long double var_a = 0;
+	long double var_b = 0;
+	long double var_c = 0;
+	long double var_d = 0;
 
 	std::wstring PaletteFileName = L"";
 };

@@ -28,6 +28,7 @@ Mandelbrot::Mandelbrot() : Fractal()
 	AcceptsVarB = true;
 
 	MultiThread = true;
+    ThreadCount  = 5;
 
 	bailout_radius = 4;
 
@@ -58,11 +59,13 @@ Mandelbrot::~Mandelbrot()
 
 
 
-bool Mandelbrot::MultiThreadRender()
+bool Mandelbrot::MultiThreadRender(bool preview)
 {
     max_d = 0;
 
 	StartTime = std::chrono::system_clock::now();
+
+	if (preview) SwapDimensions();
 
 	if (RenderMode == __RMEscapeTime)
 	{
@@ -89,7 +92,11 @@ bool Mandelbrot::MultiThreadRender()
 	CalculateRenderTime();
 
 	if (RenderMode == __RMEscapeTime)
+	{
 		delete[] NumIterationsPerPixel;
+	}
+
+	if (preview) SwapDimensions();
 
     return true;
 }
@@ -101,20 +108,20 @@ void Mandelbrot::Render(int hstart, int hend)
 	{
 		int ydotwidth = y * Width;
 
-		double q = ymin + (double)y * (ymax - ymin) / (double)Height;   // imaginary part
+		long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
 
 		for (int x = 0; x < Width; x++)
 		{
-			double p = xmin + (double)x * (xmax - xmin) / (double)Width;    // real part
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
 
 			int it = 0;
 
 			Data[y * Width + x] = 10000000000000;
-			double x1 = 0;
-			double y1 = 0;
-			double x2 = 0;
-			double y2 = 0;
-			double w = 0;
+			long double x1 = 0;
+			long double y1 = 0;
+			long double x2 = 0;
+			long double y2 = 0;
+			long double w = 0;
 
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
@@ -128,10 +135,10 @@ void Mandelbrot::Render(int hstart, int hend)
 
 				if (RenderMode == __RMOrbitTrap || RenderMode == __RMOrbitTrapFilled)
 				{
-					double cr = x1 - Var.a;
-					double ci = y1 - Var.b;
+					long double cr = x1 - Var.a;
+					long double ci = y1 - Var.b;
 
-					double magnitude = std::sqrt(cr * cr + ci * ci);
+					long double magnitude = std::sqrt(cr * cr + ci * ci);
 
 					if (magnitude < Data[ydotwidth + x])
 					{
@@ -159,13 +166,13 @@ void Mandelbrot::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					double log_zn = std::log(x1 * x1 + y1 * y1) / 2;
-					double nu = std::log(log_zn / std::log(2)) / std::log(2);
+					long double log_zn = std::log(x1 * x1 + y1 * y1) / 2;
+					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
-					double itnew = it + 1 - nu;
+					long double itnew = it + 1 - nu;
 
 					it = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
-					double it_d = (double)it + 1 - nu;
+					long double it_d = (long double)it + 1 - nu;
 
 					Iteration[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
 																  Palette[it + 1],
@@ -241,11 +248,11 @@ void Mandelbrot::FinaliseRender()
 
 			for (int x = 0; x < Width; x++)
 			{
-				double c = 0;
+				long double c = 0;
 
 				for (int i = 0; i < Iteration[ydotwidth + x]; i++)
 				{
-					c += (double)NumIterationsPerPixel[i] / (double)total;
+					c += (long double)NumIterationsPerPixel[i] / (long double)total;
 				}
 
 				if (Iteration[ydotwidth + x] != max_iterations)

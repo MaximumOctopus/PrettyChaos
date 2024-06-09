@@ -16,8 +16,8 @@
 
 namespace Utility
 {
-	[[nodiscard]] std::wstring GetOpenFileName(int);
-	[[nodiscard]] std::wstring GetSaveFileName(int);
+	[[nodiscard]] std::wstring GetOpenFileName(int, std::wstring);
+	[[nodiscard]] std::wstring GetSaveFileName(int, std::wstring);
 
 	[[nodiscard]] int CurrentYear();
 

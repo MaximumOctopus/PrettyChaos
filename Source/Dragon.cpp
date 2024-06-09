@@ -69,6 +69,16 @@ void Dragon::Generate(int iterations)
 }
 
 
+void Dragon::PreRender(bool preview)
+{
+	if (preview) SwapDimensions();
+
+	Render(-1, -1);
+
+	if (preview) SwapDimensions();
+}
+
+
 void Dragon::Render(int hstart, int hend)
 {
 	StartTime = std::chrono::system_clock::now();

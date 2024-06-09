@@ -227,6 +227,16 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbMergeImage;
 	TBevel *Bevel7;
 	TSpeedButton *sbSwapImage;
+	TMenuItem *N14;
+	TMenuItem *QuickParameter1;
+	TMenuItem *miQPA;
+	TMenuItem *miQPB;
+	TMenuItem *miQPC;
+	TMenuItem *miQPD;
+	TMenuItem *miQPE;
+	TImage *iPreview;
+	TMenuItem *N15;
+	TMenuItem *miShowPreview;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -268,9 +278,12 @@ __published:	// IDE-managed Components
 	void __fastcall sbCopyImageClick(TObject *Sender);
 	void __fastcall sbMergeImageClick(TObject *Sender);
 	void __fastcall sbSwapImageClick(TObject *Sender);
+	void __fastcall miQPAClick(TObject *Sender);
 
 
 private:	// User declarations
+
+    double QPFine = 0.1;
 
     FractalHandler* GFractalHandler = nullptr;
 
@@ -281,6 +294,10 @@ private:	// User declarations
 
 	Animation AnimationConfiguration;
 
+	std::wstring PalettePath = L"";
+	std::wstring ProjectPath = L"";
+    std::wstring RenderPath = L"";
+
 	int ZoomMode = -1;
 	bool FirstPoint = True;
 
@@ -289,12 +306,14 @@ private:	// User declarations
 
 	double LastZoomX, LastZoomY;
 
+    void RenderPreview();
+
 	void ZoomPointClick(double, double);
 
 	void SaveFractal(const std::wstring);
 	void SaveFractalParameters(const std::wstring);
 
-	void UpdateDimension();
+	void UpdateDimension(bool);
 	void UpdateABCPanel();
     void UpdateZoomPanel();
 
@@ -302,6 +321,7 @@ private:	// User declarations
 	PCProject GetProjectSettings();
 
 	void CopyFromFractalToScreen();
+    void CopyFromFractalToPreview();
     void CopyFromBackupToScreen();
 
 	void UpdateFromFractalChange();

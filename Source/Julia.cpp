@@ -25,6 +25,7 @@ Julia::Julia() : Fractal()
 	AcceptsVarB = true;
 
 	MultiThread = true;
+    ThreadCount  = 4;
 
     QuickParamterMode = 1;	// A+B + fine control
 
@@ -56,13 +57,15 @@ Julia::~Julia()
 }
 
 
-bool Julia::MultiThreadRender()
+bool Julia::MultiThreadRender(bool preview)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
 	{
 		return false;
 	}
+
+	if (preview) SwapDimensions();
 
 	StartTime = std::chrono::system_clock::now();
 
@@ -82,6 +85,8 @@ bool Julia::MultiThreadRender()
 
 	CalculateRenderTime();
 
+    if (preview) SwapDimensions();
+
 	return true;
 }
 
@@ -99,12 +104,12 @@ void Julia::Render(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			double p = xmin + (double)x * (xmax - xmin) / (double)Width;    // real part
-			double q = ymin + (double)y * (ymax - ymin) / (double)Height;   // imaginary part
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
 
 			int it = 0;
 
-			double w = 0;
+			long double w = 0;
 
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
@@ -131,13 +136,13 @@ void Julia::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					double log_zn = std::log(p * p + q * q) / 2;
-					double nu = std::log(log_zn / std::log(2)) / std::log(2);
+					long double log_zn = std::log(p * p + q * q) / 2;
+					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
-					double itnew = it + 1 - nu;
+					long double itnew = it + 1 - nu;
 
 					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * __PaletteCount;
-					double it_d = (double)it + 1 - nu;
+					long double it_d = (long double)it + 1 - nu;
 
 					Iteration[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
 																  Palette[it + 1],
@@ -162,7 +167,7 @@ void Julia::Render(int hstart, int hend)
 				int nx = std::floor(x - (Width / 2));
 				int ny = std::floor(y - (Height / 2));
 
-				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((double)it / max_iterations, n_coeff)) * __PaletteCount);
+				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 				Iteration[ydotwidth + x] = Palette[index];
 				break;
@@ -212,7 +217,7 @@ void Julia::FinaliseRender()
 				{
 					int it = Iteration[ydotwidth + x] - min;
 
-					int index = std::round(std::pow((double)it / ((double)max - (double)min), n_coeff) * __PaletteCount);
+					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
 
 					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
 					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;

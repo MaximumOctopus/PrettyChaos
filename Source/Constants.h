@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.12 (debug) :: March 28th 2024";
+static const std::wstring __PrettyChaosVersion = L"0.14 (debug) :: June 9th 2024";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.12 :: March 28th 2024";
+static const std::wstring __PrettyChaosVersion = L"0.14 :: June 9th 2024";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
@@ -23,6 +23,10 @@ static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.p
 
 static const int __PaletteCount = 500;      // 0-499
 static const int __PaletteInfinity = 500;
+
+static const int __QPMNone = 0;
+static const int __QPMABPlusFine = 1;
+static const int __QPMABC = 2;
 
 
 static const int DimensionsDesktop[17][2] = {
