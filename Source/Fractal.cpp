@@ -19,7 +19,7 @@
 
 Fractal::Fractal()
 {
-	Iteration = new int[1280 * 1024];
+	FractalData = new Colour[1280 * 1024];
 	Data = new long double[1280 * 1024];
 
 	RenderCanvas = new TBitmap();
@@ -34,18 +34,16 @@ Fractal::Fractal()
 
 	for (int t = 0; t < __PaletteCount; t++)
 	{
-		int colour = std::floor(((double)t / __PaletteCount) * 255);
-
-		Palette[t] = colour + (colour << 8) + (colour << 16);
+		Palette[t] = Colour(1, 1, 1); // to do, what  did this code do
 	}
 
-	Palette[__PaletteInfinity] = 0x000000;
+	Palette[__PaletteInfinity] = Colour();
 }
 
 
 Fractal::~Fractal()
 {
-	delete Iteration;
+	delete FractalData;
 	delete Data;
 	delete RenderCanvas;
 	delete CopyCanvas;
@@ -69,7 +67,7 @@ void Fractal::SwapDimensions()
 }
 
 
-bool Fractal::MultiThreadRender(bool preview)
+bool Fractal::MultiThreadRender(bool preview, bool super_sample)
 {
 	// handled by subclass
     return false;
@@ -83,6 +81,12 @@ void Fractal::PreRender(bool preview)
 
 
 void Fractal::Render(int hs, int he)
+{
+	// handled by subclass
+}
+
+
+void Fractal::RenderSS(int hs, int he)
 {
 	// handled by subclass
 }
@@ -181,20 +185,35 @@ void Fractal::ZoomAtPoint(long double _x, long double _y)
 }
 
 
-void Fractal::SetDimensions(int _width, int _height)
+void Fractal::ZoomOut()
 {
-	if (Width != _width || Height != _height)
+	long double x_range = ((xmax - xmin) / 2);
+	long double y_range = ((ymax - ymin) / 2);
+
+	long double new_xmin = xmin - x_range;
+	long double new_xmax = xmax + x_range;
+
+	long double new_ymin = ymin - y_range;
+	long double new_ymax = ymax + y_range;
+
+	SetView(new_xmin, new_xmax, new_ymin, new_ymax);
+}
+
+
+void Fractal::SetDimensions(bool force, int _width, int _height)
+{
+	if (force || (Width != _width || Height != _height))
 	{
 		Width = _width;
 		Height = _height;
 
-		delete[] Iteration;
+		delete[] FractalData;
 		delete[] Data;
 
 		delete RenderCanvas;
 		delete CopyCanvas;
 
-		Iteration = new int[Width * Height];
+		FractalData = new Colour[Width * Height];
 		Data = new long double[Width * Height];
 
 		RenderCanvas = new TBitmap();
@@ -340,12 +359,8 @@ void Fractal::SetRenderMode(int new_mode)
 }
 
 
-void Fractal::SetPaletteInfinity(int colour)
+void Fractal::SetPaletteInfinity(Colour colour)
 {
-	PaletteInfintyR = colour & 0x0000ff;
-	PaletteInfintyG = colour >> 8 & 0x0000ff;
-	PaletteInfintyB = colour >> 16;
-
 	Palette[__PaletteInfinity] = colour;
 }
 
@@ -404,19 +419,19 @@ void Fractal::ColourDistanceI(long double max_d)
 
 		for (int x = 0; x < Width; x++)
 		{
-			if (Iteration[ydotwidth + x] != max_iterations)
+			if (FractalData[ydotwidth + x].a != max_iterations)
 			{
 				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[index] >> 16;
+				ptr[x].rgbtRed = Palette[index].r;
+				ptr[x].rgbtGreen = Palette[index].g;
+				ptr[x].rgbtBlue = Palette[index].b;
 			}
 			else
 			{
-				ptr[x].rgbtRed = PaletteInfintyR;
-				ptr[x].rgbtGreen = PaletteInfintyG;
-				ptr[x].rgbtBlue = PaletteInfintyB;
+				ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
 			}
 		}
 	}
@@ -435,19 +450,19 @@ void Fractal::ColourDistanceII(long double max_d)
 
 		for (int x = 0; x < Width; x++)
 		{
-			if (Iteration[ydotwidth + x] != max_iterations)
+			if (FractalData[ydotwidth + x].a != max_iterations)
 			{
 				int index = std::floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
 
-				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[index] >> 16;
+				ptr[x].rgbtRed = Palette[index].r;
+				ptr[x].rgbtGreen = Palette[index].g;
+				ptr[x].rgbtBlue = Palette[index].b;
 			}
 			else
 			{
-				ptr[x].rgbtRed = PaletteInfintyR;
-				ptr[x].rgbtGreen = PaletteInfintyG;
-				ptr[x].rgbtBlue = PaletteInfintyB;
+				ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
 			}
 		}
 	}
@@ -456,7 +471,7 @@ void Fractal::ColourDistanceII(long double max_d)
 
 void Fractal::ColourNTone(int n)
 {
-	int* colours = new int[n];
+	Colour* colours = new Colour[n];
 
 	colours[0] = Palette[0];
 	colours[n - 1] = Palette[499];
@@ -481,19 +496,19 @@ void Fractal::ColourNTone(int n)
 
 		for (int x = 0; x < Width; x++)
 		{
-			if (Iteration[ydotwidth + x] != max_iterations)
+			if (FractalData[ydotwidth + x].a != max_iterations)
 			{
-				int colour = colours[Iteration[ydotwidth + x] % n];
+				Colour colour = colours[FractalData[ydotwidth + x].a % n];
 
-				ptr[x].rgbtRed = colour & 0x0000ff;
-				ptr[x].rgbtGreen = colour >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = colour >> 16;
+				ptr[x].rgbtRed = colour.r;
+				ptr[x].rgbtGreen = colour.g;
+				ptr[x].rgbtBlue = colour.b;
 			}
 			else
 			{
-				ptr[x].rgbtRed = PaletteInfintyR;
-				ptr[x].rgbtGreen = PaletteInfintyG;
-				ptr[x].rgbtBlue = PaletteInfintyB;
+				ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+				ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+				ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
 			}
 		}
 	}
@@ -526,14 +541,116 @@ void Fractal::MergeImage()
 
 		for (int x = 0; x  < RenderCanvas->Width; x++)
 		{
-			if (ptra[x].rgbtRed == PaletteInfintyR &&
-				ptra[x].rgbtGreen == PaletteInfintyG &&
-				ptra[x].rgbtBlue == PaletteInfintyB)
+			if (ptra[x].rgbtRed == Palette[__PaletteInfinity].r &&
+				ptra[x].rgbtGreen == Palette[__PaletteInfinity].g &&
+				ptra[x].rgbtBlue == Palette[__PaletteInfinity].b)
 			{
                 ptra[x] = ptrb[x];
 			}
 		}
 	}
+}
+
+void Fractal::FinaliseRenderJulia(double max_d)
+{
+	switch (RenderMode)
+	{
+	case __RMJuliaEscapeTime:
+	{
+		int max = 0;
+		int min = max_iterations + 1;
+
+		for (int y = 0; y < Height; y++)
+		{
+			int ydotwidth = y * Width;
+
+			for (int x = 0; x < Width; x++)
+			{
+				if (FractalData[ydotwidth + x].a > max) max = FractalData[ydotwidth + x].a;
+				if (FractalData[ydotwidth + x].a < min && FractalData[ydotwidth + x].a != 0) min = FractalData[ydotwidth + x].a;
+			}
+		}
+
+		TRGBTriple *ptr;
+
+		for (int y = 0; y < Height; y++)
+		{
+			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			for (int x = 0; x < Width; x++)
+			{
+				if (FractalData[ydotwidth + x].a == 0)
+				{
+					ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+				}
+				else
+				{
+					int it = FractalData[ydotwidth + x].a - min;
+
+					if (max == min)
+					{
+						ptr[x].rgbtRed = Palette[499].r;
+						ptr[x].rgbtGreen = Palette[499].g;
+						ptr[x].rgbtBlue = Palette[499].b;
+					}
+					else
+					{
+						int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
+
+						ptr[x].rgbtRed = Palette[index].r;
+						ptr[x].rgbtGreen = Palette[index].g;
+						ptr[x].rgbtBlue = Palette[index].b;
+					}
+				}
+			}
+		}
+		break;
+	}
+	case __RMJuliaContinuous:
+	case __RMJuliaDistanceOrigin:
+		TRGBTriple *ptr;
+
+		for (int y = 0; y < Height; y++)
+		{
+			int ydotwidth = y * Width;
+
+			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
+
+			for (int x = 0; x < Width; x++)
+			{
+				ptr[x].rgbtRed = FractalData[ydotwidth + x].r;
+				ptr[x].rgbtGreen = FractalData[ydotwidth + x].g;
+				ptr[x].rgbtBlue = FractalData[ydotwidth + x].b;
+			}
+		}
+		break;
+	case __RMJuliaDistance:                                                                     // distance II
+		ColourDistanceII(max_d);
+		break;
+	case __RMJuliaTwoTone:                                                                     // two-tone
+		ColourNTone(2);
+		break;
+	case __RMJuliaThreeTone:                                                                     // three-tone
+		ColourNTone(3);
+		break;
+	case __RMJuliaFourTone:                                                                     // four-tone
+		ColourNTone(4);
+		break;
+	case __RMJuliaFiveTone:                                                                     // five-tone
+		ColourNTone(5);
+		break;
+	}
+}
+
+
+std::wstring Fractal::Description()
+{
+	// handled by subclass
+    return L"";
 }
 
 

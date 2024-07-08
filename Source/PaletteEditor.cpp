@@ -63,7 +63,7 @@ void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
 {
 	RenderGradient();
 
-	sInfinity->Brush->Color = TColor(GPaletteHandler->Palette[__PaletteInfinity]);
+	sInfinity->Brush->Color = TColor(GPaletteHandler->Palette[__PaletteInfinity].ToIntBGR());
 }
 
 
@@ -288,7 +288,7 @@ void __fastcall TfrmPaletteEditor::tbRedChange(TObject *Sender)
 		lHexGreen->Caption = IntToHex(tbGreen->Position, 2);
 		lHexBlue->Caption = IntToHex(tbBlue->Position, 2);
 
-		lColourHex->Caption = ColourUtility::BRGtoRGBHex(pk.Colour);
+		lColourHex->Caption = ColourUtility::BGRtoRGBHex(pk.Colour);
 
 		BuildRGBGradients();
 
@@ -703,10 +703,10 @@ void __fastcall TfrmPaletteEditor::sInfinityMouseDown(TObject *Sender, TMouseBut
 	{
 		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
-		lInfinityHex->Caption = ColourUtility::BRGtoRGBHex(frmColourDialog->SelectedColour);
+		lInfinityHex->Caption = ColourUtility::BGRtoRGBHex(frmColourDialog->SelectedColour);
 
-		GPaletteHandler->Palette[__PaletteInfinity] = frmColourDialog->SelectedColour;
-    }
+		GPaletteHandler->Palette[__PaletteInfinity].FromIntBGR(frmColourDialog->SelectedColour);
+	}
 }
 
 

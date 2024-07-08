@@ -16,18 +16,8 @@
 
 class JuliaNtic : public Fractal
 {
-	static const int __RMEscapeTime = 0;
-	static const int __RMContinuous = 1;
-	static const int __RMDistance = 2;
-	static const int __RMDistanceOrigin = 3;
-	static const int __RMTwoTone = 4;
-	static const int __RMThreeTone = 5;
-	static const int __RMFourTone = 6;
-	static const int __RMFiveTone = 7;
 
 	long double max_d = 0;
-
-	void FinaliseRender();
 
 public:
 
@@ -35,13 +25,16 @@ public:
 
 	~JuliaNtic();
 
-	bool MultiThreadRender(bool) override;
+	bool MultiThreadRender(bool, bool) override;
 	void Render(int, int) override;
+	void RenderSS(int, int) override;
 
     void ResetAll() override;
 	void ResetView() override;
 
     std::wstring GetParameters() override;
+
+    std::wstring Description() override;
 
     void ToFile(std::ofstream&) override;
 };

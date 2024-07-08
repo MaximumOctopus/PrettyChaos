@@ -10,6 +10,7 @@
 
 #include <vector>
 
+#include "Colour.h"
 #include "PaletteKey.h"
 
 
@@ -38,7 +39,7 @@ public:
 	double Log = 1;
 	bool ColourSpace = true;            // false is b/w
 
-	int Palette[501];
+	Colour Palette[501];
 
 	int SelectedKey = 0;
 

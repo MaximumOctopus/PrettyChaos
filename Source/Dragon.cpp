@@ -79,6 +79,11 @@ void Dragon::PreRender(bool preview)
 }
 
 
+void Dragon::RenderSS(int hstart, int hend)
+{
+}
+
+
 void Dragon::Render(int hstart, int hend)
 {
 	StartTime = std::chrono::system_clock::now();
@@ -100,9 +105,9 @@ void Dragon::Render(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			ptr[x].rgbtRed = PaletteInfintyR;
-			ptr[x].rgbtGreen = PaletteInfintyG;
-			ptr[x].rgbtBlue = PaletteInfintyB;
+			ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+			ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+			ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
 		}
 	}
 
@@ -243,9 +248,9 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 		{
 			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
-			ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
-			ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
-			ptr[x].rgbtBlue = Palette[colour] >> 16;
+			ptr[x].rgbtRed = Palette[colour].r;
+			ptr[x].rgbtGreen = Palette[colour].g;
+			ptr[x].rgbtBlue = Palette[colour].b;
 		}
 
 		for (int i = 0; x < xe; i++)
@@ -274,9 +279,9 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 			{
 				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
-				ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[colour] >> 16;
+				ptr[x].rgbtRed = Palette[colour].r;
+				ptr[x].rgbtGreen = Palette[colour].g;
+				ptr[x].rgbtBlue = Palette[colour].b;
 			}
 		}
 	}
@@ -299,9 +304,9 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 		{
 			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
-			ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
-			ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
-			ptr[x].rgbtBlue = Palette[colour] >> 16;
+			ptr[x].rgbtRed = Palette[colour].r;
+			ptr[x].rgbtGreen = Palette[colour].g;
+			ptr[x].rgbtBlue = Palette[colour].b;
 		}
 
 		for (int i = 0; y < ye; i++)
@@ -330,9 +335,9 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 			{
 				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
-				ptr[x].rgbtRed = Palette[colour] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[colour] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[colour] >> 16;
+				ptr[x].rgbtRed = Palette[colour].r;
+				ptr[x].rgbtGreen = Palette[colour].g;
+				ptr[x].rgbtBlue = Palette[colour].b;
 			}
 		}
 	}
@@ -366,6 +371,13 @@ std::wstring Dragon::GetParameters()
 	return L"render mode: " + RenderModes[RenderMode] +
 		   L"; recursions: " + std::to_wstring(Var.a) + L"; max iterations: " + std::to_wstring(max_iterations);
 }
+
+
+std::wstring Dragon::Description()
+{
+	return L"Dragon: " + std::to_wstring((int)Var.a);
+}
+
 
 
 void Dragon::ToFile(std::ofstream& ofile)

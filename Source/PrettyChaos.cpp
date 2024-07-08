@@ -18,6 +18,7 @@ USEFORM("FormAnimate.cpp", frmAnimate);
 USEFORM("FormAbout.cpp", frmAbout);
 USEFORM("FormEditBounds.cpp", frmEditBounds);
 USEFORM("FormColourDialog.cpp", frmColourDialog);
+USEFORM("FormText.cpp", frmText);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

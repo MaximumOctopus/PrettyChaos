@@ -72,6 +72,11 @@ void Martin::PreRender(bool preview)
 }
 
 
+void Martin::RenderSS(int hstart, int hend)
+{
+}
+
+
 void Martin::Render(int hstart, int hend)
 {
 	StartTime = std::chrono::system_clock::now();
@@ -96,11 +101,11 @@ void Martin::Render(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			Iteration[y * Width + x] = 0;
+			FractalData[y * Width + x].a = 0;
 
-			ptr[x].rgbtRed = PaletteInfintyR;
-			ptr[x].rgbtGreen = PaletteInfintyG;
-			ptr[x].rgbtBlue = PaletteInfintyB;
+			ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+			ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+			ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
 		}
 	}
 
@@ -114,15 +119,15 @@ void Martin::Render(int hstart, int hend)
 			switch (RenderMode)
 			{
 			case __RMAverage:
-				Iteration[y * Width + x]++;
+				FractalData[y * Width + x].a++;
 				break;
 			case __RMTime:
 			{
 				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
-				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[index] >> 16;
+				ptr[x].rgbtRed = Palette[index].r;
+				ptr[x].rgbtGreen = Palette[index].g;
+				ptr[x].rgbtBlue = Palette[index].b;
 
 				count++;
 
@@ -138,9 +143,9 @@ void Martin::Render(int hstart, int hend)
 
 				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
 
-				ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-				ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Palette[index] >> 16;
+				ptr[x].rgbtRed = Palette[index].r;
+				ptr[x].rgbtGreen = Palette[index].g;
+				ptr[x].rgbtBlue = Palette[index].b;
 				break;
 			}
 		}
@@ -162,8 +167,8 @@ void Martin::Render(int hstart, int hend)
 
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[ydotwidth + x] > max) max = Iteration[ydotwidth + x];
-				if (Iteration[ydotwidth + x] < min && Iteration[ydotwidth + x] != 0) min = Iteration[ydotwidth + x];
+				if (FractalData[ydotwidth + x].a > max) max = FractalData[ydotwidth + x].a;
+				if (FractalData[ydotwidth + x].a < min && FractalData[ydotwidth + x].a != 0) min = FractalData[ydotwidth + x].a;
 			}
 		}
 
@@ -177,21 +182,21 @@ void Martin::Render(int hstart, int hend)
 
 			for (int x = 0; x < Width; x++)
 			{
-				if (Iteration[ydotwidth + x] == 0)
+				if (FractalData[ydotwidth + x].a == 0)
 				{
-					ptr[x].rgbtRed = PaletteInfintyR;
-					ptr[x].rgbtGreen = PaletteInfintyG;
-					ptr[x].rgbtBlue = PaletteInfintyB;
+					ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
+					ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
+					ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
 				}
 				else
 				{
-					int it = Iteration[ydotwidth + x] - min;
+					int it = FractalData[ydotwidth + x].a - min;
 
 					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
 
-					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-					ptr[x].rgbtBlue = Palette[index] >> 16;
+					ptr[x].rgbtRed = Palette[index].r;
+					ptr[x].rgbtGreen = Palette[index].g;
+					ptr[x].rgbtBlue = Palette[index].b;
 				}
 			}
 		}
@@ -232,6 +237,12 @@ std::wstring Martin::GetParameters()
 		   L"; a: " + std::to_wstring(Var.a) + L"; b " + std::to_wstring(Var.b) + L"; c: " + std::to_wstring(Var.c) + L"; Zoom " + std::to_wstring(Var.d) +
 		   L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
+}
+
+
+std::wstring Martin::Description()
+{
+	return L"Martin: " + std::to_wstring(Var.a) + L", " + std::to_wstring(Var.b) + L", " +std::to_wstring(Var.c);
 }
 
 

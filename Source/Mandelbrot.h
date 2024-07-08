@@ -41,14 +41,18 @@ public:
 
 	~Mandelbrot();
 
-	bool MultiThreadRender(bool) override;
+	bool MultiThreadRender(bool, bool) override;
 	void Render(int, int) override;
+	void RenderSS(int, int) override;
+
     void Preview() override;
 
     void ResetAll() override;
 	void ResetView() override;
 
-    std::wstring GetParameters() override;
+	std::wstring GetParameters() override;
+
+    std::wstring Description() override;
 
     void ToFile(std::ofstream&) override;
 };

@@ -138,6 +138,14 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 					case FileProperty::PaletteFileName:
                         project.PaletteFileName = value;
 						break;
+
+					case FileProperty::SuperSampling:
+						project.SuperSampling = stoi(value);
+						break;
+
+					case FileProperty::SuperSamplingLevel:
+						project.SuperSamplingLevel = stoi(value);
+						break;
                     }
 				}
 			}
@@ -182,6 +190,9 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 		file << Formatting::to_utf8(L"nCoeff=" + std::to_wstring(project.nCoeff) + L"\n");
 		file << Formatting::to_utf8(L"MaxIterations=" + std::to_wstring(project.MaxIterations) + L"\n");
 		file << Formatting::to_utf8(L"BailoutRadius=" + std::to_wstring(project.BailoutRadius) + L"\n");
+
+		file << Formatting::to_utf8(L"SS=" + std::to_wstring(project.SuperSampling) + L"\n");
+		file << Formatting::to_utf8(L"SSLevel=" + std::to_wstring(project.SuperSamplingLevel) + L"\n");
 
 		if (!GPaletteHandler->FileName.empty())
 		{

@@ -38,6 +38,11 @@ Newton::~Newton()
 }
 
 
+void Newton::RenderSS(int hs, int he)
+{
+}
+
+
 void Newton::Render(int hs, int he)
 {
 	StartTime = std::chrono::system_clock::now();

@@ -57,7 +57,7 @@ JuliaQuartic::~JuliaQuartic()
 }
 
 
-bool JuliaQuartic::MultiThreadRender(bool preview)
+bool JuliaQuartic::MultiThreadRender(bool preview, bool super_sample)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
@@ -69,25 +69,151 @@ bool JuliaQuartic::MultiThreadRender(bool preview)
 
 	if (preview) SwapDimensions();
 
-	int h_delta = std::round((double)Height / 4);
+	if (super_sample)
+	{
+		int h_delta = std::round((double)Height / 10);
 
-	std::thread t1(Render, 0, h_delta);
-	std::thread t2(Render, h_delta, 2 * h_delta);
-	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
-	std::thread t4(Render, 3 * h_delta, Height);
+		std::thread t1(RenderSS, 0, h_delta);
+		std::thread t2(RenderSS, h_delta, 2 * h_delta);
+		std::thread t3(RenderSS, 2 * h_delta, 3 * h_delta);
+		std::thread t4(RenderSS, 3 * h_delta, 4 * h_delta);
+		std::thread t5(RenderSS, 4 * h_delta, 5 * h_delta);
+		std::thread t6(RenderSS, 5 * h_delta, 6 * h_delta);
+		std::thread t7(RenderSS, 6 * h_delta, 7 * h_delta);
+		std::thread t8(RenderSS, 7 * h_delta, 8 * h_delta);
+		std::thread t9(RenderSS, 8 * h_delta, 9 * h_delta);
+		std::thread t10(RenderSS, 9 * h_delta, Height);
 
-	t1.join();
-	t2.join();
-	t3.join();
-	t4.join();
+		t1.join();
+		t2.join();
+		t3.join();
+		t4.join();
+		t5.join();
+		t6.join();
+		t7.join();
+		t8.join();
+		t9.join();
+		t10.join();
+	}
+	else
+	{
+		int h_delta = std::round((double)Height / 5);
 
-	FinaliseRender();
+		std::thread t1(Render, 0, h_delta);
+		std::thread t2(Render, h_delta, 2 * h_delta);
+		std::thread t3(Render, 2 * h_delta, 3 * h_delta);
+		std::thread t4(Render, 3 * h_delta, 4 * h_delta);
+		std::thread t5(Render, 4 * h_delta, Height);
+
+		t1.join();
+		t2.join();
+		t3.join();
+		t4.join();
+		t5.join();
+	}
+
+	FinaliseRenderJulia(max_d);
 
 	CalculateRenderTime();
 
 	if (preview) SwapDimensions();
 
 	return true;
+}
+
+
+void JuliaQuartic::RenderSS(int hstart, int hend)
+{
+	max_d = 0;
+
+	// maximum distance from the centre of the image
+	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+
+	for (int y = hstart; y < hend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		for (int x = 0; x < Width; x++)
+		{
+			FractalData[ydotwidth + x].Clear();
+
+			for (int ss = 0; ss < 8; ss++)
+			{
+				long double p = xmin + ((long double)x + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (xmax - xmin) / (long double)Width;    // real part
+				long double q = ymin + ((long double)y + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (ymax - ymin) / (long double)Height;   // imaginary part
+
+				int it = 0;
+
+				long double w = 0;
+
+				while (p * p + q * q <= bailout_radius && it < max_iterations)
+				{
+					long double atan2pq = 4 * std::atan2(q, p);
+					long double pow2 = std::pow(p * p + q * q, 2);
+
+					w = pow2 * std::cos(atan2pq) + Var.a;
+					q = pow2 * std::sin(atan2pq) + Var.b;
+					p = w;
+
+					it++;
+				}
+
+				switch (RenderMode)
+				{
+				case __RMJuliaEscapeTime:
+				case __RMJuliaTwoTone:
+				case __RMJuliaThreeTone:
+				case __RMJuliaFourTone:
+				case __RMJuliaFiveTone:
+				{
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				case __RMJuliaContinuous:
+				{
+					if (it < max_iterations)
+					{
+						long double log_zn = std::log(p * p + q * q) / 2;
+						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
+
+						long double itnew = it + 1 - nu;
+
+						it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+						long double it_d = (long double)it + 1 - nu;
+
+						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(Palette[it],
+																	  Palette[it + 1],
+																	  it_d - (std::floorl(it_d)));
+					}
+					else
+					{
+						FractalData[ydotwidth + x] += Palette[__PaletteInfinity];
+					}
+					break;
+				}
+				case __RMJuliaDistance:
+				{
+					Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
+
+					if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				case __RMJuliaDistanceOrigin:
+					int nx = std::floor(x - (Width / 2));
+					int ny = std::floor(y - (Height / 2));
+
+					int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+
+					FractalData[ydotwidth + x] += Palette[index];
+					break;
+				}
+			}
+
+			FractalData[ydotwidth + x] >>= 3;
+		}
+	}
 }
 
 
@@ -125,16 +251,16 @@ void JuliaQuartic::Render(int hstart, int hend)
 
 			switch (RenderMode)
 			{
-			case __RMEscapeTime:
-			case __RMTwoTone:
-			case __RMThreeTone:
-			case __RMFourTone:
-			case __RMFiveTone:
+			case __RMJuliaEscapeTime:
+			case __RMJuliaTwoTone:
+			case __RMJuliaThreeTone:
+			case __RMJuliaFourTone:
+			case __RMJuliaFiveTone:
 			{
-				Iteration[ydotwidth + x] = it;
+				FractalData[ydotwidth + x].a = it;
 				break;
 			}
-			case __RMContinuous:
+			case __RMJuliaContinuous:
 			{
 				if (it < max_iterations)
 				{
@@ -143,129 +269,38 @@ void JuliaQuartic::Render(int hstart, int hend)
 
 					long double itnew = it + 1 - nu;
 
-					if (itnew < 0) itnew = 0;
+					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+					long double it_d = (long double)it + 1 - nu;
 
-					itnew = std::pow((std::floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
-
-					it = std::floor(itnew);
-
-					Iteration[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																				Palette[it + 1],
-																				itnew - (std::floor(itnew)));
+					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
+																  Palette[it + 1],
+																  it_d - (std::floorl(it_d)));
 				}
 				else
 				{
-					Iteration[ydotwidth + x] = Palette[__PaletteInfinity];
+					FractalData[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
-
 				break;
 			}
-			case __RMDistance:
+			case __RMJuliaDistance:
 			{
 				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
 
 				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
 
-				Iteration[ydotwidth + x] = it;
+				FractalData[ydotwidth + x].a = it;
 				break;
 			}
-			case __RMDistanceOrigin:
+			case __RMJuliaDistanceOrigin:
 				int nx = std::floor(x - (Width / 2));
 				int ny = std::floor(y - (Height / 2));
 
 				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
-				Iteration[ydotwidth + x] = Palette[index];
+				FractalData[ydotwidth + x] = Palette[index];
 				break;
 			}
 		}
-	}
-}
-
-
-void JuliaQuartic::FinaliseRender()
-{
-	switch (RenderMode)
-	{
-	case __RMEscapeTime:
-	{
-		int max = 0;
-		int min = max_iterations + 1;
-
-		for (int y = 0; y < Height; y++)
-		{
-			int ydotwidth = y * Width;
-
-			for (int x = 0; x < Width; x++)
-			{
-				if (Iteration[ydotwidth + x] > max) max = Iteration[ydotwidth + x];
-				if (Iteration[ydotwidth + x] < min && Iteration[ydotwidth + x] != 0) min = Iteration[ydotwidth + x];
-			}
-		}
-
-		TRGBTriple *ptr;
-
-		for (int y = 0; y < Height; y++)
-		{
-			int ydotwidth = y * Width;
-
-			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-			for (int x = 0; x < Width; x++)
-			{
-				if (Iteration[ydotwidth + x] == 0)
-				{
-					ptr[x].rgbtRed = PaletteInfintyR;
-					ptr[x].rgbtGreen = PaletteInfintyG;
-					ptr[x].rgbtBlue = PaletteInfintyB;
-				}
-				else
-				{
-					int it = Iteration[ydotwidth + x] - min;
-
-					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
-
-					ptr[x].rgbtRed = Palette[index] & 0x0000ff;
-					ptr[x].rgbtGreen = Palette[index] >> 8 & 0x0000ff;
-					ptr[x].rgbtBlue = Palette[index] >> 16;
-				}
-			}
-		}
-		break;
-	}
-	case __RMContinuous:
-	case __RMDistanceOrigin:
-		TRGBTriple *ptr;
-
-		for (int y = 0; y < Height; y++)
-		{
-			int ydotwidth = y * Width;
-
-			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-			for (int x = 0; x < Width; x++)
-			{
-				ptr[x].rgbtRed = Iteration[ydotwidth + x] & 0x0000ff;
-				ptr[x].rgbtGreen = Iteration[ydotwidth + x] >> 8 & 0x0000ff;
-				ptr[x].rgbtBlue = Iteration[ydotwidth + x] >> 16;
-			}
-		}
-		break;
-	case __RMDistance:                                                                     // distance II
-		ColourDistanceII(max_d);
-		break;
-	case __RMTwoTone:                                                                     // two-tone
-		ColourNTone(2);
-		break;
-	case __RMThreeTone:                                                                     // three-tone
-		ColourNTone(3);
-		break;
-	case __RMFourTone:                                                                     // four-tone
-		ColourNTone(4);
-		break;
-	case __RMFiveTone:                                                                     // five-tone
-		ColourNTone(5);
-		break;
 	}
 }
 
@@ -297,6 +332,12 @@ std::wstring JuliaQuartic::GetParameters()
 		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
 		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
+}
+
+
+std::wstring JuliaQuartic::Description()
+{
+	return L"Julia (z^3): " + std::to_wstring(Var.a) + L" + " + std::to_wstring(Var.b) + L"i; " + std::to_wstring(xmin) + L", " + std::to_wstring(xmax) + L" / " + std::to_wstring(ymin) + L", " + std::to_wstring(ymax);
 }
 
 

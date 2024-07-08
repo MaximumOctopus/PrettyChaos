@@ -9,12 +9,13 @@
 //
 
 #include <System.SysUtils.hpp>
+
 #include "ColourUtility.h"
 
 
 namespace ColourUtility
 {
-	System::UnicodeString BRGtoRGBHex(int bgr)
+	System::UnicodeString BGRtoRGBHex(int bgr)
 	{
 		int r = (bgr & 0x0000ff);
 		int g = (bgr & 0x00ff00) >> 8;
@@ -182,20 +183,20 @@ namespace ColourUtility
 	}
 
 
-	int LinearInterpolate(int colour1, int colour2, double t)
+	Colour LinearInterpolate(const Colour&colour1, const Colour&colour2, double t)
 	{
-		int red1 = colour1 & 0x0000ff;
-		int green1 = colour1 >> 8 & 0x0000ff;
-		int blue1 = colour1 >> 16 & 0x0000ff;
+		int red1 = colour1.r;
+		int green1 = colour1.g;
+		int blue1 = colour1.b;
 
-		int red2 = colour2 & 0x0000ff;
-		int green2 = colour2 >> 8 & 0x0000ff;
-		int blue2 = colour2 >> 16 & 0x0000ff;
+		int red2 = colour2.r;
+		int green2 = colour2.g;
+		int blue2 = colour2.b;
 
 		int red = std::floor((double)red1 + t * ((double)red2 - (double)red1));
 		int green = std::floor((double)green1 + t * ((double)green2 - (double)green1));
 		int blue = std::floor((double)blue1 + t * ((double)blue2 - (double)blue1));
 
-		return (blue << 16) + (green << 8) + red;
+		return Colour(red, green, blue);
 	}
 }

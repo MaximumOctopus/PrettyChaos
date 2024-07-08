@@ -14,14 +14,16 @@
 #include <string>
 #include <System.hpp>
 
+#include "Colour.h"
+
 
 namespace ColourUtility
 {
-	System::UnicodeString BRGtoRGBHex(int bgr);
+	System::UnicodeString BGRtoRGBHex(int bgr);
 
 	void BGRtoHSV(int rgb, int &H, int &S, int &V);
 	void RGBtoHSV(int rgb, int &H, int &S, int &V);
 	void HSVtoRGB(int H, int S, int V, int &R, int &G, int &B);
 
-	int LinearInterpolate(int colour1, int colour2, double t);
+	Colour LinearInterpolate(const Colour&, const Colour&, double);
 }

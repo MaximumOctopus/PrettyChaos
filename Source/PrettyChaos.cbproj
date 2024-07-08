@@ -160,6 +160,14 @@
             <VirtualFolder>{4C4C43A1-9CD0-4FE2-850D-242A2F59A052}</VirtualFolder>
             <BuildOrder>36</BuildOrder>
         </None>
+        <CppCompile Include="Colour.cpp">
+            <VirtualFolder>{5A84A299-3DD4-4B20-AAF8-CEFF5B6B252B}</VirtualFolder>
+            <BuildOrder>55</BuildOrder>
+        </CppCompile>
+        <None Include="Colour.h">
+            <VirtualFolder>{5A84A299-3DD4-4B20-AAF8-CEFF5B6B252B}</VirtualFolder>
+            <BuildOrder>56</BuildOrder>
+        </None>
         <CppCompile Include="ColourUtility.cpp">
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
             <BuildOrder>31</BuildOrder>
@@ -220,6 +228,13 @@
             <DependentOn>FormEditBounds.h</DependentOn>
             <BuildOrder>17</BuildOrder>
         </CppCompile>
+        <CppCompile Include="FormText.cpp">
+            <VirtualFolder>{6F195188-9F40-4F70-B1F3-F2BFE6978011}</VirtualFolder>
+            <Form>frmText</Form>
+            <FormType>dfm</FormType>
+            <DependentOn>FormText.h</DependentOn>
+            <BuildOrder>52</BuildOrder>
+        </CppCompile>
         <CppCompile Include="Fractal.cpp">
             <VirtualFolder>{CBC6E249-27A9-4600-9ED7-EEE1DE006581}</VirtualFolder>
             <BuildOrder>5</BuildOrder>
@@ -243,6 +258,14 @@
         <None Include="HistoryHandler.h">
             <VirtualFolder>{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}</VirtualFolder>
             <BuildOrder>8</BuildOrder>
+        </None>
+        <CppCompile Include="ImageDescription.cpp">
+            <VirtualFolder>{51396BD9-C1F8-4606-8962-298686808B56}</VirtualFolder>
+            <BuildOrder>54</BuildOrder>
+        </CppCompile>
+        <None Include="ImageDescription.h">
+            <VirtualFolder>{51396BD9-C1F8-4606-8962-298686808B56}</VirtualFolder>
+            <BuildOrder>53</BuildOrder>
         </None>
         <CppCompile Include="Julia.cpp">
             <VirtualFolder>{8FFEB68A-C801-4430-885E-1783CF9ED09A}</VirtualFolder>
@@ -382,10 +405,11 @@
         </None>
         <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
-        <FormResources Include="FormAnimate.dfm"/>
         <FormResources Include="FormAbout.dfm"/>
-        <FormResources Include="FormEditBounds.dfm"/>
+        <FormResources Include="FormAnimate.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
+        <FormResources Include="FormText.dfm"/>
+        <FormResources Include="FormEditBounds.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -414,6 +438,7 @@
                 </Source>
                 <VFOLDERS>
                     <VFOLDER ID="{4C4C43A1-9CD0-4FE2-850D-242A2F59A052}" name="Animation"/>
+                    <VFOLDER ID="{5A84A299-3DD4-4B20-AAF8-CEFF5B6B252B}" name="Classes"/>
                     <VFOLDER ID="{71E52FCC-187C-4BB1-8E62-C3D352E18A05}" name="Constants"/>
                     <VFOLDER ID="{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}" name="File I/O"/>
                     <VFOLDER ID="{6F195188-9F40-4F70-B1F3-F2BFE6978011}" name="Forms"/>
@@ -431,6 +456,7 @@
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>
                     </VFOLDER>
+                    <VFOLDER ID="{51396BD9-C1F8-4606-8962-298686808B56}" name="Settings"/>
                     <VFOLDER ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}" name="Utility"/>
                 </VFOLDERS>
                 <Excluded_Packages>

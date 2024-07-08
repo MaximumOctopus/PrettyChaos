@@ -16,7 +16,7 @@
 #include <fstream>
 #include <vector>
 
-
+#include "Colour.h"
 #include "Formatting.h"
 
 
@@ -31,15 +31,19 @@ struct Variables
 
 class Fractal
 {
-
 	static const int __PreviewWidth = 200;
 	static const int __PreviewHeight = 200;
 
 protected:
 
-	int PaletteInfintyR = 0;
-	int PaletteInfintyG = 0;
-	int PaletteInfintyB = 0;
+	static const int __RMJuliaEscapeTime = 0;
+	static const int __RMJuliaContinuous = 1;
+	static const int __RMJuliaDistance = 2;
+	static const int __RMJuliaDistanceOrigin = 3;
+	static const int __RMJuliaTwoTone = 4;
+	static const int __RMJuliaThreeTone = 5;
+	static const int __RMJuliaFourTone = 6;
+	static const int __RMJuliaFiveTone = 7;
 
 	int* NumIterationsPerPixel = nullptr;
 
@@ -72,7 +76,7 @@ public:
 
 	Variables Var;
 
-	int Palette[501];
+	Colour Palette[501];
 
 	int AcceptsABCSpectificRenderModeBegin = -1;
 	int AcceptsABCSpectificRenderModeEnd = -1;
@@ -98,7 +102,7 @@ public:
 
 	std::wstring RenderTime = L"0";
 
-	int* Iteration = nullptr;
+	Colour* FractalData = nullptr;
 	long double* Data = nullptr;
 
 	TBitmap *RenderCanvas = nullptr;
@@ -121,9 +125,10 @@ public:
 
 	~Fractal();
 
-	virtual bool MultiThreadRender(bool);
+	virtual bool MultiThreadRender(bool, bool);
 	virtual void PreRender(bool);
 	virtual void Render(int, int);
+	virtual void RenderSS(int, int);
     virtual void Preview();
 
 	virtual void ResetAll();
@@ -134,9 +139,10 @@ public:
 	void SetView(long double, long double, long double, long double);
 	void FitToView(long double, long double, long double, long double);
 	void ZoomAtPoint(long double, long double);
+	void ZoomOut();
 	void CentreOnPoint(long double, long double);
 
-	void SetDimensions(int, int);
+	void SetDimensions(bool, int, int);
     void SetPreviewDimensions();
 	void SetParameters(long double, int, int);
 	void SetRenderMode(int);
@@ -144,12 +150,16 @@ public:
 	void SetABC(long double, long double, long double, long double);
 	bool ShowABC(int);
 
-	void SetPaletteInfinity(int);
+	void SetPaletteInfinity(Colour);
 
 	virtual std::wstring GetParameters();
 
 	void CopyImage();
 	void MergeImage();
+
+	void FinaliseRenderJulia(double);
+
+    virtual std::wstring Description();
 
 	virtual void ToFile(std::ofstream&);
 };

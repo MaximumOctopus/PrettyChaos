@@ -24,6 +24,7 @@ public:
 	~Newton();
 
 	void Render(int, int) override;
+   	void RenderSS(int, int) override;
 
 	void ResetView() override;
 };

@@ -22,6 +22,7 @@
 #include "Animation.h"
 #include "FractalHandler.h"
 #include "HistoryHandler.h"
+#include "ImageDescription.h"
 #include "Mandelbrot.h"
 #include "MartinClassic.h"
 #include "ProjectIO.h"
@@ -237,6 +238,13 @@ __published:	// IDE-managed Components
 	TImage *iPreview;
 	TMenuItem *N15;
 	TMenuItem *miShowPreview;
+	TSpeedButton *sbDescription;
+	TBevel *Bevel8;
+	TMenuItem *miSuperSample;
+	TSpeedButton *sbZoomCentre;
+	TSpeedButton *sbZoomOut;
+	TBevel *Bevel9;
+	TBevel *Bevel10;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -279,6 +287,11 @@ __published:	// IDE-managed Components
 	void __fastcall sbMergeImageClick(TObject *Sender);
 	void __fastcall sbSwapImageClick(TObject *Sender);
 	void __fastcall miQPAClick(TObject *Sender);
+	void __fastcall sbDescriptionClick(TObject *Sender);
+	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall miShowPreviewClick(TObject *Sender);
+	void __fastcall sbZoomCentreClick(TObject *Sender);
+	void __fastcall sbZoomOutClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -291,6 +304,7 @@ private:	// User declarations
 
 	HistoryHandler* history = nullptr;
 	ProjectIO* projectio = nullptr;
+	ImageDescription* imagedescription = nullptr;
 
 	Graphics::TBitmap* PaletteBitmap;
 
@@ -308,19 +322,22 @@ private:	// User declarations
 
 	double LastZoomX, LastZoomY;
 
-    void RenderPreview();
+	void RenderPreview();
 
 	void ZoomPointClick(double, double);
+	void ZoomOut();
 
 	void SaveFractal(const std::wstring);
 	void SaveFractalParameters(const std::wstring);
 
-	void UpdateDimension();
+	void UpdateDimension(bool);
 	void UpdateABCPanel();
     void UpdateZoomPanel();
 
 	void SetFromProjectFile(PCProject&, Animation&);
 	PCProject GetProjectSettings();
+
+    void RenderTextToScreen();
 
 	void CopyFromFractalToScreen();
     void CopyFromFractalToPreview();

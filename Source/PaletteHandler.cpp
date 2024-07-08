@@ -355,7 +355,7 @@ if (IsRendering) return;
 			ptr[y].rgbtGreen = PaletteG[y];
 			ptr[y].rgbtBlue = PaletteB[y];
 		}
-    }
+	}
 
 	IsRendering = false;
 }
@@ -370,7 +370,7 @@ void PaletteHandler::CopyPublic()
 	// render palette to public
 	for (int t = 0; t < __PaletteCount; t++)
 	{
-		Palette[t] = ptr[t].rgbtRed + (ptr[t].rgbtGreen << 8) + (ptr[t].rgbtBlue << 16);
+		Palette[t] = Colour(ptr[t].rgbtRed, ptr[t].rgbtGreen, ptr[t].rgbtBlue);
 	}
 }
 
@@ -389,7 +389,7 @@ bool PaletteHandler::Load(const std::wstring file_name)
 		int method(0);
 		int mode(0);
 		int position(0);
-		int infinity(0);
+		Colour infinity;
         bool locked(false);
 		bool interleve(false);
 		int interlevelevel(0);
@@ -466,7 +466,7 @@ bool PaletteHandler::Load(const std::wstring file_name)
 						break;
 
 					case 14:
-						infinity = stoi(value);
+						infinity.FromIntBGR(stoi(value));
 						break;
 
 					case 15:
@@ -503,7 +503,7 @@ bool PaletteHandler::Save(const std::wstring file_name)
 	if (file)
 	{
 		file << Formatting::to_utf8(L"[\n");
-		file << Formatting::to_utf8(L"infinity=" + std::to_wstring(Palette[500]) + L"\n");
+		file << Formatting::to_utf8(L"infinity=" + std::to_wstring(Palette[500].ToIntBGR()) + L"\n");
 		file << Formatting::to_utf8(L"colourspace=" + std::to_wstring(ColourSpace) + L"\n");
 		file << Formatting::to_utf8(L"steps=" + std::to_wstring(Steps) + L"\n");
 		file << Formatting::to_utf8(L"interleve=" + std::to_wstring(Interleve) + L"\n");

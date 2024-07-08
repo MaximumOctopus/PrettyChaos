@@ -13,8 +13,8 @@
 #include <Vcl.ExtCtrls.hpp>
 
 
-	static const int modeRGB = 0;
-	static const int modeHSV = 1;
+static const int modeRGB = 0;
+static const int modeHSV = 1;
 
 
 struct CombinedColour
@@ -34,12 +34,12 @@ class PaletteKey
 
 public:
 
-	int Colour = 0;
+	int Colour = 0;             // BGR format
 	CombinedColour SuperColour;
 	int Position = 0;
 
 	int Method = 0;
-	int Mode = modeRGB;               // 0 = RGB, 1 = HSV
+	int Mode = modeRGB;			// 0 = RGB, 1 = HSV
 	int SubMethod = 0;
 	int SubParameterR = 0;
 	int SubParameterG = 0;
