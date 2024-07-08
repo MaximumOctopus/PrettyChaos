@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.14
+  PrettyChaos 0.16
   (c) Paul Alan Freshney 2023-2024
 
   paul@freshney.org
@@ -7,13 +7,13 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  June 9th 2024
+  July 8th 2024
 
 =================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
 
-Currently supports Julia Set, Julia Set, Mandelbrot, and Martin fractals.
+Currently supports Julia Set, Julia Set (with any polynomial degree), Mandelbrot, Dragon, and Martin fractals.
 
 =================================================================================================
 
@@ -26,7 +26,6 @@ Written with C++ Builder 11 (Update 3) Community Edition (free).
 
    All coding       : Paul A Freshney
    Development Cats : Rutherford, Freeman, and Maxwell
-   Icon             : https://icon-icons.com
 
    Dedicated to Dad, Julie, Adam, and Dyanne.
 
@@ -35,6 +34,21 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.16 / July 8th 2024
+
+Added: Super-sampling! Hard-coded to 8x in this version.
+       Creates much nicer, smoother fractals with fewer jaggies but at significant processing cost
+       I've increased the default number of threads for super-sampling to 10 (non-ss is 5).
+Added: Zoom out (useful when loading a new project)
+Fixed: Preview now updates when zooming, resetting, and navigating zoom history
+Fixed: Reseting the view now calculates a correct aspect ratios if the width and/or height has changed
+Fixed: A few minor bugs.	   
+
+0.15 / June 18th 2024
+
+Added: description and fractal properties to rendered image
+Fixed: Coeff n value not being saved correctly to project files
 
 0.14 / June 9th 2024
 
