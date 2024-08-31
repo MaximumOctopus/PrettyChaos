@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.16
+  PrettyChaos 0.17
   (c) Paul Alan Freshney 2023-2024
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  July 8th 2024
+  August 31st 2024
 
 =================================================================================================
 
@@ -34,6 +34,11 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.17 / August 31st 2024
+
+Fixed: Fractal parameters not always being saved with enough mathematical precision
+Added: Loaded/saved project file name to title bar
 
 0.16 / July 8th 2024
 
