@@ -40,13 +40,11 @@ TfrmMain *frmMain;
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner)
 {
-	std::wstring title = L"PrettyChaos " + __PrettyChaosVersion;
-
 	PalettePath = ExtractFilePath(Application->ExeName) + L"Palettes\\";
 	ProjectPath = ExtractFilePath(Application->ExeName) + L"Projects\\";
 	RenderPath = ExtractFilePath(Application->ExeName) + L"Renders\\";
 
-	Caption = title.c_str();
+	SetTitle(L"");
 
 	PaletteBitmap = new Graphics::TBitmap;
 	PaletteBitmap->PixelFormat = pf24bit;
@@ -308,6 +306,10 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 			sbMain->SimpleText = error.c_str();
 		}
 	}
+
+	// =========================================================================
+
+	SetTitle(ExtractFileName(project.ProjectFileName.c_str()).c_str());
 
 	// =========================================================================
 
@@ -636,6 +638,8 @@ void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 		PCProject project = GetProjectSettings();
 
 		projectio->Save(file_name, project, AnimationConfiguration);
+
+		SetTitle(ExtractFileName(project.ProjectFileName.c_str()).c_str());
 
 		ProjectPath = ExtractFilePath(file_name.c_str());
 	}
@@ -1401,4 +1405,17 @@ void TfrmMain::SetWarning(bool warning)
 			lVarB->Font->Color = clWindowText;
 		}
 	}
+}
+
+
+void TfrmMain::SetTitle(const std::wstring file_name)
+{
+	std::wstring title = L"PrettyChaos " + __PrettyChaosVersion;
+
+	if (!file_name.empty())
+	{
+		title += L" - " + file_name;
+	}
+
+    Caption = title.c_str();
 }

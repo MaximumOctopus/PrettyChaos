@@ -555,7 +555,7 @@ std::wstring Mandelbrot::GetParameters()
 
 std::wstring Mandelbrot::Description()
 {
-	return L"Mandelbrot: " + std::to_wstring(xmin) + L", " + std::to_wstring(xmax) + L" / " + std::to_wstring(ymin) + L", " + std::to_wstring(ymax);
+	return L"Mandelbrot: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
@@ -568,14 +568,14 @@ void Mandelbrot::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
 
-	ofile << Formatting::to_utf8(L"    x min      : " + std::to_wstring(xmin) + L"\n");
-	ofile << Formatting::to_utf8(L"    x max      : " + std::to_wstring(xmax) + L"\n");
-	ofile << Formatting::to_utf8(L"    y min      : " + std::to_wstring(ymin) + L"\n");
-	ofile << Formatting::to_utf8(L"    y max      : " + std::to_wstring(ymax) + L"\n");
+	ofile << Formatting::to_utf8(L"    x min      : " + Formatting::LDToStr(xmin) + L"\n");
+	ofile << Formatting::to_utf8(L"    x max      : " + Formatting::LDToStr(xmax) + L"\n");
+	ofile << Formatting::to_utf8(L"    y min      : " + Formatting::LDToStr(ymin) + L"\n");
+	ofile << Formatting::to_utf8(L"    y max      : " + Formatting::LDToStr(ymax) + L"\n");
 
 	if (RenderMode == __RMOrbitTrap || RenderMode == __RMOrbitTrapFilled)
 	{
-		ofile << Formatting::to_utf8(L"    Orbit x    : " + std::to_wstring(Var.a) + L"\n");
-		ofile << Formatting::to_utf8(L"    Orbit y    : " + std::to_wstring(Var.b) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit x    : " + Formatting::LDToStr(Var.a) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.b) + L"\n");
 	}
 }

@@ -40,6 +40,7 @@ struct PCProject
 	long double var_c = 0;
 	long double var_d = 0;
 
+    std::wstring ProjectFileName = L"";
 	std::wstring PaletteFileName = L"";
 };
 

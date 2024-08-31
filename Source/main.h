@@ -354,6 +354,8 @@ private:	// User declarations
 
 	void SetWarning(bool);
 
+    void SetTitle(const std::wstring);
+
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);
 };

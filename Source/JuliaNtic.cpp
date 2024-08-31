@@ -345,7 +345,7 @@ std::wstring JuliaNtic::GetParameters()
 
 std::wstring JuliaNtic::Description()
 {
-	return L"Julia (z^" + std::to_wstring((int)Var.c) + L"): " + std::to_wstring(Var.a) + L" + " + std::to_wstring(Var.b) + L"i; " + std::to_wstring(xmin) + L", " + std::to_wstring(xmax) + L" / " + std::to_wstring(ymin) + L", " + std::to_wstring(ymax);
+	return L"Julia (z^" +  Formatting::LDToStr((int)Var.c) + L"): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
@@ -361,8 +361,8 @@ void JuliaNtic::ToFile(std::ofstream& ofile)
 	ofile << Formatting::to_utf8(L"    imaginary  : " + std::to_wstring(Var.b) + L"\n");
 	ofile << Formatting::to_utf8(L"    n          : " + std::to_wstring(Var.c) + L"\n\n");
 
-	ofile << Formatting::to_utf8(L"    x min      : " + std::to_wstring(xmin) + L"\n");
-	ofile << Formatting::to_utf8(L"    x max      : " + std::to_wstring(xmax) + L"\n");
-	ofile << Formatting::to_utf8(L"    y min      : " + std::to_wstring(ymin) + L"\n");
-	ofile << Formatting::to_utf8(L"    y max      : " + std::to_wstring(ymax) + L"\n");
+	ofile << Formatting::to_utf8(L"    x min      : " + Formatting::LDToStr(xmin) + L"\n");
+	ofile << Formatting::to_utf8(L"    x max      : " + Formatting::LDToStr(xmax) + L"\n");
+	ofile << Formatting::to_utf8(L"    y min      : " + Formatting::LDToStr(ymin) + L"\n");
+	ofile << Formatting::to_utf8(L"    y max      : " + Formatting::LDToStr(ymax) + L"\n");
 }

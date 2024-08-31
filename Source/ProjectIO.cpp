@@ -9,6 +9,7 @@
 //
 
 #include <fstream>
+#include <iomanip>
 
 #include <Vcl.Dialogs.hpp>
 
@@ -21,7 +22,6 @@ extern PaletteHandler *GPaletteHandler;
 
 ProjectIO::ProjectIO()
 {
-
 }
 
 
@@ -31,6 +31,8 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 
 	if (file)
 	{
+		project.ProjectFileName = file_name;
+
 		std::wstring s(L"");
 
 		animation.Configured = false;
@@ -180,6 +182,8 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 
 	if (file)
 	{
+		project.ProjectFileName = file_name;
+
 		file << Formatting::to_utf8(L"[\n");
 
 		file << Formatting::to_utf8(L"Name=" + project.Name + L"\n");
@@ -199,15 +203,15 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 			file << Formatting::to_utf8(L"Palette=" + GPaletteHandler->FileName + L"\n");
 		}
 
-		file << Formatting::to_utf8(L"xmin=" + std::to_wstring(project.xmin) + L"\n");
-		file << Formatting::to_utf8(L"xmax=" + std::to_wstring(project.xmax) + L"\n");
-		file << Formatting::to_utf8(L"ymin=" + std::to_wstring(project.ymin) + L"\n");
-		file << Formatting::to_utf8(L"ymax=" + std::to_wstring(project.ymax) + L"\n");
+		file << Formatting::to_utf8(L"xmin=" + Formatting::LDToStr(project.xmin) + L"\n");
+		file << Formatting::to_utf8(L"xmax=" + Formatting::LDToStr(project.xmax) + L"\n");
+		file << Formatting::to_utf8(L"ymin=" + Formatting::LDToStr(project.ymin) + L"\n");
+		file << Formatting::to_utf8(L"ymax=" + Formatting::LDToStr(project.ymax) + L"\n");
 
-		file << Formatting::to_utf8(L"var_a=" + std::to_wstring(project.var_a) + L"\n");
-		file << Formatting::to_utf8(L"var_b=" + std::to_wstring(project.var_b) + L"\n");
-		file << Formatting::to_utf8(L"var_c=" + std::to_wstring(project.var_c) + L"\n");
-		file << Formatting::to_utf8(L"var_d=" + std::to_wstring(project.var_d) + L"\n");
+		file << Formatting::to_utf8(L"var_a=" + Formatting::LDToStr(project.var_a) + L"\n");
+		file << Formatting::to_utf8(L"var_b=" + Formatting::LDToStr(project.var_b) + L"\n");
+		file << Formatting::to_utf8(L"var_c=" + Formatting::LDToStr(project.var_c) + L"\n");
+		file << Formatting::to_utf8(L"var_d=" + Formatting::LDToStr(project.var_d) + L"\n");
 
 		file << Formatting::to_utf8(L"]\n");
 

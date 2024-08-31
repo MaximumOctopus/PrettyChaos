@@ -10,6 +10,7 @@
 
 #include <string>
 #include <windows.h>
+#include <SysUtils.hpp>
 
 #include "Formatting.h"
 
@@ -53,6 +54,12 @@ namespace Formatting
 		}
 
 		return input;
+	}
+
+
+	std::wstring LDToStr(long double ld)
+	{
+		return FloatToStr(ld).c_str();
 	}
 
 
