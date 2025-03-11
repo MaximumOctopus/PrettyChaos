@@ -1,13 +1,13 @@
 =================================================================================================
-  PrettyChaos 0.17
-  (c) Paul Alan Freshney 2023-2024
+  PrettyChaos 0.18
+  (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
 
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  August 31st 2024
+  March 11th 2025
 
 =================================================================================================
 
@@ -17,7 +17,7 @@ Currently supports Julia Set, Julia Set (with any polynomial degree), Mandelbrot
 
 =================================================================================================
 
-Written with C++ Builder 11 (Update 3) Community Edition (free).
+Written with C++ Builder 12 (Update 1) Community Edition (free).
    https://www.embarcadero.com/products/cbuilder/starter
 
 =================================================================================================
@@ -34,6 +34,18 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.18 / March 11th 2025
+
+Added: Cos, cubic, and quartic, z^n, and Cos(z^n) Mandelbrots
+       Cos(z^n) and z^n are slow though. Keep iterations around 100 until you find the one you want to keep
+Added: Cos Julia set
+Added: Configurable super-sampling options of 4x/8x/16x/32x.
+Added: Changing palette will automatically recolour the current fractal (no render needed!).
+       Not available when "show preview" is active.
+Fixed: Project file now saves super-sampling information; and sets correctly on load
+
+A few performance improvements to Martin and Dragon fractals. Some minor performance improvements to all fractals.
 
 0.17 / August 31st 2024
 
