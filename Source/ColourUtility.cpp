@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -11,6 +11,7 @@
 #include <System.SysUtils.hpp>
 
 #include "ColourUtility.h"
+#include "Fast.h"
 
 
 namespace ColourUtility
@@ -43,7 +44,7 @@ namespace ColourUtility
 		}
 		else
 		{
-			S  = std::floor(std::div(255 * Delta, V).quot);
+			S  = Fast::Floor(std::div(255 * Delta, V).quot);
 		}
 
 		if (S == 0)
@@ -54,15 +55,15 @@ namespace ColourUtility
 		{
 			if (r == V)
 			{
-				H = std::floor(std::div(60*(g-b), Delta).quot);
+				H = Fast::Floor(std::div(60*(g-b), Delta).quot);
 			}
 			else if (g == V)
 			{
-				H = std::floor(120 + std::div((60*(b-r)), Delta).quot);
+				H = Fast::Floor(120 + std::div((60*(b-r)), Delta).quot);
 			}
 			else if (b == V)
 			{
-				H = std::floor(240 + std::div((60 * ( r - g)), Delta).quot);
+				H = Fast::Floor(240 + std::div((60 * ( r - g)), Delta).quot);
 			}
 		  }
 
@@ -91,7 +92,7 @@ namespace ColourUtility
 		}
 		else
 		{
-			S  = std::floor(std::div(255 * Delta, V).quot);
+			S  = Fast::Floor(std::div(255 * Delta, V).quot);
 		}
 
 		if (S == 0)
@@ -102,15 +103,15 @@ namespace ColourUtility
 		{
 			if (r == V)
 			{
-				H = std::floor(std::div(60*(g-b), Delta).quot);
+				H = Fast::Floor(std::div(60*(g-b), Delta).quot);
 			}
 			else if (g == V)
 			{
-				H = std::floor(120 + std::div((60*(b-r)), Delta).quot);
+				H = Fast::Floor(120 + std::div((60*(b-r)), Delta).quot);
 			}
 			else if (b == V)
 			{
-				H = std::floor(240 + std::div((60 * ( r - g)), Delta).quot);
+				H = Fast::Floor(240 + std::div((60 * ( r - g)), Delta).quot);
 			}
 		  }
 
@@ -193,9 +194,9 @@ namespace ColourUtility
 		int green2 = colour2.g;
 		int blue2 = colour2.b;
 
-		int red = std::floor((double)red1 + t * ((double)red2 - (double)red1));
-		int green = std::floor((double)green1 + t * ((double)green2 - (double)green1));
-		int blue = std::floor((double)blue1 + t * ((double)blue2 - (double)blue1));
+		int red = Fast::Floor((double)red1 + t * ((double)red2 - (double)red1));
+		int green = Fast::Floor((double)green1 + t * ((double)green2 - (double)green1));
+		int blue = Fast::Floor((double)blue1 + t * ((double)blue2 - (double)blue1));
 
 		return Colour(red, green, blue);
 	}

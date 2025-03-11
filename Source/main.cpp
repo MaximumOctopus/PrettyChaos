@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -94,18 +94,18 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 	{
 		double delta = 0.1;
 
-		switch (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->QuickParamterMode)
+		switch (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->QPM)
 		{
-		case __QPMNone:
+		case QuickParameterMode::kNone:
 			break;
-		case __QPMABPlusFine:
+		case QuickParameterMode::kABPlusFine:
 			if (Key == VK_LEFT || Key == VK_RIGHT)
 			{
 				delta = QPFine;
 			}
 
 			break;
-		case __QPMABC:
+		case QuickParameterMode::kABC:
 			delta = 1;
 
 			if (Key == VK_LEFT || Key == VK_RIGHT)
@@ -241,6 +241,23 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	// =========================================================================
 
 	miSuperSample->Checked = project.SuperSampling;
+	miSuperSampleClick(NULL);
+
+	switch (project.SuperSamplingLevel)
+	{
+		case 4:
+			miSamples4Click(miSamples4);
+			break;
+		case 8:
+			miSamples4Click(miSamples8);
+			break;
+		case 16:
+			miSamples4Click(miSamples16);
+			break;
+		case 32:
+			miSamples4Click(miSamples32);
+			break;
+	}
 
 	// =========================================================================
 
@@ -342,6 +359,9 @@ PCProject TfrmMain::GetProjectSettings()
 	project.var_c = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
 	project.var_d = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
 
+	project.SuperSampling = miSuperSample->Checked;
+	project.SuperSamplingLevel = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples;
+
 	return project;
 }
 
@@ -371,8 +391,6 @@ void TfrmMain::UpdateFractalPanel()
 	lXMax->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax);
 	lYMin->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin);
 	lYMax->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
-
-	//Caption = (fractal->xmax - fractal->xmin) / (fractal->ymax - fractal->ymin); ratio
 }
 
 
@@ -460,7 +478,7 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 	}
 	else
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Render(0, 0);
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreRender(false);
 	}
 
 	if (rendered)
@@ -592,6 +610,8 @@ void __fastcall TfrmMain::miShowPreviewClick(TObject *Sender)
 	{
 		if (miShowPreview->Checked && !IsBusy) RenderPreview();
 	}
+
+    iPreview->Visible = miShowPreview->Checked;
 }
 
 
@@ -689,7 +709,7 @@ void TfrmMain::CopyFromFractalToScreen()
 
 void TfrmMain::CopyFromFractalToPreview()
 {
-	iPreview->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderCanvas);
+	iPreview->Picture->Assign(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreviewCanvas);
 }
 
 
@@ -1088,6 +1108,14 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 		UpdatePalette();
 
 		if (miShowPreview->Checked) RenderPreview();
+
+		if (miRecolour->Checked && !iPreview->Visible)
+		{
+			if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AttemptRecolour())
+			{
+				CopyFromFractalToScreen();
+            }
+		}
 	}
 
 	delete frmPaletteEditor;
@@ -1107,6 +1135,14 @@ void __fastcall TfrmMain::sbLoadPaletteClick(TObject *Sender)
 			PalettePath = ExtractFilePath(odPalette->FileName);
 
 			if (miShowPreview->Checked) RenderPreview();
+
+			if (miRecolour->Checked && !miShowPreview->Checked)
+			{
+				if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AttemptRecolour())
+				{
+					CopyFromFractalToScreen();
+				}
+			}
 		}
 		else
 		{
@@ -1214,27 +1250,34 @@ void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 	int i = eIterations->Text.ToIntDef(-1);
 	int rb = eBailoutRadius->Text.ToIntDef(-1);
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetParameters(n, i, rb);
-
 	if (n <= 0)
 	{
 		eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff);
+
+		n = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
 	}
 
-	if (i <= 0)
+	if (i <= 0 || (i > 2000 && GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Name.find(L"Martin") == std::string::npos))
 	{
 		eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
+
+		i = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
 	}
 
 	if (rb < 4)
 	{
 		eBailoutRadius->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius);
+
+		rb = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius;
 	}
 
 	if (Sender != nullptr)
 	{
 		if (miShowPreview->Checked) RenderPreview();
 	}
+
+
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetParameters(n, i, rb);
 }
 
 
@@ -1352,6 +1395,17 @@ void __fastcall TfrmMain::miExampleJS1Click(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::miExampleJC1Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	eVarA->Text = JuliaCubicExamples[mi->Tag][0];
+	eVarB->Text = JuliaCubicExamples[mi->Tag][1];
+
+	if (miShowPreview->Checked && !IsBusy) RenderPreview();
+}
+
+
 void __fastcall TfrmMain::miExampleM1Click(TObject *Sender)
 {
 	TMenuItem* mi = (TMenuItem*)Sender;
@@ -1418,4 +1472,45 @@ void TfrmMain::SetTitle(const std::wstring file_name)
 	}
 
     Caption = title.c_str();
+}
+
+
+void __fastcall TfrmMain::miSuperSampleClick(TObject *Sender)
+{
+	if (miSuperSample->Checked)
+	{
+		sbRender->Caption = L"Render (ss)";
+	}
+	else
+	{
+        sbRender->Caption = L"Render";
+    }
+}
+
+
+void __fastcall TfrmMain::miSamples4Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+    mi->Checked = true;
+
+	switch (mi->Tag)
+	{
+		case 0:
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 4;
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 2;
+			break;
+		case 1:
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 8;
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 3;
+			break;
+		case 2:
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 16;
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 4;
+			break;
+		case 3:
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 32;
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 5;
+			break;
+	}
 }

@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -18,6 +18,7 @@
 #include <string>
 
 #include "Constants.h"
+#include "Fast.h"
 #include "MartinPositive.h"
 
 
@@ -29,18 +30,13 @@ MartinPositive::MartinPositive() : Fractal()
 	AcceptsVarC = true;
 	AcceptsVarD = true;
 
-	QuickParamterMode = 2;  // 2 = A+B+C
+	QPM = QuickParameterMode::kABC;
 
 	AcceptsZoom = false;
 
-	Var.a = 45;
-	Var.b = 2;
-	Var.c = -300;
-	Var.d = 1;
-
 	// we need a LOT of iterations here because we're not calculating a function on a per pixel basis,
 	// but bouncing around the screen hitting pixels as we go
-	max_iterations = 1000000;
+	Defaults.Set(1, 1000000, 4, 45, 2, -300, 1);
 
 	Name = L"Martin (Positive)";
 
@@ -53,7 +49,7 @@ MartinPositive::MartinPositive() : Fractal()
 	NameC = L"c";
 	NameD = L"Zoom";
 
-    ResetView();
+	ResetAll();
 }
 
 
@@ -64,11 +60,24 @@ MartinPositive::~MartinPositive()
 
 void MartinPositive::PreRender(bool preview)
 {
-	if (preview) SwapDimensions();
+	if (preview)
+	{
+		SwapDimensions();
 
-	Render(-1, -1);
+		Render(-1, -1);
 
-	if (preview) SwapDimensions();
+		FinaliseRenderMartin(PreviewCanvas);
+
+		SwapDimensions();
+	}
+	else
+	{
+		Render(-1, -1);
+
+		FinaliseRenderMartin(RenderCanvas);
+	}
+
+	CalculateRenderTime();
 }
 
 
@@ -86,47 +95,30 @@ void MartinPositive::Render(int hstart, int hend)
 	long double xnew = 0;
 	long double ynew = 0;
 
-	int delta = std::floor((long double)max_iterations / __PaletteCount);
+	int delta = Fast::Floor((long double)max_iterations / __PaletteCount);
 	int count = 0;
 	int index = 0;
 
     // maximum distance from the centre of the image
-	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
-	TRGBTriple *ptr;
-
-	for (int y = 0; y < Height; y++)
-	{
-		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-		for (int x = 0; x < Width; x++)
-		{
-			FractalData[y * Width + x].a = 0;
-
-			ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-			ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-			ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
-		}
-	}
+	ClearFractalDataA();
 
 	for (int i = 0; i < max_iterations; i++)
 	{
-		int x = std::floor((Var.d * (long double)xold) + ((long double)Width / 2));
-		int y = std::floor((Var.d * (long double)yold) + ((long double)Height / 2));
+		int x = Fast::Floor((Var.d * (long double)xold) + ((long double)Width / 2));
+		int y = Fast::Floor((Var.d * (long double)yold) + ((long double)Height / 2));
 
 		if (x < Width && y < Height && x >= 0 && y >= 0)
 		{
 			switch (RenderMode)
 			{
-			case __RMAverage:
+			case __RMMartinAverage:
 				FractalData[y * Width + x].a++;
 				break;
-			case __RMTime:
+			case __RMMartinTime:
 			{
-				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-				ptr[x].rgbtRed = Palette[index].r;
-				ptr[x].rgbtGreen = Palette[index].g;
-				ptr[x].rgbtBlue = Palette[index].b;
+				FractalData[y * Width + x].a = index;
 
 				count++;
 
@@ -137,13 +129,10 @@ void MartinPositive::Render(int hstart, int hend)
 				}
 				break;
 			}
-			case __RMDistance:
-				int index = std::floor((std::sqrt(xold * xold + yold * yold) / maxdim) * __PaletteCount);
+			case __RMMartinDistance:
+				int index = Fast::Floor((std::sqrt(xold * xold + yold * yold) / maxdim) * __PaletteCount);
 
-				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-				ptr[x].rgbtRed = Palette[index].r;
-				ptr[x].rgbtGreen = Palette[index].g;
-				ptr[x].rgbtBlue = Palette[index].b;
+				FractalData[y * Width + x].a = index;
 				break;
 			}
 		}
@@ -153,73 +142,18 @@ void MartinPositive::Render(int hstart, int hend)
 		xold = xnew;
 		yold = ynew;
 	}
-
-	if (RenderMode == __RMAverage)
-	{
-		int max = 0;
-		int min = max_iterations + 1;
-
-		for (int y = 0; y < Height; y++)
-		{
-			for (int x = 0; x < Width; x++)
-			{
-				if (FractalData[y * Width + x].a > max) max = FractalData[y * Width + x].a;
-				if (FractalData[y * Width + x].a < min && FractalData[y * Width + x].a != 0) min = FractalData[y * Width + x].a;
-			}
-		}
-
-		for (int y = 0; y < Height; y++)
-		{
-			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-			for (int x = 0; x < Width; x++)
-			{
-				if (FractalData[y * Width + x].a == 0)
-				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
-				}
-				else
-				{
-					int it = FractalData[y * Width + x].a - min;
-
-					int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
-
-					ptr[x].rgbtRed = Palette[index].r;
-					ptr[x].rgbtGreen = Palette[index].g;
-					ptr[x].rgbtBlue = Palette[index].b;
-				}
-			}
-		}
-	}
-
-	CalculateRenderTime();
 }
 
 
 void MartinPositive::ResetView()
 {
-	int x_min = std::floor(-(double)Width / (2 * Var.d));
-	int x_max = std::floor((double)Width / (2 * Var.d));
+	int x_min = Fast::Floor(-(double)Width / (2 * Var.d));
+	int x_max = Fast::Floor((double)Width / (2 * Var.d));
 
-	int y_min = std::floor(-(double)Height / (2 * Var.d));
-	int y_max = std::floor((double)Height / (2 * Var.d));
+	int y_min = Fast::Floor(-(double)Height / (2 * Var.d));
+	int y_max = Fast::Floor((double)Height / (2 * Var.d));
 
 	SetView(x_min, x_max, y_min, y_max);
-}
-
-
-void MartinPositive::ResetAll()
-{
-	Var.a = 45;
-	Var.b = 2;
-	Var.c = -300;
-	Var.d = 1;
-
-	max_iterations = 1000000;
-
-	ResetView();
 }
 
 

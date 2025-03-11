@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -245,6 +245,25 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbZoomOut;
 	TBevel *Bevel9;
 	TBevel *Bevel10;
+	TMenuItem *Samples1;
+	TMenuItem *N16;
+	TMenuItem *miSamples4;
+	TMenuItem *miSamples8;
+	TMenuItem *miSamples16;
+	TMenuItem *miSamples32;
+	TMenuItem *JuliaCubic1;
+	TMenuItem *miExampleJC1;
+	TMenuItem *miExampleJC2;
+	TMenuItem *miExampleJC3;
+	TMenuItem *miExampleJC4;
+	TMenuItem *miExampleJC5;
+	TMenuItem *N1659068071;
+	TMenuItem *N1659068072;
+	TMenuItem *N0789131631;
+	TMenuItem *N0789131632;
+	TMenuItem *N16070611;
+	TMenuItem *N17;
+	TMenuItem *miRecolour;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -292,6 +311,9 @@ __published:	// IDE-managed Components
 	void __fastcall miShowPreviewClick(TObject *Sender);
 	void __fastcall sbZoomCentreClick(TObject *Sender);
 	void __fastcall sbZoomOutClick(TObject *Sender);
+	void __fastcall miSuperSampleClick(TObject *Sender);
+	void __fastcall miSamples4Click(TObject *Sender);
+	void __fastcall miExampleJC1Click(TObject *Sender);
 
 
 private:	// User declarations

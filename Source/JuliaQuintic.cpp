@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -16,6 +16,7 @@
 
 #include "ColourUtility.h"
 #include "Constants.h"
+#include "Fast.h"
 #include "JuliaQuintic.h"
 
 
@@ -25,15 +26,11 @@ JuliaQuintic::JuliaQuintic() : Fractal()
 	AcceptsVarA = true;
 	AcceptsVarB = true;
 
-	QuickParamterMode = 1;	// A+B + fine control
+	Defaults.Set(1, 1000, 4, -0.79, 0.15, 0, 0);
+
+	QPM = QuickParameterMode::kABPlusFine;
 
 	MultiThread = true;
-    ThreadCount  = 4;
-
-	bailout_radius = 4;
-
-	Var.a = -0.79;
-	Var.b = 0.15;
 
 	Name = L"Julia Set (Quintic)";
 
@@ -49,7 +46,7 @@ JuliaQuintic::JuliaQuintic() : Fractal()
 	NameA = L"real";
 	NameB = L"imaginary";
 
-	ResetView();
+	ResetAll();
 }
 
 
@@ -113,11 +110,18 @@ bool JuliaQuintic::MultiThreadRender(bool preview, bool super_sample)
 		t5.join();
 	}
 
-	FinaliseRenderJulia(max_d);
+	if (preview)
+	{
+		FinaliseRenderJulia(PreviewCanvas, max_d);
+
+		SwapDimensions();
+	}
+	else
+	{
+		FinaliseRenderJulia(RenderCanvas, max_d);
+	}
 
 	CalculateRenderTime();
-
-	if (preview) SwapDimensions();
 
     return true;
 }
@@ -128,7 +132,7 @@ void JuliaQuintic::RenderSS(int hstart, int hend)
 max_d = 0;
 
 	// maximum distance from the centre of the image
-	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -138,23 +142,20 @@ max_d = 0;
 		{
 			FractalData[ydotwidth + x].Clear();
 
-			for (int ss = 0; ss < 8; ss++)
+			for (int ss = 0; ss < supersamples; ss++)
 			{
 				long double p = xmin + ((long double)x + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (xmax - xmin) / (long double)Width;    // real part
 				long double q = ymin + ((long double)y + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (ymax - ymin) / (long double)Height;   // imaginary part
 
 				int it = 0;
 
-				long double w = 0;
-
 				while (p * p + q * q <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = 5 * std::atan2(q, p);
 					long double pow25 = std::pow(p * p + q * q, 2.5);
 
-					w = pow25 * std::cos(atan2pq) + Var.a;
+					p = pow25 * std::cos(atan2pq) + Var.a;
 					q = pow25 * std::sin(atan2pq) + Var.b;
-					p = w;
 
 					it++;
 				}
@@ -179,7 +180,7 @@ max_d = 0;
 
 						long double itnew = it + 1 - nu;
 
-						it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
 						long double it_d = (long double)it + 1 - nu;
 
 						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(Palette[it],
@@ -202,17 +203,17 @@ max_d = 0;
 						break;
 					}
 				case __RMJuliaDistanceOrigin:
-					int nx = std::floor(x - (Width / 2));
-					int ny = std::floor(y - (Height / 2));
+					int nx = Fast::Floor(x - (Width / 2));
+					int ny = Fast::Floor(y - (Height / 2));
 
-					int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 					FractalData[ydotwidth + x] += Palette[index];
 					break;
 				}
 			}
 
-			FractalData[ydotwidth + x] >>= 3;
+			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
 		}
 	}
 }
@@ -223,7 +224,7 @@ void JuliaQuintic::Render(int hstart, int hend)
 	max_d = 0;
 
 	// maximum distance from the centre of the image
-	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -236,16 +237,13 @@ void JuliaQuintic::Render(int hstart, int hend)
 
 			int it = 0;
 
-			long double w = 0;
-
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = 5 * std::atan2(q, p);
 				long double pow25 = std::pow(p * p + q * q, 2.5);
 
-				w = pow25 * std::cos(atan2pq) + Var.a;
+				p = pow25 * std::cos(atan2pq) + Var.a;
 				q = pow25 * std::sin(atan2pq) + Var.b;
-				p = w;
 
 				it++;
 			}
@@ -270,7 +268,7 @@ void JuliaQuintic::Render(int hstart, int hend)
 
 					long double itnew = it + 1 - nu;
 
-					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
 					long double it_d = (long double)it + 1 - nu;
 
 					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
@@ -293,10 +291,10 @@ void JuliaQuintic::Render(int hstart, int hend)
 				break;
 			}
 			case __RMJuliaDistanceOrigin:
-				int nx = std::floor(x - (Width / 2));
-				int ny = std::floor(y - (Height / 2));
+				int nx = Fast::Floor(x - (Width / 2));
+				int ny = Fast::Floor(y - (Height / 2));
 
-				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 				FractalData[ydotwidth + x] = Palette[index];
 				break;
@@ -309,21 +307,6 @@ void JuliaQuintic::Render(int hstart, int hend)
 void JuliaQuintic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
-}
-
-
-void JuliaQuintic::ResetAll()
-{
-	bailout_radius = 4;
-
-	Var.a = -0.79;
-	Var.b = 0.15;
-
-	n_coeff = 1;
-	max_iterations = 1000;
-	bailout_radius = 256;
-
-	ResetView();
 }
 
 

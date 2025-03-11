@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -17,6 +17,7 @@
 
 #include "Constants.h"
 #include "ColourUtility.h"
+#include "Fast.h"
 #include "Formatting.h"
 #include "PaletteEditor.h"
 #include "PaletteHandler.h"
@@ -144,7 +145,7 @@ void __fastcall TfrmPaletteEditor::pbHuePaint(TObject *Sender)
 
 	for (int i = 0; i < 256; i++)
 	{
-		ColourUtility::HSVtoRGB(std::floor(((double)i / 255) * 360), tbSaturation->Position, tbValue->Position, r, g, b);
+		ColourUtility::HSVtoRGB(Fast::Floor(((double)i / 255) * 360), tbSaturation->Position, tbValue->Position, r, g, b);
 		ptr1[i].rgbtBlue  = b;
 		ptr1[i].rgbtGreen = g;
 		ptr1[i].rgbtRed   = r;

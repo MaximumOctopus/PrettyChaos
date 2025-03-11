@@ -10,20 +10,23 @@
 
 #pragma once
 
+#include <thread>
 
 #include "Fractal.h"
+#include "MandelbrotRenderCore.h"
 
 
-class MartinAdditive : public Fractal
+class MandelbrotQuartic : public Fractal
 {
+	void OrbitTrap(bool);
 
 public:
 
-	MartinAdditive();
+	MandelbrotQuartic();
 
-	~MartinAdditive();
+	~MandelbrotQuartic();
 
-	void PreRender(bool) override;
+	bool MultiThreadRender(bool, bool) override;
 	void Render(int, int) override;
 	void RenderSS(int, int) override;
 

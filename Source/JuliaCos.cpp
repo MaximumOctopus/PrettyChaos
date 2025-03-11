@@ -8,7 +8,7 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
-// https://en.wikipedia.org/wiki/Julia_set
+#include <Vcl.Dialogs.hpp>
 
 #include <string>
 #include <thread>
@@ -16,23 +16,22 @@
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Fast.h"
-#include "JuliaNtic.h"
+#include "JuliaCos.h"
 
 
-JuliaNtic::JuliaNtic() : Fractal()
+JuliaCos::JuliaCos() : Fractal()
 {
 	AcceptsABC = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
-	AcceptsVarC = true;
-
-	QPM = QuickParameterMode::kABPlusFine;
-
-	Defaults.Set(1, 1000, 4, 0.89, -0.19, 6, 0);
 
 	MultiThread = true;
 
-	Name = L"Julia Set (n-tic)";
+	Defaults.Set(1, 1000, 4, -1.6, 0.7061, 0, 0);
+
+	QPM = QuickParameterMode::kABPlusFine;
+
+	Name = L"Julia Cos(z)";
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
@@ -45,18 +44,17 @@ JuliaNtic::JuliaNtic() : Fractal()
 
 	NameA = L"real";
 	NameB = L"imaginary";
-	NameC = L"n";
 
 	ResetAll();
 }
 
 
-JuliaNtic::~JuliaNtic()
+JuliaCos::~JuliaCos()
 {
 }
 
 
-bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
+bool JuliaCos::MultiThreadRender(bool preview, bool super_sample)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
@@ -64,9 +62,9 @@ bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
 		return false;
 	}
 
-	StartTime = std::chrono::system_clock::now();
-
 	if (preview) SwapDimensions();
+
+	StartTime = std::chrono::system_clock::now();
 
 	if (super_sample)
 	{
@@ -124,15 +122,101 @@ bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
 
 	CalculateRenderTime();
 
-    return true;
+	return true;
 }
 
 
-void JuliaNtic::RenderSS(int hstart, int hend)
+void JuliaCos::Render(int hstart, int hend)
 {
 	max_d = 0;
 
-	long double halfn = Var.c / 2;
+    // maximum distance from the centre of the image
+	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+
+	for (int y = hstart; y < hend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		for (int x = 0; x < Width; x++)
+		{
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
+
+			int it = 0;
+
+			long double w = 0;
+
+			while (p * p + q * q <= bailout_radius && it < max_iterations)
+			{
+				w = cos(p) * cosh(q) + Var.a;
+				q = -(sin(p) * sinh(q)) + Var.b;
+
+				p = w;
+
+				it++;
+			}
+
+			switch (RenderMode)
+			{
+			case __RMJuliaEscapeTime:
+			case __RMJuliaTwoTone:
+			case __RMJuliaThreeTone:
+			case __RMJuliaFourTone:
+			case __RMJuliaFiveTone:
+			{
+				FractalData[ydotwidth + x].a = it;
+				break;
+			}
+			case __RMJuliaContinuous:
+			{
+				if (it < max_iterations)
+				{
+					long double log_zn = std::log(p * p + q * q) / 2;
+					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
+
+					long double itnew = it + 1 - nu;
+
+					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * __PaletteCount;
+					long double it_d = (long double)it + 1 - nu;
+
+					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
+																  Palette[it + 1],
+																  it_d - (std::floorl(it_d)));
+				}
+				else
+				{
+					FractalData[ydotwidth + x] = Palette[__PaletteInfinity];
+				}
+
+				break;
+			}
+			case __RMJuliaDistance:
+			{
+				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
+
+				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+
+				FractalData[ydotwidth + x].a = it;
+
+				break;
+			}
+			case __RMJuliaDistanceOrigin:
+				int nx = Fast::Floor(x - (Width / 2));
+				int ny = Fast::Floor(y - (Height / 2));
+
+				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+
+				FractalData[ydotwidth + x] = Palette[index];
+				break;
+			}
+		}
+	}
+}
+
+
+void JuliaCos::RenderSS(int hstart, int hend)
+{
+	max_d = 0;
 
 	// maximum distance from the centre of the image
 	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
@@ -152,13 +236,14 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 
 				int it = 0;
 
+				long double w = 0;
+
 				while (p * p + q * q <= bailout_radius && it < max_iterations)
 				{
-					long double atan2pq = Var.c * std::atan2(q, p);
-					long double pow25 = std::pow(p * p + q * q, halfn);
+					w = cos(p) * cosh(q) + Var.a;
+					q = -(sin(p) * sinh(q)) + Var.b;
 
-					p = pow25 * std::cos(atan2pq) + Var.a;
-					q = pow25 * std::sin(atan2pq) + Var.b;
+					p = w;
 
 					it++;
 				}
@@ -194,6 +279,7 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 					{
 						FractalData[ydotwidth + x] += Palette[__PaletteInfinity];
 					}
+
 					break;
 				}
 				case __RMJuliaDistance:
@@ -206,6 +292,7 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 					break;
 				}
 				case __RMJuliaDistanceOrigin:
+				{
 					int nx = Fast::Floor(x - (Width / 2));
 					int ny = Fast::Floor(y - (Height / 2));
 
@@ -213,6 +300,7 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 
 					FractalData[ydotwidth + x] += Palette[index];
 					break;
+				}
 				}
 			}
 
@@ -222,100 +310,13 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 }
 
 
-void JuliaNtic::Render(int hstart, int hend)
-{
-	max_d = 0;
-
-	long double halfn = Var.c / 2;
-
-	// maximum distance from the centre of the image
-	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
-
-	for (int y = hstart; y < hend; y++)
-	{
-		int ydotwidth = y * Width;
-
-		for (int x = 0; x < Width; x++)
-		{
-			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
-			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
-
-			int it = 0;
-
-			while (p * p + q * q <= bailout_radius && it < max_iterations)
-			{
-				long double atan2pq = Var.c * std::atan2(q, p);
-				long double pown = std::pow(p * p + q * q, halfn);
-
-				p = pown * std::cos(atan2pq) + Var.a;
-				q = pown * std::sin(atan2pq) + Var.b;
-
-				it++;
-			}
-
-			switch (RenderMode)
-			{
-			case __RMJuliaEscapeTime:
-			case __RMJuliaTwoTone:
-			case __RMJuliaThreeTone:
-			case __RMJuliaFourTone:
-			case __RMJuliaFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(p * p + q * q) / 2;
-					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
-
-					long double itnew = it + 1 - nu;
-
-					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
-					long double it_d = (long double)it + 1 - nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																  Palette[it + 1],
-																  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x] = Palette[__PaletteInfinity];
-				}
-				break;
-			}
-			case __RMJuliaDistance:
-			{
-				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
-
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistanceOrigin:
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
-
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
-
-				FractalData[ydotwidth + x] = Palette[index];
-				break;
-			}
-		}
-	}
-}
-
-
-void JuliaNtic::ResetView()
+void JuliaCos::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
 }
 
 
-std::wstring JuliaNtic::GetParameters()
+std::wstring JuliaCos::GetParameters()
 {
 	return L"render mode: " + RenderModes[RenderMode] +
 		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
@@ -324,23 +325,22 @@ std::wstring JuliaNtic::GetParameters()
 }
 
 
-std::wstring JuliaNtic::Description()
+std::wstring JuliaCos::Description()
 {
-	return L"Julia (z^" +  Formatting::LDToStr((int)Var.c) + L"): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Julia Cos(z): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-void JuliaNtic::ToFile(std::ofstream& ofile)
+void JuliaCos::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Julie Set (n-tic)\n");
+	ofile << Formatting::to_utf8(L"JuliaCos Set\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
-	ofile << Formatting::to_utf8(L"    real       : " + std::to_wstring(Var.a) + L"\n");
-	ofile << Formatting::to_utf8(L"    imaginary  : " + std::to_wstring(Var.b) + L"\n");
-	ofile << Formatting::to_utf8(L"    n          : " + std::to_wstring(Var.c) + L"\n\n");
+	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");
+	ofile << Formatting::to_utf8(L"    b          : " + std::to_wstring(Var.b) + L"\n\n");
 
 	ofile << Formatting::to_utf8(L"    x min      : " + Formatting::LDToStr(xmin) + L"\n");
 	ofile << Formatting::to_utf8(L"    x max      : " + Formatting::LDToStr(xmax) + L"\n");

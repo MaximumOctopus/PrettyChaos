@@ -8,7 +8,9 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
-// https://en.wikipedia.org/wiki/Julia_set
+// https://en.wikipedia.org/wiki/Orbit_trap
+// z -> z^n + c
+
 
 #include <string>
 #include <thread>
@@ -16,57 +18,63 @@
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Fast.h"
-#include "JuliaNtic.h"
+#include "MandelbrotNtic.h"
 
 
-JuliaNtic::JuliaNtic() : Fractal()
+MandelbrotNtic::MandelbrotNtic() : Fractal()
 {
-	AcceptsABC = true;
+	Name = L"Mandelbrot z^n";
+
+	NumIterationsPerPixel = new int[2001];
+	for (int z = 0; z < 2001; z++) NumIterationsPerPixel[z] = 0;
+
+   	AcceptsABC = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
 	AcceptsVarC = true;
 
-	QPM = QuickParameterMode::kABPlusFine;
-
-	Defaults.Set(1, 1000, 4, 0.89, -0.19, 6, 0);
+	Defaults.Set(1, 100, 4, 0, 0, 5, 0);
 
 	MultiThread = true;
-
-	Name = L"Julia Set (n-tic)";
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
 	RenderModes.push_back(L"Distance");
-	RenderModes.push_back(L"Distance from origin");
+	RenderModes.push_back(L"Distance II");
+	RenderModes.push_back(L"Orbit Trap");
+	RenderModes.push_back(L"Orbit Trap (filled)");
 	RenderModes.push_back(L"Two-tone");
 	RenderModes.push_back(L"Three-tone");
 	RenderModes.push_back(L"Four-tone");
 	RenderModes.push_back(L"Five-tone");
 
-	NameA = L"real";
-	NameB = L"imaginary";
+	NameA = L"orbit x";
+	NameB = L"orbit y";
 	NameC = L"n";
 
 	ResetAll();
 }
 
 
-JuliaNtic::~JuliaNtic()
+MandelbrotNtic::~MandelbrotNtic()
 {
+	delete NumIterationsPerPixel;
 }
 
 
-bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
+
+bool MandelbrotNtic::MultiThreadRender(bool preview, bool super_sample)
 {
-	// nothing to render, point isn't valid
-	if (PointGoesToInfinity(Var.a, Var.b))
-	{
-		return false;
-	}
+    max_d = 0;
 
 	StartTime = std::chrono::system_clock::now();
 
 	if (preview) SwapDimensions();
+
+	if (RenderMode == __RMMandelbrotEscapeTime)
+	{
+		for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
+	}
 
 	if (super_sample)
 	{
@@ -113,13 +121,13 @@ bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
 
 	if (preview)
 	{
-		FinaliseRenderJulia(PreviewCanvas, max_d);
+		FinaliseRenderMandelbrot(PreviewCanvas, max_d);
 
 		SwapDimensions();
 	}
 	else
 	{
-		FinaliseRenderJulia(RenderCanvas, max_d);
+		FinaliseRenderMandelbrot(RenderCanvas, max_d);
 	}
 
 	CalculateRenderTime();
@@ -128,14 +136,9 @@ bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
 }
 
 
-void JuliaNtic::RenderSS(int hstart, int hend)
+void MandelbrotNtic::RenderSS(int hstart, int hend)
 {
-	max_d = 0;
-
 	long double halfn = Var.c / 2;
-
-	// maximum distance from the centre of the image
-	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -152,38 +155,65 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 
 				int it = 0;
 
-				while (p * p + q * q <= bailout_radius && it < max_iterations)
-				{
-					long double atan2pq = Var.c * std::atan2(q, p);
-					long double pow25 = std::pow(p * p + q * q, halfn);
+				Data[ydotwidth + x] = 10000000000000;
+				long double x1 = 0;
+				long double y1 = 0;
+				long double x2 = 0;
+				long double y2 = 0;
+				long double m = 0;
 
-					p = pow25 * std::cos(atan2pq) + Var.a;
-					q = pow25 * std::sin(atan2pq) + Var.b;
+				while (x2 + y2 <= bailout_radius && it < max_iterations)
+				{
+					long double atan2pq = Var.c * std::atan2(y1, x1);
+					long double pown = std::pow(x2 + y2, halfn);
+
+					m = pown * std::cos(atan2pq) + p;
+					y1 = pown * std::sin(atan2pq) + q;
+
+					x1 = m;
+
+					x2 = x1 * x1;
+					y2 = y1 * y1;
+
+					if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
+					{
+						long double cr = p - Var.a;
+						long double ci = q - Var.b;
+
+						long double magnitude = std::sqrt(cr * cr + ci * ci);
+
+						if (magnitude < Data[ydotwidth + x])
+						{
+							Data[ydotwidth + x] = magnitude;
+						}
+					}
 
 					it++;
 				}
 
 				switch (RenderMode)
 				{
-				case __RMJuliaEscapeTime:
-				case __RMJuliaTwoTone:
-				case __RMJuliaThreeTone:
-				case __RMJuliaFourTone:
-				case __RMJuliaFiveTone:
+				case __RMMandelbrotEscapeTime:
+				case __RMMandelbrotOrbitTrap:
+				case __RMMandelbrotOrbitTrapFilled:
+				case __RMMandelbrotTwoTone:
+				case __RMMandelbrotThreeTone:
+				case __RMMandelbrotFourTone:
+				case __RMMandelbrotFiveTone:
 				{
 					FractalData[ydotwidth + x].a += it;
 					break;
 				}
-				case __RMJuliaContinuous:
+				case __RMMandelbrotContinuous:
 				{
 					if (it < max_iterations)
 					{
-						long double log_zn = std::log(p * p + q * q) / 2;
+						long double log_zn = std::log(x2 + y2) / 2;
 						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
 						long double itnew = it + 1 - nu;
 
-						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
 						long double it_d = (long double)it + 1 - nu;
 
 						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(Palette[it],
@@ -194,25 +224,31 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 					{
 						FractalData[ydotwidth + x] += Palette[__PaletteInfinity];
 					}
+
 					break;
 				}
-				case __RMJuliaDistance:
+				case __RMMandelbrotDistance:
 				{
-					Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
+					if (it < max_iterations)
+					{
+						Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
 
-					if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
-
+						if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+					}
 					FractalData[ydotwidth + x].a += it;
 					break;
 				}
-				case __RMJuliaDistanceOrigin:
-					int nx = Fast::Floor(x - (Width / 2));
-					int ny = Fast::Floor(y - (Height / 2));
+				case __RMMandelbrotDistanceII:
+				{
+					if (it < max_iterations)
+					{
+						Data[ydotwidth + x] = std::sqrt(std::pow(x2 + y2, 2));
 
-					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
-
-					FractalData[ydotwidth + x] += Palette[index];
+						if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+					}
+					FractalData[ydotwidth + x].a += it;
 					break;
+				}
 				}
 			}
 
@@ -222,58 +258,81 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 }
 
 
-void JuliaNtic::Render(int hstart, int hend)
+void MandelbrotNtic::Render(int hstart, int hend)
 {
-	max_d = 0;
-
 	long double halfn = Var.c / 2;
-
-	// maximum distance from the centre of the image
-	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
 
+		long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
+
 		for (int x = 0; x < Width; x++)
 		{
 			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
-			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
 
 			int it = 0;
 
-			while (p * p + q * q <= bailout_radius && it < max_iterations)
-			{
-				long double atan2pq = Var.c * std::atan2(q, p);
-				long double pown = std::pow(p * p + q * q, halfn);
+			Data[ydotwidth + x] = 10000000000000;
+			long double x1 = 0;
+			long double y1 = 0;
+			long double x2 = 0;
+			long double y2 = 0;
+			long double m = 0;
 
-				p = pown * std::cos(atan2pq) + Var.a;
-				q = pown * std::sin(atan2pq) + Var.b;
+			while (x2 + y2 <= bailout_radius && it < max_iterations)
+			{
+				long double atan2pq = Var.c * std::atan2(y1, x1);
+				long double pown = std::pow(x2 + y2, halfn);
+
+				m = pown * std::cos(atan2pq) + p;
+				y1 = pown * std::sin(atan2pq) + q;
+
+				x1 = m;
+
+				x2 = x1 * x1;
+				y2 = y1 * y1;
+
+				if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
+				{
+					long double cr = p - Var.a;
+					long double ci = q - Var.b;
+
+					long double magnitude = std::sqrt(cr * cr + ci * ci);
+
+					if (magnitude < Data[ydotwidth + x])
+					{
+						Data[ydotwidth + x] = magnitude;
+					}
+				}
 
 				it++;
 			}
 
 			switch (RenderMode)
 			{
-			case __RMJuliaEscapeTime:
-			case __RMJuliaTwoTone:
-			case __RMJuliaThreeTone:
-			case __RMJuliaFourTone:
-			case __RMJuliaFiveTone:
+			case __RMMandelbrotEscapeTime:
+			case __RMMandelbrotOrbitTrap:
+			case __RMMandelbrotOrbitTrapFilled:
+			case __RMMandelbrotTwoTone:
+			case __RMMandelbrotThreeTone:
+			case __RMMandelbrotFourTone:
+			case __RMMandelbrotFiveTone:
 			{
 				FractalData[ydotwidth + x].a = it;
 				break;
 			}
-			case __RMJuliaContinuous:
+			case __RMMandelbrotContinuous:
 			{
 				if (it < max_iterations)
 				{
-					long double log_zn = std::log(p * p + q * q) / 2;
+					long double log_zn = std::log(x2 + y2) / 2;
 					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
 					long double itnew = it + 1 - nu;
 
-					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
 					long double it_d = (long double)it + 1 - nu;
 
 					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
@@ -284,66 +343,80 @@ void JuliaNtic::Render(int hstart, int hend)
 				{
 					FractalData[ydotwidth + x] = Palette[__PaletteInfinity];
 				}
+
 				break;
 			}
-			case __RMJuliaDistance:
+			case __RMMandelbrotDistance:
 			{
-				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
+				if (it < max_iterations)
+				{
+					Data[ydotwidth + x] = std::sqrt((x1 + x2) * (x1 + x2));
 
-				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
-
+					if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+				}
 				FractalData[ydotwidth + x].a = it;
 				break;
 			}
-			case __RMJuliaDistanceOrigin:
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
+			case __RMMandelbrotDistanceII:
+			{
+				if (it < max_iterations)
+				{
+					Data[ydotwidth + x] = std::sqrt(std::pow(x2 + y2, 2));
 
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
-
-				FractalData[ydotwidth + x] = Palette[index];
+					if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+				}
+				FractalData[ydotwidth + x].a = it;
 				break;
+			}
 			}
 		}
 	}
 }
 
 
-void JuliaNtic::ResetView()
+void MandelbrotNtic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
+
+	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
+	Var.b = ymin + ((ymax - ymin) / 2);     //
+    Var.c = 5;
 }
 
 
-std::wstring JuliaNtic::GetParameters()
+std::wstring MandelbrotNtic::GetParameters()
 {
 	return L"render mode: " + RenderModes[RenderMode] +
-		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
+		   L"; orbit x: " + std::to_wstring(Var.a) + L"; orbit y " + std::to_wstring(Var.b) +
 		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
 
 
-std::wstring JuliaNtic::Description()
+std::wstring MandelbrotNtic::Description()
 {
-	return L"Julia (z^" +  Formatting::LDToStr((int)Var.c) + L"): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"MandelbrotNtic: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-void JuliaNtic::ToFile(std::ofstream& ofile)
+void MandelbrotNtic::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Julie Set (n-tic)\n");
+	ofile << Formatting::to_utf8(L"MandelbrotNtic fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
-	ofile << Formatting::to_utf8(L"    real       : " + std::to_wstring(Var.a) + L"\n");
-	ofile << Formatting::to_utf8(L"    imaginary  : " + std::to_wstring(Var.b) + L"\n");
-	ofile << Formatting::to_utf8(L"    n          : " + std::to_wstring(Var.c) + L"\n\n");
 
 	ofile << Formatting::to_utf8(L"    x min      : " + Formatting::LDToStr(xmin) + L"\n");
 	ofile << Formatting::to_utf8(L"    x max      : " + Formatting::LDToStr(xmax) + L"\n");
 	ofile << Formatting::to_utf8(L"    y min      : " + Formatting::LDToStr(ymin) + L"\n");
 	ofile << Formatting::to_utf8(L"    y max      : " + Formatting::LDToStr(ymax) + L"\n");
+
+	if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
+	{
+		ofile << Formatting::to_utf8(L"    Orbit x    : " + Formatting::LDToStr(Var.a) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.b) + L"\n");
+	}
 }
+

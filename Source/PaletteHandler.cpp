@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -12,6 +12,7 @@
 
 #include "ColourUtility.h"
 #include "Constants.h"
+#include "Fast.h"
 #include "Formatting.h"
 #include "PaletteHandler.h"
 
@@ -65,7 +66,7 @@ bool PaletteHandler::Align()
 {
 	if (GPaletteHandler->Keys.size() > 2)         // nothing to align if only two keys
 	{
-		int delta = std::floor(__PaletteCount / (Keys.size() - 1));
+		int delta = Fast::Floor(__PaletteCount / (Keys.size() - 1));
 
 		for (int t = 2; t < Keys.size(); t++)
 		{
@@ -116,7 +117,7 @@ int PaletteHandler::GradientKeyAt(int xpos)
 
 void PaletteHandler::Render()
 {
-if (IsRendering) return;
+	if (IsRendering) return;
 
 	IsRendering = true;
 
@@ -231,7 +232,7 @@ if (IsRendering) return;
 		}
 		else                                                // grayscale mode
 		{
-			int newgrayscale = std::floor((newrout * 0.3) + (newgout * 0.59) + (newbout * 0.11));
+			int newgrayscale = Fast::Floor((newrout * 0.3) + (newgout * 0.59) + (newbout * 0.11));
 
 			PaletteR[y] = newgrayscale;
 			PaletteG[y] = newgrayscale;
@@ -246,9 +247,9 @@ if (IsRendering) return;
 			newg += g_delta;
 			newb += b_delta;
 
-			newri = std::floor(newr);
-			newgi = std::floor(newg);
-			newbi = std::floor(newb);
+			newri = Fast::Floor(newr);
+			newgi = Fast::Floor(newg);
+			newbi = Fast::Floor(newb);
 		}
 		else
 		{
@@ -256,9 +257,9 @@ if (IsRendering) return;
 			sg = std::pow(((double)y - (double)gradstart) / (double)gradheight, Log / 50) * gdy;
 			sb = std::pow(((double)y - (double)gradstart) / (double)gradheight, Log / 50) * bdy;
 
-			newri = std::floor(newr + sr);
-			newgi = std::floor(newg + sg);
-			newbi = std::floor(newb + sb);
+			newri = Fast::Floor(newr + sr);
+			newgi = Fast::Floor(newg + sg);
+			newbi = Fast::Floor(newb + sb);
 		}
 
 		// =====================================================================

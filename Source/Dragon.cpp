@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -17,6 +17,7 @@
 #include <string>
 
 #include "Constants.h"
+#include "Fast.h"
 #include "Dragon.h"
 
 
@@ -27,11 +28,9 @@ Dragon::Dragon() : Fractal()
 
 	AcceptsZoom = false;
 
-	Var.a = 16;
+	Defaults.Set(1, 4, 256, 16, 0, 0, 0);
 
 	Name = L"Dragon curve";
-
-	max_iterations = 4;
 
 	RenderModes.push_back(L"Iteration");
 	RenderModes.push_back(L"Direction");
@@ -40,7 +39,7 @@ Dragon::Dragon() : Fractal()
 
 	NameA = L"Recursions";
 
-    ResetView();
+	ResetAll();
 }
 
 
@@ -71,11 +70,24 @@ void Dragon::Generate(int iterations)
 
 void Dragon::PreRender(bool preview)
 {
-	if (preview) SwapDimensions();
+	if (preview)
+	{
+		SwapDimensions();
 
-	Render(-1, -1);
+		Render(-1, -1);
 
-	if (preview) SwapDimensions();
+		FinaliseRenderDragon(PreviewCanvas);
+
+		SwapDimensions();
+	}
+	else
+	{
+		Render(-1, -1);
+
+		FinaliseRenderDragon(RenderCanvas);
+	}
+
+	CalculateRenderTime();
 }
 
 
@@ -97,21 +109,9 @@ void Dragon::Render(int hstart, int hend)
 	int from_y = 0;
 	int colour = 0;
 
-	TRGBTriple *ptr;
+	ClearFractalDataA();
 
-	for (int y = 0; y < Height; y++)
-	{
-		ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-		for (int x = 0; x < Width; x++)
-		{
-			ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-			ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-			ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
-		}
-	}
-
-	int palette_range = std::floor(500 / (double)max_iterations) - 1;
+int palette_range = std::floor(500 / (double)max_iterations) - 1;
 
 	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
@@ -194,7 +194,7 @@ void Dragon::Render(int hstart, int hend)
 				int nx = std::floor(from_x - (Width / 2));
 				int ny = std::floor(from_y - (Height / 2));
 
-				colour = t * palette_range + std::floor( std::pow(std::sqrt(nx * nx + ny * ny) / maxdim, n_coeff) * palette_range);//__PaletteCount);
+				colour = t * palette_range + std::floor(std::pow(std::sqrt(nx * nx + ny * ny) / maxdim, n_coeff) * palette_range);//__PaletteCount);
 				break;
 			}
 			case 3:
@@ -219,15 +219,13 @@ void Dragon::Render(int hstart, int hend)
 
 void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 {
-	TRGBTriple *ptr;
-
-	int x,y,dx,dy,dx1,dy1,px,py,xe,ye;
-	dx = x2 - x1;
-	dy = y2 - y1;
-	dx1 = abs(dx);
-	dy1 = abs(dy);
-	px = 2 * dy1 - dx1;
-	py = 2 * dx1 - dy1;
+	int x,y,xe,ye;
+	int dx = x2 - x1;
+	int dy = y2 - y1;
+	int dx1 = abs(dx);
+	int dy1 = abs(dy);
+	int px = 2 * dy1 - dx1;
+	int py = 2 * dx1 - dy1;
 
 	if (dy1 <= dx1)
 	{
@@ -246,42 +244,34 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 		if (y < Height && y >= 0 && x < Width && x >= 0)
 		{
-			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-			ptr[x].rgbtRed = Palette[colour].r;
-			ptr[x].rgbtGreen = Palette[colour].g;
-			ptr[x].rgbtBlue = Palette[colour].b;
+			FractalData[y * Width + x].a = colour;
 		}
 
 		for (int i = 0; x < xe; i++)
 		{
-			x = x + 1;
+			x++;
 
 			if (px < 0)
 			{
-				px = px + 2 * dy1;
+				px += dy1 << 1;
 			}
 			else
 			{
 				if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
 				{
-					y = y + 1;
+					y++;
 				}
 				else
 				{
-					y = y - 1;
+					y--;
 				}
 
-				px = px + 2 * (dy1 - dx1);
+				px += 2 * (dy1 - dx1);
 			}
 
 			if (y < Height && y >= 0 && x < Width && x >= 0)
 			{
-				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-				ptr[x].rgbtRed = Palette[colour].r;
-				ptr[x].rgbtGreen = Palette[colour].g;
-				ptr[x].rgbtBlue = Palette[colour].b;
+				FractalData[y * Width + x].a = colour;
 			}
 		}
 	}
@@ -302,42 +292,34 @@ void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 
 		if (y < Height && y >= 0 && x < Width && x >= 0)
 		{
-			ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-			ptr[x].rgbtRed = Palette[colour].r;
-			ptr[x].rgbtGreen = Palette[colour].g;
-			ptr[x].rgbtBlue = Palette[colour].b;
+			FractalData[y * Width + x].a = colour;
 		}
 
 		for (int i = 0; y < ye; i++)
 		{
-			y = y + 1;
+			y++;
 
 			if (py <= 0)
 			{
-				py = py + 2 * dx1;
+				py += dx1 << 1;
 			}
 			else
 			{
 				if ((dx < 0 && dy < 0) || (dx > 0 && dy > 0))
 				{
-					x = x + 1;
+					x++;
 				}
 				else
 				{
-					x = x - 1;
+					x--;
 				}
 
-				py = py + 2 * (dx1 - dy1);
+				py += 2 * (dx1 - dy1);
 			}
 
 			if (y < Height && y >= 0 && x < Width && x >= 0)
 			{
-				ptr = reinterpret_cast<TRGBTriple *>(RenderCanvas->ScanLine[y]);
-
-				ptr[x].rgbtRed = Palette[colour].r;
-				ptr[x].rgbtGreen = Palette[colour].g;
-				ptr[x].rgbtBlue = Palette[colour].b;
+				FractalData[y * Width + x].a = colour;
 			}
 		}
 	}
@@ -353,16 +335,6 @@ void Dragon::ResetView()
 	int y_max = std::floor((double)Height / (2 * 1));
 
 	SetView(x_min, x_max, y_min, y_max);
-}
-
-
-void Dragon::ResetAll()
-{
-	Var.a = 16;
-
-	max_iterations = 4;
-
-	ResetView();
 }
 
 

@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -15,6 +15,7 @@
 
 #include "ColourUtility.h"
 #include "Constants.h"
+#include "Fast.h"
 #include "Julia.h"
 
 
@@ -25,14 +26,10 @@ Julia::Julia() : Fractal()
 	AcceptsVarB = true;
 
 	MultiThread = true;
-    ThreadCount  = 4;
 
-    QuickParamterMode = 1;	// A+B + fine control
+	Defaults.Set(1, 1000, 4, -0.7, 0.27015, 0, 0);
 
-	bailout_radius = 4;
-
-	Var.a = -0.7;
-	Var.b = 0.27015;
+    QPM = QuickParameterMode::kABPlusFine;
 
 	Name = L"Julia Set";
 
@@ -48,7 +45,7 @@ Julia::Julia() : Fractal()
 	NameA = L"real";
 	NameB = L"imaginary";
 
-	ResetView();
+	ResetAll();
 }
 
 
@@ -112,11 +109,18 @@ bool Julia::MultiThreadRender(bool preview, bool super_sample)
 		t5.join();
 	}
 
-	FinaliseRenderJulia(max_d);
+	if (preview)
+	{
+		FinaliseRenderJulia(PreviewCanvas, max_d);
+
+		SwapDimensions();
+	}
+	else
+	{
+		FinaliseRenderJulia(RenderCanvas, max_d);
+	}
 
 	CalculateRenderTime();
-
-    if (preview) SwapDimensions();
 
 	return true;
 }
@@ -127,7 +131,7 @@ void Julia::Render(int hstart, int hend)
 	max_d = 0;
 
     // maximum distance from the centre of the image
-	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -172,7 +176,7 @@ void Julia::Render(int hstart, int hend)
 
 					long double itnew = it + 1 - nu;
 
-					it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * __PaletteCount;
+					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * __PaletteCount;
 					long double it_d = (long double)it + 1 - nu;
 
 					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
@@ -197,10 +201,10 @@ void Julia::Render(int hstart, int hend)
 				break;
 			}
 			case __RMJuliaDistanceOrigin:
-				int nx = std::floor(x - (Width / 2));
-				int ny = std::floor(y - (Height / 2));
+				int nx = Fast::Floor(x - (Width / 2));
+				int ny = Fast::Floor(y - (Height / 2));
 
-				int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 				FractalData[ydotwidth + x] = Palette[index];
 				break;
@@ -215,7 +219,7 @@ void Julia::RenderSS(int hstart, int hend)
 	max_d = 0;
 
 	// maximum distance from the centre of the image
-	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
+	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -225,7 +229,7 @@ void Julia::RenderSS(int hstart, int hend)
 		{
 			FractalData[ydotwidth + x].Clear();
 
-			for (int ss = 0; ss < 8; ss++)
+			for (int ss = 0; ss < supersamples; ss++)
 			{
 				long double p = xmin + ((long double)x + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (xmax - xmin) / (long double)Width;    // real part
 				long double q = ymin + ((long double)y + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (ymax - ymin) / (long double)Height;   // imaginary part
@@ -264,7 +268,7 @@ void Julia::RenderSS(int hstart, int hend)
 
 						long double itnew = it + 1 - nu;
 
-						it = std::pow((std::floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
 						long double it_d = (long double)it + 1 - nu;
 
 						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(Palette[it],
@@ -289,10 +293,10 @@ void Julia::RenderSS(int hstart, int hend)
 				}
 				case __RMJuliaDistanceOrigin:
 				{
-					int nx = std::floor(x - (Width / 2));
-					int ny = std::floor(y - (Height / 2));
+					int nx = Fast::Floor(x - (Width / 2));
+					int ny = Fast::Floor(y - (Height / 2));
 
-					int index = std::floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
 
 					FractalData[ydotwidth + x] += Palette[index];
 					break;
@@ -300,7 +304,7 @@ void Julia::RenderSS(int hstart, int hend)
 				}
 			}
 
-			FractalData[ydotwidth + x] >>= 3;
+			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
 		}
 	}
 }
@@ -309,21 +313,6 @@ void Julia::RenderSS(int hstart, int hend)
 void Julia::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
-}
-
-
-void Julia::ResetAll()
-{
-	bailout_radius = 4;
-
-	Var.a = -0.7;
-	Var.b = 0.27015;
-
-	n_coeff = 1;
-	max_iterations = 1000;
-	bailout_radius = 256;
-
-	ResetView();
 }
 
 

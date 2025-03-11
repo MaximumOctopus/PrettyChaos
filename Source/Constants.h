@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.17 (debug) :: August 31st 2024";
+static const std::wstring __PrettyChaosVersion = L"0.18 (debug) :: March 11th 2025";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.17 :: August 31st 2024";
+static const std::wstring __PrettyChaosVersion = L"0.18 :: March 11th 2025";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
@@ -23,11 +23,6 @@ static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.p
 
 static const int __PaletteCount = 500;      // 0-499
 static const int __PaletteInfinity = 500;
-
-static const int __QPMNone = 0;
-static const int __QPMABPlusFine = 1;
-static const int __QPMABC = 2;
-
 
 static const int DimensionsDesktop[17][2] = {
 	{ 1024, 768 },
@@ -92,6 +87,19 @@ static const double JuliaSetExamples[27][2] = {
 	{ -1, 0 },
 	{ 0.3, 0.6 },
 	{ 0.8, 0.156 } };
+
+static const double JuliaCubicExamples[10][2] = {
+	{ -1.5855, 0.6877 },
+	{ 0.859, 0.7157 },
+	{ -0.748, -1.309 },
+	{ -0.349, 1.291 },
+	{ -1.249, 1.092 },
+	{ -1.659, 0.6807 },
+	{ -1.659, 0.5807 },
+	{ -0.789, -1.3163 },
+	{ -0.394, -1.2243 },
+	{ -1.6, 0.7061 } };
+
 
 static const double MartinExamples[8][3] = {
 	{ 68, 75, 83 },

@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -24,7 +24,7 @@ struct PCProject
 
 	int RenderMode = 0;
 	bool SuperSampling = false;
-    bool SuperSamplingLevel = 8;
+    int SuperSamplingLevel = 8;
 	double nCoeff = 1;
 
 	long double MaxIterations = 1000;

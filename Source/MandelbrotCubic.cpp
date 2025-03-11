@@ -9,6 +9,9 @@
 //
 
 // https://en.wikipedia.org/wiki/Orbit_trap
+// z -> z^3 + c
+// z^3 = a^3 - 3ab^2 + i(3a^2b - b^3)
+
 
 #include <string>
 #include <thread>
@@ -16,12 +19,12 @@
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Fast.h"
-#include "Mandelbrot.h"
+#include "MandelbrotCubic.h"
 
 
-Mandelbrot::Mandelbrot() : Fractal()
+MandelbrotCubic::MandelbrotCubic() : Fractal()
 {
-	Name = L"Mandelbrot";
+	Name = L"Mandelbrot z^3";
 
 	NumIterationsPerPixel = new int[2001];
 	for (int z = 0; z < 2001; z++) NumIterationsPerPixel[z] = 0;
@@ -55,13 +58,14 @@ Mandelbrot::Mandelbrot() : Fractal()
 }
 
 
-Mandelbrot::~Mandelbrot()
+MandelbrotCubic::~MandelbrotCubic()
 {
 	delete NumIterationsPerPixel;
 }
 
 
-bool Mandelbrot::MultiThreadRender(bool preview, bool super_sample)
+
+bool MandelbrotCubic::MultiThreadRender(bool preview, bool super_sample)
 {
     max_d = 0;
 
@@ -130,11 +134,11 @@ bool Mandelbrot::MultiThreadRender(bool preview, bool super_sample)
 
 	CalculateRenderTime();
 
-	return true;
+    return true;
 }
 
 
-void Mandelbrot::RenderSS(int hstart, int hend)
+void MandelbrotCubic::RenderSS(int hstart, int hend)
 {
 	for (int y = hstart; y < hend; y++)
 	{
@@ -154,19 +158,19 @@ void Mandelbrot::RenderSS(int hstart, int hend)
 				Data[y * Width + x] = 10000000000000;
 				long double x1 = 0;
 				long double y1 = 0;
-				long double x2 = 0;
-				long double y2 = 0;
-				long double w = 0;
+				long double x1squared = 0;
+				long double y1squared = 0;
+				long double m = 0;
 
-				while (x2 + y2 <= bailout_radius && it < max_iterations)
+				while (x1squared + y1squared <= bailout_radius && it < max_iterations)
 				{
-					x1 = x2 - y2 + p;
-					y1 = w - x2 - y2 + q;
+					m = x1squared * x1 - (3 * x1 * y1squared) + p;
+					y1 = 3 * x1squared * y1 - (y1 * y1squared) + q;
 
-					x2 = x1 * x1;
-					y2 = y1 * y1;
+					x1 = m;
 
-					w = (x1 + y1) * (x1 + y1);
+					x1squared = x1 * x1;
+					y1squared = y1 * y1;
 
 					if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 					{
@@ -201,7 +205,7 @@ void Mandelbrot::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						long double log_zn = std::log(x2 + y2) / 2;
+						long double log_zn = std::log(x1squared + y1squared) / 2;
 						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
 						long double itnew = it + 1 - nu;
@@ -224,7 +228,7 @@ void Mandelbrot::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						Data[ydotwidth + x] = std::sqrt(w);
+						Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
 
 						if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
 					}
@@ -235,7 +239,7 @@ void Mandelbrot::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						Data[ydotwidth + x] = std::sqrt(std::pow(x2 + y2, 2));
+						Data[ydotwidth + x] = std::sqrt(std::pow(x1squared + y1squared, 2));
 
 						if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
 					}
@@ -251,7 +255,7 @@ void Mandelbrot::RenderSS(int hstart, int hend)
 }
 
 
-void Mandelbrot::Render(int hstart, int hend)
+void MandelbrotCubic::Render(int hstart, int hend)
 {
 	for (int y = hstart; y < hend; y++)
 	{
@@ -268,19 +272,19 @@ void Mandelbrot::Render(int hstart, int hend)
 			Data[y * Width + x] = 10000000000000;
 			long double x1 = 0;
 			long double y1 = 0;
-			long double x2 = 0;
-			long double y2 = 0;
-			long double w = 0;
+			long double x1squared = 0;
+			long double y1squared = 0;
+			long double m = 0;
 
-			while (x2 + y2 <= bailout_radius && it < max_iterations)
+			while (x1squared + y1squared <= bailout_radius && it < max_iterations)
 			{
-				x1 = x2 - y2 + p;
-				y1 = w - x2 - y2 + q;
+				m = x1squared * x1 - (3 * x1 * y1squared) + p;
+				y1 = 3 * x1squared * y1 - (y1 * y1squared) + q;
 
-				x2 = x1 * x1;
-				y2 = y1 * y1;
+				x1 = m;
 
-				w = (x1 + y1) * (x1 + y1);
+				x1squared = x1 * x1;
+				y1squared = y1 * y1;
 
 				if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 				{
@@ -315,7 +319,7 @@ void Mandelbrot::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					long double log_zn = std::log(x2 + y2) / 2;
+					long double log_zn = std::log(x1squared + y1squared) / 2;
 					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
 					long double itnew = it + 1 - nu;
@@ -338,7 +342,7 @@ void Mandelbrot::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					Data[ydotwidth + x] = std::sqrt(w);
+					Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
 
 					if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
 				}
@@ -349,7 +353,7 @@ void Mandelbrot::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					Data[ydotwidth + x] = std::sqrt(std::pow(x2 + y2, 2));
+					Data[ydotwidth + x] = std::sqrt(std::pow(x1squared + y1squared, 2));
 
 					if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
 				}
@@ -362,16 +366,16 @@ void Mandelbrot::Render(int hstart, int hend)
 }
 
 
-void Mandelbrot::ResetView()
+void MandelbrotCubic::ResetView()
 {
-	SetView(-2.00, 0.47, -0.988, 0.988);
+	SetView(-2.00, 2.00, -1.6, 1.6);
 
 	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
 	Var.b = ymin + ((ymax - ymin) / 2);     //
 }
 
 
-std::wstring Mandelbrot::GetParameters()
+std::wstring MandelbrotCubic::GetParameters()
 {
 	return L"render mode: " + RenderModes[RenderMode] +
 		   L"; orbit x: " + std::to_wstring(Var.a) + L"; orbit y " + std::to_wstring(Var.b) +
@@ -380,15 +384,15 @@ std::wstring Mandelbrot::GetParameters()
 }
 
 
-std::wstring Mandelbrot::Description()
+std::wstring MandelbrotCubic::Description()
 {
-	return L"Mandelbrot: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"MandelbrotCubic: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-void Mandelbrot::ToFile(std::ofstream& ofile)
+void MandelbrotCubic::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Mandelbrot fractal\n");
+	ofile << Formatting::to_utf8(L"MandelbrotCubic fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
@@ -406,3 +410,4 @@ void Mandelbrot::ToFile(std::ofstream& ofile)
 		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.b) + L"\n");
 	}
 }
+

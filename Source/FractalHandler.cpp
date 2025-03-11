@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -17,7 +17,13 @@
 #include "JuliaQuartic.h"
 #include "JuliaQuintic.h"
 #include "JuliaNtic.h"
+#include "JuliaCos.h"
 #include "Mandelbrot.h"
+#include "MandelbrotCubic.h"
+#include "MandelbrotQuartic.h"
+#include "MandelbrotNtic.h"
+#include "MandelbrotCos.h"
+#include "MandelbrotCosNtic.h"
 #include "MartinClassic.h"
 #include "MartinAdditive.h"
 #include "MartinPositive.h"
@@ -27,28 +33,43 @@
 FractalHandler::FractalHandler()
 {
 	Fractal* dn = new Dragon();
-	Fractal* ja = new Julia();
-	Fractal* jc = new JuliaCubic();
-	Fractal* jq = new JuliaQuartic();
-	Fractal* jn = new JuliaQuintic();
-	Fractal* jx = new JuliaNtic();
-	Fractal* mt = new Mandelbrot();
-	Fractal* mc = new Martin();
+	Fractal* j1 = new Julia();
+	Fractal* j2 = new JuliaCubic();
+	Fractal* j3 = new JuliaQuartic();
+	Fractal* j4 = new JuliaQuintic();
+	Fractal* j5 = new JuliaNtic();
+	Fractal* j6 = new JuliaCos();
+	Fractal* m1 = new Mandelbrot();
+	Fractal* m2 = new MandelbrotCubic();
+	Fractal* m3 = new MandelbrotQuartic();
+	Fractal* m4 = new MandelbrotNtic();
+	Fractal* m5 = new MandelbrotCos();
+	Fractal* m6 = new MandelbrotCosNtic();
+	Fractal* mf = new Martin();
 	Fractal* ma = new MartinAdditive();
 	Fractal* mp = new MartinPositive();
 	Fractal* ms = new MartinSinusoidal();
 
-	Fractals.push_back(dn);
-	Fractals.push_back(ja);
-	Fractals.push_back(jc);
-	Fractals.push_back(jq);
-	Fractals.push_back(jn);
-	Fractals.push_back(jx);
-	Fractals.push_back(mt);
-	Fractals.push_back(mc);
+	Fractals.push_back(j1);
+	Fractals.push_back(j2);
+	Fractals.push_back(j3);
+	Fractals.push_back(j4);
+	Fractals.push_back(j5);
+	Fractals.push_back(j6);
+
+	Fractals.push_back(m1);
+	Fractals.push_back(m2);
+	Fractals.push_back(m3);
+	Fractals.push_back(m4);
+	Fractals.push_back(m5);
+	Fractals.push_back(m6);
+
+	Fractals.push_back(mf);
 	Fractals.push_back(ma);
 	Fractals.push_back(mp);
 	Fractals.push_back(ms);
+
+	Fractals.push_back(dn);
 }
 
 

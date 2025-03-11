@@ -26,7 +26,6 @@ object frmMain: TfrmMain
     Height = 34
     Align = alTop
     TabOrder = 0
-    ExplicitWidth = 1580
     object sbRender: TSpeedButton
       Left = 311
       Top = 2
@@ -111,7 +110,7 @@ object frmMain: TfrmMain
     end
     object sbBack: TSpeedButton
       Left = 780
-      Top = 4
+      Top = 2
       Width = 30
       Height = 27
       Hint = 'previous zoom view'
@@ -195,7 +194,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 30
       Height = 27
-      Hint = 'reset zoom'
+      Hint = 'centre image on a point (no zoom)'
       ImageIndex = 13
       Images = ImageList1
       OnClick = sbZoomOnPointClick
@@ -242,7 +241,7 @@ object frmMain: TfrmMain
       Top = 4
       Width = 30
       Height = 27
-      Hint = 'swap between render and backup'
+      Hint = 'edit on-image text parameters'
       ImageIndex = 17
       Images = ImageList1
       OnClick = sbDescriptionClick
@@ -259,7 +258,7 @@ object frmMain: TfrmMain
       Top = 1
       Width = 30
       Height = 27
-      Hint = 'zoom centre'
+      Hint = 'zoom at image centre'
       ImageIndex = 18
       Images = ImageList1
       OnClick = sbZoomCentreClick
@@ -296,8 +295,6 @@ object frmMain: TfrmMain
     Height = 1038
     Align = alRight
     TabOrder = 1
-    ExplicitLeft = 1368
-    ExplicitHeight = 1037
     object Label16: TLabel
       Left = 14
       Top = 17
@@ -317,6 +314,7 @@ object frmMain: TfrmMain
       Top = 727
       Width = 200
       Height = 200
+      Visible = False
     end
     object GroupBox2: TGroupBox
       Left = 6
@@ -758,10 +756,8 @@ object frmMain: TfrmMain
     Align = alClient
     TabOrder = 2
     OnMouseMove = Panel3MouseMove
-    ExplicitWidth = 1368
-    ExplicitHeight = 1037
     object iRender: TImage
-      Left = 2
+      Left = 0
       Top = 1
       Width = 1280
       Height = 1024
@@ -776,8 +772,6 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 1071
-    ExplicitWidth = 1580
   end
   object ImageList1: TImageList
     Left = 1016
@@ -1778,6 +1772,7 @@ object frmMain: TfrmMain
     end
   end
   object MainMenu1: TMainMenu
+    Tag = 3
     Left = 672
     Top = 80
     object File1: TMenuItem
@@ -1862,6 +1857,14 @@ object frmMain: TfrmMain
           OnClick = miQPAClick
         end
       end
+      object N17: TMenuItem
+        Caption = '-'
+      end
+      object miRecolour: TMenuItem
+        AutoCheck = True
+        Caption = 'Recolour fractal after palette change'
+        Checked = True
+      end
     end
     object Export1: TMenuItem
       Caption = 'Export'
@@ -1918,9 +1921,44 @@ object frmMain: TfrmMain
         ShortCut = 116
         OnClick = sbRenderClick
       end
+      object N16: TMenuItem
+        Caption = '-'
+      end
       object miSuperSample: TMenuItem
         AutoCheck = True
         Caption = 'Super-sample'
+        OnClick = miSuperSampleClick
+      end
+      object Samples1: TMenuItem
+        Caption = 'Samples'
+        object miSamples4: TMenuItem
+          Caption = '4'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = miSamples4Click
+        end
+        object miSamples8: TMenuItem
+          Tag = 1
+          Caption = '8'
+          Checked = True
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = miSamples4Click
+        end
+        object miSamples16: TMenuItem
+          Tag = 2
+          Caption = '16'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = miSamples4Click
+        end
+        object miSamples32: TMenuItem
+          Tag = 3
+          Caption = '32'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = miSamples4Click
+        end
       end
       object N10: TMenuItem
         Caption = '-'
@@ -1950,7 +1988,7 @@ object frmMain: TfrmMain
     Left = 752
     Top = 82
     object JuliaSets1: TMenuItem
-      Caption = 'Julia Sets'
+      Caption = 'Julia'
       object miExampleJS1: TMenuItem
         Caption = '-0.79, 0.15'
         OnClick = miExampleJS1Click
@@ -2084,6 +2122,58 @@ object frmMain: TfrmMain
         Tag = 26
         Caption = '0.8, 0.156'
         OnClick = miExampleJS1Click
+      end
+    end
+    object JuliaCubic1: TMenuItem
+      Caption = 'Julia Cubic'
+      object miExampleJC1: TMenuItem
+        Caption = '-1.5855, 0.6877'
+        OnClick = miExampleJC1Click
+      end
+      object miExampleJC2: TMenuItem
+        Tag = 1
+        Caption = '0.859, 0.7157'
+        OnClick = miExampleJC1Click
+      end
+      object miExampleJC3: TMenuItem
+        Tag = 2
+        Caption = '-0.748, -1.309'
+        OnClick = miExampleJC1Click
+      end
+      object miExampleJC4: TMenuItem
+        Tag = 3
+        Caption = '-0.349, 1.291'
+        OnClick = miExampleJC1Click
+      end
+      object miExampleJC5: TMenuItem
+        Tag = 4
+        Caption = '-1.249, 1.092'
+        OnClick = miExampleJC1Click
+      end
+      object N1659068071: TMenuItem
+        Tag = 5
+        Caption = '-1.659, 0.6807'
+        OnClick = miExampleJC1Click
+      end
+      object N1659068072: TMenuItem
+        Tag = 6
+        Caption = '-1.659, 0.5807'
+        OnClick = miExampleJC1Click
+      end
+      object N0789131631: TMenuItem
+        Tag = 7
+        Caption = '-0.789, -1.3163'
+        OnClick = miExampleJC1Click
+      end
+      object N0789131632: TMenuItem
+        Tag = 8
+        Caption = '-0.394, -1.2243'
+        OnClick = miExampleJC1Click
+      end
+      object N16070611: TMenuItem
+        Tag = 9
+        Caption = '-1.6, 0.7061'
+        OnClick = miExampleJC1Click
       end
     end
     object N12: TMenuItem

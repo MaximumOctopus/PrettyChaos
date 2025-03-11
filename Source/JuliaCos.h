@@ -8,22 +8,24 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+// https://en.wikipedia.org/wiki/Julia_set
+
 #pragma once
 
 
 #include "Fractal.h"
 
 
-class MartinAdditive : public Fractal
+class JuliaCos : public Fractal
 {
 
 public:
 
-	MartinAdditive();
+	JuliaCos();
 
-	~MartinAdditive();
+	~JuliaCos();
 
-	void PreRender(bool) override;
+	bool MultiThreadRender(bool, bool) override;
 	void Render(int, int) override;
 	void RenderSS(int, int) override;
 
@@ -33,5 +35,5 @@ public:
 
     std::wstring Description() override;
 
-    void ToFile(std::ofstream&) override;
+   	void ToFile(std::ofstream&) override;
 };

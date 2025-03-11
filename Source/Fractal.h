@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2024
+// (c) Paul Alan Freshney 2023-2025
 //
 // paul@freshney.org
 //
@@ -20,12 +20,40 @@
 #include "Formatting.h"
 
 
+enum class QuickParameterMode { kNone = 0, kABPlusFine = 1, kABC };
+
+struct DefaultConfig
+{
+	long double n_coeff = 1;  		// used to map the linear range of palette colours to an exponential range (very cool)
+	long double max_iterations = 1000;
+	long double bailout_radius = 4;
+
+	long double a = 0;
+	long double b = 0;
+	long double c = 0;
+	long double d = 0;
+
+	void Set(long double _n_coeff, long double _max_iterations, long double _bailout_radius,
+			 long double _a, long double _b, long double _c, long double _d)
+	{
+		n_coeff = _n_coeff;
+		max_iterations = _max_iterations;
+		bailout_radius = _bailout_radius;
+
+		a = _a;
+		b = _b;
+		c = _c;
+		d = _d;
+	}
+};
+
+
 struct Variables
 {
 	long double a = 0;
 	long double b = 0;
 	long double c = 0;
-    long double d = 0;
+	long double d = 0;
 };
 
 
@@ -45,7 +73,24 @@ protected:
 	static const int __RMJuliaFourTone = 6;
 	static const int __RMJuliaFiveTone = 7;
 
+	static const int __RMMandelbrotEscapeTime = 0;
+	static const int __RMMandelbrotContinuous = 1;
+	static const int __RMMandelbrotDistance = 2;
+	static const int __RMMandelbrotDistanceII = 3;
+	static const int __RMMandelbrotOrbitTrap = 4;
+	static const int __RMMandelbrotOrbitTrapFilled = 5;
+	static const int __RMMandelbrotTwoTone = 6;
+	static const int __RMMandelbrotThreeTone = 7;
+	static const int __RMMandelbrotFourTone = 8;
+	static const int __RMMandelbrotFiveTone = 9;
+
+	static const int __RMMartinAverage = 0;
+	static const int __RMMartinTime = 1;
+	static const int __RMMartinDistance = 2;
+
 	int* NumIterationsPerPixel = nullptr;
+
+	long double max_d = 0;
 
 	std::chrono::system_clock::time_point StartTime;
 
@@ -55,11 +100,16 @@ protected:
 
 	void CalculateRenderTime();
 
+	void ClearFractalDataA();
+
 	double Sign(long double);
 
-	void ColourDistanceI(long double);
-	void ColourDistanceII(long double);
-	void ColourNTone(int);
+	void ResetConfig();
+
+	void ColourDistanceI(TBitmap* canvas, long double);
+	void ColourDistanceII(TBitmap* canvas, long double);
+	void ColourNTone(TBitmap* canvas, int);
+	void OrbitTrap(TBitmap* canvas, bool);
 
 public:
 
@@ -70,9 +120,14 @@ public:
 	std::vector<std::wstring> RenderModes;
 	std::wstring Name;
 
+	DefaultConfig Defaults;
+
 	long double n_coeff = 1;  		// used to map the linear range of palette colours to an exponential range (very cool)
 	long double max_iterations = 1000;
 	long double bailout_radius = 256;
+
+	int supersamples = 8;
+	int supersamplenormalistioncoefficient = 3; // log2(supersamples)
 
 	Variables Var;
 
@@ -89,9 +144,8 @@ public:
 	bool AcceptsZoom = true;
 
 	bool MultiThread = false;
-	int ThreadCount = 0;
 
-	int QuickParamterMode = 0;  	// 0 = none, 1 = A+B + fine control, 2 = A+B+C
+	QuickParameterMode QPM = QuickParameterMode::kNone;
 
 	std::wstring NameA = L"";
 	std::wstring NameB = L"";
@@ -106,6 +160,7 @@ public:
 	long double* Data = nullptr;
 
 	TBitmap *RenderCanvas = nullptr;
+    TBitmap *PreviewCanvas = nullptr;
     TBitmap *CopyCanvas = nullptr;
 
 	long double ymin = 0;    		// fractal objects must set these in their constructor
@@ -129,10 +184,10 @@ public:
 	virtual void PreRender(bool);
 	virtual void Render(int, int);
 	virtual void RenderSS(int, int);
-    virtual void Preview();
 
-	virtual void ResetAll();
 	virtual void ResetView();
+
+    void ResetAll();
 
 	bool PointGoesToInfinity(long double, long double);
 
@@ -157,7 +212,12 @@ public:
 	void CopyImage();
 	void MergeImage();
 
-	void FinaliseRenderJulia(double);
+	bool AttemptRecolour();
+
+	void FinaliseRenderDragon(TBitmap*);
+	void FinaliseRenderJulia(TBitmap*, double);
+	void FinaliseRenderMandelbrot(TBitmap*, double);
+	void FinaliseRenderMartin(TBitmap*);
 
     virtual std::wstring Description();
 
