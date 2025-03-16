@@ -1,9 +1,10 @@
 object frmPaletteEditor: TfrmPaletteEditor
   Left = 0
   Top = 0
+  Hint = 'Generates purely random colours for each key'
   BorderStyle = bsDialog
   Caption = 'Palette Editor'
-  ClientHeight = 540
+  ClientHeight = 539
   ClientWidth = 546
   Color = clBtnFace
   DoubleBuffered = True
@@ -59,7 +60,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Top = 34
       Width = 8
       Height = 16
-      Caption = '0'
+      Caption = '1'
       Font.Charset = DEFAULT_CHARSET
       Font.Color = clWindowText
       Font.Height = -13
@@ -77,7 +78,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       Position = 1
       TabOrder = 0
       TickStyle = tsNone
-      OnChange = FormPaint
+      OnChange = tbLogChange
     end
   end
   object bSave: TBitBtn
@@ -194,7 +195,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object Label1: TLabel
       Left = 19
-      Top = 63
+      Top = 66
       Width = 37
       Height = 13
       Caption = 'Position'
@@ -244,7 +245,7 @@ object frmPaletteEditor: TfrmPaletteEditor
       OnClick = sbRGBClick
     end
     object lColourHex: TLabel
-      Left = 333
+      Left = 335
       Top = 374
       Width = 64
       Height = 16
@@ -275,6 +276,35 @@ object frmPaletteEditor: TfrmPaletteEditor
       Width = 27
       Height = 13
       Caption = 'Steps'
+    end
+    object sbReverse: TSpeedButton
+      Left = 460
+      Top = 24
+      Width = 52
+      Height = 22
+      Caption = 'Reverse'
+      Images = iPalette
+      OnClick = sbReverseClick
+    end
+    object sbRandom: TSpeedButton
+      Left = 402
+      Top = 24
+      Width = 52
+      Height = 22
+      Hint = 'Generates purely random colours for each key'
+      Caption = 'Rand 2'
+      Images = iPalette
+      OnClick = sbRandomClick
+    end
+    object sbRandomFrom: TSpeedButton
+      Left = 344
+      Top = 24
+      Width = 52
+      Height = 22
+      Hint = 'Generates a random colour from the previous  key'
+      Caption = 'Rand 1'
+      Images = iPalette
+      OnClick = sbRandomFromClick
     end
     object pcColourSpace: TPageControl
       Left = 10
@@ -561,7 +591,7 @@ object frmPaletteEditor: TfrmPaletteEditor
     end
     object sePosition: TSpinEdit
       Left = 62
-      Top = 60
+      Top = 62
       Width = 42
       Height = 22
       MaxValue = 499

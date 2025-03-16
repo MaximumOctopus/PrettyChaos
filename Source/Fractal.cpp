@@ -56,6 +56,33 @@ Fractal::~Fractal()
 }
 
 
+void Fractal::SetFromProjectHistory(ProjectHistory ph)
+{
+	xmin = ph.xmin;
+	xmax = ph.xmax;
+	ymin = ph.ymin;
+	ymax = ph.ymax;
+
+	Var.a = ph.VarA;
+	Var.b = ph.VarB;
+	Var.c = ph.VarC;
+	Var.d = ph.VarD;
+
+	n_coeff = ph.Coeff;
+	max_iterations = ph.MaxIterations;
+    bailout_radius = ph.Bailout;
+}
+
+
+ProjectHistory Fractal::GetAsProject(int id)
+{
+	return ProjectHistory(id, HistoryEntry(),
+						  xmin, xmax, ymin, ymax,
+						  Var.a, Var.b, Var.c, Var.d,
+						  n_coeff, max_iterations, bailout_radius);
+}
+
+
 void Fractal::ClearFractalDataA()
 {
 	for (int y = 0; y < Height; y++)
@@ -972,6 +999,13 @@ std::wstring Fractal::Description()
 {
 	// handled by subclass
     return L"";
+}
+
+
+std::wstring Fractal::HistoryEntry()
+{
+	// handled by subclass
+	return L"";
 }
 
 

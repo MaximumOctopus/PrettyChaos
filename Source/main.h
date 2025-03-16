@@ -39,47 +39,16 @@ class TfrmMain : public TForm
 {
 __published:	// IDE-managed Components
 	TPanel *Panel1;
-	TPanel *Panel2;
 	TPanel *Panel3;
 	TImage *iRender;
 	TSpeedButton *sbRender;
 	TSpeedButton *sbSaveImage;
 	TStatusBar *sbMain;
-	TGroupBox *GroupBox1;
-	TGroupBox *GroupBox2;
-	TLabel *lXMin;
-	TLabel *lXMax;
-	TLabel *lYMin;
-	TLabel *lYMax;
-	TLabel *Label4;
-	TLabel *Label8;
-	TLabel *Label7;
-	TLabel *Label3;
-	TLabel *Label2;
-	TLabel *Label6;
-	TLabel *Label5;
-	TLabel *Label1;
-	TLabel *lWidth;
-	TLabel *Label9;
-	TEdit *eWidth;
-	TEdit *eHeight;
-	TSpeedButton *bEditPalette;
-	TPaintBox *pbPalette;
 	TImageList *ImageList1;
-	TGroupBox *GroupBox3;
-	TComboBox *cbRenderMode;
-	TLabel *Label10;
-	TEdit *eCoeffN;
 	TSpeedButton *bSaveProject;
 	TSpeedButton *bOpenProject;
 	TBevel *Bevel2;
 	TBevel *Bevel3;
-	TSpeedButton *sbCopyBoundsToClipboard;
-	TSpeedButton *sbEditBounds;
-	TLabel *Label11;
-	TEdit *eIterations;
-	TLabel *Label12;
-	TEdit *eBailoutRadius;
 	TPopupMenu *puDimensions;
 	TMenuItem *Dimensions1;
 	TMenuItem *Dimensions2;
@@ -128,16 +97,6 @@ __published:	// IDE-managed Components
 	TMenuItem *Zoomintoarea1;
 	TMenuItem *Render1;
 	TMenuItem *Render2;
-	TGroupBox *gbVarABC;
-	TLabel *lVarA;
-	TLabel *lVarB;
-	TLabel *lVarC;
-	TEdit *eVarA;
-	TEdit *eVarB;
-	TEdit *eVarC;
-	TComboBox *cbFractalSelector;
-	TLabel *Label16;
-	TBevel *Bevel1;
 	TSpeedButton *sbReset;
 	TSpeedButton *sbZoom;
 	TSpeedButton *sbZoomCrop;
@@ -187,14 +146,10 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbAbout;
 	TMenuItem *N101;
 	TMenuItem *N102;
-	TGroupBox *GroupBox4;
-	TLabel *lCursor;
-	TLabel *lCursorColour;
 	TMenuItem *N8;
 	TMenuItem *miRMBSetParameters;
 	TMenuItem *Help1;
 	TMenuItem *About1;
-	TShape *sInfinity;
 	TMenuItem *N9;
 	TMenuItem *miSaveFractalParameters;
 	TMenuItem *miRenderAnimation;
@@ -205,8 +160,6 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbReZoom;
 	TMenuItem *N12;
 	TMenuItem *N0801562;
-	TEdit *eVarD;
-	TLabel *lVarD;
 	TMenuItem *exture1;
 	TMenuItem *N13;
 	TMenuItem *miTextureDimensions;
@@ -215,7 +168,6 @@ __published:	// IDE-managed Components
 	TMenuItem *N128x1284;
 	TMenuItem *N128x1285;
 	TMenuItem *N128x1286;
-	TSpeedButton *sbLoadPalette;
 	TOpenDialog *odPalette;
 	TMenuItem *N3840x21601;
 	TSpeedButton *sbResetAll;
@@ -235,7 +187,6 @@ __published:	// IDE-managed Components
 	TMenuItem *miQPC;
 	TMenuItem *miQPD;
 	TMenuItem *miQPE;
-	TImage *iPreview;
 	TMenuItem *N15;
 	TMenuItem *miShowPreview;
 	TSpeedButton *sbDescription;
@@ -264,6 +215,67 @@ __published:	// IDE-managed Components
 	TMenuItem *N16070611;
 	TMenuItem *N17;
 	TMenuItem *miRecolour;
+	TPanel *pMain;
+	TPageControl *PageControl1;
+	TTabSheet *TabSheet1;
+	TTabSheet *TabSheet2;
+	TGroupBox *GroupBox4;
+	TLabel *lCursor;
+	TLabel *lCursorColour;
+	TGroupBox *GroupBox2;
+	TLabel *lXMin;
+	TLabel *lXMax;
+	TLabel *lYMin;
+	TLabel *lYMax;
+	TLabel *Label4;
+	TLabel *Label8;
+	TLabel *Label7;
+	TLabel *Label3;
+	TLabel *Label2;
+	TLabel *Label6;
+	TLabel *Label5;
+	TLabel *Label1;
+	TLabel *lWidth;
+	TLabel *Label9;
+	TSpeedButton *sbCopyBoundsToClipboard;
+	TSpeedButton *sbEditBounds;
+	TEdit *eWidth;
+	TEdit *eHeight;
+	TGroupBox *GroupBox1;
+	TSpeedButton *bEditPalette;
+	TPaintBox *pbPalette;
+	TShape *sInfinity;
+	TSpeedButton *sbLoadPalette;
+	TGroupBox *gbVarABC;
+	TLabel *lVarA;
+	TLabel *lVarB;
+	TLabel *lVarC;
+	TLabel *lVarD;
+	TEdit *eVarA;
+	TEdit *eVarB;
+	TEdit *eVarC;
+	TEdit *eVarD;
+	TGroupBox *GroupBox3;
+	TLabel *Label10;
+	TLabel *Label11;
+	TLabel *Label12;
+	TComboBox *cbRenderMode;
+	TEdit *eCoeffN;
+	TEdit *eIterations;
+	TEdit *eBailoutRadius;
+	TLabel *Label16;
+	TComboBox *cbFractalSelector;
+	TBevel *Bevel1;
+	TListBox *lbHistory;
+	TPanel *Panel2;
+	TSpeedButton *sbClearHistory;
+	TSpeedButton *sbLoadHistory;
+	TSpeedButton *sbSaveHistory;
+	TMenuItem *N18;
+	TMenuItem *miCopyToClipboard;
+	TPanel *Panel4;
+	TImage *iPreview;
+	TLabel *lCursorAbsolute;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -314,6 +326,11 @@ __published:	// IDE-managed Components
 	void __fastcall miSuperSampleClick(TObject *Sender);
 	void __fastcall miSamples4Click(TObject *Sender);
 	void __fastcall miExampleJC1Click(TObject *Sender);
+	void __fastcall sbClearHistoryClick(TObject *Sender);
+	void __fastcall lbHistoryDblClick(TObject *Sender);
+	void __fastcall sbLoadHistoryClick(TObject *Sender);
+	void __fastcall sbSaveHistoryClick(TObject *Sender);
+	void __fastcall miCopyToClipboardClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -376,7 +393,9 @@ private:	// User declarations
 
 	void SetWarning(bool);
 
-    void SetTitle(const std::wstring);
+	void SetTitle(const std::wstring);
+
+    void UpdateLastHistoryItem();
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);

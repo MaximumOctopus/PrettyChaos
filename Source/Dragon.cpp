@@ -351,6 +351,11 @@ std::wstring Dragon::Description()
 }
 
 
+std::wstring Dragon::HistoryEntry()
+{
+	return L"Dragon: " + std::to_wstring((int)Var.a);
+}
+
 
 void Dragon::ToFile(std::ofstream& ofile)
 {

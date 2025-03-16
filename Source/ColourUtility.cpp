@@ -26,6 +26,42 @@ namespace ColourUtility
 	}
 
 
+	int RandomBGR()
+	{
+		int r = rand() % 256;
+		int g = rand() % 256;
+		int b = rand() % 256;
+
+		return (b << 16) + (g << 8) + r;
+	}
+
+
+	int RandomBGRFromBGR(int bgr)
+	{
+		int r = (bgr & 0x0000ff);
+		int g = (bgr & 0x00ff00) >> 8;
+		int b = (bgr & 0xff0000) >> 16;
+
+		int r_delta = (rand() % 50) - 25;
+		int g_delta = (rand() % 50) - 25;
+		int b_delta = (rand() % 50) - 25;
+
+		r += r_delta;
+		g += g_delta;
+		b += b_delta;
+
+		if (r > 255) r -= 255;
+		if (g > 255) g -= 255;
+		if (b > 255) b -= 255;
+
+		if (r < 0) r += 255;
+		if (g < 0) g += 255;
+		if (b < 0) b += 255;
+
+        return (b << 16) + (g << 8) + r;
+	}
+
+
 	void BGRtoHSV(int rgb, int &H, int &S, int &V)
 	{
 		int r = (rgb & 0x0000ff);
@@ -55,15 +91,15 @@ namespace ColourUtility
 		{
 			if (r == V)
 			{
-				H = Fast::Floor(std::div(60*(g-b), Delta).quot);
+				H = Fast::Floor(std::div(60*(g - b), Delta).quot);
 			}
 			else if (g == V)
 			{
-				H = Fast::Floor(120 + std::div((60*(b-r)), Delta).quot);
+				H = Fast::Floor(120 + std::div((60*(b - r)), Delta).quot);
 			}
 			else if (b == V)
 			{
-				H = Fast::Floor(240 + std::div((60 * ( r - g)), Delta).quot);
+				H = Fast::Floor(240 + std::div((60 * (r - g)), Delta).quot);
 			}
 		  }
 
@@ -154,7 +190,7 @@ namespace ColourUtility
 				B = std::round(p * 255);
 				break;
 			case 1:
-				R =std::round(q * 255);
+				R = std::round(q * 255);
 				G = std::round(newv * 255);
 				B = std::round(p * 255);
 				break;

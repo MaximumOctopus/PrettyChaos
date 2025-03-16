@@ -172,6 +172,12 @@ std::wstring MartinPositive::Description()
 }
 
 
+std::wstring MartinPositive::HistoryEntry()
+{
+	return L"Martin (Positive): " + std::to_wstring(Var.a) + L", " + std::to_wstring(Var.b) + L", " +std::to_wstring(Var.c);
+}
+
+
 void MartinPositive::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Positive) fractal\n");

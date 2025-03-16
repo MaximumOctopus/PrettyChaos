@@ -78,10 +78,10 @@ bool MandelbrotCos::MultiThreadRender(bool preview, bool super_sample)
 		for (int z = 0; z < max_iterations; z++) NumIterationsPerPixel[z] = 0;
 	}
 
+	int h_delta = std::round((double)Height / 10);
+
 	if (super_sample)
 	{
-		int h_delta = std::round((double)Height / 10);
-
 		std::thread t1(RenderSS, 0, h_delta);
 		std::thread t2(RenderSS, h_delta, 2 * h_delta);
 		std::thread t3(RenderSS, 2 * h_delta, 3 * h_delta);
@@ -106,19 +106,27 @@ bool MandelbrotCos::MultiThreadRender(bool preview, bool super_sample)
 	}
 	else
 	{
-		int h_delta = std::round((double)Height / 5);
-
 		std::thread t1(Render, 0, h_delta);
 		std::thread t2(Render, h_delta, 2 * h_delta);
 		std::thread t3(Render, 2 * h_delta, 3 * h_delta);
 		std::thread t4(Render, 3 * h_delta, 4 * h_delta);
-		std::thread t5(Render, 4 * h_delta, Height);
+		std::thread t5(Render, 4 * h_delta, 5 * h_delta);
+		std::thread t6(Render, 5 * h_delta, 6 * h_delta);
+		std::thread t7(Render, 6 * h_delta, 7 * h_delta);
+		std::thread t8(Render, 7 * h_delta, 8 * h_delta);
+		std::thread t9(Render, 8 * h_delta, 9 * h_delta);
+		std::thread t10(Render, 9 * h_delta, Height);
 
 		t1.join();
 		t2.join();
 		t3.join();
 		t4.join();
 		t5.join();
+		t6.join();
+		t7.join();
+		t8.join();
+		t9.join();
+		t10.join();
 	}
 
 	if (preview)
@@ -386,7 +394,13 @@ std::wstring MandelbrotCos::GetParameters()
 
 std::wstring MandelbrotCos::Description()
 {
-	return L"MandelbrotCos: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Mandelbrot Cos(z): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
+std::wstring MandelbrotCos::HistoryEntry()
+{
+	return L"Mandelbrot Cos(z): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 

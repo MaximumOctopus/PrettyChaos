@@ -19,11 +19,14 @@
 
 namespace ColourUtility
 {
-	System::UnicodeString BGRtoRGBHex(int bgr);
+	System::UnicodeString BGRtoRGBHex(int);
 
 	void BGRtoHSV(int rgb, int &H, int &S, int &V);
 	void RGBtoHSV(int rgb, int &H, int &S, int &V);
 	void HSVtoRGB(int H, int S, int V, int &R, int &G, int &B);
+
+	int RandomBGR();
+    int RandomBGRFromBGR(int);
 
 	Colour LinearInterpolate(const Colour&, const Colour&, double);
 }

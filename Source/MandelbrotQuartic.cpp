@@ -386,7 +386,13 @@ std::wstring MandelbrotQuartic::GetParameters()
 
 std::wstring MandelbrotQuartic::Description()
 {
-	return L"MandelbrotQuartic: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Mandelbrot (z^4): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
+std::wstring MandelbrotQuartic::HistoryEntry()
+{
+	return L"Mandelbrot (z^4): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 

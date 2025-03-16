@@ -386,6 +386,12 @@ std::wstring Mandelbrot::Description()
 }
 
 
+std::wstring Mandelbrot::HistoryEntry()
+{
+	return L"Mandelbrot: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
 void Mandelbrot::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Mandelbrot fractal\n");

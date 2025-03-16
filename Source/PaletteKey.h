@@ -39,11 +39,16 @@ public:
 	int Position = 0;
 
 	int Method = 0;
+	int SubMethod = 1;
 	int Mode = modeRGB;			// 0 = RGB, 1 = HSV
-	int SubMethod = 0;
 	int SubParameterR = 0;
 	int SubParameterG = 0;
 	int SubParameterB = 0;
 
 	bool Locked = false;
+
+	void Reverse()
+	{
+        Position = 500 - Position;
+	}
 };

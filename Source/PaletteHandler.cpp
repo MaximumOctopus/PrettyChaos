@@ -10,6 +10,8 @@
 
 #include <fstream>
 
+#include <Vcl.Dialogs.hpp>
+
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Fast.h"
@@ -124,6 +126,7 @@ void PaletteHandler::Render()
 	int colstart = 0;
 	int colend = 0;
 	int method = 0;
+	int submethod = 0;
 	int mode = 0;
 	int gradheight = 0;
 	int gradstart = 0;
@@ -163,6 +166,7 @@ void PaletteHandler::Render()
 		{
 			colstart = Keys[keyat].Colour;
 			method = Keys[keyat].Method;
+			submethod = Keys[keyat].SubMethod;
 			mode = Keys[keyat].Mode;
 
 			keyat = GetNextGradientKey(y);
@@ -241,7 +245,7 @@ void PaletteHandler::Render()
 
 		// =====================================================================
 
-		if (method == 0)
+		if (method == 0)    // linear
 		{
 			newr += r_delta;
 			newg += g_delta;
@@ -251,11 +255,11 @@ void PaletteHandler::Render()
 			newgi = Fast::Floor(newg);
 			newbi = Fast::Floor(newb);
 		}
-		else
+		else                // log
 		{
-			sr = std::pow(((double)y - (double)gradstart) / (double)gradheight, Log / 50) * rdy;
-			sg = std::pow(((double)y - (double)gradstart) / (double)gradheight, Log / 50) * gdy;
-			sb = std::pow(((double)y - (double)gradstart) / (double)gradheight, Log / 50) * bdy;
+			sr = std::pow(((double)y - (double)gradstart) / (double)gradheight, (double)submethod / 100) * rdy;
+			sg = std::pow(((double)y - (double)gradstart) / (double)gradheight, (double)submethod / 100) * gdy;
+			sb = std::pow(((double)y - (double)gradstart) / (double)gradheight, (double)submethod / 100) * bdy;
 
 			newri = Fast::Floor(newr + sr);
 			newgi = Fast::Floor(newg + sg);

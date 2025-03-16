@@ -322,6 +322,12 @@ std::wstring JuliaCubic::Description()
 }
 
 
+std::wstring JuliaCubic::HistoryEntry()
+{
+	return L"Julia (z^3): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
 void JuliaCubic::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Julie Set (Cubic)\n");

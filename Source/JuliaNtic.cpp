@@ -326,7 +326,13 @@ std::wstring JuliaNtic::GetParameters()
 
 std::wstring JuliaNtic::Description()
 {
-	return L"Julia (z^" +  Formatting::LDToStr((int)Var.c) + L"): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Julia (z^n)" +  Formatting::LDToStr((int)Var.c) + L"): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
+std::wstring JuliaNtic::HistoryEntry()
+{
+	return L"Julia (z^n)" +  Formatting::LDToStr((int)Var.c) + L"): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 

@@ -468,6 +468,10 @@
             <BuildOrder>1</BuildOrder>
             <PCH>true</PCH>
         </PCHCompile>
+        <None Include="ProjectHistory.h">
+            <VirtualFolder>{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}</VirtualFolder>
+            <BuildOrder>69</BuildOrder>
+        </None>
         <CppCompile Include="ProjectIO.cpp">
             <VirtualFolder>{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}</VirtualFolder>
             <BuildOrder>19</BuildOrder>

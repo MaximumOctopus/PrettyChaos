@@ -40,6 +40,8 @@ TfrmMain *frmMain;
 __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	: TForm(Owner)
 {
+	srand((unsigned)time(NULL));
+
 	PalettePath = ExtractFilePath(Application->ExeName) + L"Palettes\\";
 	ProjectPath = ExtractFilePath(Application->ExeName) + L"Projects\\";
 	RenderPath = ExtractFilePath(Application->ExeName) + L"Renders\\";
@@ -66,7 +68,7 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
     cbFractalSelector->ItemIndex = 0;
 
 	history = new HistoryHandler();
-    projectio = new ProjectIO();
+	projectio = new ProjectIO();
 
 	history->AddZoom(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin, GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax,
 					 GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin, GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
@@ -502,6 +504,10 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 		std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
 
 		std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds (" + std::to_wstring(elapsed_seconds.count()) + L" seconds)";
+
+		history->AddProject(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->GetAsProject(cbFractalSelector->ItemIndex));
+
+		UpdateLastHistoryItem();
 
 		sbMain->SimpleText = c.c_str();
 	}
@@ -1257,7 +1263,7 @@ void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 		n = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
 	}
 
-	if (i <= 0 || (i > 2000 && GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Name.find(L"Martin") == std::string::npos))
+	if (i <= 0 || (i > 20000 && GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Name.find(L"Martin") == std::string::npos))
 	{
 		eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
 
@@ -1301,6 +1307,14 @@ void __fastcall TfrmMain::miCopyAllToClipboardClick(TObject *Sender)
 	std::wstring parameters(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->GetParameters());
 
 	clippy->AsText = parameters.c_str();
+}
+
+
+void __fastcall TfrmMain::miCopyToClipboardClick(TObject *Sender)
+{
+	TClipboard * clippy = Clipboard();
+
+	clippy->Assign(iRender->Picture);
 }
 
 
@@ -1428,6 +1442,8 @@ void __fastcall TfrmMain::iRenderMouseMove(TObject *Sender, TShiftState Shift, i
 
 	lCursor->Caption = s.c_str();
 
+	lCursorAbsolute->Caption = IntToStr(X) + L" x " + IntToStr(Y);
+
 	///lCursorColour->Caption = ColourUtility::BGRtoRGBHex(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Canvas[Y * iRender->Width + X]); TO DO
 }
 
@@ -1436,7 +1452,7 @@ void __fastcall TfrmMain::Panel3MouseMove(TObject *Sender, TShiftState Shift, in
 		  int Y)
 {
 	lCursor->Caption = "-";
-
+    lCursorAbsolute->Caption = "-";
 	lCursorColour->Caption = "-";
 }
 
@@ -1483,7 +1499,7 @@ void __fastcall TfrmMain::miSuperSampleClick(TObject *Sender)
 	}
 	else
 	{
-        sbRender->Caption = L"Render";
+		sbRender->Caption = L"Render";
     }
 }
 
@@ -1512,5 +1528,76 @@ void __fastcall TfrmMain::miSamples4Click(TObject *Sender)
 			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 32;
 			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 5;
 			break;
+	}
+}
+
+
+void TfrmMain::UpdateLastHistoryItem()
+{
+	ProjectHistory ph = history->Projects.back();
+
+	lbHistory->Items->Add(ph.Description.c_str());
+}
+
+
+void __fastcall TfrmMain::sbClearHistoryClick(TObject *Sender)
+{
+	history->Projects.clear();
+    lbHistory->Clear();
+}
+
+
+void __fastcall TfrmMain::lbHistoryDblClick(TObject *Sender)
+{
+	if (lbHistory->ItemIndex != -1)
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetFromProjectHistory(history->Projects[lbHistory->ItemIndex]);
+
+        if (miShowPreview->Checked)
+		{
+			RenderPreview();
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::sbLoadHistoryClick(TObject *Sender)
+{
+	std::wstring file_name = Utility::GetOpenFileName(4, ProjectPath);
+
+	if (!file_name.empty())
+	{
+		IsBusy = true;
+
+		if (file_name.find(L".prttychshf") == std::wstring::npos)
+		{
+			file_name += L".prttychshf";
+		}
+
+		history->Load(file_name);
+
+		for (int t = 0; t < history->Projects.size(); t++)
+		{
+            lbHistory->Items->Add(history->Projects[t].Description.c_str());
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::sbSaveHistoryClick(TObject *Sender)
+{
+	std::wstring file_name = Utility::GetSaveFileName(4, ProjectPath);
+
+	if (!file_name.empty())
+	{
+		if (file_name.find(L".prttychshf") == std::wstring::npos)
+		{
+			file_name += L".prttychshf";
+		}
+
+		if (!history->Save(file_name))
+		{
+
+		}
 	}
 }

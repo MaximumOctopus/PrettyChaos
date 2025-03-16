@@ -395,7 +395,13 @@ std::wstring MandelbrotNtic::GetParameters()
 
 std::wstring MandelbrotNtic::Description()
 {
-	return L"MandelbrotNtic: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Mandelbrot (z^n): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
+std::wstring MandelbrotNtic::HistoryEntry()
+{
+	return L"Mandelbrot (z^n): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 

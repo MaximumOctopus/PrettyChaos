@@ -95,6 +95,9 @@ __published:	// IDE-managed Components
 	TRadioButton *rbInterleveX2;
 	TRadioButton *rbInterleveX4;
 	TCheckBox *cbInterleveReverse;
+	TSpeedButton *sbReverse;
+	TSpeedButton *sbRandom;
+	TSpeedButton *sbRandomFrom;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall sbAddNewKeyClick(TObject *Sender);
 	void __fastcall shapeStartColourMouseDown(TObject *Sender, TMouseButton Button,
@@ -137,6 +140,10 @@ __published:	// IDE-managed Components
 	void __fastcall rbInterleveX2Click(TObject *Sender);
 	void __fastcall cbInterleveReverseClick(TObject *Sender);
 	void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+	void __fastcall sbReverseClick(TObject *Sender);
+	void __fastcall sbRandomClick(TObject *Sender);
+	void __fastcall sbRandomFromClick(TObject *Sender);
+	void __fastcall tbLogChange(TObject *Sender);
 
 private:
 

@@ -172,6 +172,12 @@ std::wstring MartinAdditive::Description()
 }
 
 
+std::wstring MartinAdditive::HistoryEntry()
+{
+	return L"Martin (Additive): " + std::to_wstring(Var.a) + L", " + std::to_wstring(Var.b) + L", " +std::to_wstring(Var.c);
+}
+
+
 void MartinAdditive::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Additive) fractal\n");

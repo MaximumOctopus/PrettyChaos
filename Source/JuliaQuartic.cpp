@@ -323,7 +323,13 @@ std::wstring JuliaQuartic::GetParameters()
 
 std::wstring JuliaQuartic::Description()
 {
-	return L"Julia (z^3): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " +  Formatting::LDToStr(xmin) + L", " +  Formatting::LDToStr(xmax) + L" / " +  Formatting::LDToStr(ymin) + L", " +  Formatting::LDToStr(ymax);
+	return L"Julia (z^4): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " +  Formatting::LDToStr(xmin) + L", " +  Formatting::LDToStr(xmax) + L" / " +  Formatting::LDToStr(ymin) + L", " +  Formatting::LDToStr(ymax);
+}
+
+
+std::wstring JuliaQuartic::HistoryEntry()
+{
+	return L"Julia (z^4): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " +  Formatting::LDToStr(xmin) + L", " +  Formatting::LDToStr(xmax) + L" / " +  Formatting::LDToStr(ymin) + L", " +  Formatting::LDToStr(ymax);
 }
 
 

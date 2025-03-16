@@ -32,6 +32,7 @@ public:
     std::wstring GetParameters() override;
 
     std::wstring Description() override;
+	std::wstring HistoryEntry() override;
 
     void ToFile(std::ofstream&) override;
 };

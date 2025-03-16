@@ -188,6 +188,7 @@ void __fastcall TfrmPaletteEditor::pbValuePaint(TObject *Sender)
 	for (int i = 0; i < 256; i++)
 	{
 		ColourUtility::HSVtoRGB(tbHue->Position, tbSaturation->Position, i, r, g, b);
+
 		ptr3[i].rgbtBlue  = b;
 		ptr3[i].rgbtGreen = g;
 		ptr3[i].rgbtRed   = r;
@@ -202,9 +203,11 @@ void __fastcall TfrmPaletteEditor::pbValuePaint(TObject *Sender)
 
 void TfrmPaletteEditor::UpdateAllKeys()
 {
-	for (int t = 0; t < Shapes.size(); t++)
+	for (int k = 0; k < Shapes.size(); k++)
 	{
-        Shapes[t]->Left = GPaletteHandler->Keys[Shapes[t]->Tag].Position + __KeyOffset;
+		Shapes[k]->Left = GPaletteHandler->Keys[Shapes[k]->Tag].Position + __KeyOffset;
+
+		Shapes[k]->Brush->Color = TColor(GPaletteHandler->Keys[k].Colour);
 	}
 
    	iPointer->Left = Selected->Left;
@@ -253,6 +256,8 @@ void TfrmPaletteEditor::UpdateKeyDisplay(int key_index)
 	else
 	{
 		sbLog->Down = true;
+
+        lLog->Caption = pk.SubMethod;
 	}
 
 	if (pk.Mode == 0)
@@ -438,6 +443,65 @@ void __fastcall TfrmPaletteEditor::sbColourClick(TObject *Sender)
 	GPaletteHandler->ColourSpace = sbColour->Down;
 
 	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::sbRandomFromClick(TObject *Sender)
+{
+	if (GPaletteHandler->Keys.size() != 0 && GPaletteHandler->Keys.size() > 2)
+	{
+		int lastcolour = GPaletteHandler->Keys[0].Colour;
+
+		for (int k = 2; k < GPaletteHandler->Keys.size(); k++)
+		{
+			GPaletteHandler->Keys[k].Colour = ColourUtility::RandomBGRFromBGR(lastcolour);
+
+			lastcolour = GPaletteHandler->Keys[k].Colour;
+		}
+
+		GPaletteHandler->Keys[1].Colour = ColourUtility::RandomBGRFromBGR(lastcolour);
+
+		UpdateAllKeys();
+
+		RenderGradient();
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::sbRandomClick(TObject *Sender)
+{
+	if (GPaletteHandler->Keys.size() != 0)
+	{
+		for (int k = 0; k < GPaletteHandler->Keys.size(); k++)
+		{
+			GPaletteHandler->Keys[k].Colour = ColourUtility::RandomBGR();
+		}
+
+		UpdateAllKeys();
+
+		RenderGradient();
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::sbReverseClick(TObject *Sender)
+{
+	if (GPaletteHandler->Keys.size() != 0)
+	{
+		std::swap(GPaletteHandler->Keys[0].Colour, GPaletteHandler->Keys[1].Colour);
+
+		if (GPaletteHandler->Keys.size() > 2)
+		{
+			for (int k = 2; k < GPaletteHandler->Keys.size(); k++)
+			{
+				GPaletteHandler->Keys[k].Reverse();
+			}
+		}
+
+		UpdateAllKeys();
+
+		RenderGradient();
+	}
 }
 
 
@@ -774,6 +838,16 @@ void __fastcall TfrmPaletteEditor::sbLinearClick(TObject *Sender)
 	TSpeedButton* sb = (TSpeedButton*)Sender;
 
 	GPaletteHandler->Keys[KeySelected].Method = sb->Tag;
+
+	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::tbLogChange(TObject *Sender)
+{
+	lLog->Caption = tbLog->Position;
+
+	GPaletteHandler->Keys[KeySelected].SubMethod = tbLog->Position;
 
 	RenderGradient();
 }

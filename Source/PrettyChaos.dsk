@@ -1,176 +1,131 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'c:\program files (x86)\embarcadero\studio\22.0\include\windows\rtl\sysset.h',0,1,174,1,197,0,0,,
-File_1=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.dfm',0,1,31,1,1,0,0,,
-File_2=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.dfm',0,1,1,67,7,0,0,,
+File_0=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.h',0,1,1,36,4,0,0,,
+File_1=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.cpp',0,1,139,42,175,0,0,,
+File_2=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.h',0,1,192,38,227,0,0,,
+File_3=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.cpp',0,1,144,28,175,0,0,,
+File_4=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.h',0,1,1,42,35,0,0,,
+File_5=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.cpp',0,1,161,30,177,0,0,,
+File_6=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.h',0,1,1,42,35,0,0,,
+File_7=TSourceModule,'c:\program files (x86)\embarcadero\studio\23.0\include\windows\sdk\commdlg.h',0,1,230,9,257,0,0,,
+File_8=TSourceModule,'c:\program files (x86)\embarcadero\studio\23.0\SOURCE\VCL\vclinit.cpp',0,1,113,1,134,0,0,,
+File_9=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotRenderCore.h',0,1,26,21,50,0,0,,
+File_10=TSourceModule,'C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotRenderCore.cpp',0,1,21,34,16,0,0,,
 
 [Modules]
-Module0=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h
-Module1=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAnimate.cpp
-Module2=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp
-Module3=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.cpp
-Module4=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.h
-Module5=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaos.cbproj
+Module0=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp
+Module1=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaos.cbproj
+Module2=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.cpp
+Module3=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteKey.h
+Module4=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp
+Module5=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp
 Module6=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.cpp
-Module7=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.h
-Module8=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp
-Module9=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h
-Module10=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp
-Module11=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fast.h
-Module12=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h
-Module13=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp
-Module14=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h
-Module15=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp
-Module16=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.h
-Module17=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.cpp
-Module18=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.h
-Module19=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.cpp
-Module20=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.h
+Module7=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.h
+Module8=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormText.cpp
+Module9=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp
+Module10=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h
+Module11=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp
+Module12=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h
+Module13=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h
+Module14=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.cpp
+Module15=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.cpp
+Module16=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.h
+Module17=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.cpp
+Module18=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectHistory.h
+Module19=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.h
+Module20=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp
 Module21=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.cpp
-Module22=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.h
-Module23=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.cpp
-Module24=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h
-Module25=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp
-Module26=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h
-Module27=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp
-Module28=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.h
-Module29=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.cpp
-Module30=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.h
-Module31=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp
-Module32=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteKey.h
-Module33=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h
-Module34=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp
-Module35=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp
-Module36=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp
-Module37=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.cpp
-Module38=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.h
-Module39=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.cpp
-Module40=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.cpp
-Module41=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.cpp
-Module42=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.cpp
-Module43=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.cpp
-Module44=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.h
-Module45=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.h
-Module46=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.h
-Module47=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Animation.h
-Module48=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.h
-Module49=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.cpp
-Module50=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.h
-Module51=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaosPCH1.h
-Count=52
+Module22=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.cpp
+Module23=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.cpp
+Module24=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.h
+Module25=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.cpp
+Module26=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.cpp
+Module27=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.cpp
+Module28=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp
+Module29=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.cpp
+Module30=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.cpp
+Module31=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.cpp
+Module32=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.cpp
+Module33=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.h
+Module34=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.h
+Module35=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.h
+Module36=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.h
+Module37=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.h
+Module38=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.h
+Module39=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h
+Module40=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.h
+Module41=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.h
+Module42=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.h
+Module43=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.h
+Module44=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.h
+Module45=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h
+Module46=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp
+Module47=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fast.h
+Module48=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h
+Module49=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp
+Module50=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.cpp
+Module51=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.h
+Module52=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.cpp
+Module53=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Animation.h
+Module54=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.h
+Module55=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAnimate.cpp
+Module56=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp
+Module57=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h
+Module58=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.h
+Module59=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.cpp
+Module60=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.cpp
+Module61=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp
+Module62=C:\Users\iamru\Documents\Software Development\CBuilder\LEDMatrixStudio\Forms\FormExportCode.cpp
+Module63=c:\program files (x86)\embarcadero\studio\22.0\include\dinkumware64\Dinkum\threads\xthread
+Module64=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaosPCH1.h
+Count=65
 EditWindowCount=1
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAnimate.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.h]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaos.cbproj]
 ModuleType=TBaseProject
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fast.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.cpp]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.h]
-ModuleType=TSourceModule
-
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteKey.h]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormText.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.cpp]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.h]
@@ -179,10 +134,40 @@ ModuleType=TSourceModule
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.cpp]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.cpp]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectHistory.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.cpp]
@@ -191,33 +176,108 @@ ModuleType=TSourceModule
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.cpp]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.h]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.h]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.h]
 ModuleType=TSourceModule
 
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.h]
+ModuleType=TSourceModule
+
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fast.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Animation.h]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.h]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAnimate.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.h]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.cpp]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.cpp]
 ModuleType=TSourceModule
 
-[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.h]
+[C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp]
+ModuleType=TSourceModule
+
+[C:\Users\iamru\Documents\Software Development\CBuilder\LEDMatrixStudio\Forms\FormExportCode.cpp]
+ModuleType=TSourceModule
+
+[c:\program files (x86)\embarcadero\studio\22.0\include\dinkumware64\Dinkum\threads\xthread]
 ModuleType=TSourceModule
 
 [C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaosPCH1.h]
 ModuleType=TSourceModule
 
 [EditWindow0]
-ViewCount=52
-CurrentEditView=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h
+ViewCount=65
+CurrentEditView=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp
 View0=0
 View1=1
 View2=2
@@ -270,6 +330,19 @@ View48=48
 View49=49
 View50=50
 View51=51
+View52=52
+View53=53
+View54=54
+View55=55
+View56=56
+View57=57
+View58=58
+View59=59
+View60=60
+View61=61
+View62=62
+View63=63
+View64=64
 PercentageSizes=1
 Create=1
 Visible=1
@@ -277,24 +350,28 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=7241
-Height=9143
+Width=7541
+Height=8993
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=7241
-ClientHeight=9143
+ClientWidth=7541
+ClientHeight=8993
+TBDockHeight=9257
+LRDockWidth=9953
+Dockable=1
+StayOnTop=0
 DockedToMainForm=1
 BorlandEditorCodeExplorer=BorlandEditorCodeExplorer@EditWindow0
 TopPanelSize=0
-LeftPanelSize=1047
+LeftPanelSize=1395
 LeftPanelClients=PropertyInspector,DockSite3
-LeftPanelData=00000800010100000000E90B00000000000001170400000000000001000000005A0E000009000000446F636B53697465330100000000751C00001100000050726F7065727479496E73706563746F72FFFFFFFF
-RightPanelSize=1099
+LeftPanelData=000008000101000000004C0E00000000000001730500000000000001000000005A0E000009000000446F636B53697465330100000000272200001100000050726F7065727479496E73706563746F72FFFFFFFF
+RightPanelSize=1997
 RightPanelClients=DockSite2,DockSite4
-RightPanelData=00000800010100000000E90B000000000000014B0400000000000001000000004912000009000000446F636B53697465320100000000751C000009000000446F636B5369746534FFFFFFFF
-BottomPanelSize=1549
+RightPanelData=000008000101000000004C0E00000000000001CD0700000000000001000000004912000009000000446F636B536974653201000000002722000009000000446F636B5369746534FFFFFFFF
+BottomPanelSize=0
 BottomPanelClients=MessageView,DockSite1
-BottomPanelData=0000080001020100000009000000446F636B53697465319343000000000000020D060000000000000100000000934300000F0000004D65737361676556696577466F726DFFFFFFFF
+BottomPanelData=000008000102020000000F0000004D65737361676556696577466F726D09000000446F636B53697465311534000000000000022806000000000000FFFFFFFF
 BottomMiddlePanelSize=0
 BottomMiddlePanelClients=DockSite0,GraphDrawingModel
 BottomMiddelPanelData=0000080001020200000009000000446F636B536974653010000000477261706844726177696E67566965779F1D00000000000002F206000000000000FFFFFFFF
@@ -302,9 +379,9 @@ BottomMiddelPanelData=0000080001020200000009000000446F636B5369746530100000004772
 [View0]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaos.cpp
-CursorX=26
-CursorY=51
-TopLine=26
+CursorX=28
+CursorY=15
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -313,9 +390,9 @@ EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\
 [View1]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.h
-CursorX=26
-CursorY=34
-TopLine=11
+CursorX=12
+CursorY=39
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -324,15 +401,26 @@ EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\
 [View2]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.cpp
-CursorX=1
-CursorY=394
-TopLine=377
+CursorX=37
+CursorY=208
+TopLine=189
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteHandler.cpp
 
 [View3]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp
+CursorX=2
+CursorY=931
+TopLine=760
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp
+
+[View4]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaosPCH1.h
 CursorX=21
@@ -343,32 +431,32 @@ Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PrettyChaosPCH1.h
 
-[View4]
+[View5]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp
-CursorX=48
-CursorY=565
-TopLine=546
+CursorX=40
+CursorY=850
+TopLine=824
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteEditor.cpp
+EditViewName=Borland.FormDesignerView
 
-[View5]
+[View6]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.h
-CursorX=17
-CursorY=19
+CursorX=42
+CursorY=37
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.h
 
-[View6]
+[View7]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.h
-CursorX=18
+CursorX=42
 CursorY=35
 TopLine=1
 LeftCol=1
@@ -376,32 +464,32 @@ Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.h
 
-[View7]
+[View8]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.cpp
-CursorX=1
-CursorY=281
-TopLine=260
+CursorX=40
+CursorY=328
+TopLine=286
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuintic.cpp
 
-[View8]
+[View9]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.cpp
-CursorX=91
-CursorY=280
-TopLine=276
+CursorX=47
+CursorY=308
+TopLine=298
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCubic.cpp
 
-[View9]
+[View10]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.h
-CursorX=18
+CursorX=42
 CursorY=35
 TopLine=1
 LeftCol=1
@@ -409,463 +497,595 @@ Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.h
 
-[View10]
+[View11]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.cpp
-CursorX=91
-CursorY=282
-TopLine=256
+CursorX=40
+CursorY=330
+TopLine=288
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaQuartic.cpp
 
-[View11]
+[View12]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h
-CursorX=24
-CursorY=28
+CursorX=36
+CursorY=4
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.h
 
-[View12]
+[View13]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp
-CursorX=22
-CursorY=63
-TopLine=41
+CursorX=47
+CursorY=38
+TopLine=51
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FractalHandler.cpp
 
-[View13]
+[View14]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.h
-CursorX=16
-CursorY=86
-TopLine=66
+CursorX=5
+CursorY=85
+TopLine=51
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.h
 
-[View14]
+[View15]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h
+CursorX=56
+CursorY=38
+TopLine=11
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h
+
+[View16]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectHistory.h
+CursorX=75
+CursorY=35
+TopLine=11
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectHistory.h
+
+[View17]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.h
+CursorX=36
+CursorY=4
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.h
+
+[View18]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.cpp
+CursorX=36
+CursorY=4
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ImageDescription.cpp
+
+[View19]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp
-CursorX=25
-CursorY=81
-TopLine=61
+CursorX=36
+CursorY=4
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormEditBounds.cpp
 
-[View15]
+[View20]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp
-CursorX=27
-CursorY=50
-TopLine=25
+CursorX=36
+CursorY=4
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.cpp
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormColourDialog.h
 
-[View16]
+[View21]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h
-CursorX=30
-CursorY=99
+CursorX=48
+CursorY=19
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Constants.h
 
-[View17]
+[View22]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.cpp
+CursorX=1
+CursorY=79
+TopLine=65
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.cpp
+
+[View23]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.h
+CursorX=42
+CursorY=38
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCosNtic.h
+
+[View24]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.cpp
-CursorX=20
-CursorY=945
-TopLine=916
+CursorX=1
+CursorY=1
+TopLine=26
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\main.h
 
-[View18]
+[View25]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp
+CursorX=25
+CursorY=165
+TopLine=131
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp
+
+[View26]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormText.cpp
+CursorX=32
+CursorY=18
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormText.cpp
+
+[View27]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\LEDMatrixStudio\Forms\FormExportCode.cpp
+CursorX=1
+CursorY=37
+TopLine=31
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\LEDMatrixStudio\Forms\FormExportCode.cpp
+
+[View28]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.h
-CursorX=15
+CursorX=42
 CursorY=35
-TopLine=1
+TopLine=16
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.h
 
-[View19]
+[View29]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.cpp
-CursorX=17
-CursorY=14
-TopLine=6
+CursorX=43
+CursorY=311
+TopLine=287
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaNtic.cpp
 
-[View20]
+[View30]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.h
-CursorX=23
-CursorY=47
-TopLine=31
+CursorX=42
+CursorY=51
+TopLine=26
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.h
 
-[View21]
+[View31]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.cpp
-CursorX=4
-CursorY=322
-TopLine=286
+CursorX=20
+CursorY=354
+TopLine=331
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Dragon.cpp
 
-[View22]
+[View32]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.cpp
-CursorX=1
-CursorY=21
+CursorX=36
+CursorY=4
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.h
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAbout.cpp
 
-[View23]
+[View33]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.h
-CursorX=12
-CursorY=24
+CursorX=36
+CursorY=4
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.h
 
-[View24]
+[View34]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.cpp
-CursorX=1
-CursorY=33
-TopLine=16
+CursorX=36
+CursorY=4
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Newton.cpp
 
-[View25]
+[View35]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp
-CursorX=15
-CursorY=94
-TopLine=76
+CursorX=36
+CursorY=4
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.cpp
 
-[View26]
+[View36]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h
-CursorX=21
-CursorY=24
-TopLine=21
+CursorX=36
+CursorY=4
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Formatting.h
 
-[View27]
+[View37]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp
-CursorX=47
-CursorY=425
-TopLine=411
+CursorX=38
+CursorY=389
+TopLine=356
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.cpp
 
-[View28]
+[View38]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.cpp
+CursorX=79
+CursorY=123
+TopLine=105
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.cpp
+
+[View39]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.h
+CursorX=42
+CursorY=38
+TopLine=11
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.h
+
+[View40]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.cpp
+CursorX=29
+CursorY=395
+TopLine=356
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCubic.cpp
+
+[View41]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.cpp
+CursorX=29
+CursorY=395
+TopLine=365
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.cpp
+
+[View42]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.cpp
+CursorX=30
+CursorY=404
+TopLine=380
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.cpp
+
+[View43]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.h
+CursorX=42
+CursorY=38
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotNtic.h
+
+[View44]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.h
+CursorX=5
+CursorY=39
+TopLine=21
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotQuartic.h
+
+[View45]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.h
+CursorX=5
+CursorY=39
+TopLine=11
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MandelbrotCos.h
+
+[View46]
+CustomEditViewType=TEditView
+Module=c:\program files (x86)\embarcadero\studio\22.0\include\dinkumware64\Dinkum\threads\xthread
+CursorX=5
+CursorY=246
+TopLine=223
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=c:\program files (x86)\embarcadero\studio\22.0\include\dinkumware64\Dinkum\threads\xthread
+
+[View47]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fast.h
-CursorX=3
-CursorY=9
+CursorX=26
+CursorY=16
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fast.h
 
-[View29]
+[View48]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAnimate.cpp
-CursorX=10
-CursorY=76
-TopLine=37
+CursorX=36
+CursorY=4
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\FormAnimate.cpp
 
-[View30]
+[View49]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Animation.h
-CursorX=23
-CursorY=22
-TopLine=1
+CursorX=58
+CursorY=64
+TopLine=51
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Animation.h
 
-[View31]
+[View50]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp
-CursorX=21
-CursorY=280
-TopLine=257
+CursorX=56
+CursorY=326
+TopLine=307
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.cpp
 
-[View32]
+[View51]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.cpp
+CursorX=36
+CursorY=334
+TopLine=287
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.cpp
+
+[View52]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.h
+CursorX=42
+CursorY=37
+TopLine=1
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\JuliaCos.h
+
+[View53]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.h
+CursorX=35
+CursorY=81
+TopLine=56
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.h
+
+[View54]
+CustomEditViewType=TEditView
+Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.cpp
+CursorX=41
+CursorY=95
+TopLine=81
+LeftCol=1
+Elisions=
+Bookmarks=
+EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Colour.cpp
+
+[View55]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h
-CursorX=28
-CursorY=44
-TopLine=31
+CursorX=5
+CursorY=39
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Julia.h
 
-[View33]
+[View56]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h
-CursorX=10
-CursorY=49
-TopLine=16
+CursorX=42
+CursorY=38
+TopLine=6
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Mandelbrot.h
 
-[View34]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.h
-CursorX=6
-CursorY=118
-TopLine=111
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.h
-
-[View35]
+[View57]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.h
-CursorX=13
-CursorY=34
+CursorX=42
+CursorY=35
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.h
 
-[View36]
+[View58]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.cpp
-CursorX=17
-CursorY=188
-TopLine=151
+CursorX=20
+CursorY=175
+TopLine=154
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinClassic.cpp
 
-[View37]
+[View59]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.h
-CursorX=15
-CursorY=34
-TopLine=1
+CursorX=42
+CursorY=35
+TopLine=21
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.h
 
-[View38]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.cpp
-CursorX=16
-CursorY=188
-TopLine=152
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinAdditive.cpp
-
-[View39]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.h
-CursorX=13
-CursorY=34
-TopLine=1
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.h
-
-[View40]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.cpp
-CursorX=1
-CursorY=188
-TopLine=149
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinSinusoidal.cpp
-
-[View41]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.h
-CursorX=20
-CursorY=34
-TopLine=1
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.h
-
-[View42]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.cpp
-CursorX=19
-CursorY=188
-TopLine=152
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\MartinPositive.cpp
-
-[View43]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp
-CursorX=28
-CursorY=273
-TopLine=256
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Fractal.cpp
-
-[View44]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp
-CursorX=17
-CursorY=25
-TopLine=1
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.cpp
-
-[View45]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h
-CursorX=6
-CursorY=39
-TopLine=1
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\HistoryHandler.h
-
-[View46]
+[View60]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h
-CursorX=43
-CursorY=27
+CursorX=42
+CursorY=22
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.h
 
-[View47]
+[View61]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp
-CursorX=20
-CursorY=201
-TopLine=181
+CursorX=36
+CursorY=212
+TopLine=21
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ColourUtility.cpp
 
-[View48]
-CustomEditViewType=TEditView
-Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.h
-CursorX=30
-CursorY=28
-TopLine=1
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.h
-
-[View49]
+[View62]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp
-CursorX=32
-CursorY=290
-TopLine=261
+CursorX=1
+CursorY=1
+TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\Utility.cpp
 
-[View50]
+[View63]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteKey.h
-CursorX=24
-CursorY=49
-TopLine=31
+CursorX=55
+CursorY=38
+TopLine=16
 LeftCol=1
 Elisions=
 Bookmarks=
 EditViewName=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\PaletteKey.h
 
-[View51]
+[View64]
 CustomEditViewType=TEditView
 Module=C:\Users\iamru\Documents\Software Development\CBuilder\PrettyChaos\ProjectIO.cpp
-CursorX=53
-CursorY=227
-TopLine=206
+CursorX=1
+CursorY=165
+TopLine=146
 LeftCol=1
 Elisions=
 Bookmarks=
@@ -913,15 +1133,15 @@ Create=1
 Visible=1
 Docked=0
 State=0
-Left=2590
-Top=0
-Width=7334
-Height=10000
+Left=2154
+Top=79
+Width=7634
+Height=9850
 MaxLeft=-3
 MaxTop=-7
-ClientWidth=7288
-ClientHeight=9943
-BottomPanelSize=8889
+ClientWidth=7587
+ClientHeight=9793
+BottomPanelSize=8743
 BottomPanelClients=EditWindow0
 BottomPanelData=0000080000000000000000000000000000000000000000000000000100000000000000000C0000004564697457696E646F775F30FFFFFFFF
 
@@ -933,11 +1153,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1099
+Width=1997
 Height=4357
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1099
+ClientWidth=1997
 ClientHeight=4357
 TBDockHeight=5900
 LRDockWidth=2349
@@ -947,21 +1167,47 @@ StayOnTop=0
 [MessageView]
 PercentageSizes=1
 Create=1
-Visible=1
+Visible=0
 Docked=1
 State=0
 Left=0
-Top=28
-Width=7241
-Height=1393
+Top=0
+Width=2770
+Height=1421
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=7241
-ClientHeight=1393
-TBDockHeight=1393
+ClientWidth=2770
+ClientHeight=1421
+TBDockHeight=1421
 LRDockWidth=2770
 Dockable=1
 StayOnTop=0
+
+[ConfigurationManager]
+PercentageSizes=1
+Create=1
+Visible=0
+Docked=0
+State=0
+Left=5340
+Top=3414
+Width=1637
+Height=3050
+MaxLeft=-3
+MaxTop=-7
+ClientWidth=1590
+ClientHeight=2771
+TBDockHeight=3050
+LRDockWidth=1637
+Dockable=1
+StayOnTop=0
+
+[TConfigMgrDlg]
+Column0=120
+Column1=120
+Column2=120
+Column3=100
+Column4=140
 
 [ToolForm]
 PercentageSizes=1
@@ -971,12 +1217,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1099
-Height=2479
+Width=1997
+Height=3979
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1099
-ClientHeight=2479
+ClientWidth=1997
+ClientHeight=3979
 TBDockHeight=7150
 LRDockWidth=1997
 Dockable=1
@@ -990,17 +1236,17 @@ Docked=1
 State=0
 Left=0
 Top=557
-Width=1047
-Height=3514
+Width=1395
+Height=5014
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1047
-ClientHeight=3514
-TBDockHeight=9014
-LRDockWidth=1047
+ClientWidth=1395
+ClientHeight=5014
+TBDockHeight=4250
+LRDockWidth=1395
 Dockable=1
 StayOnTop=0
-SplitPos=131
+SplitPos=82
 
 [frmDesignPreview]
 PercentageSizes=1
@@ -1010,14 +1256,71 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1099
-Height=8743
+Width=1997
+Height=4050
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1099
-ClientHeight=8743
+ClientWidth=1997
+ClientHeight=4050
 TBDockHeight=5957
 LRDockWidth=2512
+Dockable=1
+StayOnTop=0
+
+[ClassBrowserTool]
+PercentageSizes=1
+Create=1
+Visible=0
+Docked=1
+State=0
+Left=-1150
+Top=-170
+Width=1846
+Height=3143
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=1846
+ClientHeight=3143
+TBDockHeight=3143
+LRDockWidth=1846
+Dockable=1
+StayOnTop=0
+
+[MetricsView]
+PercentageSizes=1
+Create=1
+Visible=1
+Docked=1
+State=0
+Left=0
+Top=0
+Width=2337
+Height=1279
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=2337
+ClientHeight=1279
+TBDockHeight=4836
+LRDockWidth=3564
+Dockable=1
+StayOnTop=0
+
+[QAView]
+PercentageSizes=1
+Create=1
+Visible=1
+Docked=1
+State=0
+Left=0
+Top=0
+Width=2337
+Height=1279
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=2337
+ClientHeight=1279
+TBDockHeight=4836
+LRDockWidth=3564
 Dockable=1
 StayOnTop=0
 
@@ -1123,6 +1426,25 @@ LRDockWidth=3483
 Dockable=1
 StayOnTop=0
 
+[PatchForm]
+PercentageSizes=1
+Create=1
+Visible=1
+Docked=1
+State=0
+Left=0
+Top=0
+Width=2337
+Height=1279
+MaxLeft=-1
+MaxTop=-1
+ClientWidth=2337
+ClientHeight=1279
+TBDockHeight=2500
+LRDockWidth=3398
+Dockable=1
+StayOnTop=0
+
 [FindReferencsForm]
 PercentageSizes=1
 Create=1
@@ -1196,12 +1518,12 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1099
-Height=8743
+Width=1997
+Height=4050
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1099
-ClientHeight=8743
+ClientWidth=1997
+ClientHeight=4050
 TBDockHeight=4886
 LRDockWidth=7148
 Dockable=1
@@ -1223,63 +1545,6 @@ ClientWidth=2855
 ClientHeight=3207
 TBDockHeight=3207
 LRDockWidth=2855
-Dockable=1
-StayOnTop=0
-
-[ClassBrowserTool]
-PercentageSizes=1
-Create=1
-Visible=0
-Docked=1
-State=0
-Left=-8
-Top=-8
-Width=1846
-Height=3143
-MaxLeft=-1
-MaxTop=-1
-ClientWidth=1846
-ClientHeight=3143
-TBDockHeight=3143
-LRDockWidth=1846
-Dockable=1
-StayOnTop=0
-
-[MetricsView]
-PercentageSizes=1
-Create=1
-Visible=1
-Docked=1
-State=0
-Left=0
-Top=0
-Width=2337
-Height=1279
-MaxLeft=-1
-MaxTop=-1
-ClientWidth=2337
-ClientHeight=1279
-TBDockHeight=4836
-LRDockWidth=3564
-Dockable=1
-StayOnTop=0
-
-[QAView]
-PercentageSizes=1
-Create=1
-Visible=1
-Docked=1
-State=0
-Left=0
-Top=0
-Width=2337
-Height=1279
-MaxLeft=-1
-MaxTop=-1
-ClientWidth=2337
-ClientHeight=1279
-TBDockHeight=4836
-LRDockWidth=3564
 Dockable=1
 StayOnTop=0
 
@@ -1317,11 +1582,11 @@ Docked=1
 State=0
 Left=0
 Top=0
-Width=1047
+Width=1395
 Height=3521
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1047
+ClientWidth=1395
 ClientHeight=3521
 TBDockHeight=3679
 LRDockWidth=1895
@@ -1372,7 +1637,7 @@ Dockable=1
 StayOnTop=0
 TabPosition=1
 ActiveTabID=RefactoringForm
-TabDockClients=RefactoringForm,FindReferencsForm,ToDo List,MetricsView,QAView
+TabDockClients=RefactoringForm,PatchForm,FindReferencsForm,ToDo List,MetricsView,QAView
 
 [DockSite1]
 HostDockSite=DockBottomPanel
@@ -1408,14 +1673,14 @@ Docked=1
 State=0
 Left=0
 Top=28
-Width=1099
+Width=1997
 Height=4557
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1099
+ClientWidth=1997
 ClientHeight=4557
-TBDockHeight=9014
-LRDockWidth=1099
+TBDockHeight=4250
+LRDockWidth=1997
 Dockable=1
 StayOnTop=0
 TabPosition=1
@@ -1432,14 +1697,14 @@ Docked=1
 State=0
 Left=0
 Top=28
-Width=1047
+Width=1395
 Height=3521
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1047
+ClientWidth=1395
 ClientHeight=3521
-TBDockHeight=9014
-LRDockWidth=1047
+TBDockHeight=4250
+LRDockWidth=1395
 Dockable=1
 StayOnTop=0
 TabPosition=1
@@ -1456,14 +1721,14 @@ Docked=1
 State=0
 Left=0
 Top=702
-Width=1099
-Height=2479
+Width=1997
+Height=3979
 MaxLeft=-1
 MaxTop=-1
-ClientWidth=1099
-ClientHeight=2479
-TBDockHeight=9014
-LRDockWidth=1099
+ClientWidth=1997
+ClientHeight=3979
+TBDockHeight=4250
+LRDockWidth=1997
 Dockable=1
 StayOnTop=0
 TabPosition=1

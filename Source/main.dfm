@@ -4,7 +4,7 @@ object frmMain: TfrmMain
   Caption = 'PrettyChaos'
   ClientHeight = 1091
   ClientWidth = 1584
-  Color = clBtnFace
+  Color = clWhite
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
   Font.Height = -11
@@ -288,473 +288,13 @@ object frmMain: TfrmMain
       Shape = bsLeftLine
     end
   end
-  object Panel2: TPanel
-    Left = 1372
-    Top = 34
-    Width = 212
-    Height = 1038
-    Align = alRight
-    TabOrder = 1
-    object Label16: TLabel
-      Left = 14
-      Top = 17
-      Width = 33
-      Height = 13
-      Caption = 'Fractal'
-    end
-    object Bevel1: TBevel
-      Left = 6
-      Top = 48
-      Width = 195
-      Height = 10
-      Shape = bsTopLine
-    end
-    object iPreview: TImage
-      Left = 6
-      Top = 727
-      Width = 200
-      Height = 200
-      Visible = False
-    end
-    object GroupBox2: TGroupBox
-      Left = 6
-      Top = 474
-      Width = 200
-      Height = 174
-      Caption = 'Dimensions'
-      TabOrder = 1
-      object lXMin: TLabel
-        Left = 72
-        Top = 56
-        Width = 100
-        Height = 13
-        AutoSize = False
-        Caption = 'lXMin'
-      end
-      object lXMax: TLabel
-        Left = 72
-        Top = 75
-        Width = 100
-        Height = 13
-        AutoSize = False
-        Caption = 'Label1'
-      end
-      object lYMin: TLabel
-        Left = 72
-        Top = 94
-        Width = 100
-        Height = 13
-        AutoSize = False
-        Caption = 'Label1'
-      end
-      object lYMax: TLabel
-        Left = 72
-        Top = 113
-        Width = 100
-        Height = 13
-        AutoSize = False
-        Caption = 'Label1'
-      end
-      object Label4: TLabel
-        Left = 24
-        Top = 121
-        Width = 17
-        Height = 11
-        Caption = 'Max'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -9
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-      end
-      object Label8: TLabel
-        Left = 16
-        Top = 113
-        Width = 7
-        Height = 13
-        Caption = 'Y'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label7: TLabel
-        Left = 16
-        Top = 94
-        Width = 7
-        Height = 13
-        Caption = 'Y'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label3: TLabel
-        Left = 24
-        Top = 102
-        Width = 15
-        Height = 11
-        Caption = 'Min'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -9
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-      end
-      object Label2: TLabel
-        Left = 24
-        Top = 83
-        Width = 17
-        Height = 11
-        Caption = 'Max'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -9
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-      end
-      object Label6: TLabel
-        Left = 16
-        Top = 75
-        Width = 7
-        Height = 13
-        Caption = 'X'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label5: TLabel
-        Left = 16
-        Top = 56
-        Width = 7
-        Height = 13
-        Caption = 'X'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-      object Label1: TLabel
-        Left = 24
-        Top = 64
-        Width = 15
-        Height = 11
-        Caption = 'Min'
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clWindowText
-        Font.Height = -9
-        Font.Name = 'Tahoma'
-        Font.Style = []
-        ParentFont = False
-      end
-      object lWidth: TLabel
-        Left = 16
-        Top = 27
-        Width = 19
-        Height = 13
-        Caption = 'Size'
-      end
-      object Label9: TLabel
-        Left = 118
-        Top = 27
-        Width = 6
-        Height = 13
-        Caption = 'x'
-      end
-      object sbCopyBoundsToClipboard: TSpeedButton
-        Left = 45
-        Top = 142
-        Width = 23
-        Height = 22
-        ImageIndex = 9
-        Images = ImageList1
-        OnClick = sbCopyBoundsToClipboardClick
-      end
-      object sbEditBounds: TSpeedButton
-        Left = 16
-        Top = 142
-        Width = 23
-        Height = 22
-        ImageIndex = 4
-        Images = ImageList1
-        OnClick = sbEditBoundsClick
-      end
-      object eWidth: TEdit
-        Left = 65
-        Top = 24
-        Width = 45
-        Height = 21
-        Alignment = taRightJustify
-        NumbersOnly = True
-        PopupMenu = puDimensions
-        TabOrder = 0
-        Text = '1280'
-        OnExit = eWidthExit
-      end
-      object eHeight: TEdit
-        Left = 132
-        Top = 24
-        Width = 45
-        Height = 21
-        Alignment = taRightJustify
-        NumbersOnly = True
-        PopupMenu = puDimensions
-        TabOrder = 1
-        Text = '1024'
-        OnExit = eWidthExit
-      end
-    end
-    object GroupBox1: TGroupBox
-      Left = 6
-      Top = 376
-      Width = 200
-      Height = 92
-      Caption = 'Palette'
-      TabOrder = 0
-      object bEditPalette: TSpeedButton
-        Left = 6
-        Top = 24
-        Width = 62
-        Height = 22
-        Caption = 'Edit'
-        ImageIndex = 4
-        Images = ImageList1
-        OnClick = bEditPaletteClick
-      end
-      object pbPalette: TPaintBox
-        Left = 11
-        Top = 58
-        Width = 125
-        Height = 20
-      end
-      object sInfinity: TShape
-        Left = 148
-        Top = 58
-        Width = 20
-        Height = 20
-        OnMouseDown = sInfinityMouseDown
-      end
-      object sbLoadPalette: TSpeedButton
-        Left = 74
-        Top = 24
-        Width = 62
-        Height = 22
-        Caption = 'Open'
-        ImageIndex = 7
-        Images = ImageList1
-        OnClick = sbLoadPaletteClick
-      end
-    end
-    object GroupBox3: TGroupBox
-      Left = 6
-      Top = 64
-      Width = 200
-      Height = 150
-      Caption = 'Render'
-      TabOrder = 2
-      object Label10: TLabel
-        Left = 16
-        Top = 62
-        Width = 44
-        Height = 13
-        Caption = 'Coeff (n)'
-      end
-      object Label11: TLabel
-        Left = 16
-        Top = 89
-        Width = 47
-        Height = 13
-        Caption = 'Iterations'
-      end
-      object Label12: TLabel
-        Left = 16
-        Top = 116
-        Width = 47
-        Height = 13
-        Caption = 'Bailout (r)'
-      end
-      object cbRenderMode: TComboBox
-        Left = 16
-        Top = 24
-        Width = 174
-        Height = 21
-        Style = csDropDownList
-        TabOrder = 0
-        OnChange = cbRenderModeChange
-      end
-      object eCoeffN: TEdit
-        Left = 72
-        Top = 59
-        Width = 115
-        Height = 21
-        Hint = 'maps linear palette to exponential palette (default is 1)'
-        Alignment = taRightJustify
-        TabOrder = 1
-        Text = '1'
-        OnExit = eCoeffNExit
-      end
-      object eIterations: TEdit
-        Left = 72
-        Top = 86
-        Width = 115
-        Height = 21
-        Alignment = taRightJustify
-        NumbersOnly = True
-        TabOrder = 2
-        Text = '1000'
-        OnExit = eCoeffNExit
-      end
-      object eBailoutRadius: TEdit
-        Left = 72
-        Top = 113
-        Width = 115
-        Height = 21
-        Hint = 'maps linear palette to exponential palette (default is 1)'
-        Alignment = taRightJustify
-        NumbersOnly = True
-        TabOrder = 3
-        Text = '256'
-        OnExit = eCoeffNExit
-      end
-    end
-    object gbVarABC: TGroupBox
-      Left = 6
-      Top = 220
-      Width = 200
-      Height = 141
-      Caption = 'Extra Parameters'
-      TabOrder = 3
-      object lVarA: TLabel
-        Left = 16
-        Top = 30
-        Width = 6
-        Height = 13
-        Caption = 'a'
-      end
-      object lVarB: TLabel
-        Left = 16
-        Top = 57
-        Width = 6
-        Height = 13
-        Caption = 'b'
-      end
-      object lVarC: TLabel
-        Left = 16
-        Top = 84
-        Width = 5
-        Height = 13
-        Caption = 'c'
-      end
-      object lVarD: TLabel
-        Left = 16
-        Top = 111
-        Width = 6
-        Height = 13
-        Caption = 'd'
-      end
-      object eVarA: TEdit
-        Left = 72
-        Top = 27
-        Width = 115
-        Height = 21
-        Hint = 'maps linear palette to exponential palette (default is 1)'
-        Alignment = taRightJustify
-        PopupMenu = puExamples
-        TabOrder = 0
-        Text = '1'
-        OnExit = eCoeffNExit
-      end
-      object eVarB: TEdit
-        Left = 72
-        Top = 54
-        Width = 115
-        Height = 21
-        Alignment = taRightJustify
-        PopupMenu = puExamples
-        TabOrder = 1
-        Text = '1000'
-        OnExit = eCoeffNExit
-      end
-      object eVarC: TEdit
-        Left = 72
-        Top = 81
-        Width = 115
-        Height = 21
-        Hint = 'maps linear palette to exponential palette (default is 1)'
-        Alignment = taRightJustify
-        PopupMenu = puExamples
-        TabOrder = 2
-        Text = '256'
-        OnExit = eCoeffNExit
-      end
-      object eVarD: TEdit
-        Left = 72
-        Top = 108
-        Width = 115
-        Height = 21
-        Hint = 'maps linear palette to exponential palette (default is 1)'
-        Alignment = taRightJustify
-        PopupMenu = puExamples
-        TabOrder = 3
-        Text = '1'
-        OnExit = eCoeffNExit
-      end
-    end
-    object cbFractalSelector: TComboBox
-      Left = 53
-      Top = 13
-      Width = 140
-      Height = 21
-      Style = csDropDownList
-      TabOrder = 4
-      OnChange = cbFractalSelectorChange
-    end
-    object GroupBox4: TGroupBox
-      Left = 6
-      Top = 654
-      Width = 200
-      Height = 67
-      Caption = 'Cursor'
-      DoubleBuffered = True
-      ParentDoubleBuffered = False
-      TabOrder = 5
-      object lCursor: TLabel
-        Left = 15
-        Top = 27
-        Width = 146
-        Height = 13
-        AutoSize = False
-        Caption = '...'
-      end
-      object lCursorColour: TLabel
-        Left = 15
-        Top = 46
-        Width = 146
-        Height = 13
-        AutoSize = False
-        Caption = '...'
-      end
-    end
-  end
   object Panel3: TPanel
     Left = 0
     Top = 34
-    Width = 1372
+    Width = 1584
     Height = 1038
     Align = alClient
-    TabOrder = 2
+    TabOrder = 1
     OnMouseMove = Panel3MouseMove
     object iRender: TImage
       Left = 0
@@ -763,6 +303,550 @@ object frmMain: TfrmMain
       Height = 1024
       OnMouseDown = iRenderMouseDown
       OnMouseMove = iRenderMouseMove
+    end
+    object pMain: TPanel
+      Left = 1352
+      Top = 1
+      Width = 231
+      Height = 1036
+      Align = alRight
+      Color = clWhite
+      ParentBackground = False
+      TabOrder = 0
+      object PageControl1: TPageControl
+        Left = 1
+        Top = 1
+        Width = 229
+        Height = 826
+        ActivePage = TabSheet1
+        Align = alClient
+        TabOrder = 0
+        object TabSheet1: TTabSheet
+          Caption = 'Fractal'
+          object Label16: TLabel
+            Left = 14
+            Top = 7
+            Width = 33
+            Height = 13
+            Caption = 'Fractal'
+          end
+          object Bevel1: TBevel
+            Left = 3
+            Top = 38
+            Width = 215
+            Height = 10
+            Shape = bsTopLine
+          end
+          object GroupBox4: TGroupBox
+            Left = 6
+            Top = 644
+            Width = 212
+            Height = 87
+            Caption = 'Cursor'
+            DoubleBuffered = True
+            ParentDoubleBuffered = False
+            TabOrder = 0
+            object lCursor: TLabel
+              Left = 15
+              Top = 27
+              Width = 146
+              Height = 13
+              AutoSize = False
+              Caption = '...'
+            end
+            object lCursorColour: TLabel
+              Left = 15
+              Top = 65
+              Width = 146
+              Height = 13
+              AutoSize = False
+              Caption = '...'
+            end
+            object lCursorAbsolute: TLabel
+              Left = 15
+              Top = 46
+              Width = 146
+              Height = 13
+              AutoSize = False
+              Caption = '...'
+            end
+          end
+          object GroupBox2: TGroupBox
+            Left = 6
+            Top = 464
+            Width = 212
+            Height = 174
+            Caption = 'Dimensions'
+            TabOrder = 1
+            object lXMin: TLabel
+              Left = 72
+              Top = 56
+              Width = 130
+              Height = 13
+              AutoSize = False
+              Caption = 'lXMin'
+            end
+            object lXMax: TLabel
+              Left = 72
+              Top = 75
+              Width = 130
+              Height = 13
+              AutoSize = False
+              Caption = 'Label1'
+            end
+            object lYMin: TLabel
+              Left = 72
+              Top = 94
+              Width = 130
+              Height = 13
+              AutoSize = False
+              Caption = 'Label1'
+            end
+            object lYMax: TLabel
+              Left = 72
+              Top = 113
+              Width = 130
+              Height = 13
+              AutoSize = False
+              Caption = 'Label1'
+            end
+            object Label4: TLabel
+              Left = 24
+              Top = 121
+              Width = 17
+              Height = 11
+              Caption = 'Max'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -9
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label8: TLabel
+              Left = 16
+              Top = 113
+              Width = 7
+              Height = 13
+              Caption = 'Y'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label7: TLabel
+              Left = 16
+              Top = 94
+              Width = 7
+              Height = 13
+              Caption = 'Y'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label3: TLabel
+              Left = 24
+              Top = 102
+              Width = 15
+              Height = 11
+              Caption = 'Min'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -9
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label2: TLabel
+              Left = 24
+              Top = 83
+              Width = 17
+              Height = 11
+              Caption = 'Max'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -9
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object Label6: TLabel
+              Left = 16
+              Top = 75
+              Width = 7
+              Height = 13
+              Caption = 'X'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label5: TLabel
+              Left = 16
+              Top = 56
+              Width = 7
+              Height = 13
+              Caption = 'X'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -11
+              Font.Name = 'Tahoma'
+              Font.Style = [fsBold]
+              ParentFont = False
+            end
+            object Label1: TLabel
+              Left = 24
+              Top = 64
+              Width = 15
+              Height = 11
+              Caption = 'Min'
+              Font.Charset = DEFAULT_CHARSET
+              Font.Color = clWindowText
+              Font.Height = -9
+              Font.Name = 'Tahoma'
+              Font.Style = []
+              ParentFont = False
+            end
+            object lWidth: TLabel
+              Left = 16
+              Top = 27
+              Width = 19
+              Height = 13
+              Caption = 'Size'
+            end
+            object Label9: TLabel
+              Left = 118
+              Top = 27
+              Width = 6
+              Height = 13
+              Caption = 'x'
+            end
+            object sbCopyBoundsToClipboard: TSpeedButton
+              Left = 45
+              Top = 142
+              Width = 23
+              Height = 22
+              ImageIndex = 9
+              Images = ImageList1
+              OnClick = sbCopyBoundsToClipboardClick
+            end
+            object sbEditBounds: TSpeedButton
+              Left = 16
+              Top = 142
+              Width = 23
+              Height = 22
+              ImageIndex = 4
+              Images = ImageList1
+              OnClick = sbEditBoundsClick
+            end
+            object eWidth: TEdit
+              Left = 65
+              Top = 24
+              Width = 45
+              Height = 21
+              Alignment = taRightJustify
+              NumbersOnly = True
+              PopupMenu = puDimensions
+              TabOrder = 0
+              Text = '1280'
+              OnExit = eWidthExit
+            end
+            object eHeight: TEdit
+              Left = 132
+              Top = 24
+              Width = 45
+              Height = 21
+              Alignment = taRightJustify
+              NumbersOnly = True
+              PopupMenu = puDimensions
+              TabOrder = 1
+              Text = '1024'
+              OnExit = eWidthExit
+            end
+          end
+          object GroupBox1: TGroupBox
+            Left = 6
+            Top = 366
+            Width = 212
+            Height = 92
+            Caption = 'Palette'
+            TabOrder = 2
+            object bEditPalette: TSpeedButton
+              Left = 6
+              Top = 24
+              Width = 62
+              Height = 22
+              Caption = 'Edit'
+              ImageIndex = 4
+              Images = ImageList1
+              OnClick = bEditPaletteClick
+            end
+            object pbPalette: TPaintBox
+              Left = 11
+              Top = 58
+              Width = 125
+              Height = 20
+            end
+            object sInfinity: TShape
+              Left = 148
+              Top = 58
+              Width = 20
+              Height = 20
+              OnMouseDown = sInfinityMouseDown
+            end
+            object sbLoadPalette: TSpeedButton
+              Left = 74
+              Top = 24
+              Width = 62
+              Height = 22
+              Caption = 'Open'
+              ImageIndex = 7
+              Images = ImageList1
+              OnClick = sbLoadPaletteClick
+            end
+          end
+          object gbVarABC: TGroupBox
+            Left = 6
+            Top = 210
+            Width = 212
+            Height = 141
+            Caption = 'Extra Parameters'
+            TabOrder = 3
+            object lVarA: TLabel
+              Left = 16
+              Top = 30
+              Width = 6
+              Height = 13
+              Caption = 'a'
+            end
+            object lVarB: TLabel
+              Left = 16
+              Top = 57
+              Width = 6
+              Height = 13
+              Caption = 'b'
+            end
+            object lVarC: TLabel
+              Left = 16
+              Top = 84
+              Width = 5
+              Height = 13
+              Caption = 'c'
+            end
+            object lVarD: TLabel
+              Left = 16
+              Top = 111
+              Width = 6
+              Height = 13
+              Caption = 'd'
+            end
+            object eVarA: TEdit
+              Left = 88
+              Top = 27
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 0
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eVarB: TEdit
+              Left = 88
+              Top = 54
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 1
+              Text = '1000'
+              OnExit = eCoeffNExit
+            end
+            object eVarC: TEdit
+              Left = 88
+              Top = 81
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 2
+              Text = '256'
+              OnExit = eCoeffNExit
+            end
+            object eVarD: TEdit
+              Left = 88
+              Top = 108
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 3
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+          end
+          object GroupBox3: TGroupBox
+            Left = 6
+            Top = 54
+            Width = 212
+            Height = 150
+            Caption = 'Render'
+            TabOrder = 4
+            object Label10: TLabel
+              Left = 16
+              Top = 62
+              Width = 44
+              Height = 13
+              Caption = 'Coeff (n)'
+            end
+            object Label11: TLabel
+              Left = 16
+              Top = 89
+              Width = 47
+              Height = 13
+              Caption = 'Iterations'
+            end
+            object Label12: TLabel
+              Left = 16
+              Top = 116
+              Width = 47
+              Height = 13
+              Caption = 'Bailout (r)'
+            end
+            object cbRenderMode: TComboBox
+              Left = 16
+              Top = 24
+              Width = 185
+              Height = 21
+              Style = csDropDownList
+              TabOrder = 0
+              OnChange = cbRenderModeChange
+            end
+            object eCoeffN: TEdit
+              Left = 88
+              Top = 59
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              TabOrder = 1
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eIterations: TEdit
+              Left = 88
+              Top = 86
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              NumbersOnly = True
+              TabOrder = 2
+              Text = '1000'
+              OnExit = eCoeffNExit
+            end
+            object eBailoutRadius: TEdit
+              Left = 88
+              Top = 113
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              NumbersOnly = True
+              TabOrder = 3
+              Text = '256'
+              OnExit = eCoeffNExit
+            end
+          end
+          object cbFractalSelector: TComboBox
+            Left = 53
+            Top = 3
+            Width = 165
+            Height = 21
+            Style = csDropDownList
+            TabOrder = 5
+            OnChange = cbFractalSelectorChange
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'History'
+          ImageIndex = 1
+          object lbHistory: TListBox
+            Left = 0
+            Top = 31
+            Width = 221
+            Height = 767
+            Align = alClient
+            ItemHeight = 13
+            TabOrder = 0
+            OnDblClick = lbHistoryDblClick
+          end
+          object Panel2: TPanel
+            Left = 0
+            Top = 0
+            Width = 221
+            Height = 31
+            Align = alTop
+            TabOrder = 1
+            object sbClearHistory: TSpeedButton
+              Left = 188
+              Top = 1
+              Width = 30
+              Height = 27
+              Hint = 'clear'
+              ImageIndex = 20
+              Images = ImageList1
+              OnClick = sbClearHistoryClick
+            end
+            object sbLoadHistory: TSpeedButton
+              Left = 4
+              Top = 1
+              Width = 30
+              Height = 27
+              Hint = 'clear'
+              ImageIndex = 7
+              Images = ImageList1
+              OnClick = sbLoadHistoryClick
+            end
+            object sbSaveHistory: TSpeedButton
+              Left = 32
+              Top = 1
+              Width = 30
+              Height = 27
+              Hint = 'clear'
+              ImageIndex = 6
+              Images = ImageList1
+              OnClick = sbSaveHistoryClick
+            end
+          end
+        end
+      end
+      object Panel4: TPanel
+        Left = 1
+        Top = 827
+        Width = 229
+        Height = 208
+        Align = alBottom
+        Color = clWhite
+        ParentBackground = False
+        TabOrder = 1
+        object iPreview: TImage
+          Left = 14
+          Top = 4
+          Width = 200
+          Height = 200
+          Visible = False
+        end
+      end
     end
   end
   object sbMain: TStatusBar
@@ -777,7 +861,7 @@ object frmMain: TfrmMain
     Left = 1016
     Top = 120
     Bitmap = {
-      494C010114001800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010115001800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000006000000001002000000000000060
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -787,61 +871,97 @@ object frmMain: TfrmMain
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00F3F3F300FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F4FF
+      F400FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F1FE
+      F100FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F4FF
+      F400FFFFFF0000000000FFFFFF0000000000FFFFFF001E1E1E00FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F2FF
+      F200FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F2FF
+      F200FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F2FF
+      F200FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F2FF
+      F200FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F4FF
+      F400FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F1FE
+      F100FFFFFF0000000000FFFFFF0000000000FFFFFF0000000000FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000F0FF
+      F000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      000000000000000000000000000000000000000000000000000000000000FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00050C05000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -849,50 +969,14 @@ object frmMain: TfrmMain
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
+      00000F010F002400240000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      00000000000000000000FFFFFF00FFFFFF00FFFFFF0000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1549,11 +1633,11 @@ object frmMain: TfrmMain
       0000000000000000000000000000000000000000000000000000000000000000
       000000000000000000000000000000000000424D3E000000000000003E000000
       2800000040000000600000000100010000000000000300000000000000000000
-      000000000000000000000000FFFFFF0000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000FFFF07C07E7EFFFFFFFF9FE3FFFDFFF9
+      000000000000000000000000FFFFFF00E00F000000000000C007000000000000
+      C007000000000000C007000000000000C007000000000000C007000000000000
+      C007000000000000C007000000000000C007000000000000C007000000000000
+      C007000000000000C007000000000000C0070000000000008003000000000000
+      F83F000000000000FC7F000000000000FFFF07C07E7EFFFFFFFF9FE3FFFDFFF9
       DFFFCFE3FE3BFFF19FFFCFE7F807FFE30000E7C7F007F0479FFFE00FF007C00F
       DFFFE00FE003C01FFFFFF38F6002800FFFFFF31F6002800FFFFBF91FF007800F
       FFF9F93FF007800F0000F83FF80F800FFFF9FC3FFE3FC01FFFFBFC7FFFFFC01F
@@ -1815,6 +1899,13 @@ object frmMain: TfrmMain
       object miCopyAllToClipboard: TMenuItem
         Caption = 'Copy all parameters to clipboard'
         OnClick = miCopyAllToClipboardClick
+      end
+      object N18: TMenuItem
+        Caption = '-'
+      end
+      object miCopyToClipboard: TMenuItem
+        Caption = 'Copy render to clipboard'
+        OnClick = miCopyToClipboardClick
       end
       object N14: TMenuItem
         Caption = '-'

@@ -386,7 +386,13 @@ std::wstring MandelbrotCubic::GetParameters()
 
 std::wstring MandelbrotCubic::Description()
 {
-	return L"MandelbrotCubic: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Mandelbrot (z^3): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
+std::wstring MandelbrotCubic::HistoryEntry()
+{
+	return L"Mandelbrot (z^3): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 

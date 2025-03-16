@@ -12,6 +12,7 @@
 
 #include <vector>
 
+#include "ProjectHistory.h"
 
 struct ZoomHistory
 {
@@ -27,60 +28,49 @@ struct ZoomHistory
 };
 
 
-struct ProjectHistory
-{
-	int fractal = 0;
-
-	double xmin = 0;
-	double xmax = 0;
-	double ymin = 0;
-	double ymax = 0;
-
-	double VarA = 0;
-	double VarB = 0;
-	double VarC = 0;
-	double VarD = 0;
-
-	double Coeff = 0;
-	double MaxIterations = 0;
-	double Bailout  = 0;
-
-	ProjectHistory(int _fractal, double _xmin, double _xmax, double _ymin, double _ymax,
-				   double _VarA, double _VarB, double _VarC, double _VarD,
-				   double _Coeff, double _MaxIterations, double _Bailout)
-	{
-		fractal = _fractal;
-
-		xmin = _xmin;
-		xmax = _xmax;
-		ymin = _ymin;
-		ymax = _ymax;
-
-		VarA = _VarA;
-		VarB = _VarB;
-		VarC = _VarC;
-		VarD = _VarD;
-
-		Coeff = _Coeff;
-		MaxIterations = _MaxIterations;
-		Bailout  = _Bailout;
-	}
-};
-
-
 class HistoryHandler
 {
+	enum class FileProperty {
+		None = 0, ObjectOpen = 1, ObjectClose = 2,
+		Index = 3, Description = 4,
+		nCoeff = 5,	MaxIterations = 6, BailoutRadius = 7,
+		xmin = 8, xmax = 9, ymin = 10, ymax = 11,
+		VarA = 12, VarB = 13, VarC = 14, VarD = 15,
+	};
+
+	static const int kPropertyListCount = 15;
+
+	const std::wstring FilePropertyList[kPropertyListCount] = {
+		L"[", L"]", L"index", L"description",
+		L"nCoeff",	L"MaxIterations", L"BailoutRadius",
+		L"xmin", L"xmax", L"ymin", L"ymax",
+		L"var_a", L"var_b", L"var_c", L"var_d"
+	};
+
+	const FileProperty FilePropertyReference[kPropertyListCount] = {
+		FileProperty::ObjectOpen, FileProperty::ObjectClose, FileProperty::Index, FileProperty::Description,
+		FileProperty::nCoeff, FileProperty::MaxIterations, FileProperty::BailoutRadius,
+		FileProperty::xmin, FileProperty::xmax, FileProperty::ymin, FileProperty::ymax,
+		FileProperty::VarA, FileProperty::VarB, FileProperty::VarC, FileProperty::VarD
+	};
+
+	FileProperty GetInputProperty(const std::wstring);
+
 public:
 
 	std::vector<ZoomHistory> Zoom;
 
-	std::vector<ProjectHistory> Project;
+	std::vector<ProjectHistory> Projects;
 
 	HistoryHandler();
 
 	void AddZoom(double, double, double, double);
 
+	void AddProject(ProjectHistory);
 	void AddProject(int _fractal, double _xmin, double _xmax, double _ymin, double _ymax,
 					double _VarA, double _VarB, double _VarC, double _VarD,
-				    double _Coeff, double _MaxIterations, double _Bailout);
+					double _Coeff, double _MaxIterations, double _Bailout);
+
+	bool Load(const std::wstring);
+	bool Save(const std::wstring);
 };

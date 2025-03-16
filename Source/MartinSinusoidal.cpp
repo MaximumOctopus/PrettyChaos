@@ -174,6 +174,12 @@ std::wstring MartinSinusoidal::Description()
 }
 
 
+std::wstring MartinSinusoidal::HistoryEntry()
+{
+	return L"Martin (Sinusoidal): " + std::to_wstring(Var.a) + L", " + std::to_wstring(Var.b) + L", " +std::to_wstring(Var.c);
+}
+
+
 void MartinSinusoidal::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Sinusoidal) fractal\n");

@@ -18,6 +18,7 @@
 
 #include "Colour.h"
 #include "Formatting.h"
+#include "ProjectHistory.h"
 
 
 enum class QuickParameterMode { kNone = 0, kABPlusFine = 1, kABC };
@@ -219,7 +220,11 @@ public:
 	void FinaliseRenderMandelbrot(TBitmap*, double);
 	void FinaliseRenderMartin(TBitmap*);
 
-    virtual std::wstring Description();
+    void SetFromProjectHistory(ProjectHistory);
+	ProjectHistory GetAsProject(int);
+
+	virtual std::wstring Description();
+    virtual std::wstring HistoryEntry();
 
 	virtual void ToFile(std::ofstream&);
 };

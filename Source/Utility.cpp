@@ -48,6 +48,9 @@ namespace Utility
 		case 3:
 			ofn.lpstrFilter = _T("Text files\0*.txt\0");
 			break;
+		case 4:
+			ofn.lpstrFilter = _T("PrettyChaos history files\0*.prttychshf\0");
+			break;
 		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
@@ -86,12 +89,15 @@ namespace Utility
 		case 3:
 			ofn.lpstrFilter = _T("Text files\0*.txt\0");
 			break;
+		case 4:
+			ofn.lpstrFilter = _T("PrettyChaos history files\0*.prttychshf\0");
+			break;
 		}
 		ofn.nFilterIndex = 1;
 		ofn.lpstrFileTitle = NULL;
 		ofn.nMaxFileTitle = 0;
 		ofn.lpstrInitialDir = folder.c_str();
-		ofn.Flags = 0;
+		ofn.Flags = OFN_PATHMUSTEXIST | OFN_OVERWRITEPROMPT;
 
 		if (GetSaveFileName(&ofn) == TRUE)
 		{
@@ -105,6 +111,7 @@ namespace Utility
 	{
 		struct tm newtime;
 		time_t now = time(0);
+
 		#ifdef _CONSOLE
 		localtime_s(&newtime, &now);
 		#else

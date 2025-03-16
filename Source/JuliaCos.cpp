@@ -331,6 +331,12 @@ std::wstring JuliaCos::Description()
 }
 
 
+std::wstring JuliaCos::HistoryEntry()
+{
+	return L"Julia Cos(z): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+}
+
+
 void JuliaCos::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"JuliaCos Set\n");

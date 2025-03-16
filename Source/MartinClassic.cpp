@@ -172,6 +172,12 @@ std::wstring Martin::Description()
 }
 
 
+std::wstring Martin::HistoryEntry()
+{
+	return L"Martin: " + std::to_wstring(Var.a) + L", " + std::to_wstring(Var.b) + L", " +std::to_wstring(Var.c);
+}
+
+
 void Martin::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin fractal\n");
