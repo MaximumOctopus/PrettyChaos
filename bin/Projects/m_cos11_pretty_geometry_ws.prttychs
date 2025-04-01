@@ -1,0 +1,20 @@
+[
+Name=Mandelbrot Cos(z^n)
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=2000.000000
+BailoutRadius=4.000000
+SS=0
+SSLevel=16
+Palette=random_7_hsv_rainbows.palette
+xmin=-0.407069396972656
+xmax=-0.405116271972656
+ymin=-0.00040726772574482
+ymax=0.000410319483557506
+var_a=0
+var_b=0
+var_c=11
+var_d=0
+]

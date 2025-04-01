@@ -1,0 +1,20 @@
+[
+Name=Julia Set
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=4000.000000
+BailoutRadius=4.000000
+SS=1
+SSLevel=32
+Palette=random_2.palette
+xmin=0.0657164107921514
+xmax=0.0662046920421514
+ymin=-0.564083365506904
+ymax=-0.563878968704579
+var_a=0.27923
+var_b=-0.01
+var_c=0
+var_d=0
+]
