@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.19
+  PrettyChaos 0.20
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  March 16th 2025
+  April 4th 2025
 
 =================================================================================================
 
@@ -35,6 +35,12 @@ All of my software is free and open source; please consider donating to a local 
 
 Release History
 
+0.20 / April 4th 2025
+
+Added: Resize options to Width/Height popup menu
+
+A few minor tweaks.
+
 0.19 / March 16th 2025
 
 Added: Save/Load Fractal history (every generated fractal's information is saved for later recall)
@@ -42,7 +48,7 @@ Added: "Reverse" palette option on Palette Editor dialog
 Added: "Random" palette options on Palette Editor dialog
        Rand 1 uses the first key's colour as a "seed" for the rest
        Rand 2 randomly generates each colour
-       These can produce some suprisingly awesome palettes!
+	   These can produce some suprisingly awesome palettes!
 Added: Copy rendered image to clipboard menu option
 
 A few tweaks and minor fixes.
