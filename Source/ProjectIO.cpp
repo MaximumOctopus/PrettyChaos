@@ -63,7 +63,6 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 					switch (PropertyName)
 					{
 					case FileProperty::None:
-						//ShowMessage(key.c_str());
 						break;
 					case FileProperty::Name:
 						project.Name = value;

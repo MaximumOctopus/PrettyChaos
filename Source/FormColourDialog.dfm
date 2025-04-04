@@ -3,7 +3,7 @@ object frmColourDialog: TfrmColourDialog
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Colour Select'
-  ClientHeight = 198
+  ClientHeight = 193
   ClientWidth = 562
   Color = clBtnFace
   DoubleBuffered = True

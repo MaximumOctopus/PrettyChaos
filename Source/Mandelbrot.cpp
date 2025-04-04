@@ -265,7 +265,7 @@ void Mandelbrot::Render(int hstart, int hend)
 
 			int it = 0;
 
-			Data[y * Width + x] = 10000000000000;
+			Data[ydotwidth + x] = 10000000000000;
 			long double x1 = 0;
 			long double y1 = 0;
 			long double x2 = 0;

@@ -259,6 +259,9 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 		case 32:
 			miSamples4Click(miSamples32);
 			break;
+		case 64:
+			miSamples4Click(miSamples64);
+			break;
 	}
 
 	// =========================================================================
@@ -1398,6 +1401,40 @@ void __fastcall TfrmMain::miTextureDimensionsClick(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::Half2Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	int w = StrToInt(eWidth->Text);
+	int h = StrToInt(eHeight->Text);
+
+	switch (mi->Tag)
+	{
+		case 0:
+			w /= 4;
+			h /= 4;
+			break;
+		case 1:
+			w /= 2;
+			h /= 2;
+			break;
+		case 2:
+			w *= 2;
+			h *= 2;
+			break;
+		case 3:
+			w *= 4;
+			h *= 4;
+			break;
+	}
+
+	eWidth->Text = w;
+	eHeight->Text = h;
+
+	UpdateDimension(false);
+}
+
+
 void __fastcall TfrmMain::miExampleJS1Click(TObject *Sender)
 {
 	TMenuItem* mi = (TMenuItem*)Sender;
@@ -1527,6 +1564,10 @@ void __fastcall TfrmMain::miSamples4Click(TObject *Sender)
 		case 3:
 			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 32;
 			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 5;
+			break;
+		case 4:
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 64;
+			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 6;
 			break;
 	}
 }

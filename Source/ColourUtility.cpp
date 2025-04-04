@@ -42,9 +42,9 @@ namespace ColourUtility
 		int g = (bgr & 0x00ff00) >> 8;
 		int b = (bgr & 0xff0000) >> 16;
 
-		int r_delta = (rand() % 50) - 25;
-		int g_delta = (rand() % 50) - 25;
-		int b_delta = (rand() % 50) - 25;
+		int r_delta = (rand() % 90) - 45;
+		int g_delta = (rand() % 90) - 45;
+		int b_delta = (rand() % 90) - 45;
 
 		r += r_delta;
 		g += g_delta;

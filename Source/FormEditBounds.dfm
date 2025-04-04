@@ -3,8 +3,8 @@ object frmEditBounds: TfrmEditBounds
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Edit Fractal Bounds'
-  ClientHeight = 201
-  ClientWidth = 372
+  ClientHeight = 192
+  ClientWidth = 368
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -141,7 +141,7 @@ object frmEditBounds: TfrmEditBounds
     Width = 75
     Height = 25
     Cancel = True
-    Caption = 'Close'
+    Caption = 'Cancel'
     ModalResult = 2
     TabOrder = 1
   end

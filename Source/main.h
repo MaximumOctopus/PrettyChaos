@@ -276,6 +276,14 @@ __published:	// IDE-managed Components
 	TPanel *Panel4;
 	TImage *iPreview;
 	TLabel *lCursorAbsolute;
+	TMenuItem *miSamples64;
+	TMenuItem *N027930011;
+	TMenuItem *Resize1;
+	TMenuItem *N19;
+	TMenuItem *Quarter1;
+	TMenuItem *Half1;
+	TMenuItem *Half2;
+	TMenuItem *Quadruplex41;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -331,6 +339,7 @@ __published:	// IDE-managed Components
 	void __fastcall sbLoadHistoryClick(TObject *Sender);
 	void __fastcall sbSaveHistoryClick(TObject *Sender);
 	void __fastcall miCopyToClipboardClick(TObject *Sender);
+	void __fastcall Half2Click(TObject *Sender);
 
 
 private:	// User declarations

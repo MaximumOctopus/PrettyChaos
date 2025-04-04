@@ -1854,6 +1854,31 @@ object frmMain: TfrmMain
         OnClick = miTextureDimensionsClick
       end
     end
+    object N19: TMenuItem
+      Caption = '-'
+    end
+    object Resize1: TMenuItem
+      Caption = 'Resize'
+      object Quarter1: TMenuItem
+        Caption = 'Quarter (x0.25)'
+        OnClick = Half2Click
+      end
+      object Half1: TMenuItem
+        Tag = 1
+        Caption = 'Half (x0.5)'
+        OnClick = Half2Click
+      end
+      object Half2: TMenuItem
+        Tag = 2
+        Caption = 'Double (x2)'
+        OnClick = Half2Click
+      end
+      object Quadruplex41: TMenuItem
+        Tag = 3
+        Caption = 'Quadruple (x4)'
+        OnClick = Half2Click
+      end
+    end
   end
   object MainMenu1: TMainMenu
     Tag = 3
@@ -2050,6 +2075,13 @@ object frmMain: TfrmMain
           RadioItem = True
           OnClick = miSamples4Click
         end
+        object miSamples64: TMenuItem
+          Tag = 4
+          Caption = '64'
+          GroupIndex = 1
+          RadioItem = True
+          OnClick = miSamples4Click
+        end
       end
       object N10: TMenuItem
         Caption = '-'
@@ -2212,6 +2244,11 @@ object frmMain: TfrmMain
       object N0801562: TMenuItem
         Tag = 26
         Caption = '0.8, 0.156'
+        OnClick = miExampleJS1Click
+      end
+      object N027930011: TMenuItem
+        Tag = 27
+        Caption = '0.2793, -0.01'
         OnClick = miExampleJS1Click
       end
     end

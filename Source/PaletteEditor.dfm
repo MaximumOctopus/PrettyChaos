@@ -4,7 +4,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   Hint = 'Generates purely random colours for each key'
   BorderStyle = bsDialog
   Caption = 'Palette Editor'
-  ClientHeight = 539
+  ClientHeight = 536
   ClientWidth = 546
   Color = clBtnFace
   DoubleBuffered = True

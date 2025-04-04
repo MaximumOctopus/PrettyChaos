@@ -965,12 +965,12 @@ void Fractal::OrbitTrap(TBitmap* canvas, bool fill)
 
 		for (int x = 0; x < Width; x++)
 		{
+			int index = Fast::Floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * __PaletteCount);
+
 			if (fill)
 			{
 				if (FractalData[ydotwidth + x].a != max_iterations)
 				{
-					int index = Fast::Floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * __PaletteCount);
-
 					ptr[x].rgbtRed = Palette[index].r;
 					ptr[x].rgbtGreen = Palette[index].g;
 					ptr[x].rgbtBlue = Palette[index].b;
@@ -984,8 +984,6 @@ void Fractal::OrbitTrap(TBitmap* canvas, bool fill)
 			}
 			else
 			{
-				int index = Fast::Floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * __PaletteCount);
-
 				ptr[x].rgbtRed = Palette[index].r;
 				ptr[x].rgbtGreen = Palette[index].g;
 				ptr[x].rgbtBlue = Palette[index].b;
