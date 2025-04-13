@@ -682,8 +682,6 @@ void Fractal::FinaliseRenderJulia(TBitmap *canvas, double max_d)
 				}
 				else
 				{
-					int it = FractalData[ydotwidth + x].a - min;
-
 					if (max == min)
 					{
 						ptr[x].rgbtRed = Palette[499].r;
@@ -692,6 +690,7 @@ void Fractal::FinaliseRenderJulia(TBitmap *canvas, double max_d)
 					}
 					else
 					{
+	                    int it = FractalData[ydotwidth + x].a - min;
 						int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
 
 						ptr[x].rgbtRed = Palette[index].r;

@@ -8,6 +8,8 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+// https://en.wikipedia.org/wiki/Julia_set
+
 #include <Vcl.Dialogs.hpp>
 
 #include <string>
@@ -16,10 +18,10 @@
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Fast.h"
-#include "JuliaCos.h"
+#include "JuliaSinCos.h"
 
 
-JuliaCos::JuliaCos() : Fractal()
+JuliaSinCos::JuliaSinCos() : Fractal()
 {
 	AcceptsABC = true;
 	AcceptsVarA = true;
@@ -27,11 +29,11 @@ JuliaCos::JuliaCos() : Fractal()
 
 	MultiThread = true;
 
-	Defaults.Set(1, 1000, 4, -1.6, 0.7061, 0, 0);
+	Defaults.Set(1, 250, 6, -0.9, -0.8, 2, 0);
 
 	QPM = QuickParameterMode::kABPlusFine;
 
-	Name = L"Julia Cos(z)";
+	Name = L"Julia Sin(z) + Cos(z)";
 
 	RenderModes.push_back(L"Escape time");
 	RenderModes.push_back(L"Continuous");
@@ -49,12 +51,12 @@ JuliaCos::JuliaCos() : Fractal()
 }
 
 
-JuliaCos::~JuliaCos()
+JuliaSinCos::~JuliaSinCos()
 {
 }
 
 
-bool JuliaCos::MultiThreadRender(bool preview, bool super_sample)
+bool JuliaSinCos::MultiThreadRender(bool preview, bool super_sample)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
@@ -126,7 +128,7 @@ bool JuliaCos::MultiThreadRender(bool preview, bool super_sample)
 }
 
 
-void JuliaCos::Render(int hstart, int hend)
+void JuliaSinCos::Render(int hstart, int hend)
 {
 	max_d = 0;
 
@@ -144,14 +146,27 @@ void JuliaCos::Render(int hstart, int hend)
 
 			int it = 0;
 
-			long double w = 0;
+			long double r = 0;
+			long double s = 0;
+			long double t = 0;
+			long double u = 0;
+			long double x2 = 0;
+			long double y2 = 0;
+			long double m = 0;
 
-			while (p * p + q * q <= bailout_radius && it < max_iterations)
+			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
-				w = cos(p) * cosh(q) + Var.a;
-				q = -(sin(p) * sinh(q)) + Var.b;
+				t = sin(p) * cosh(q);
+				u = cos(p) * sinh(q);
 
-  				p = w;
+				r = t + cos(p) * cosh(q);
+				s = u -(sin(p) * sinh(q));
+
+				p = r + Var.a;
+				q = s + Var.b;
+
+				x2 = p * p;
+				y2 = q * q;
 
 				it++;
 			}
@@ -171,7 +186,7 @@ void JuliaCos::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					long double log_zn = std::log(p * p + q * q) / 2;
+					long double log_zn = std::log(x2 + y2) / 2;
 					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
 					long double itnew = it + 1 - nu;
@@ -194,7 +209,7 @@ void JuliaCos::Render(int hstart, int hend)
 			{
 				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
 
-				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+				if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
 
 				FractalData[ydotwidth + x].a = it;
 
@@ -214,7 +229,7 @@ void JuliaCos::Render(int hstart, int hend)
 }
 
 
-void JuliaCos::RenderSS(int hstart, int hend)
+void JuliaSinCos::RenderSS(int hstart, int hend)
 {
 	max_d = 0;
 
@@ -236,14 +251,27 @@ void JuliaCos::RenderSS(int hstart, int hend)
 
 				int it = 0;
 
-				long double w = 0;
+				long double r = 0;
+				long double s = 0;
+				long double t = 0;
+				long double u = 0;
+				long double x2 = 0;
+				long double y2 = 0;
+				long double m = 0;
 
-				while (p * p + q * q <= bailout_radius && it < max_iterations)
+				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
-					w = cos(p) * cosh(q) + Var.a;
-					q = -(sin(p) * sinh(q)) + Var.b;
+					t = sin(p) * cosh(q);
+					u = cos(p) * sinh(q);
 
-					p = w;
+					r = t + cos(p) * cosh(q);
+					s = u -(sin(p) * sinh(q));
+
+					p = r + Var.a;
+					q = s + Var.b;
+
+					x2 = p * p;
+					y2 = q * q;
 
 					it++;
 				}
@@ -263,7 +291,7 @@ void JuliaCos::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						long double log_zn = std::log(p * p + q * q) / 2;
+						long double log_zn = std::log(x2 + y2) / 2;
 						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
 
 						long double itnew = it + 1 - nu;
@@ -310,13 +338,13 @@ void JuliaCos::RenderSS(int hstart, int hend)
 }
 
 
-void JuliaCos::ResetView()
+void JuliaSinCos::ResetView()
 {
-	SetView(-2.00, 2.00, -1.6, 1.6);
+	SetView(-3.141, 3.141, -2.5128, 2.5128);
 }
 
 
-std::wstring JuliaCos::GetParameters()
+std::wstring JuliaSinCos::GetParameters()
 {
 	return L"render mode: " + RenderModes[RenderMode] +
 		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
@@ -325,21 +353,21 @@ std::wstring JuliaCos::GetParameters()
 }
 
 
-std::wstring JuliaCos::Description()
+std::wstring JuliaSinCos::Description()
 {
-	return L"Julia Cos(z): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Julia Sin(z) + Cos(z): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-std::wstring JuliaCos::HistoryEntry()
+std::wstring JuliaSinCos::HistoryEntry()
 {
-	return L"Julia Cos(z): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"Julia Sin(z) + Cos(z): " + Formatting::LDToStr(Var.a) + L" + " + Formatting::LDToStr(Var.b) + L"i; " + Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-void JuliaCos::ToFile(std::ofstream& ofile)
+void JuliaSinCos::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"JuliaCos Set\n");
+	ofile << Formatting::to_utf8(L"JuliaSinCos Set\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");

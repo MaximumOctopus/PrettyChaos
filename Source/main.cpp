@@ -53,6 +53,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	PaletteBitmap->Width = 125;
 	PaletteBitmap->Height = 1;
 
+    QPFine = 0.01;
+
 	GPaletteHandler = new PaletteHandler();
 
 	GFractalHandler = new FractalHandler();

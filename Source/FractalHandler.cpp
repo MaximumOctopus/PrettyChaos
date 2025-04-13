@@ -18,6 +18,7 @@
 #include "JuliaQuintic.h"
 #include "JuliaNtic.h"
 #include "JuliaCos.h"
+#include "JuliaSinCos.h"
 #include "Mandelbrot.h"
 #include "MandelbrotCubic.h"
 #include "MandelbrotQuartic.h"
@@ -39,6 +40,7 @@ FractalHandler::FractalHandler()
 	Fractal* j4 = new JuliaQuintic();
 	Fractal* j5 = new JuliaNtic();
 	Fractal* j6 = new JuliaCos();
+	Fractal* j7 = new JuliaSinCos();
 	Fractal* m1 = new Mandelbrot();
 	Fractal* m2 = new MandelbrotCubic();
 	Fractal* m3 = new MandelbrotQuartic();
@@ -56,6 +58,7 @@ FractalHandler::FractalHandler()
 	Fractals.push_back(j4);
 	Fractals.push_back(j5);
 	Fractals.push_back(j6);
+	Fractals.push_back(j7);
 
 	Fractals.push_back(m1);
 	Fractals.push_back(m2);

@@ -348,6 +348,14 @@
             <VirtualFolder>{74E76172-3D9A-4426-B71F-8E48BA01D0E9}</VirtualFolder>
             <BuildOrder>46</BuildOrder>
         </None>
+        <CppCompile Include="JuliaSinCos.cpp">
+            <VirtualFolder>{798AA649-3F98-4C4F-9DBB-98092E3EC036}</VirtualFolder>
+            <BuildOrder>70</BuildOrder>
+        </CppCompile>
+        <None Include="JuliaSinCos.h">
+            <VirtualFolder>{798AA649-3F98-4C4F-9DBB-98092E3EC036}</VirtualFolder>
+            <BuildOrder>71</BuildOrder>
+        </None>
         <CppCompile Include="main.cpp">
             <Form>Form1</Form>
             <FormType>dfm</FormType>
@@ -492,9 +500,9 @@
         <FormResources Include="PaletteEditor.dfm"/>
         <FormResources Include="FormAnimate.dfm"/>
         <FormResources Include="FormAbout.dfm"/>
+        <FormResources Include="FormColourDialog.dfm"/>
         <FormResources Include="FormText.dfm"/>
         <FormResources Include="FormEditBounds.dfm"/>
-        <FormResources Include="FormColourDialog.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -538,6 +546,7 @@
                         <VFOLDER ID="{8B6C5C96-BE5B-482D-B071-5F1B1EA8EEFA}" name="JuliaQuartic"/>
                         <VFOLDER ID="{74E76172-3D9A-4426-B71F-8E48BA01D0E9}" name="JuliaQuintic"/>
                         <VFOLDER ID="{74189EF0-E9D5-4A91-A3D1-F970D78723C7}" name="Julia_Cos"/>
+                        <VFOLDER ID="{798AA649-3F98-4C4F-9DBB-98092E3EC036}" name="Julia_SinCos"/>
                         <VFOLDER ID="{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}" name="Mandelbrot"/>
                         <VFOLDER ID="{FFDEDC69-B18E-4B86-BDF5-28C2E6C98690}" name="Mandelbrot_Cos"/>
                         <VFOLDER ID="{D12492A8-F745-4419-8C05-1F05A60D1612}" name="Mandelbrot_CosNtic"/>

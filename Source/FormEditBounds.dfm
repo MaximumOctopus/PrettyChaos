@@ -3,7 +3,7 @@ object frmEditBounds: TfrmEditBounds
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Edit Fractal Bounds'
-  ClientHeight = 192
+  ClientHeight = 195
   ClientWidth = 368
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
