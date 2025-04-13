@@ -1,0 +1,20 @@
+[
+Name=Mandelbrot Cos(z^n)
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=0.800000
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+SS=0
+SSLevel=8
+Palette=blue_white_gold_2.palette
+xmin=-0.302685546875
+xmax=-0.271435546875
+ymin=-0.0124755859375
+ymax=0.0125244140625
+var_a=0
+var_b=0
+var_c=21
+var_d=0
+]
