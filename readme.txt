@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.20
+  PrettyChaos 0.21
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  April 4th 2025
+  April 13th 2025
 
 =================================================================================================
 
@@ -34,6 +34,12 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.21 / April 13th 2025
+
+Added: Julia sin(z) + cos(z) + c
+
+A couple of minor fixes and changes.
 
 0.20 / April 4th 2025
 
