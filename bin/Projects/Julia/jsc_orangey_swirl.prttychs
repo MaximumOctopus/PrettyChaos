@@ -1,0 +1,19 @@
+[
+Name=Julia Sin(z) + Cos(z)
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=0.400000
+MaxIterations=500.000000
+BailoutRadius=6.000000
+SS=0
+SSLevel=8
+xmin=-3.141
+xmax=3.141
+ymin=-2.5128
+ymax=2.5128
+var_a=0.17
+var_b=0.79
+var_c=2
+var_d=0
+]

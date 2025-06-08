@@ -1,0 +1,20 @@
+[
+Name=Julia Sin(z) + Cos(z)
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=0.400000
+MaxIterations=250.000000
+BailoutRadius=6.000000
+SS=0
+SSLevel=8
+Palette=random_10_laser_neon.palette
+xmin=-1.795032421875
+xmax=-0.224532421875
+ymin=-0.844643091388082
+ymax=-0.187224486736919
+var_a=0.43
+var_b=0.5
+var_c=2
+var_d=0
+]

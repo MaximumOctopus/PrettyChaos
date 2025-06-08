@@ -1,0 +1,18 @@
+[
+Name=Martin (Positive)
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=0.8
+MaxIterations=100000000.000000
+BailoutRadius=256.000000
+Palette=red_yellow_green.palette
+xmin=-640.000000
+xmax=640.000000
+ymin=-267.906977
+ymax=267.906977
+var_a=451.000000
+var_b=0.550000
+var_c=-300.000000
+var_d=1.000000
+]

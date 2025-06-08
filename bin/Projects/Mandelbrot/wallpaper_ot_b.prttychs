@@ -1,0 +1,16 @@
+[
+Name=Mandelbrot
+Width=688
+Height=288
+RenderMode=5
+nCoeff=1
+MaxIterations=1000.000000
+BailoutRadius=256.000000
+xmin=-0.330596
+xmax=-0.021846
+ymin=-0.928725
+ymax=-0.799481
+var_a=-0.700000
+var_b=0.270150
+var_c=0.000000
+]

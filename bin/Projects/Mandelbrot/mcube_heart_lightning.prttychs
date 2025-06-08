@@ -1,0 +1,20 @@
+[
+Name=Mandelbrot z^3
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+SS=0
+SSLevel=1
+Palette=red_purple_yellow_grey.palette
+xmin=-0.25537109375
+xmax=-0.252294921875
+ymin=-1.2769873046875
+ymax=-1.2745263671875
+var_a=16
+var_b=0
+var_c=0
+var_d=0
+]

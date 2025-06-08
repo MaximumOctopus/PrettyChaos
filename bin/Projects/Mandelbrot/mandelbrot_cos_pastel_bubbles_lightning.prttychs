@@ -1,0 +1,20 @@
+[
+Name=Mandelbrot Cos(z)
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+SS=1
+SSLevel=8
+Palette=pink_green_blue.palette
+xmin=-1.55625
+xmax=-1.49375
+ymin=-0.9921875
+ymax=-0.9421875
+var_a=16
+var_b=0
+var_c=0
+var_d=0
+]
