@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.21
+  PrettyChaos 0.22
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  April 13th 2025
+  June 29th 2025
 
 =================================================================================================
 
@@ -34,6 +34,12 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.22 / June 29th 2025
+
+Added: Support for gradients to replace the "infinity" colour
+       Instead of solid colour to represent points that tend to infinity
+       a gradient can be used instead.	   
 
 0.21 / April 13th 2025
 
