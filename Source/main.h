@@ -284,6 +284,8 @@ __published:	// IDE-managed Components
 	TMenuItem *Half1;
 	TMenuItem *Half2;
 	TMenuItem *Quadruplex41;
+	TPaintBox *pbPalette2;
+	TShape *sInfinity2;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -340,6 +342,9 @@ __published:	// IDE-managed Components
 	void __fastcall sbSaveHistoryClick(TObject *Sender);
 	void __fastcall miCopyToClipboardClick(TObject *Sender);
 	void __fastcall Half2Click(TObject *Sender);
+	void __fastcall pbPalette2Click(TObject *Sender);
+	void __fastcall sInfinity2MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
 
 
 private:	// User declarations
@@ -396,9 +401,7 @@ private:	// User declarations
 	void UpdatePalette();
     void UpdateAllParameters();
 
-	void CopyPaletteToFractal();
-
-	bool LoadAndSetPalette(const std::wstring);
+	bool LoadAndSetPalette(int, const std::wstring);
 
 	void SetWarning(bool);
 

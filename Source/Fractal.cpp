@@ -36,13 +36,6 @@ Fractal::Fractal()
 	CopyCanvas->PixelFormat = pf24bit;
 	CopyCanvas->Width = 1280;
 	CopyCanvas->Height = 1024;
-
-	for (int t = 0; t < __PaletteCount; t++)
-	{
-		Palette[t] = Colour(1, 1, 1); // to do, what  did this code do
-	}
-
-	Palette[__PaletteInfinity] = Colour();
 }
 
 
@@ -83,7 +76,7 @@ ProjectHistory Fractal::GetAsProject(int id)
 }
 
 
-void Fractal::ClearFractalDataA()
+void Fractal::ClearFractalDataA(int value)
 {
 	for (int y = 0; y < Height; y++)
 	{
@@ -91,7 +84,7 @@ void Fractal::ClearFractalDataA()
 
 		for (int x = 0; x < Width; x++)
 		{
-			FractalData[ydotwidth + x].a = 0;
+			FractalData[ydotwidth + x].a = value;
 		}
 	}
 }
@@ -422,7 +415,7 @@ void Fractal::SetRenderMode(int new_mode)
 
 void Fractal::SetPaletteInfinity(Colour colour)
 {
-	Palette[__PaletteInfinity] = colour;
+	pp2->SingleColour = colour;
 }
 
 
@@ -482,17 +475,39 @@ void Fractal::ColourDistanceI(TBitmap* canvas, long double max_d)
 		{
 			if (FractalData[ydotwidth + x].a != max_iterations)
 			{
-				int index = Fast::Floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
+				int index = Fast::Floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * pp->ColourCount);
 
-				ptr[x].rgbtRed = Palette[index].r;
-				ptr[x].rgbtGreen = Palette[index].g;
-				ptr[x].rgbtBlue = Palette[index].b;
+				ptr[x].rgbtRed = pp->Colours[index].r;
+				ptr[x].rgbtGreen = pp->Colours[index].g;
+				ptr[x].rgbtBlue = pp->Colours[index].b;
 			}
 			else
 			{
-				ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-				ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-				ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+				if (pp2->IsGradient)
+				{
+					if (pp2->GradientDirection)
+					{
+						int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+						ptr[x].rgbtRed = pp2->Colours[index].r;
+						ptr[x].rgbtGreen = pp2->Colours[index].g;
+						ptr[x].rgbtBlue = pp2->Colours[index].b;
+					}
+					else
+					{
+						int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+						ptr[x].rgbtRed = pp2->Colours[index].r;
+						ptr[x].rgbtGreen = pp2->Colours[index].g;
+						ptr[x].rgbtBlue = pp2->Colours[index].b;
+					}
+				}
+				else
+				{
+					ptr[x].rgbtRed = pp2->SingleColour.r;
+					ptr[x].rgbtGreen = pp2->SingleColour.g;
+					ptr[x].rgbtBlue = pp2->SingleColour.b;
+				}
 			}
 		}
 	}
@@ -513,17 +528,17 @@ void Fractal::ColourDistanceII(TBitmap* canvas, long double max_d)
 		{
 			if (FractalData[ydotwidth + x].a != max_iterations)
 			{
-				int index = Fast::Floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * __PaletteCount);
+				int index = Fast::Floor(std::pow((Data[ydotwidth + x] / max_d), n_coeff) * pp->ColourCount);
 
-				ptr[x].rgbtRed = Palette[index].r;
-				ptr[x].rgbtGreen = Palette[index].g;
-				ptr[x].rgbtBlue = Palette[index].b;
+				ptr[x].rgbtRed = pp->Colours[index].r;
+				ptr[x].rgbtGreen = pp->Colours[index].g;
+				ptr[x].rgbtBlue = pp->Colours[index].b;
 			}
 			else
 			{
-				ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-				ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-				ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+				ptr[x].rgbtRed = pp2->SingleColour.r;
+				ptr[x].rgbtGreen = pp2->SingleColour.g;
+				ptr[x].rgbtBlue = pp2->SingleColour.b;
 			}
 		}
 	}
@@ -534,16 +549,16 @@ void Fractal::ColourNTone(TBitmap* canvas, int n)
 {
 	Colour* colours = new Colour[n];
 
-	colours[0] = Palette[0];
-	colours[n - 1] = Palette[499];
+	colours[0] = pp->Colours[0];
+	colours[n - 1] = pp->Colours[499];
 
 	if (n > 2)
 	{
-		int delta = Fast::Floor(__PaletteCount / (n - 1));
+		int delta = Fast::Floor(pp->ColourCount / (n - 1));
 
 		for (int t = 1; t < n - 1; t++)
 		{
-			colours[t] = Palette[delta * t];
+			colours[t] = pp->Colours[delta * t];
 		}
 	}
 
@@ -567,9 +582,31 @@ void Fractal::ColourNTone(TBitmap* canvas, int n)
 			}
 			else
 			{
-				ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-				ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-				ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+				if (pp2->IsGradient)
+				{
+					if (pp2->GradientDirection)
+					{
+						int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+						ptr[x].rgbtRed = pp2->Colours[index].r;
+						ptr[x].rgbtGreen = pp2->Colours[index].g;
+						ptr[x].rgbtBlue = pp2->Colours[index].b;
+					}
+					else
+					{
+						int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+						ptr[x].rgbtRed = pp2->Colours[index].r;
+						ptr[x].rgbtGreen = pp2->Colours[index].g;
+						ptr[x].rgbtBlue = pp2->Colours[index].b;
+					}
+				}
+				else
+				{
+					ptr[x].rgbtRed = pp2->SingleColour.r;
+					ptr[x].rgbtGreen = pp2->SingleColour.g;
+					ptr[x].rgbtBlue = pp2->SingleColour.b;
+				}
 			}
 		}
 	}
@@ -602,9 +639,9 @@ void Fractal::MergeImage()
 
 		for (int x = 0; x  < RenderCanvas->Width; x++)
 		{
-			if (ptra[x].rgbtRed == Palette[__PaletteInfinity].r &&
-				ptra[x].rgbtGreen == Palette[__PaletteInfinity].g &&
-				ptra[x].rgbtBlue == Palette[__PaletteInfinity].b)
+			if (ptra[x].rgbtRed == pp2->SingleColour.r &&
+				ptra[x].rgbtGreen == pp2->SingleColour.g &&
+				ptra[x].rgbtBlue == pp2->SingleColour.b)
 			{
                 ptra[x] = ptrb[x];
 			}
@@ -676,26 +713,26 @@ void Fractal::FinaliseRenderJulia(TBitmap *canvas, double max_d)
 			{
 				if (FractalData[ydotwidth + x].a == 0)
 				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+					ptr[x].rgbtRed = pp2->SingleColour.r;
+					ptr[x].rgbtGreen = pp2->SingleColour.g;
+					ptr[x].rgbtBlue = pp2->SingleColour.b;
 				}
 				else
 				{
 					if (max == min)
 					{
-						ptr[x].rgbtRed = Palette[499].r;
-						ptr[x].rgbtGreen = Palette[499].g;
-						ptr[x].rgbtBlue = Palette[499].b;
+						ptr[x].rgbtRed = pp->Colours[499].r;
+						ptr[x].rgbtGreen = pp->Colours[499].g;
+						ptr[x].rgbtBlue = pp->Colours[499].b;
 					}
 					else
 					{
 	                    int it = FractalData[ydotwidth + x].a - min;
-						int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
+						int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * pp->ColourCount);
 
-						ptr[x].rgbtRed = Palette[index].r;
-						ptr[x].rgbtGreen = Palette[index].g;
-						ptr[x].rgbtBlue = Palette[index].b;
+						ptr[x].rgbtRed = pp->Colours[index].r;
+						ptr[x].rgbtGreen = pp->Colours[index].g;
+						ptr[x].rgbtBlue = pp->Colours[index].b;
 					}
 				}
 			}
@@ -781,20 +818,42 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
 
 				if (FractalData[ydotwidth + x].a != max_iterations)
 				{
-					int index = Fast::Floor(std::pow(c, n_coeff) * __PaletteCount);
+					int index = Fast::Floor(std::pow(c, n_coeff) * pp->ColourCount);
 
 					if (index >= 0 && index <= 500)
 					{
-						ptr[x].rgbtRed = Palette[index].r;
-						ptr[x].rgbtGreen = Palette[index].g;
-						ptr[x].rgbtBlue = Palette[index].b;
+						ptr[x].rgbtRed = pp->Colours[index].r;
+						ptr[x].rgbtGreen = pp->Colours[index].g;
+						ptr[x].rgbtBlue = pp->Colours[index].b;
 					}
 				}
 				else
 				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+					if (pp2->IsGradient)
+					{
+						if (pp2->GradientDirection)
+						{
+							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+						else
+						{
+							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+					}
+					else
+					{
+						ptr[x].rgbtRed = pp2->SingleColour.r;
+						ptr[x].rgbtGreen = pp2->SingleColour.g;
+						ptr[x].rgbtBlue = pp2->SingleColour.b;
+  					}
 				}
 			}
 		}
@@ -811,9 +870,40 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
 
 			for (int x = 0; x < Width; x++)
 			{
-				ptr[x].rgbtRed = FractalData[ydotwidth + x].r;
-				ptr[x].rgbtGreen = FractalData[ydotwidth + x].g;
-				ptr[x].rgbtBlue = FractalData[ydotwidth + x].b;
+				if (FractalData[ydotwidth + x].a == -1)
+				{
+	                if (pp2->IsGradient)
+					{
+						if (pp2->GradientDirection)
+						{
+							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+						else
+						{
+							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+					}
+					else
+					{
+						ptr[x].rgbtRed = pp2->SingleColour.r;
+						ptr[x].rgbtGreen = pp2->SingleColour.g;
+						ptr[x].rgbtBlue = pp2->SingleColour.b;
+					}
+				}
+				else
+				{
+					ptr[x].rgbtRed = FractalData[ydotwidth + x].r;
+					ptr[x].rgbtGreen = FractalData[ydotwidth + x].g;
+					ptr[x].rgbtBlue = FractalData[ydotwidth + x].b;
+				}
 			}
 		}
 		break;
@@ -857,9 +947,9 @@ void Fractal::FinaliseRenderDragon(TBitmap* canvas)
 
 		for (int x = 0; x < Width; x++)
 		{
-			ptr[x].rgbtRed = Palette[FractalData[ydotwidth + x].a].r;
-			ptr[x].rgbtGreen = Palette[FractalData[ydotwidth + x].a].g;
-			ptr[x].rgbtBlue = Palette[FractalData[ydotwidth + x].a].b;
+			ptr[x].rgbtRed = pp->Colours[FractalData[ydotwidth + x].a].r;
+			ptr[x].rgbtGreen = pp->Colours[FractalData[ydotwidth + x].a].g;
+			ptr[x].rgbtBlue = pp->Colours[FractalData[ydotwidth + x].a].b;
 		}
 	}
 }
@@ -895,21 +985,43 @@ void Fractal::FinaliseRenderMartin(TBitmap* canvas)
 
 				for (int x = 0; x < Width; x++)
 				{
-					if (FractalData[ydotwidth + x].a == 0)
+					if (FractalData[ydotwidth + x].a == -1)
 					{
-						ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-						ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-						ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+						if (pp2->IsGradient)
+						{
+							if (pp2->GradientDirection)
+							{
+								int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+								ptr[x].rgbtRed = pp2->Colours[index].r;
+								ptr[x].rgbtGreen = pp2->Colours[index].g;
+								ptr[x].rgbtBlue = pp2->Colours[index].b;
+							}
+							else
+							{
+								int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+								ptr[x].rgbtRed = pp2->Colours[index].r;
+								ptr[x].rgbtGreen = pp2->Colours[index].g;
+								ptr[x].rgbtBlue = pp2->Colours[index].b;
+							}
+						}
+						else
+						{
+							ptr[x].rgbtRed = pp2->SingleColour.r;
+							ptr[x].rgbtGreen = pp2->SingleColour.g;
+							ptr[x].rgbtBlue = pp2->SingleColour.b;
+						}
 					}
 					else
 					{
 						int it = FractalData[ydotwidth + x].a - min;
 
-						int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * __PaletteCount);
+						int index = std::round(std::pow((long double)it / ((long double)max - (long double)min), n_coeff) * pp->ColourCount);
 
-						ptr[x].rgbtRed = Palette[index].r;
-						ptr[x].rgbtGreen = Palette[index].g;
-						ptr[x].rgbtBlue = Palette[index].b;
+						ptr[x].rgbtRed = pp->Colours[index].r;
+						ptr[x].rgbtGreen = pp->Colours[index].g;
+						ptr[x].rgbtBlue = pp->Colours[index].b;
 					}
 				}
 			}
@@ -927,9 +1039,40 @@ void Fractal::FinaliseRenderMartin(TBitmap* canvas)
 
 			for (int x = 0; x < Width; x++)
 			{
-				ptr[x].rgbtRed = Palette[FractalData[ydotwidth + x].a].r;
-				ptr[x].rgbtGreen = Palette[FractalData[ydotwidth + x].a].g;
-				ptr[x].rgbtBlue = Palette[FractalData[ydotwidth + x].a].b;
+				if (FractalData[ydotwidth + x].a == -1)
+				{
+                	if (pp2->IsGradient)
+					{
+						if (pp2->GradientDirection)
+						{
+							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+						else
+						{
+							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+					}
+					else
+					{
+						ptr[x].rgbtRed = pp2->SingleColour.r;
+						ptr[x].rgbtGreen = pp2->SingleColour.g;
+						ptr[x].rgbtBlue = pp2->SingleColour.b;
+					}
+				}
+				else
+				{
+					ptr[x].rgbtRed = pp->Colours[FractalData[ydotwidth + x].a].r;
+					ptr[x].rgbtGreen = pp->Colours[FractalData[ydotwidth + x].a].g;
+					ptr[x].rgbtBlue = pp->Colours[FractalData[ydotwidth + x].a].b;
+				}
 			}
 		}
 		break;
@@ -964,28 +1107,50 @@ void Fractal::OrbitTrap(TBitmap* canvas, bool fill)
 
 		for (int x = 0; x < Width; x++)
 		{
-			int index = Fast::Floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * __PaletteCount);
+			int index = Fast::Floor(std::pow((Data[ydotwidth + x] / maxx), n_coeff) * pp->ColourCount);
 
 			if (fill)
 			{
 				if (FractalData[ydotwidth + x].a != max_iterations)
 				{
-					ptr[x].rgbtRed = Palette[index].r;
-					ptr[x].rgbtGreen = Palette[index].g;
-					ptr[x].rgbtBlue = Palette[index].b;
+					ptr[x].rgbtRed = pp->Colours[index].r;
+					ptr[x].rgbtGreen = pp->Colours[index].g;
+					ptr[x].rgbtBlue = pp->Colours[index].b;
 				}
 				else
 				{
-					ptr[x].rgbtRed = Palette[__PaletteInfinity].r;
-					ptr[x].rgbtGreen = Palette[__PaletteInfinity].g;
-					ptr[x].rgbtBlue = Palette[__PaletteInfinity].b;
+					if (pp2->IsGradient)
+					{
+						if (pp2->GradientDirection)
+						{
+							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+						else
+						{
+							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+
+							ptr[x].rgbtRed = pp2->Colours[index].r;
+							ptr[x].rgbtGreen = pp2->Colours[index].g;
+							ptr[x].rgbtBlue = pp2->Colours[index].b;
+						}
+					}
+					else
+					{
+						ptr[x].rgbtRed = pp2->SingleColour.r;
+						ptr[x].rgbtGreen = pp2->SingleColour.g;
+						ptr[x].rgbtBlue = pp2->SingleColour.b;
+					}
 				}
 			}
 			else
 			{
-				ptr[x].rgbtRed = Palette[index].r;
-				ptr[x].rgbtGreen = Palette[index].g;
-				ptr[x].rgbtBlue = Palette[index].b;
+				ptr[x].rgbtRed = pp->Colours[index].r;
+				ptr[x].rgbtGreen = pp->Colours[index].g;
+				ptr[x].rgbtBlue = pp->Colours[index].b;
 			}
 		}
 	}

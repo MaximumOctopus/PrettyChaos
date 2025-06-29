@@ -450,6 +450,14 @@
             <VirtualFolder>{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}</VirtualFolder>
             <BuildOrder>30</BuildOrder>
         </None>
+        <CppCompile Include="Palette.cpp">
+            <VirtualFolder>{46D9CB62-2EB1-420D-BC6E-3252AEC2B8FE}</VirtualFolder>
+            <BuildOrder>73</BuildOrder>
+        </CppCompile>
+        <None Include="Palette.h">
+            <VirtualFolder>{46D9CB62-2EB1-420D-BC6E-3252AEC2B8FE}</VirtualFolder>
+            <BuildOrder>72</BuildOrder>
+        </None>
         <CppCompile Include="PaletteEditor.cpp">
             <VirtualFolder>{6F195188-9F40-4F70-B1F3-F2BFE6978011}</VirtualFolder>
             <Form>frmPaletteEditor</Form>
@@ -536,7 +544,9 @@
                     <VFOLDER ID="{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}" name="File I/O"/>
                     <VFOLDER ID="{6F195188-9F40-4F70-B1F3-F2BFE6978011}" name="Forms"/>
                     <VFOLDER ID="{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}" name="History"/>
-                    <VFOLDER ID="{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}" name="Palette"/>
+                    <VFOLDER ID="{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}" name="Palette">
+                        <VFOLDER ID="{46D9CB62-2EB1-420D-BC6E-3252AEC2B8FE}" name="Palette"/>
+                    </VFOLDER>
                     <VFOLDER ID="{64C7C5C2-487C-4A13-995B-F058C27D22E0}" name="Renderers">
                         <VFOLDER ID="{CBC6E249-27A9-4600-9ED7-EEE1DE006581}" name="Base"/>
                         <VFOLDER ID="{23FBDFF5-6240-4159-81D9-03F9995582AA}" name="Dragon"/>

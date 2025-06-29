@@ -317,10 +317,11 @@ object frmMain: TfrmMain
         Left = 1
         Top = 1
         Width = 229
-        Height = 826
+        Height = 786
         ActivePage = TabSheet1
         Align = alClient
         TabOrder = 0
+        ExplicitHeight = 826
         object TabSheet1: TTabSheet
           Caption = 'Fractal'
           object Label16: TLabel
@@ -339,7 +340,7 @@ object frmMain: TfrmMain
           end
           object GroupBox4: TGroupBox
             Left = 6
-            Top = 644
+            Top = 668
             Width = 212
             Height = 87
             Caption = 'Cursor'
@@ -373,7 +374,7 @@ object frmMain: TfrmMain
           end
           object GroupBox2: TGroupBox
             Left = 6
-            Top = 464
+            Top = 488
             Width = 212
             Height = 174
             Caption = 'Dimensions'
@@ -575,7 +576,7 @@ object frmMain: TfrmMain
             Left = 6
             Top = 366
             Width = 212
-            Height = 92
+            Height = 116
             Caption = 'Palette'
             TabOrder = 2
             object bEditPalette: TSpeedButton
@@ -589,10 +590,11 @@ object frmMain: TfrmMain
               OnClick = bEditPaletteClick
             end
             object pbPalette: TPaintBox
-              Left = 11
+              Left = 17
               Top = 58
               Width = 125
               Height = 20
+              OnClick = bEditPaletteClick
             end
             object sInfinity: TShape
               Left = 148
@@ -610,6 +612,20 @@ object frmMain: TfrmMain
               ImageIndex = 7
               Images = ImageList1
               OnClick = sbLoadPaletteClick
+            end
+            object pbPalette2: TPaintBox
+              Left = 17
+              Top = 84
+              Width = 125
+              Height = 20
+              OnClick = pbPalette2Click
+            end
+            object sInfinity2: TShape
+              Left = 148
+              Top = 84
+              Width = 20
+              Height = 20
+              OnMouseDown = sInfinity2MouseDown
             end
           end
           object gbVarABC: TGroupBox
@@ -784,11 +800,12 @@ object frmMain: TfrmMain
             Left = 0
             Top = 31
             Width = 221
-            Height = 767
+            Height = 727
             Align = alClient
             ItemHeight = 13
             TabOrder = 0
             OnDblClick = lbHistoryDblClick
+            ExplicitHeight = 767
           end
           object Panel2: TPanel
             Left = 0
@@ -832,9 +849,9 @@ object frmMain: TfrmMain
       end
       object Panel4: TPanel
         Left = 1
-        Top = 827
+        Top = 787
         Width = 229
-        Height = 208
+        Height = 248
         Align = alBottom
         Color = clWhite
         ParentBackground = False

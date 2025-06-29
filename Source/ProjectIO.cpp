@@ -32,6 +32,7 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 	if (file)
 	{
 		project.ProjectFileName = file_name;
+        project.Palette2FileName = L"";
 
 		std::wstring s(L"");
 
@@ -137,7 +138,18 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 						break;
 
 					case FileProperty::PaletteFileName:
-                        project.PaletteFileName = value;
+						project.PaletteFileName = value;
+						break;
+
+					case FileProperty::BackgroundPaletteFileName:
+						project.Palette2FileName = value;
+						break;
+
+					case FileProperty::GradientDirection:
+						GPaletteHandler->Palettes[1]->GradientDirection = stoi(value);
+						break;
+					case FileProperty::IsGradient:
+						GPaletteHandler->Palettes[1]->IsGradient = stoi(value);
 						break;
 
 					case FileProperty::SuperSampling:
@@ -197,9 +209,32 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 		file << Formatting::to_utf8(L"SS=" + std::to_wstring(project.SuperSampling) + L"\n");
 		file << Formatting::to_utf8(L"SSLevel=" + std::to_wstring(project.SuperSamplingLevel) + L"\n");
 
-		if (!GPaletteHandler->FileName.empty())
+		if (!GPaletteHandler->Palettes[0]->FileName.empty())
 		{
-			file << Formatting::to_utf8(L"Palette=" + GPaletteHandler->FileName + L"\n");
+			file << Formatting::to_utf8(L"Palette=" + GPaletteHandler->Palettes[0]->FileName + L"\n");
+		}
+
+		if (!GPaletteHandler->Palettes[1]->FileName.empty())
+		{
+			file << Formatting::to_utf8(L"Palette2=" + GPaletteHandler->Palettes[1]->FileName + L"\n");
+		}
+
+		if (GPaletteHandler->Palettes[1]->GradientDirection)
+		{
+			file << Formatting::to_utf8(L"GradientDirection=1\n");
+		}
+		else
+		{
+			file << Formatting::to_utf8(L"GradientDirection=0\n");
+		}
+
+		if (GPaletteHandler->Palettes[1]->IsGradient)
+		{
+			file << Formatting::to_utf8(L"IsGradient=1\n");
+		}
+		else
+		{
+			file << Formatting::to_utf8(L"IsGradient=0\n");
 		}
 
 		file << Formatting::to_utf8(L"xmin=" + Formatting::LDToStr(project.xmin) + L"\n");

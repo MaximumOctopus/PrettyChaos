@@ -210,6 +210,7 @@ namespace ColourUtility
 				B = std::round(newv * 255);
 				break;
 			case 5:
+
 			default:
 				R = std::round(newv * 255);
 				G = std::round(p * 255);

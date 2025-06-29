@@ -42,6 +42,7 @@ struct PCProject
 
     std::wstring ProjectFileName = L"";
 	std::wstring PaletteFileName = L"";
+	std::wstring Palette2FileName = L"";
 };
 
 
@@ -54,11 +55,11 @@ class ProjectIO
 		var_a = 12, var_b = 13, var_c = 14, var_d = 15,
 		Steps = 20, DeltaA = 21, DeltaB = 22, DeltaC = 23, DeltaD = 24,
 		Parameters = 25, Zoom = 26, Prefix = 27,
-		PaletteFileName = 28,
-		SuperSampling = 29, SuperSamplingLevel = 30
+		PaletteFileName = 28, BackgroundPaletteFileName = 29, GradientDirection = 30, IsGradient = 31,
+		SuperSampling = 32, SuperSamplingLevel = 33
 	};
 
-	static const int kPropertyListCount = 26;
+	static const int kPropertyListCount = 29;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
 		L"Name", L"Width", L"Height", L"RenderMode", L"nCoeff",
@@ -67,7 +68,7 @@ class ProjectIO
 		L"var_a", L"var_b", L"var_c", L"var_d",
 		L"Steps", L"DeltaA", L"DeltaB", L"DeltaC", L"DeltaD",
 		L"Parameters", L"Zoom", L"Prefix",
-		L"Palette",
+		L"Palette", L"Palette2", L"GradientDirection", L"IsGradient",
 		L"SS", L"SSLevel"
 	};
 
@@ -78,7 +79,7 @@ class ProjectIO
 		FileProperty::var_a, FileProperty::var_b, FileProperty::var_c, FileProperty::var_d,
 		FileProperty::Steps, FileProperty::DeltaA, FileProperty::DeltaB, FileProperty::DeltaC, FileProperty::DeltaD,
 		FileProperty::Parameters, FileProperty::Zoom, FileProperty::Prefix,
-		FileProperty::PaletteFileName,
+		FileProperty::PaletteFileName, FileProperty::BackgroundPaletteFileName, FileProperty::GradientDirection, FileProperty::IsGradient,
 		FileProperty::SuperSampling, FileProperty::SuperSamplingLevel
 	};
 

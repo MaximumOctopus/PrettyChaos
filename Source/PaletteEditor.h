@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include "PaletteKey.h"
-
 #include <System.Classes.hpp>
 #include <Vcl.Controls.hpp>
 #include <Vcl.StdCtrls.hpp>
@@ -26,6 +24,12 @@
 #include <Vcl.Dialogs.hpp>
 
 #include <vector>
+
+#include "PaletteHandler.h"
+#include "PaletteKey.h"
+
+extern PaletteHandler* GPaletteHandler;
+
 
 class TfrmPaletteEditor : public TForm
 {
@@ -83,11 +87,6 @@ __published:	// IDE-managed Components
 	TSpinEdit *seSaturation;
 	TSpinEdit *seValue;
 	TSpinEdit *sePosition;
-	TGroupBox *GroupBox1;
-	TShape *sInfinity;
-	TLabel *lInfinityHex;
-	TLabel *lColourHex;
-	TLabel *Label5;
 	TLabel *lLog;
 	TLabel *Label6;
 	TComboBox *cbSteps;
@@ -98,6 +97,14 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbReverse;
 	TSpeedButton *sbRandom;
 	TSpeedButton *sbRandomFrom;
+	TComboBox *cbPalettes;
+	TLabel *Label7;
+	TLabel *Label5;
+	TLabel *lColourHex;
+	TSpeedButton *sbHorizontal;
+	TSpeedButton *sbVertical;
+	TShape *sSingleColour;
+	TCheckBox *cbGradient;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall sbAddNewKeyClick(TObject *Sender);
 	void __fastcall shapeStartColourMouseDown(TObject *Sender, TMouseButton Button,
@@ -111,8 +118,6 @@ __published:	// IDE-managed Components
 	void __fastcall sePositionChange(TObject *Sender);
 	void __fastcall bLoadClick(TObject *Sender);
 	void __fastcall sbClearClick(TObject *Sender);
-	void __fastcall sInfinityMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
-          int X, int Y);
 	void __fastcall FormShow(TObject *Sender);
 	void __fastcall sbAlignAllClick(TObject *Sender);
 	void __fastcall FormDestroy(TObject *Sender);
@@ -144,6 +149,9 @@ __published:	// IDE-managed Components
 	void __fastcall sbRandomClick(TObject *Sender);
 	void __fastcall sbRandomFromClick(TObject *Sender);
 	void __fastcall tbLogChange(TObject *Sender);
+	void __fastcall cbPalettesChange(TObject *Sender);
+	void __fastcall sSingleColourMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
+          int X, int Y);
 
 private:
 
@@ -189,11 +197,15 @@ private:
 
 public:
 
+	int CurrentPaletteIndex = 0;
+
 	std::wstring PaletteFileName = L"";    // relative to \palettes\
 
     std::wstring PalettePath = L"";
 
 	__fastcall TfrmPaletteEditor(TComponent* Owner);
 };
+
+bool OpenPalette(int, const std::wstring);
 
 extern PACKAGE TfrmPaletteEditor *frmPaletteEditor;

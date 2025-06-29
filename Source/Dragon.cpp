@@ -109,7 +109,7 @@ void Dragon::Render(int hstart, int hend)
 	int from_y = 0;
 	int colour = 0;
 
-	ClearFractalDataA();
+	ClearFractalDataA(-1);
 
 int palette_range = std::floor(500 / (double)max_iterations) - 1;
 

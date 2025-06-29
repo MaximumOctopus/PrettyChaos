@@ -30,10 +30,41 @@ extern PaletteHandler *GPaletteHandler;
 
 TfrmPaletteEditor *frmPaletteEditor;
 
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
+
+bool OpenPalette(int index, const std::wstring palette_path)
+{
+	bool is_ok = false;
+
+	TfrmPaletteEditor *frmPaletteEditor = new TfrmPaletteEditor(Application);
+
+	frmPaletteEditor->CurrentPaletteIndex = index;
+	frmPaletteEditor->PalettePath = palette_path;
+
+	if (frmPaletteEditor->ShowModal() == mrOk)
+	{
+		is_ok = true;
+	}
+
+	delete frmPaletteEditor;
+
+	return is_ok;
+}
+
+//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------
 
 __fastcall TfrmPaletteEditor::TfrmPaletteEditor(TComponent* Owner)
 	: TForm(Owner)
 {
+	for (int t = 0; t < GPaletteHandler->Palettes.size(); t++)
+	{
+		cbPalettes->Items->Add(GPaletteHandler->Palettes[t]->Description.c_str());
+
+		GPaletteHandler->Palettes[t]->CopyToTemp();
+	}
+
 	for (int t = 0; t < 3; t++)
 	{
 		RGBGradients[t] = new TBitmap();
@@ -62,9 +93,11 @@ void __fastcall TfrmPaletteEditor::FormClose(TObject *Sender, TCloseAction &Acti
 
 void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
 {
+	cbPalettes->ItemIndex = CurrentPaletteIndex;
+
 	RenderGradient();
 
-	sInfinity->Brush->Color = TColor(GPaletteHandler->Palette[__PaletteInfinity].ToIntBGR());
+	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->SingleColour.ToIntBGR());
 }
 
 
@@ -205,9 +238,9 @@ void TfrmPaletteEditor::UpdateAllKeys()
 {
 	for (int k = 0; k < Shapes.size(); k++)
 	{
-		Shapes[k]->Left = GPaletteHandler->Keys[Shapes[k]->Tag].Position + __KeyOffset;
+		Shapes[k]->Left = GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[Shapes[k]->Tag].Position + __KeyOffset;
 
-		Shapes[k]->Brush->Color = TColor(GPaletteHandler->Keys[k].Colour);
+		Shapes[k]->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[k].Colour);
 	}
 
    	iPointer->Left = Selected->Left;
@@ -220,7 +253,7 @@ void TfrmPaletteEditor::UpdateKeyDisplay(int key_index)
 {
 	KeyDisplayUpdating = true;
 
-	PaletteKey &pk = GPaletteHandler->Keys[key_index];
+	PaletteKey &pk = GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[key_index];
 
 	if (pcColourSpace->TabIndex == 0)
 	{
@@ -285,7 +318,7 @@ void __fastcall TfrmPaletteEditor::tbRedChange(TObject *Sender)
 		seGreen->Value = tbGreen->Position;
 		seBlue->Value = tbBlue->Position;
 
-		PaletteKey &pk = GPaletteHandler->Keys[KeySelected];
+		PaletteKey &pk = GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected];
 
 		Selected->Brush->Color = TColor(tbRed->Position + (tbGreen->Position << 8) + (tbBlue->Position << 16));
 		pk.Colour = Selected->Brush->Color;
@@ -318,7 +351,7 @@ void __fastcall TfrmPaletteEditor::tbHueChange(TObject *Sender)
 		int colour = (r) + (g << 8) + (b << 16);
 
 		Selected->Brush->Color = TColor(colour);
-		GPaletteHandler->Keys[KeySelected].Colour = colour;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected].Colour = colour;
 
 		lColourHex->Caption = "0x" + IntToHex(colour, 6);
 
@@ -353,7 +386,7 @@ void TfrmPaletteEditor::BuildHSVGradients()
 
 void __fastcall TfrmPaletteEditor::sbClearClick(TObject *Sender)
 {
-	GPaletteHandler->Clear(true);
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Clear(true);
 
 	ClearPalette(true);
 
@@ -372,7 +405,7 @@ void __fastcall TfrmPaletteEditor::sbClearClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbAddNewKeyClick(TObject *Sender)
 {
-	int index = GPaletteHandler->AddNewKey(0xaaaaaa, 0, 200, false);
+	int index = GPaletteHandler->Palettes[CurrentPaletteIndex]->AddNewKey(0xaaaaaa, 0, 200, false);
 
 	AddShape(index);
 
@@ -408,9 +441,9 @@ void __fastcall TfrmPaletteEditor::sbDeleteSelectedKeyClick(TObject *Sender)
 			Shapes.erase(Shapes.begin() + index);
 		}
 
-		GPaletteHandler->Keys.erase(GPaletteHandler->Keys.begin() + KeySelected);
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.erase(GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.begin() + KeySelected);
 
-		for (int t = 0; t < GPaletteHandler->Keys.size(); t++)
+		for (int t = 0; t < GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size(); t++)
 		{
 			Shapes[t]->Tag = t;
 		}
@@ -429,7 +462,7 @@ void __fastcall TfrmPaletteEditor::sbDeleteSelectedKeyClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 {
-	if (GPaletteHandler->Align())
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Align())
 	{
 		UpdateAllKeys();
 
@@ -440,7 +473,7 @@ void __fastcall TfrmPaletteEditor::sbAlignAllClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbColourClick(TObject *Sender)
 {
-	GPaletteHandler->ColourSpace = sbColour->Down;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->ColourSpace = sbColour->Down;
 
 	RenderGradient();
 }
@@ -448,18 +481,18 @@ void __fastcall TfrmPaletteEditor::sbColourClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbRandomFromClick(TObject *Sender)
 {
-	if (GPaletteHandler->Keys.size() != 0 && GPaletteHandler->Keys.size() > 2)
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() != 0 && GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() > 2)
 	{
-		int lastcolour = GPaletteHandler->Keys[0].Colour;
+		int lastcolour = GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[0].Colour;
 
-		for (int k = 2; k < GPaletteHandler->Keys.size(); k++)
+		for (int k = 2; k < GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size(); k++)
 		{
-			GPaletteHandler->Keys[k].Colour = ColourUtility::RandomBGRFromBGR(lastcolour);
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[k].Colour = ColourUtility::RandomBGRFromBGR(lastcolour);
 
-			lastcolour = GPaletteHandler->Keys[k].Colour;
+			lastcolour = GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[k].Colour;
 		}
 
-		GPaletteHandler->Keys[1].Colour = ColourUtility::RandomBGRFromBGR(lastcolour);
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[1].Colour = ColourUtility::RandomBGRFromBGR(lastcolour);
 
 		UpdateAllKeys();
 
@@ -470,11 +503,11 @@ void __fastcall TfrmPaletteEditor::sbRandomFromClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbRandomClick(TObject *Sender)
 {
-	if (GPaletteHandler->Keys.size() != 0)
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() != 0)
 	{
-		for (int k = 0; k < GPaletteHandler->Keys.size(); k++)
+		for (int k = 0; k < GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size(); k++)
 		{
-			GPaletteHandler->Keys[k].Colour = ColourUtility::RandomBGR();
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[k].Colour = ColourUtility::RandomBGR();
 		}
 
 		UpdateAllKeys();
@@ -486,15 +519,15 @@ void __fastcall TfrmPaletteEditor::sbRandomClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::sbReverseClick(TObject *Sender)
 {
-	if (GPaletteHandler->Keys.size() != 0)
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() != 0)
 	{
-		std::swap(GPaletteHandler->Keys[0].Colour, GPaletteHandler->Keys[1].Colour);
+		std::swap(GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[0].Colour, GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[1].Colour);
 
-		if (GPaletteHandler->Keys.size() > 2)
+		if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() > 2)
 		{
-			for (int k = 2; k < GPaletteHandler->Keys.size(); k++)
+			for (int k = 2; k < GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size(); k++)
 			{
-				GPaletteHandler->Keys[k].Reverse();
+				GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[k].Reverse();
 			}
 		}
 
@@ -560,7 +593,7 @@ void __fastcall TfrmPaletteEditor::shapeStartColourMouseMove(TObject *Sender, TS
 
 			sePosition->Value = shape->Left - __KeyOffset;
 
-			GPaletteHandler->Keys[KeySelected].Position = shape->Left - __KeyOffset;
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected].Position = shape->Left - __KeyOffset;
 
             RenderGradient();
         }
@@ -577,22 +610,29 @@ void __fastcall TfrmPaletteEditor::shapeStartColourMouseUp(TObject *Sender, TMou
 
 void TfrmPaletteEditor::RenderGradient()
 {
-	if (GPaletteHandler->IsRendering) return;
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->IsRendering) return;
 
-	GPaletteHandler->Render();
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Render();
 
 	// now copy the single row across the paintbox
 
 	for (int t = 0; t < 25; t++)
 	{
-		pbGradient->Canvas->Draw(0, t, GPaletteHandler->Gradient);
+		pbGradient->Canvas->Draw(0, t, GPaletteHandler->Palettes[CurrentPaletteIndex]->Gradient);
 	}
 }
 
 
 void __fastcall TfrmPaletteEditor::bAcceptClick(TObject *Sender)
 {
-	GPaletteHandler->CopyPublic();
+	cbPalettesChange(NULL);
+
+	for (int t = 0; t < GPaletteHandler->Palettes.size(); t++)
+	{
+		GPaletteHandler->Palettes[t]->SetFromTemp();
+
+        GPaletteHandler->Palettes[t]->CopyPublic();
+	}
 }
 
 
@@ -614,7 +654,36 @@ void __fastcall TfrmPaletteEditor::bSaveClick(TObject *Sender)
 
 void TfrmPaletteEditor::BuildGuiForPalette()
 {
-	if (GPaletteHandler->ColourSpace)
+	bool ShowPaletteOptions = true;
+
+	if (CurrentPaletteIndex == 0)
+	{
+		ShowPaletteOptions = false;
+	}
+
+	sbHorizontal->Enabled = ShowPaletteOptions;
+	sbVertical->Enabled = ShowPaletteOptions;
+	sSingleColour->Enabled = ShowPaletteOptions;
+	cbGradient->Enabled = ShowPaletteOptions;
+
+	cbInterleve->Enabled = ShowPaletteOptions;
+	rbInterleveX2->Enabled = ShowPaletteOptions;
+	rbInterleveX4->Enabled = ShowPaletteOptions;
+	cbInterleveReverse->Enabled = ShowPaletteOptions;
+
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection)
+	{
+		sbVertical->Down = true;
+	}
+	else
+	{
+		sbHorizontal->Down = true;
+	}
+
+	cbGradient->Checked = GPaletteHandler->Palettes[CurrentPaletteIndex]->TempIsGradient;
+	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->TempSingleColour.ToIntBGR());
+
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->ColourSpace)
 	{
 		sbColour->Down = true;
 	}
@@ -623,10 +692,10 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 		sbBW->Down = true;
 	}
 
-	cbInterleve->Checked = GPaletteHandler->Interleve;
-	cbInterleveReverse->Checked = GPaletteHandler->InterleveReverse;
+	cbInterleve->Checked = GPaletteHandler->Palettes[CurrentPaletteIndex]->Interleve;
+	cbInterleveReverse->Checked = GPaletteHandler->Palettes[CurrentPaletteIndex]->InterleveReverse;
 
-	if (GPaletteHandler->InterleveMode == 0)
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->InterleveMode == 0)
 	{
 		rbInterleveX2->Checked = true;
 	}
@@ -637,21 +706,21 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 
 	for (int t = 0; t < cbSteps->Items->Count; t++)
 	{
-		if (cbSteps->Items->Strings[t] == IntToStr(GPaletteHandler->Steps))
+		if (cbSteps->Items->Strings[t] == IntToStr(GPaletteHandler->Palettes[CurrentPaletteIndex]->Steps))
 		{
 			cbSteps->ItemIndex = t;
 			break;
         }
 	}
 
-	for (int t = 0; t < GPaletteHandler->Keys.size(); t++)
+	for (int t = 0; t < GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size(); t++)
 	{
 		AddShape(t);
 	}
 
 	KeySelected = 0;
 
-	if (GPaletteHandler->Keys.size() == 0)
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() == 0)
 		ShowMessage(L"help!!");
 
 	Selected = Shapes[0];
@@ -676,7 +745,7 @@ void __fastcall TfrmPaletteEditor::bLoadClick(TObject *Sender)
 		ClearPalette(false);
 		ResetUI();
 
-		if (GPaletteHandler->Load(file_name))
+		if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Load(file_name))
 		{
 			BuildGuiForPalette();
         }
@@ -686,7 +755,7 @@ void __fastcall TfrmPaletteEditor::bLoadClick(TObject *Sender)
 
 void TfrmPaletteEditor::ClearPalette(bool autoadd)
 {
-	GPaletteHandler->Clear(autoadd);
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Clear(autoadd);
 
 	for (int t = Shapes.size() - 1; t >= 0; t--)
 	{
@@ -714,8 +783,8 @@ void TfrmPaletteEditor::AddShape(int index)
 	shape->Width = 10;
 	shape->Height = 10;
 	shape->Top = __KeyTop;
-	shape->Left = GPaletteHandler->Keys[index].Position + __KeyOffset;
-	shape->Brush->Color = TColor(GPaletteHandler->Keys[index].Colour);
+	shape->Left = GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[index].Position + __KeyOffset;
+	shape->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[index].Colour);
 	shape->Tag = index;
 	shape->Shape = stSquare;
 	shape->OnMouseDown = shapeStartColourMouseDown;
@@ -745,7 +814,7 @@ void TfrmPaletteEditor::ResetUI()
 
 void TfrmPaletteEditor::SavePalette(std::wstring file_name)
 {
-	GPaletteHandler->Save(file_name);
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Save(file_name);
 }
 
 
@@ -753,27 +822,12 @@ void __fastcall TfrmPaletteEditor::sePositionChange(TObject *Sender)
 {
 	if (KeySelected != -1 && KeySelected >= 2)
 	{
-		GPaletteHandler->Keys[KeySelected].Position = sePosition->Value;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected].Position = sePosition->Value;
 
 		Selected->Left = sePosition->Value + 20;
 		iPointer->Left = sePosition->Value + 20;
 	}
 }
-
-
-void __fastcall TfrmPaletteEditor::sInfinityMouseDown(TObject *Sender, TMouseButton Button,
-		  TShiftState Shift, int X, int Y)
-{
-	if (frmColourDialog->ShowModal() == mrOk)
-	{
-		sInfinity->Brush->Color = TColor(frmColourDialog->SelectedColour);
-
-		lInfinityHex->Caption = ColourUtility::BGRtoRGBHex(frmColourDialog->SelectedColour);
-
-		GPaletteHandler->Palette[__PaletteInfinity].FromIntBGR(frmColourDialog->SelectedColour);
-	}
-}
-
 
 void __fastcall TfrmPaletteEditor::seRedChange(TObject *Sender)
 {
@@ -803,7 +857,7 @@ void __fastcall TfrmPaletteEditor::sbRGBClick(TObject *Sender)
 {
 	TSpeedButton* sb = (TSpeedButton*)Sender;
 
-	GPaletteHandler->Keys[KeySelected].Mode = sb->Tag;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected].Mode = sb->Tag;
 
 	RenderGradient();
 }
@@ -837,7 +891,7 @@ void __fastcall TfrmPaletteEditor::sbLinearClick(TObject *Sender)
 {
 	TSpeedButton* sb = (TSpeedButton*)Sender;
 
-	GPaletteHandler->Keys[KeySelected].Method = sb->Tag;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected].Method = sb->Tag;
 
 	RenderGradient();
 }
@@ -847,7 +901,7 @@ void __fastcall TfrmPaletteEditor::tbLogChange(TObject *Sender)
 {
 	lLog->Caption = tbLog->Position;
 
-	GPaletteHandler->Keys[KeySelected].SubMethod = tbLog->Position;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys[KeySelected].SubMethod = tbLog->Position;
 
 	RenderGradient();
 }
@@ -886,7 +940,7 @@ void __fastcall TfrmPaletteEditor::pcColourSpaceChange(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::cbStepsChange(TObject *Sender)
 {
-    GPaletteHandler->Steps = cbSteps->Text.ToInt();
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Steps = cbSteps->Text.ToInt();
 
 	RenderGradient();
 }
@@ -894,7 +948,7 @@ void __fastcall TfrmPaletteEditor::cbStepsChange(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::cbInterleveClick(TObject *Sender)
 {
-	GPaletteHandler->Interleve = cbInterleve->Checked;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->Interleve = cbInterleve->Checked;
 
 	RenderGradient();
 }
@@ -904,11 +958,11 @@ void __fastcall TfrmPaletteEditor::rbInterleveX2Click(TObject *Sender)
 {
 	if (rbInterleveX2->Checked)
 	{
-		GPaletteHandler->InterleveMode = 0;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->InterleveMode = 0;
 	}
 	else
 	{
-		GPaletteHandler->InterleveMode = 1;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->InterleveMode = 1;
 	}
 
     RenderGradient();
@@ -917,7 +971,51 @@ void __fastcall TfrmPaletteEditor::rbInterleveX2Click(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::cbInterleveReverseClick(TObject *Sender)
 {
-	GPaletteHandler->InterleveReverse = cbInterleveReverse->Checked;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->InterleveReverse = cbInterleveReverse->Checked;
 
 	RenderGradient();
+}
+
+
+void __fastcall TfrmPaletteEditor::cbPalettesChange(TObject *Sender)
+{
+	if (sbHorizontal->Down)
+	{
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = false;
+	}
+	else
+	{
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = true;
+	}
+
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->TempIsGradient = cbGradient->Checked;
+	GPaletteHandler->Palettes[CurrentPaletteIndex]->TempSingleColour = sSingleColour->Brush->Color;
+
+	CurrentPaletteIndex = cbPalettes->ItemIndex;
+
+	if (Sender != NULL)
+	{
+    	for (int t = Shapes.size() - 1; t >= 0; t--)
+		{
+			delete Shapes[t];
+
+			Shapes.pop_back();
+		}
+
+		BuildGuiForPalette();
+
+        iPointer->Left = Shapes.front()->Left;
+    }
+}
+
+
+void __fastcall TfrmPaletteEditor::sSingleColourMouseDown(TObject *Sender, TMouseButton Button,
+		  TShiftState Shift, int X, int Y)
+{
+	if (frmColourDialog->ShowModal() == mrOk)
+	{
+		sSingleColour->Brush->Color = TColor(frmColourDialog->SelectedColour);
+
+		sSingleColour->Hint = ColourUtility::BGRtoRGBHex(frmColourDialog->SelectedColour);
+	}
 }

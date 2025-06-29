@@ -146,7 +146,7 @@ void MandelbrotQuartic::RenderSS(int hstart, int hend)
 
 		for (int x = 0; x < Width; x++)
 		{
-			FractalData[ydotwidth + x].Clear();
+	        FractalData[ydotwidth + x].Clear();
 
 			for (int ss = 0; ss < supersamples; ss++)
 			{
@@ -210,16 +210,16 @@ void MandelbrotQuartic::RenderSS(int hstart, int hend)
 
 						long double itnew = it + 1 - nu;
 
-						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
+						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
 						long double it_d = (long double)it + 1 - nu;
 
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(Palette[it],
-																	  Palette[it + 1],
-																	  it_d - (std::floorl(it_d)));
+						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
+																					   pp->Colours[it + 1],
+																					   it_d - (std::floorl(it_d)));
 					}
 					else
 					{
-						FractalData[ydotwidth + x] += Palette[__PaletteInfinity];
+						FractalData[ydotwidth + x].a = -1;
 					}
 
 					break;
@@ -324,16 +324,16 @@ void MandelbrotQuartic::Render(int hstart, int hend)
 
 					long double itnew = it + 1 - nu;
 
-					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * __PaletteCount;
+					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
 					long double it_d = (long double)it + 1 - nu;
 
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																  Palette[it + 1],
-																  it_d - (std::floorl(it_d)));
+					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
+																				  pp->Colours[it + 1],
+																				  it_d - (std::floorl(it_d)));
 				}
 				else
 				{
-					FractalData[ydotwidth + x] = Palette[__PaletteInfinity];
+					FractalData[ydotwidth + x].a = -1;
 				}
 
 				break;

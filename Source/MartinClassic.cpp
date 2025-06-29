@@ -95,14 +95,14 @@ void Martin::Render(int hstart, int hend)
 	long double xnew = 0;
 	long double ynew = 0;
 
-	int delta = Fast::Floor((double)max_iterations / __PaletteCount);
+	int delta = Fast::Floor((double)max_iterations / pp->ColourCount);
 	int count = 0;
 	int index = 0;
 
 	// maximum distance from the centre of the image
 	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
-   	ClearFractalDataA();
+   	ClearFractalDataA(-1);
 
 	for (int i = 0; i < max_iterations; i++)
 	{
@@ -130,7 +130,7 @@ void Martin::Render(int hstart, int hend)
 				break;
 			}
 			case __RMMartinDistance:
-				int index = Fast::Floor((std::sqrt(xold * xold + yold * yold) / maxdim) * __PaletteCount);
+				int index = Fast::Floor((std::sqrt(xold * xold + yold * yold) / maxdim) * pp->ColourCount);
 
 				FractalData[y * Width + x].a = index;
 				break;

@@ -18,6 +18,7 @@
 
 #include "Colour.h"
 #include "Formatting.h"
+#include "Palette.h"
 #include "ProjectHistory.h"
 
 
@@ -101,7 +102,7 @@ protected:
 
 	void CalculateRenderTime();
 
-	void ClearFractalDataA();
+	void ClearFractalDataA(int);
 
 	double Sign(long double);
 
@@ -132,7 +133,8 @@ public:
 
 	Variables Var;
 
-	Colour Palette[501];
+	Palette *pp;    // main colour palette
+	Palette *pp2;   // secondary palette for background (etc.)
 
 	int AcceptsABCSpectificRenderModeBegin = -1;
 	int AcceptsABCSpectificRenderModeEnd = -1;

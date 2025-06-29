@@ -140,8 +140,6 @@ max_d = 0;
 
 		for (int x = 0; x < Width; x++)
 		{
-			FractalData[ydotwidth + x].Clear();
-
 			for (int ss = 0; ss < supersamples; ss++)
 			{
 				long double p = xmin + ((long double)x + (0.5 - (rand() / (RAND_MAX + 1.0)))) * (xmax - xmin) / (long double)Width;    // real part
@@ -180,16 +178,16 @@ max_d = 0;
 
 						long double itnew = it + 1 - nu;
 
-						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)pp->ColourCount;
 						long double it_d = (long double)it + 1 - nu;
 
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(Palette[it],
-																	  Palette[it + 1],
-																	  it_d - (std::floorl(it_d)));
+						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
+																					   pp->Colours[it + 1],
+																					   it_d - (std::floorl(it_d)));
 					}
 					else
 					{
-						FractalData[ydotwidth + x] += Palette[__PaletteInfinity];
+						FractalData[ydotwidth + x] += pp2->SingleColour;
 					}
 					break;
 				}
@@ -206,9 +204,9 @@ max_d = 0;
 					int nx = Fast::Floor(x - (Width / 2));
 					int ny = Fast::Floor(y - (Height / 2));
 
-					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
 
-					FractalData[ydotwidth + x] += Palette[index];
+					FractalData[ydotwidth + x] += pp->Colours[index];
 					break;
 				}
 			}
@@ -268,16 +266,16 @@ void JuliaQuintic::Render(int hstart, int hend)
 
 					long double itnew = it + 1 - nu;
 
-					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)__PaletteCount;
+					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)pp->ColourCount;
 					long double it_d = (long double)it + 1 - nu;
 
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(Palette[it],
-																  Palette[it + 1],
-																  it_d - (std::floorl(it_d)));
+					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
+																				  pp->Colours[it + 1],
+																				  it_d - (std::floorl(it_d)));
 				}
 				else
 				{
-					FractalData[ydotwidth + x] = Palette[__PaletteInfinity];
+					FractalData[ydotwidth + x] = pp2->SingleColour;
 				}
 				break;
 			}
@@ -294,9 +292,9 @@ void JuliaQuintic::Render(int hstart, int hend)
 				int nx = Fast::Floor(x - (Width / 2));
 				int ny = Fast::Floor(y - (Height / 2));
 
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * __PaletteCount);
+				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
 
-				FractalData[ydotwidth + x] = Palette[index];
+				FractalData[ydotwidth + x] = pp->Colours[index];
 				break;
 			}
 		}
