@@ -8,8 +8,6 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
-#include <Vcl.Dialogs.hpp>
-
 #include <string>
 #include <thread>
 
@@ -27,20 +25,20 @@ Julia::Julia() : Fractal()
 
 	MultiThread = true;
 
-	Defaults.Set(1, 1000, 4, -0.7, 0.27015, 0, 0);
+	Defaults.Set(1, 1000, 4, -0.7, 0.27015, 0, 0, 0);
 
-    QPM = QuickParameterMode::kABPlusFine;
+	QPM = QuickParameterMode::kABPlusFine;
 
 	Name = L"Julia Set";
 
 	RenderModes.push_back(L"Escape time");
-	RenderModes.push_back(L"Continuous");
 	RenderModes.push_back(L"Distance");
 	RenderModes.push_back(L"Distance from origin");
 	RenderModes.push_back(L"Two-tone");
 	RenderModes.push_back(L"Three-tone");
 	RenderModes.push_back(L"Four-tone");
 	RenderModes.push_back(L"Five-tone");
+	RenderModes.push_back(L"Continuous");
 
 	NameA = L"real";
 	NameB = L"imaginary";
@@ -111,13 +109,13 @@ bool Julia::MultiThreadRender(bool preview, bool super_sample)
 
 	if (preview)
 	{
-		FinaliseRenderJulia(PreviewCanvas, max_d);
+		FinaliseRenderJulia(PreviewCanvas);
 
 		SwapDimensions();
 	}
 	else
 	{
-		FinaliseRenderJulia(RenderCanvas, max_d);
+		FinaliseRenderJulia(RenderCanvas);
 	}
 
 	CalculateRenderTime();
@@ -128,9 +126,7 @@ bool Julia::MultiThreadRender(bool preview, bool super_sample)
 
 void Julia::Render(int hstart, int hend)
 {
-	max_d = 0;
-
-    // maximum distance from the centre of the image
+	// maximum distance from the centre of the image
 	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int y = hstart; y < hend; y++)
@@ -167,17 +163,35 @@ void Julia::Render(int hstart, int hend)
 				FractalData[ydotwidth + x].a = it;
 				break;
 			}
+			case __RMJuliaDistance:
+			{
+				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
+
+				FractalData[ydotwidth + x].a = it;
+
+				break;
+			}
+			case __RMJuliaDistanceOrigin:
+			{
+				int nx = Fast::Floor(x - (Width / 2));
+				int ny = Fast::Floor(y - (Height / 2));
+
+				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
+
+				FractalData[ydotwidth + x] = pp->Colours[index];
+				break;
+            }
 			case __RMJuliaContinuous:
 			{
 				if (it < max_iterations)
 				{
-					long double log_zn = std::log(p * p + q * q) / 2;
-					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
+					long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
+					long double nu = 1 - std::log2(log_zn);
 
-					long double itnew = it + 1 - nu;
+					long double itnew = it + nu;
 
-					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + 1 - nu;
+					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+					long double it_d = (long double)it + nu;
 
 					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
 																				  pp->Colours[it + 1],
@@ -190,24 +204,6 @@ void Julia::Render(int hstart, int hend)
 
 				break;
 			}
-			case __RMJuliaDistance:
-			{
-				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
-
-				FractalData[ydotwidth + x].a = it;
-
-				break;
-			}
-			case __RMJuliaDistanceOrigin:
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
-
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-				FractalData[ydotwidth + x] = pp->Colours[index];
-				break;
 			}
 		}
 	}
@@ -216,8 +212,6 @@ void Julia::Render(int hstart, int hend)
 
 void Julia::RenderSS(int hstart, int hend)
 {
-	max_d = 0;
-
 	// maximum distance from the centre of the image
 	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
@@ -259,34 +253,9 @@ void Julia::RenderSS(int hstart, int hend)
 					FractalData[ydotwidth + x].a += it;
 					break;
 				}
-				case __RMJuliaContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(p * p + q * q) / 2;
-						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
-
-						long double itnew = it + 1 - nu;
-
-						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)pp->ColourCount;
-						long double it_d = (long double)it + 1 - nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x] += pp2->SingleColour;
-					}
-
-					break;
-				}
 				case __RMJuliaDistance:
 				{
-					Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-					if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
 
 					FractalData[ydotwidth + x].a += it;
 					break;
@@ -299,6 +268,29 @@ void Julia::RenderSS(int hstart, int hend)
 					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
 
 					FractalData[ydotwidth + x] += pp->Colours[index];
+					break;
+				}
+				case __RMJuliaContinuous:
+				{
+					if (it < max_iterations)
+					{
+						long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
+						long double nu = 1 - std::log2(log_zn);
+
+						long double itnew = it + nu;
+
+						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+						long double it_d = (long double)it + nu;
+
+						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
+																					   pp->Colours[it + 1],
+																					   it_d - (std::floorl(it_d)));
+					}
+					else
+					{
+						FractalData[ydotwidth + x] += pp2->SingleColour;
+					}
+
 					break;
 				}
 				}
@@ -339,7 +331,7 @@ std::wstring Julia::HistoryEntry()
 
 void Julia::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Julia Set\n");
+	ofile << Formatting::to_utf8(L"Julia Set (z^2)\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");

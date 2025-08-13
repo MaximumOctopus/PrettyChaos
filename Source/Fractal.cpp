@@ -60,6 +60,7 @@ void Fractal::SetFromProjectHistory(ProjectHistory ph)
 	Var.b = ph.VarB;
 	Var.c = ph.VarC;
 	Var.d = ph.VarD;
+    Var.e = ph.VarE;
 
 	n_coeff = ph.Coeff;
 	max_iterations = ph.MaxIterations;
@@ -71,21 +72,16 @@ ProjectHistory Fractal::GetAsProject(int id)
 {
 	return ProjectHistory(id, HistoryEntry(),
 						  xmin, xmax, ymin, ymax,
-						  Var.a, Var.b, Var.c, Var.d,
+						  Var.a, Var.b, Var.c, Var.d, Var.e,
 						  n_coeff, max_iterations, bailout_radius);
 }
 
 
 void Fractal::ClearFractalDataA(int value)
 {
-	for (int y = 0; y < Height; y++)
+	for (int y = 0; y < Height * Width; y++)
 	{
-		int ydotwidth = y * Width;
-
-		for (int x = 0; x < Width; x++)
-		{
-			FractalData[ydotwidth + x].a = value;
-		}
+		FractalData[y].a = value;
 	}
 }
 
@@ -154,6 +150,7 @@ void Fractal::ResetConfig()
 	Var.b = Defaults.b;
 	Var.c = Defaults.c;
 	Var.d = Defaults.d;
+	Var.e = Defaults.e;
 }
 
 
@@ -376,12 +373,13 @@ void Fractal::SetParameters(long double n, int i, int b)
 }
 
 
-void Fractal::SetABC(long double a, long double b, long double c, long double d)
+void Fractal::SetABC(long double a, long double b, long double c, long double d, long double e)
 {
 	Var.a = a;
 	Var.b = b;
 	Var.c = c;
 	Var.d = d;
+	Var.e = e;
 }
 
 
@@ -654,7 +652,7 @@ bool Fractal::AttemptRecolour()
 {
 	if (Name.find(L"Mandelbrot") != std::wstring::npos)
 	{
-		FinaliseRenderMandelbrot(RenderCanvas, max_d);
+		FinaliseRenderMandelbrot(RenderCanvas);
 
 		return true;
 	}
@@ -666,7 +664,7 @@ bool Fractal::AttemptRecolour()
 	}
 	else if (Name.find(L"Julia") != std::wstring::npos)
 	{
-		FinaliseRenderJulia(RenderCanvas, max_d);
+		FinaliseRenderJulia(RenderCanvas);
 
 		return true;
 	}
@@ -681,7 +679,7 @@ bool Fractal::AttemptRecolour()
 }
 
 
-void Fractal::FinaliseRenderJulia(TBitmap *canvas, double max_d)
+void Fractal::FinaliseRenderJulia(TBitmap *canvas)
 {
 	switch (RenderMode)
 	{
@@ -758,8 +756,17 @@ void Fractal::FinaliseRenderJulia(TBitmap *canvas, double max_d)
 		}
 		break;
 	case __RMJuliaDistance:                                                                     // distance II
+	{
+		long double max_d = 0;
+
+		for (int t = 0; t < Height * Width; t++)
+		{
+			if (Data[t] > max_d) max_d = Data[t];
+		}
+
 		ColourDistanceII(canvas, max_d);
 		break;
+	}
 	case __RMJuliaTwoTone:                                                                     // two-tone
 		ColourNTone(canvas, 2);
 		break;
@@ -776,7 +783,7 @@ void Fractal::FinaliseRenderJulia(TBitmap *canvas, double max_d)
 }
 
 
-void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
+void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas)
 {
 	switch (RenderMode)
 	{
@@ -841,7 +848,7 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
 						}
 						else
 						{
-							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)y / Height) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -876,7 +883,7 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
 					{
 						if (pp2->GradientDirection)
 						{
-							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)x / Width) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -884,7 +891,7 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
 						}
 						else
 						{
-							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)y / Height) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -908,11 +915,29 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas, double max_d)
 		}
 		break;
 	case __RMMandelbrotDistance:
+	{
+		long double max_d = 0;
+
+		for (int t = 0; t < Height * Width; t++)
+		{
+			if (Data[t] > max_d) max_d = Data[t];
+		}
+
 		ColourDistanceI(canvas, max_d);
 		break;
+	}
 	case __RMMandelbrotDistanceII:
+	{
+    	long double max_d = 0;
+
+		for (int t = 0; t < Height * Width; t++)
+		{
+			if (Data[t] > max_d) max_d = Data[t];
+		}
+
 		ColourDistanceII(canvas, max_d);
 		break;
+	}
 	case __RMMandelbrotOrbitTrap:
 		OrbitTrap(canvas, false);
 		break;
@@ -991,7 +1016,7 @@ void Fractal::FinaliseRenderMartin(TBitmap* canvas)
 						{
 							if (pp2->GradientDirection)
 							{
-								int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+								int index = (int)Fast::Floor(((double)x / Width) * pp2->ColourCount);
 
 								ptr[x].rgbtRed = pp2->Colours[index].r;
 								ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -999,7 +1024,7 @@ void Fractal::FinaliseRenderMartin(TBitmap* canvas)
 							}
 							else
 							{
-								int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+								int index = (int)Fast::Floor(((double)y / Height) * pp2->ColourCount);
 
 								ptr[x].rgbtRed = pp2->Colours[index].r;
 								ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -1045,7 +1070,7 @@ void Fractal::FinaliseRenderMartin(TBitmap* canvas)
 					{
 						if (pp2->GradientDirection)
 						{
-							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)x / Width) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -1053,7 +1078,7 @@ void Fractal::FinaliseRenderMartin(TBitmap* canvas)
 						}
 						else
 						{
-							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)y / Height) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -1123,7 +1148,7 @@ void Fractal::OrbitTrap(TBitmap* canvas, bool fill)
 					{
 						if (pp2->GradientDirection)
 						{
-							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)x / Width) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;
@@ -1131,7 +1156,7 @@ void Fractal::OrbitTrap(TBitmap* canvas, bool fill)
 						}
 						else
 						{
-							int index = (int)std::floor(((double)y / Height) * pp2->ColourCount);
+							int index = (int)Fast::Floor(((double)y / Height) * pp2->ColourCount);
 
 							ptr[x].rgbtRed = pp2->Colours[index].r;
 							ptr[x].rgbtGreen = pp2->Colours[index].g;

@@ -14,11 +14,12 @@
 
 USEFORM("main.cpp", frmMain);
 USEFORM("PaletteEditor.cpp", frmPaletteEditor);
-USEFORM("FormAnimate.cpp", frmAnimate);
-USEFORM("FormAbout.cpp", frmAbout);
-USEFORM("FormColourDialog.cpp", frmColourDialog);
-USEFORM("FormText.cpp", frmText);
 USEFORM("FormEditBounds.cpp", frmEditBounds);
+USEFORM("FormColourDialog.cpp", frmColourDialog);
+USEFORM("FormAnimate.cpp", frmAnimate);
+USEFORM("FormText.cpp", frmText);
+USEFORM("FormAbout.cpp", frmAbout);
+
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {

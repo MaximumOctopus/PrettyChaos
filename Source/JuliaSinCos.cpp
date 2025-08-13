@@ -10,8 +10,6 @@
 
 // https://en.wikipedia.org/wiki/Julia_set
 
-#include <Vcl.Dialogs.hpp>
-
 #include <string>
 #include <thread>
 
@@ -29,14 +27,13 @@ JuliaSinCos::JuliaSinCos() : Fractal()
 
 	MultiThread = true;
 
-	Defaults.Set(1, 250, 6, -0.9, -0.8, 2, 0);
+	Defaults.Set(1, 250, 6, -0.9, -0.8, 2, 0, 0);
 
 	QPM = QuickParameterMode::kABPlusFine;
 
 	Name = L"Julia Sin(z) + Cos(z)";
 
 	RenderModes.push_back(L"Escape time");
-	RenderModes.push_back(L"Continuous");
 	RenderModes.push_back(L"Distance");
 	RenderModes.push_back(L"Distance from origin");
 	RenderModes.push_back(L"Two-tone");
@@ -113,13 +110,13 @@ bool JuliaSinCos::MultiThreadRender(bool preview, bool super_sample)
 
 	if (preview)
 	{
-		FinaliseRenderJulia(PreviewCanvas, max_d);
+		FinaliseRenderJulia(PreviewCanvas);
 
 		SwapDimensions();
 	}
 	else
 	{
-		FinaliseRenderJulia(RenderCanvas, max_d);
+		FinaliseRenderJulia(RenderCanvas);
 	}
 
 	CalculateRenderTime();
@@ -130,8 +127,6 @@ bool JuliaSinCos::MultiThreadRender(bool preview, bool super_sample)
 
 void JuliaSinCos::Render(int hstart, int hend)
 {
-	max_d = 0;
-
 	// maximum distance from the centre of the image
 	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
@@ -148,7 +143,6 @@ void JuliaSinCos::Render(int hstart, int hend)
 
 			long double r = 0;
 			long double s = 0;
-			long double t = 0;
 			long double u = 0;
 			long double x2 = 0;
 			long double y2 = 0;
@@ -156,10 +150,9 @@ void JuliaSinCos::Render(int hstart, int hend)
 
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
-				t = sin(p) * cosh(q);
 				u = cos(p) * sinh(q);
 
-				r = t + cos(p) * cosh(q);
+				r = cosh(q) * (sin(p) + cos(p));
 				s = u -(sin(p) * sinh(q));
 
 				p = r + Var.a;
@@ -182,34 +175,9 @@ void JuliaSinCos::Render(int hstart, int hend)
 				FractalData[ydotwidth + x].a = it;
 				break;
 			}
-			case __RMJuliaContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(x2 + y2) / 2;
-					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
-
-					long double itnew = it + 1 - nu;
-
-					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + 1 - nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
-																				  pp->Colours[it + 1],
-																				  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x] = pp2->SingleColour;
-				}
-
-				break;
-			}
 			case __RMJuliaDistance:
 			{
-				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-				if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
 
 				FractalData[ydotwidth + x].a = it;
 
@@ -231,8 +199,6 @@ void JuliaSinCos::Render(int hstart, int hend)
 
 void JuliaSinCos::RenderSS(int hstart, int hend)
 {
-	max_d = 0;
-
 	// maximum distance from the centre of the image
 	int maxdim = Fast::Floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
@@ -251,7 +217,6 @@ void JuliaSinCos::RenderSS(int hstart, int hend)
 
 				long double r = 0;
 				long double s = 0;
-				long double t = 0;
 				long double u = 0;
 				long double x2 = 0;
 				long double y2 = 0;
@@ -259,10 +224,9 @@ void JuliaSinCos::RenderSS(int hstart, int hend)
 
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
-					t = sin(p) * cosh(q);
 					u = cos(p) * sinh(q);
 
-					r = t + cos(p) * cosh(q);
+					r = cosh(q) * (sin(p) + cos(p));
 					s = u -(sin(p) * sinh(q));
 
 					p = r + Var.a;
@@ -285,34 +249,9 @@ void JuliaSinCos::RenderSS(int hstart, int hend)
 					FractalData[ydotwidth + x].a += it;
 					break;
 				}
-				case __RMJuliaContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(x2 + y2) / 2;
-						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
-
-						long double itnew = it + 1 - nu;
-
-						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)pp->ColourCount;
-						long double it_d = (long double)it + 1 - nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x] += pp2->SingleColour;
-					}
-
-					break;
-				}
 				case __RMJuliaDistance:
 				{
-					Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-					if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+                    Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
 
 					FractalData[ydotwidth + x].a += it;
 					break;
@@ -365,7 +304,7 @@ std::wstring JuliaSinCos::HistoryEntry()
 
 void JuliaSinCos::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"JuliaSinCos Set\n");
+	ofile << Formatting::to_utf8(L"Julia Sin(z) + Cos(z) Set\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");

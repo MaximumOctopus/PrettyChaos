@@ -2,7 +2,7 @@ object frmMain: TfrmMain
   Left = 0
   Top = 0
   Caption = 'PrettyChaos'
-  ClientHeight = 1091
+  ClientHeight = 1114
   ClientWidth = 1584
   Color = clWhite
   Font.Charset = DEFAULT_CHARSET
@@ -292,10 +292,11 @@ object frmMain: TfrmMain
     Left = 0
     Top = 34
     Width = 1584
-    Height = 1038
+    Height = 1061
     Align = alClient
     TabOrder = 1
     OnMouseMove = Panel3MouseMove
+    ExplicitHeight = 1038
     object iRender: TImage
       Left = 0
       Top = 1
@@ -308,20 +309,21 @@ object frmMain: TfrmMain
       Left = 1352
       Top = 1
       Width = 231
-      Height = 1036
+      Height = 1059
       Align = alRight
       Color = clWhite
       ParentBackground = False
       TabOrder = 0
+      ExplicitHeight = 1036
       object PageControl1: TPageControl
         Left = 1
         Top = 1
         Width = 229
-        Height = 786
+        Height = 808
         ActivePage = TabSheet1
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 826
+        ExplicitHeight = 786
         object TabSheet1: TTabSheet
           Caption = 'Fractal'
           object Label16: TLabel
@@ -339,8 +341,8 @@ object frmMain: TfrmMain
             Shape = bsTopLine
           end
           object GroupBox4: TGroupBox
-            Left = 6
-            Top = 668
+            Left = 3
+            Top = 685
             Width = 212
             Height = 87
             Caption = 'Cursor'
@@ -373,8 +375,8 @@ object frmMain: TfrmMain
             end
           end
           object GroupBox2: TGroupBox
-            Left = 6
-            Top = 488
+            Left = 3
+            Top = 505
             Width = 212
             Height = 174
             Caption = 'Dimensions'
@@ -573,8 +575,8 @@ object frmMain: TfrmMain
             end
           end
           object GroupBox1: TGroupBox
-            Left = 6
-            Top = 366
+            Left = 3
+            Top = 383
             Width = 212
             Height = 116
             Caption = 'Palette'
@@ -629,10 +631,10 @@ object frmMain: TfrmMain
             end
           end
           object gbVarABC: TGroupBox
-            Left = 6
+            Left = 3
             Top = 210
             Width = 212
-            Height = 141
+            Height = 167
             Caption = 'Extra Parameters'
             TabOrder = 3
             object lVarA: TLabel
@@ -662,6 +664,13 @@ object frmMain: TfrmMain
               Width = 6
               Height = 13
               Caption = 'd'
+            end
+            object lVarE: TLabel
+              Left = 16
+              Top = 138
+              Width = 6
+              Height = 13
+              Caption = 'e'
             end
             object eVarA: TEdit
               Left = 88
@@ -707,6 +716,17 @@ object frmMain: TfrmMain
               Alignment = taRightJustify
               PopupMenu = puExamples
               TabOrder = 3
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eVarE: TEdit
+              Left = 88
+              Top = 135
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 4
               Text = '1'
               OnExit = eCoeffNExit
             end
@@ -800,12 +820,12 @@ object frmMain: TfrmMain
             Left = 0
             Top = 31
             Width = 221
-            Height = 727
+            Height = 749
             Align = alClient
             ItemHeight = 13
             TabOrder = 0
             OnDblClick = lbHistoryDblClick
-            ExplicitHeight = 767
+            ExplicitHeight = 727
           end
           object Panel2: TPanel
             Left = 0
@@ -849,16 +869,17 @@ object frmMain: TfrmMain
       end
       object Panel4: TPanel
         Left = 1
-        Top = 787
+        Top = 809
         Width = 229
-        Height = 248
+        Height = 249
         Align = alBottom
         Color = clWhite
         ParentBackground = False
         TabOrder = 1
+        ExplicitTop = 819
         object iPreview: TImage
           Left = 14
-          Top = 4
+          Top = 6
           Width = 200
           Height = 200
           Visible = False
@@ -868,11 +889,12 @@ object frmMain: TfrmMain
   end
   object sbMain: TStatusBar
     Left = 0
-    Top = 1072
+    Top = 1095
     Width = 1584
     Height = 19
     Panels = <>
     SimplePanel = True
+    ExplicitTop = 1072
   end
   object ImageList1: TImageList
     Left = 1016

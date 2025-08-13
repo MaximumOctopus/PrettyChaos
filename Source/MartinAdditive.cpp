@@ -30,13 +30,13 @@ MartinAdditive::MartinAdditive() : Fractal()
 	AcceptsVarC = true;
 	AcceptsVarD = true;
 
-	QPM = QuickParameterMode::kABC;
+	QPM = QuickParameterMode::kABPlusFine;
 
 	AcceptsZoom = false;
 
 	// we need a LOT of iterations here because we're not calculating a function on a per pixel basis,
 	// but bouncing around the screen hitting pixels as we go
-	Defaults.Set(1, 1000000, 4, 21, 40, 20, 1);
+	Defaults.Set(1, 1000000, 4, 21, 40, 20, 1, 0);
 
 	Name = L"Martin (Additive)";
 

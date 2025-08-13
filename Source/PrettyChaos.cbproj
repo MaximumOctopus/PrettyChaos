@@ -426,6 +426,14 @@
             <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
             <BuildOrder>24</BuildOrder>
         </None>
+        <CppCompile Include="MartinDeJong.cpp">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>76</BuildOrder>
+        </CppCompile>
+        <None Include="MartinDeJong.h">
+            <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
+            <BuildOrder>77</BuildOrder>
+        </None>
         <CppCompile Include="MartinPositive.cpp">
             <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
             <BuildOrder>41</BuildOrder>
@@ -504,13 +512,13 @@
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
             <BuildOrder>10</BuildOrder>
         </None>
-        <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
-        <FormResources Include="FormAnimate.dfm"/>
-        <FormResources Include="FormAbout.dfm"/>
-        <FormResources Include="FormColourDialog.dfm"/>
-        <FormResources Include="FormText.dfm"/>
         <FormResources Include="FormEditBounds.dfm"/>
+        <FormResources Include="FormColourDialog.dfm"/>
+        <FormResources Include="FormAnimate.dfm"/>
+        <FormResources Include="FormText.dfm"/>
+        <FormResources Include="FormAbout.dfm"/>
+        <FormResources Include="main.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

@@ -31,12 +31,12 @@ void HistoryHandler::AddZoom(double _xmin, double _xmax, double _ymin, double _y
 
 
 void HistoryHandler::AddProject(int _fractal, double _xmin, double _xmax, double _ymin, double _ymax,
-								double _VarA, double _VarB, double _VarC, double _VarD,
+								double _VarA, double _VarB, double _VarC, double _VarD, double _VarE,
 								double _Coeff, double _MaxIterations, double _Bailout)
 {
 	ProjectHistory zp(_fractal, L"",
-	                  _xmin, _xmax, _ymin, _ymax,
-					  _VarA, _VarB, _VarC, _VarD,
+					  _xmin, _xmax, _ymin, _ymax,
+					  _VarA, _VarB, _VarC, _VarD, _VarE,
 				      _Coeff, _MaxIterations, _Bailout);
 
 	Projects.push_back(zp);
@@ -69,6 +69,7 @@ bool HistoryHandler::Load(const std::wstring file_name)
 		double var_b = 0;
 		double var_c = 0;
 		double var_d = 0;
+		double var_e = 0;
 
 		double Coeff = 0;
 		double MaxIterations = 0;
@@ -107,7 +108,7 @@ bool HistoryHandler::Load(const std::wstring file_name)
 					case FileProperty::ObjectClose:
 					{
 						ProjectHistory ph(fractal, Description, xmin, xmax, ymin, ymax,
-										  var_a, var_b, var_c, var_d,
+										  var_a, var_b, var_c, var_d, var_e,
 										  Coeff, MaxIterations, BailoutRadius);
 
 						Projects.push_back(ph);
@@ -151,6 +152,9 @@ bool HistoryHandler::Load(const std::wstring file_name)
 						break;
 					case FileProperty::VarD:
 						var_d = stod(value);
+						break;
+					case FileProperty::VarE:
+						var_e = stod(value);
 						break;
 					}
 				}

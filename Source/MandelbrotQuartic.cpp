@@ -35,7 +35,7 @@ MandelbrotQuartic::MandelbrotQuartic() : Fractal()
 
 	MultiThread = true;
 
-	Defaults.Set(1, 1000, 4, 0, 0, 0, 0);
+	Defaults.Set(1, 1000, 4, 0, 0, 0, 0, 0);
 
 	AcceptsABCSpectificRenderModeBegin = 4;
 	AcceptsABCSpectificRenderModeEnd = 5;
@@ -67,8 +67,6 @@ MandelbrotQuartic::~MandelbrotQuartic()
 
 bool MandelbrotQuartic::MultiThreadRender(bool preview, bool super_sample)
 {
-    max_d = 0;
-
 	StartTime = std::chrono::system_clock::now();
 
 	if (preview) SwapDimensions();
@@ -123,13 +121,13 @@ bool MandelbrotQuartic::MultiThreadRender(bool preview, bool super_sample)
 
 	if (preview)
 	{
-		FinaliseRenderMandelbrot(PreviewCanvas, max_d);
+		FinaliseRenderMandelbrot(PreviewCanvas);
 
 		SwapDimensions();
 	}
 	else
 	{
-		FinaliseRenderMandelbrot(RenderCanvas, max_d);
+		FinaliseRenderMandelbrot(RenderCanvas);
 	}
 
 	CalculateRenderTime();
@@ -155,7 +153,7 @@ void MandelbrotQuartic::RenderSS(int hstart, int hend)
 
 				int it = 0;
 
-				Data[y * Width + x] = 10000000000000;
+				Data[ydotwidth + x] = 10000000000000;
 				long double x1 = 0;
 				long double y1 = 0;
 				long double x1squared = 0;
@@ -205,13 +203,13 @@ void MandelbrotQuartic::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						long double log_zn = std::log(x1squared + y1squared) / 2;
-						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
+						long double log_zn = std::log(x1squared + y1squared) / 0.60205999132796239042747778944899;    // 2 * log(2)
+						long double nu = 1 - std::log2(log_zn);
 
-						long double itnew = it + 1 - nu;
+						long double itnew = it + nu;
 
 						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-						long double it_d = (long double)it + 1 - nu;
+						long double it_d = (long double)it + nu;
 
 						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
 																					   pp->Colours[it + 1],
@@ -228,10 +226,9 @@ void MandelbrotQuartic::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
-
-						if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+						Data[ydotwidth + x] = std::sqrt(x1 + y1 * x1 + y1);
 					}
+
 					FractalData[ydotwidth + x].a += it;
 					break;
 				}
@@ -239,9 +236,7 @@ void MandelbrotQuartic::RenderSS(int hstart, int hend)
 				{
 					if (it < max_iterations)
 					{
-						Data[ydotwidth + x] = std::sqrt(std::pow(x1squared + y1squared, 2));
-
-						if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+						Data[ydotwidth + x] = std::sqrt(x1squared + y1squared * x1squared + y1squared);
 					}
 					FractalData[ydotwidth + x].a += it;
 					break;
@@ -269,7 +264,7 @@ void MandelbrotQuartic::Render(int hstart, int hend)
 
 			int it = 0;
 
-			Data[y * Width + x] = 10000000000000;
+			Data[ydotwidth + x] = 10000000000000;
 			long double x1 = 0;
 			long double y1 = 0;
 			long double x1squared = 0;
@@ -319,13 +314,13 @@ void MandelbrotQuartic::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					long double log_zn = std::log(x1squared + y1squared) / 2;
-					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
+					long double log_zn = std::log(x1squared + y1squared) / 0.60205999132796239042747778944899;    // 2 * log(2)
+					long double nu = 1 - std::log2(log_zn);
 
-					long double itnew = it + 1 - nu;
+					long double itnew = it + nu;
 
 					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + 1 - nu;
+					long double it_d = (long double)it + nu;
 
 					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
 																				  pp->Colours[it + 1],
@@ -343,8 +338,6 @@ void MandelbrotQuartic::Render(int hstart, int hend)
 				if (it < max_iterations)
 				{
 					Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
-
-					if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
 				}
 				FractalData[ydotwidth + x].a = it;
 				break;
@@ -353,9 +346,7 @@ void MandelbrotQuartic::Render(int hstart, int hend)
 			{
 				if (it < max_iterations)
 				{
-					Data[ydotwidth + x] = std::sqrt(std::pow(x1squared + y1squared, 2));
-
-					if (Data[ydotwidth + x] > max_d) max_d = Data[ydotwidth + x];
+					Data[ydotwidth + x] = std::sqrt(x1squared + y1squared * x1squared + y1squared);
 				}
 				FractalData[ydotwidth + x].a = it;
 				break;
@@ -398,7 +389,7 @@ std::wstring MandelbrotQuartic::HistoryEntry()
 
 void MandelbrotQuartic::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"MandelbrotQuartic fractal\n");
+	ofile << Formatting::to_utf8(L"Mandelbrot (z^4) fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");

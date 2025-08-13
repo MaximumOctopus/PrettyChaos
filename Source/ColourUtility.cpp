@@ -221,19 +221,11 @@ namespace ColourUtility
 	}
 
 
-	Colour LinearInterpolate(const Colour&colour1, const Colour&colour2, double t)
+	Colour LinearInterpolate(const Colour& colour1, const Colour& colour2, double t)
 	{
-		int red1 = colour1.r;
-		int green1 = colour1.g;
-		int blue1 = colour1.b;
-
-		int red2 = colour2.r;
-		int green2 = colour2.g;
-		int blue2 = colour2.b;
-
-		int red = Fast::Floor((double)red1 + t * ((double)red2 - (double)red1));
-		int green = Fast::Floor((double)green1 + t * ((double)green2 - (double)green1));
-		int blue = Fast::Floor((double)blue1 + t * ((double)blue2 - (double)blue1));
+		int red = Fast::Floor((double)colour1.r + t * ((double)colour2.r - (double)colour1.r));
+		int green = Fast::Floor((double)colour1.g + t * ((double)colour2.g - (double)colour1.g));
+		int blue = Fast::Floor((double)colour1.b + t * ((double)colour2.b - (double)colour1.b));
 
 		return Colour(red, green, blue);
 	}

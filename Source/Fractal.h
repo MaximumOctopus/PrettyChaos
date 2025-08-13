@@ -34,9 +34,10 @@ struct DefaultConfig
 	long double b = 0;
 	long double c = 0;
 	long double d = 0;
+	long double e = 0;
 
 	void Set(long double _n_coeff, long double _max_iterations, long double _bailout_radius,
-			 long double _a, long double _b, long double _c, long double _d)
+			 long double _a, long double _b, long double _c, long double _d, long double _e)
 	{
 		n_coeff = _n_coeff;
 		max_iterations = _max_iterations;
@@ -46,6 +47,7 @@ struct DefaultConfig
 		b = _b;
 		c = _c;
 		d = _d;
+        e = _e;
 	}
 };
 
@@ -56,6 +58,7 @@ struct Variables
 	long double b = 0;
 	long double c = 0;
 	long double d = 0;
+	long double e = 0;
 };
 
 
@@ -67,13 +70,13 @@ class Fractal
 protected:
 
 	static const int __RMJuliaEscapeTime = 0;
-	static const int __RMJuliaContinuous = 1;
-	static const int __RMJuliaDistance = 2;
-	static const int __RMJuliaDistanceOrigin = 3;
-	static const int __RMJuliaTwoTone = 4;
-	static const int __RMJuliaThreeTone = 5;
-	static const int __RMJuliaFourTone = 6;
-	static const int __RMJuliaFiveTone = 7;
+	static const int __RMJuliaDistance = 1;
+	static const int __RMJuliaDistanceOrigin = 2;
+	static const int __RMJuliaTwoTone = 3;
+	static const int __RMJuliaThreeTone = 4;
+	static const int __RMJuliaFourTone = 5;
+	static const int __RMJuliaFiveTone = 6;
+	static const int __RMJuliaContinuous = 7;
 
 	static const int __RMMandelbrotEscapeTime = 0;
 	static const int __RMMandelbrotContinuous = 1;
@@ -91,8 +94,6 @@ protected:
 	static const int __RMMartinDistance = 2;
 
 	int* NumIterationsPerPixel = nullptr;
-
-	long double max_d = 0;
 
 	std::chrono::system_clock::time_point StartTime;
 
@@ -143,6 +144,7 @@ public:
 	bool AcceptsVarB = false;
 	bool AcceptsVarC = false;
 	bool AcceptsVarD = false;
+	bool AcceptsVarE = false;
 
 	bool AcceptsZoom = true;
 
@@ -154,6 +156,7 @@ public:
 	std::wstring NameB = L"";
 	std::wstring NameC = L"";
 	std::wstring NameD = L"";
+	std::wstring NameE = L"";
 
 	int RenderMode = 0;
 
@@ -205,7 +208,7 @@ public:
 	void SetParameters(long double, int, int);
 	void SetRenderMode(int);
 
-	void SetABC(long double, long double, long double, long double);
+	void SetABC(long double, long double, long double, long double, long double);
 	bool ShowABC(int);
 
 	void SetPaletteInfinity(Colour);
@@ -218,8 +221,8 @@ public:
 	bool AttemptRecolour();
 
 	void FinaliseRenderDragon(TBitmap*);
-	void FinaliseRenderJulia(TBitmap*, double);
-	void FinaliseRenderMandelbrot(TBitmap*, double);
+	void FinaliseRenderJulia(TBitmap*);
+	void FinaliseRenderMandelbrot(TBitmap*);
 	void FinaliseRenderMartin(TBitmap*);
 
     void SetFromProjectHistory(ProjectHistory);

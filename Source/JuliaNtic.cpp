@@ -28,14 +28,13 @@ JuliaNtic::JuliaNtic() : Fractal()
 
 	QPM = QuickParameterMode::kABPlusFine;
 
-	Defaults.Set(1, 1000, 4, 0.89, -0.19, 6, 0);
+	Defaults.Set(1, 1000, 4, 0.89, -0.19, 6, 0, 0);
 
 	MultiThread = true;
 
 	Name = L"Julia Set (n-tic)";
 
 	RenderModes.push_back(L"Escape time");
-	RenderModes.push_back(L"Continuous");
 	RenderModes.push_back(L"Distance");
 	RenderModes.push_back(L"Distance from origin");
 	RenderModes.push_back(L"Two-tone");
@@ -113,13 +112,13 @@ bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
 
 	if (preview)
 	{
-		FinaliseRenderJulia(PreviewCanvas, max_d);
+		FinaliseRenderJulia(PreviewCanvas);
 
 		SwapDimensions();
 	}
 	else
 	{
-		FinaliseRenderJulia(RenderCanvas, max_d);
+		FinaliseRenderJulia(RenderCanvas);
 	}
 
 	CalculateRenderTime();
@@ -130,8 +129,6 @@ bool JuliaNtic::MultiThreadRender(bool preview, bool super_sample)
 
 void JuliaNtic::RenderSS(int hstart, int hend)
 {
-	max_d = 0;
-
 	long double halfn = Var.c / 2;
 
 	// maximum distance from the centre of the image
@@ -172,33 +169,9 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 					FractalData[ydotwidth + x].a += it;
 					break;
 				}
-				case __RMJuliaContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(p * p + q * q) / 2;
-						long double nu = std::log(log_zn / std::log(2)) / std::log(2);
-
-						long double itnew = it + 1 - nu;
-
-						it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)pp->ColourCount;
-						long double it_d = (long double)it + 1 - nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x] += pp2->SingleColour;
-					}
-					break;
-				}
 				case __RMJuliaDistance:
 				{
-					Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-					if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
 
 					FractalData[ydotwidth + x].a += it;
 					break;
@@ -222,8 +195,6 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 
 void JuliaNtic::Render(int hstart, int hend)
 {
-	max_d = 0;
-
 	long double halfn = Var.c / 2;
 
 	// maximum distance from the centre of the image
@@ -262,33 +233,9 @@ void JuliaNtic::Render(int hstart, int hend)
 				FractalData[ydotwidth + x].a = it;
 				break;
 			}
-			case __RMJuliaContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(p * p + q * q) / 2;
-					long double nu = std::log(log_zn / std::log(2)) / std::log(2);
-
-					long double itnew = it + 1 - nu;
-
-					it = std::pow((Fast::Floor(max_iterations - itnew) / max_iterations), n_coeff) * (long double)pp->ColourCount;
-					long double it_d = (long double)it + 1 - nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
-																				  pp->Colours[it + 1],
-																				  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x] = pp2->SingleColour;
-				}
-				break;
-			}
 			case __RMJuliaDistance:
 			{
-				Data[ydotwidth + x] = std::sqrt(std::pow(p + q, 2));
-
-				if (Data[ydotwidth + x] > max_d) max_d = Data[y * Width + x];
+				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
 
 				FractalData[ydotwidth + x].a = it;
 				break;
@@ -336,7 +283,7 @@ std::wstring JuliaNtic::HistoryEntry()
 
 void JuliaNtic::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Julie Set (n-tic)\n");
+	ofile << Formatting::to_utf8(L"Julia Set (z^n)\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");

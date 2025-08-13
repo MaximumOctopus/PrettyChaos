@@ -283,6 +283,7 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	eVarB->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b);
 	eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
 	eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
+	eVarE->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.e);
 
 	// =========================================================================
 
@@ -311,9 +312,6 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	sbReZoom->Enabled = animation.Configured;
 
 	// =========================================================================
-
-	ShowMessage(project.PaletteFileName.c_str());
-	ShowMessage(project.Palette2FileName.c_str());
 
 	if (!project.PaletteFileName.empty())
 	{
@@ -422,6 +420,7 @@ void TfrmMain::UpdateAllParameters()
 		eVarB->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b);
 		eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
 		eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
+		eVarE->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.e);
 	}
 }
 
@@ -478,11 +477,14 @@ void TfrmMain::UpdateABCPanel()
 		eVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
 		lVarD->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarD;
 		eVarD->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarD;
+		lVarE->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarE;
+		eVarE->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarE;
 
 		lVarA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
 		lVarB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
 		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
 		lVarD->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameD.c_str();
+		lVarE->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameE.c_str();
 	}
 }
 
@@ -513,7 +515,8 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(),
 																		eVarB->Text.ToDouble(),
 																		eVarC->Text.ToDouble(),
-																		eVarD->Text.ToDouble());
+																		eVarD->Text.ToDouble(),
+																		eVarE->Text.ToDouble());
 	}
 
 	eCoeffNExit(eCoeffN);
@@ -577,7 +580,8 @@ void TfrmMain::RenderPreview()
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(),
 																		eVarB->Text.ToDouble(),
 																		eVarC->Text.ToDouble(),
-																		eVarD->Text.ToDouble());
+																		eVarD->Text.ToDouble(),
+																		eVarE->Text.ToDouble());
 	}
 
 	eCoeffNExit(nullptr);
@@ -616,10 +620,11 @@ void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 		double b = eVarB->Text.ToDouble();
 		double c = eVarC->Text.ToDouble();
 		double d = eVarD->Text.ToDouble();
+		double e = eVarE->Text.ToDouble();
 
 		std::wstring path = ExtractFilePath(Application->ExeName).c_str();
 
-		std::wstring file_name = path + L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + AnimationConfiguration.ParametersForFile(a, b, c, d) + L".png";
+		std::wstring file_name = path + L"Animation\\" + AnimationConfiguration.Prefix + std::to_wstring(i + 1) + AnimationConfiguration.ParametersForFile(a, b, c, d, e) + L".png";
 
 		SaveFractal(Utility::ProcessFileName(file_name));
 
@@ -644,6 +649,12 @@ void __fastcall TfrmMain::eAnimationClick(TObject *Sender)
 			{
 				d += AnimationConfiguration.DeltaD;
 				eVarD->Text = d;
+			}
+
+			if (eVarE->Visible)
+			{
+				e += AnimationConfiguration.DeltaE;
+				eVarE->Text = e;
 			}
 		}
 

@@ -110,6 +110,9 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 					case FileProperty::var_d:
 						project.var_d = stod(value);
 						break;
+					case FileProperty::var_e:
+						project.var_e = stod(value);
+						break;
 
 					case FileProperty::Steps:
 						animation.Configured = true;
@@ -126,6 +129,9 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 						break;
 					case FileProperty::DeltaD:
 						animation.DeltaD = stod(value);
+						break;
+					case FileProperty::DeltaE:
+						animation.DeltaE = stod(value);
 						break;
 					case FileProperty::Parameters:
 						animation.Parameters = stoi(value);
@@ -246,6 +252,7 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 		file << Formatting::to_utf8(L"var_b=" + Formatting::LDToStr(project.var_b) + L"\n");
 		file << Formatting::to_utf8(L"var_c=" + Formatting::LDToStr(project.var_c) + L"\n");
 		file << Formatting::to_utf8(L"var_d=" + Formatting::LDToStr(project.var_d) + L"\n");
+		file << Formatting::to_utf8(L"var_e=" + Formatting::LDToStr(project.var_e) + L"\n");
 
 		file << Formatting::to_utf8(L"]\n");
 
@@ -259,6 +266,7 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 			file << Formatting::to_utf8(L"DeltaB=" + std::to_wstring(animation.DeltaB) + L"\n");
 			file << Formatting::to_utf8(L"DeltaC=" + std::to_wstring(animation.DeltaC) + L"\n");
 			file << Formatting::to_utf8(L"DeltaD=" + std::to_wstring(animation.DeltaD) + L"\n");
+			file << Formatting::to_utf8(L"DeltaE=" + std::to_wstring(animation.DeltaE) + L"\n");
 
 			file << Formatting::to_utf8(L"Parameters=" + std::to_wstring(animation.Parameters) + L"\n");
 			file << Formatting::to_utf8(L"Zoom=" + std::to_wstring(animation.Zoom) + L"\n");

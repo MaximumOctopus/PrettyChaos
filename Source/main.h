@@ -286,6 +286,8 @@ __published:	// IDE-managed Components
 	TMenuItem *Quadruplex41;
 	TPaintBox *pbPalette2;
 	TShape *sInfinity2;
+	TLabel *lVarE;
+	TEdit *eVarE;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,

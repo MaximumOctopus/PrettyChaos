@@ -50,7 +50,7 @@ object frmAnimate: TfrmAnimate
   end
   object Label2: TLabel
     Left = 24
-    Top = 248
+    Top = 264
     Width = 66
     Height = 15
     Caption = 'Image Prefix'
@@ -84,6 +84,13 @@ object frmAnimate: TfrmAnimate
     ParentColor = False
     ParentFont = False
     Visible = False
+  end
+  object Label5: TLabel
+    Left = 24
+    Top = 219
+    Width = 63
+    Height = 15
+    Caption = 'Parameter E'
   end
   object eDeltaA: TEdit
     Left = 112
@@ -145,7 +152,7 @@ object frmAnimate: TfrmAnimate
   end
   object ePrefix: TEdit
     Left = 112
-    Top = 245
+    Top = 261
     Width = 228
     Height = 23
     TabOrder = 6
@@ -208,5 +215,23 @@ object frmAnimate: TfrmAnimate
     Height = 17
     Caption = 'include in filename'
     TabOrder = 13
+  end
+  object cbIncludeE: TCheckBox
+    Left = 198
+    Top = 219
+    Width = 123
+    Height = 17
+    Caption = 'include in filename'
+    TabOrder = 14
+  end
+  object eDeltaE: TEdit
+    Left = 112
+    Top = 216
+    Width = 80
+    Height = 23
+    Alignment = taRightJustify
+    TabOrder = 15
+    Text = '0'
+    OnChange = eDeltaAChange
   end
 end

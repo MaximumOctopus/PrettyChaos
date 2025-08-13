@@ -25,13 +25,14 @@ struct ProjectHistory
 	double VarB = 0;
 	double VarC = 0;
 	double VarD = 0;
+    double VarE = 0;
 
 	double Coeff = 0;
 	double MaxIterations = 0;
 	double Bailout  = 0;
 
 	ProjectHistory(int _fractal, std::wstring _Description, double _xmin, double _xmax, double _ymin, double _ymax,
-				   double _VarA, double _VarB, double _VarC, double _VarD,
+				   long double _VarA, long double _VarB, long double _VarC, long double _VarD, long double _VarE,
 				   double _Coeff, double _MaxIterations, double _Bailout)
 	{
 		fractal = _fractal;
@@ -47,6 +48,7 @@ struct ProjectHistory
 		VarB = _VarB;
 		VarC = _VarC;
 		VarD = _VarD;
+		VarE = _VarE;
 
 		Coeff = _Coeff;
 		MaxIterations = _MaxIterations;

@@ -29,6 +29,7 @@
 #include "MartinAdditive.h"
 #include "MartinPositive.h"
 #include "MartinSinusoidal.h"
+#include "MartinDeJong.h"
 
 
 FractalHandler::FractalHandler()
@@ -49,6 +50,7 @@ FractalHandler::FractalHandler()
 	Fractal* m6 = new MandelbrotCosNtic();
 	Fractal* mf = new Martin();
 	Fractal* ma = new MartinAdditive();
+	Fractal* md = new MartinDeJong();
 	Fractal* mp = new MartinPositive();
 	Fractal* ms = new MartinSinusoidal();
 
@@ -69,6 +71,7 @@ FractalHandler::FractalHandler()
 
 	Fractals.push_back(mf);
 	Fractals.push_back(ma);
+	Fractals.push_back(md);
 	Fractals.push_back(mp);
 	Fractals.push_back(ms);
 
@@ -83,5 +86,5 @@ FractalHandler::~FractalHandler()
 		delete Fractals[t];
 	}
 
-    Fractals.clear();
+	Fractals.clear();
 }

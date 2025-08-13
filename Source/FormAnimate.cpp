@@ -31,6 +31,7 @@ void __fastcall TfrmAnimate::bOKClick(TObject *Sender)
 	double b = ToDouble(eDeltaB->Text.c_str(), 0);
 	double c = ToDouble(eDeltaC->Text.c_str(), 0);
 	double d = ToDouble(eDeltaD->Text.c_str(), 0);
+	double e = ToDouble(eDeltaE->Text.c_str(), 0);
 
 	int steps = eSteps->Text.ToIntDef(0);
 
@@ -38,7 +39,7 @@ void __fastcall TfrmAnimate::bOKClick(TObject *Sender)
 
 	if (cbAnimateParameters->Checked)
 	{
-		if (!(a == 0 && b == 0 && c == 0 && d == 0 && steps == 0))
+		if (!(a == 0 && b == 0 && c == 0 && d == 0 && e == 0 && steps == 0))
 		{
 			AnimationConfiguration.Configured = true;
 
@@ -48,11 +49,13 @@ void __fastcall TfrmAnimate::bOKClick(TObject *Sender)
 			AnimationConfiguration.DeltaB = b;
 			AnimationConfiguration.DeltaC = c;
 			AnimationConfiguration.DeltaD = d;
+			AnimationConfiguration.DeltaE = e;
 
 			AnimationConfiguration.IncludeA = cbIncludeA->Checked;
 			AnimationConfiguration.IncludeB = cbIncludeB->Checked;
 			AnimationConfiguration.IncludeC = cbIncludeC->Checked;
 			AnimationConfiguration.IncludeD = cbIncludeD->Checked;
+			AnimationConfiguration.IncludeE = cbIncludeE->Checked;
 
 			AnimationConfiguration.Parameters = cbAnimateParameters->Checked;
 			AnimationConfiguration.Zoom = cbAnimateZoom->Checked;
@@ -93,25 +96,30 @@ void __fastcall TfrmAnimate::FormShow(TObject *Sender)
 	eDeltaB->Text = AnimationConfiguration.DeltaB;
 	eDeltaC->Text = AnimationConfiguration.DeltaC;
 	eDeltaD->Text = AnimationConfiguration.DeltaD;
+	eDeltaE->Text = AnimationConfiguration.DeltaE;
 
 	cbIncludeA->Checked = AnimationConfiguration.IncludeA;
 	cbIncludeB->Checked = AnimationConfiguration.IncludeB;
 	cbIncludeC->Checked = AnimationConfiguration.IncludeC;
 	cbIncludeD->Checked = AnimationConfiguration.IncludeD;
+	cbIncludeE->Checked = AnimationConfiguration.IncludeE;
 
 	cbAnimateParameters->Checked = AnimationConfiguration.Parameters;
 	cbAnimateZoom->Checked = AnimationConfiguration.Zoom;
 
 	ePrefix->Text = AnimationConfiguration.Prefix.c_str();
 
-    lWarning->Visible = false;
+	lWarning->Visible = false;
 }
 
 
 void __fastcall TfrmAnimate::eDeltaAChange(TObject *Sender)
 {
-	cbAnimateParameters->Checked = !(eDeltaA->Text != L"0" && eDeltaB->Text != L"0" &&
-									 eDeltaC->Text != L"0" && eDeltaD->Text != L"0");
+	cbAnimateParameters->Checked = !(eDeltaA->Text != L"0" &&
+									 eDeltaB->Text != L"0" &&
+									 eDeltaC->Text != L"0" &&
+									 eDeltaD->Text != L"0" &&
+									 eDeltaE->Text != L"0");
 }
 
 

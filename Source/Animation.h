@@ -23,19 +23,21 @@ struct Animation
 	double DeltaA = 0;
 	double DeltaB = 0;
 	double DeltaC = 0;
-    double DeltaD = 0;
+	double DeltaD = 0;
+    double DeltaE = 0;
 
 	bool IncludeA = false;
 	bool IncludeB = false;
 	bool IncludeC = false;
 	bool IncludeD = false;
+	bool IncludeE = false;
 
 	bool Parameters = false;
     bool Zoom = false;
 
 	std::wstring Prefix = L"$yyyy$mm$dd_$Th$Tm$Ts_";
 
-	std::wstring ParametersForFile(double a, double b, double c, double d)
+	std::wstring ParametersForFile(double a, double b, double c, double d, double e)
 	{
 		std::wstring output = L"";
 
@@ -57,6 +59,11 @@ struct Animation
 		if (IncludeD)
 		{
 			output += L"__" + std::to_wstring(d);
+		}
+
+		if (IncludeE)
+		{
+			output += L"__" + std::to_wstring(e);
 		}
 
 		return Utility::ReplaceString(output, L".", L"_");

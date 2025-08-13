@@ -11,8 +11,6 @@
 // https://en.wikipedia.org/wiki/Dragon_curve
 // https://www.rosettacode.org/wiki/Dragon_curve
 
-#include <Vcl.Dialogs.hpp>
-
 #include <algorithm>
 #include <string>
 
@@ -28,7 +26,7 @@ Dragon::Dragon() : Fractal()
 
 	AcceptsZoom = false;
 
-	Defaults.Set(1, 4, 256, 16, 0, 0, 0);
+	Defaults.Set(1, 4, 256, 16, 0, 0, 0, 0);
 
 	Name = L"Dragon curve";
 
@@ -111,15 +109,15 @@ void Dragon::Render(int hstart, int hend)
 
 	ClearFractalDataA(-1);
 
-int palette_range = std::floor(500 / (double)max_iterations) - 1;
+	int palette_range = std::floor(500 / (double)max_iterations) - 1;
 
 	// maximum distance from the centre of the image
 	int maxdim = std::floor(std::sqrt(((Height / 2) * (Height / 2)) + ((Width / 2) * (Width / 2))));
 
 	for (int t = 0; t < max_iterations; t++ )
 	{
-		int a = std::floor(Width / 2);
-		int b = std::floor(Height / 2);
+		int a = Fast::Floor(Width / 2);
+		int b = Fast::Floor(Height / 2);
 		a += __Move[i++];
 		b += __Move[i++];
 

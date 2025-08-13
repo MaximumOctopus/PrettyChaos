@@ -12,6 +12,7 @@
 #pragma hdrstop
 
 #include <fstream>
+#include <Vcl.Dialogs.hpp>
 
 #include "FormColourDialog.h"
 
@@ -72,14 +73,24 @@ __fastcall TfrmPaletteEditor::TfrmPaletteEditor(TComponent* Owner)
 		RGBGradients[t]->Width = 255;
 		RGBGradients[t]->Height = 1;
 	}
+}
 
-	BuildGuiForPalette();
+
+void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
+{
+	cbPalettes->ItemIndex = CurrentPaletteIndex;
+
+	cbPalettesChange(NULL);
+
+	RenderGradient();
+
+	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->SingleColour.ToIntBGR());
 }
 
 
 void __fastcall TfrmPaletteEditor::FormDestroy(TObject *Sender)
 {
-    delete RGBGradients[2];
+	delete RGBGradients[2];
 	delete RGBGradients[1];
 	delete RGBGradients[0];
 }
@@ -88,16 +99,6 @@ void __fastcall TfrmPaletteEditor::FormDestroy(TObject *Sender)
 void __fastcall TfrmPaletteEditor::FormClose(TObject *Sender, TCloseAction &Action)
 {
 	Action = caFree;
-}
-
-
-void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
-{
-	cbPalettes->ItemIndex = CurrentPaletteIndex;
-
-	RenderGradient();
-
-	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->SingleColour.ToIntBGR());
 }
 
 
@@ -625,7 +626,7 @@ void TfrmPaletteEditor::RenderGradient()
 
 void __fastcall TfrmPaletteEditor::bAcceptClick(TObject *Sender)
 {
-	cbPalettesChange(NULL);
+	cbPalettesChange(cbPalettes);
 
 	for (int t = 0; t < GPaletteHandler->Palettes.size(); t++)
 	{
@@ -721,7 +722,9 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 	KeySelected = 0;
 
 	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Keys.size() == 0)
-		ShowMessage(L"help!!");
+	{
+		ShowMessage(L"help!! :)");
+    }
 
 	Selected = Shapes[0];
 
@@ -979,17 +982,20 @@ void __fastcall TfrmPaletteEditor::cbInterleveReverseClick(TObject *Sender)
 
 void __fastcall TfrmPaletteEditor::cbPalettesChange(TObject *Sender)
 {
-	if (sbHorizontal->Down)
+	if (Sender != NULL)
 	{
-		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = false;
-	}
-	else
-	{
-		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = true;
-	}
+		if (sbHorizontal->Down)
+		{
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = false;
+		}
+		else
+		{
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = true;
+		}
 
-	GPaletteHandler->Palettes[CurrentPaletteIndex]->TempIsGradient = cbGradient->Checked;
-	GPaletteHandler->Palettes[CurrentPaletteIndex]->TempSingleColour = sSingleColour->Brush->Color;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempIsGradient = cbGradient->Checked;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempSingleColour = sSingleColour->Brush->Color;
+    }
 
 	CurrentPaletteIndex = cbPalettes->ItemIndex;
 
@@ -1002,10 +1008,10 @@ void __fastcall TfrmPaletteEditor::cbPalettesChange(TObject *Sender)
 			Shapes.pop_back();
 		}
 
-		BuildGuiForPalette();
+		iPointer->Left = Shapes.front()->Left;
+	}
 
-        iPointer->Left = Shapes.front()->Left;
-    }
+	BuildGuiForPalette();
 }
 
 
