@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.22
+  PrettyChaos 0.23
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  June 29th 2025
+  August 13th 2025
 
 =================================================================================================
 
@@ -34,6 +34,12 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.23 / August 13th 2025
+
+Added: Martin de Jong attractor.
+
+A few minor performance improvements and fixes.
 
 0.22 / June 29th 2025
 
