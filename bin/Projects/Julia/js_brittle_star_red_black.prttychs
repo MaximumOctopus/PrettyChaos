@@ -1,0 +1,22 @@
+[
+Name=Julia Set
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=150.000000
+BailoutRadius=6.000000
+SS=1
+SSLevel=16
+Palette=grey_yellow_orange_red.palette
+GradientDirection=0
+IsGradient=0
+xmin=-0.18671875
+xmax=-0.12421875
+ymin=-0.284375
+ymax=-0.234375
+var_a=-0.8
+var_b=0.18015
+var_c=0
+var_d=0
+]
