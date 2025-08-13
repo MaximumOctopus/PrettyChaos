@@ -35,7 +35,7 @@ All of my software is free and open source; please consider donating to a local 
 
 Release History
 
-0.23 / 
+0.23 / August 13th 2025
 
 Added: Martin de Jong attractor.
 
@@ -231,3 +231,4 @@ Modifications to easily allow more fractal generators to be added in a modular w
 0.1 / September 23rd 2023
 
 Initial release.
+
