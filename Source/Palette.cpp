@@ -408,11 +408,55 @@ void Palette::Render()
 }
 
 
+// assume ColourCount is even...
 void Palette::CopyPublic()
 {
+	int i1(0);
+	int i2((ColourCount / 2));
+
+	if (InterleveReverse)
+	{
+		i2 = ColourCount - 1;
+	}
+
 	for (int t = 0; t < ColourCount; t++)
 	{
-		Colours[t] = Colour(PaletteR[t], PaletteG[t], PaletteB[t]);
+		if (Interleve)
+		{
+			switch (InterleveMode)
+			{
+			case 0:
+				if (t % 2)
+				{
+					if (InterleveReverse)
+					{
+						Colours[t] = Colour(PaletteR[i2], PaletteG[i2], PaletteB[i2]);
+
+						i2--;
+					}
+					else
+					{
+						Colours[t] = Colour(PaletteR[i2], PaletteG[i2], PaletteB[i2]);
+
+						i2++;
+					}
+				}
+				else
+				{
+					Colours[t] = Colour(PaletteR[i1], PaletteG[i1], PaletteB[i1]);
+
+					i1++;
+				}
+				break;
+			case 1:
+				Colours[t] = Colour(PaletteR[t], PaletteG[t], PaletteB[t]); // to do!
+				break;
+			}
+		}
+		else
+		{
+			Colours[t] = Colour(PaletteR[t], PaletteG[t], PaletteB[t]);
+		}
 	}
 }
 

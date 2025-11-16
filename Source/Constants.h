@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.23 (debug) :: August 13th 2025";
+static const std::wstring __PrettyChaosVersion = L"0.24 (debug) :: November 16th 2025";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.23 :: August 13th 2025";
+static const std::wstring __PrettyChaosVersion = L"0.24 :: November 16th 2025";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
@@ -40,10 +40,10 @@ static const int DimensionsDesktop[17][2] = {
 	{ 3840, 2160 }};
 
 static const int DimensionsPhone[12][2] = {
-	{ 828, 1792 },
+	{  828, 1792 },
 	{ 1125, 2436 },
 	{ 1242, 2688 },
-	{ 750,  1334 },
+	{  750, 1334 },
 	{ 1170, 2532 },
 	{ 1125, 2436 },
 	{ 1170, 2532 },
@@ -52,6 +52,21 @@ static const int DimensionsPhone[12][2] = {
 	{ 1080, 2340 },
 	{ 1170, 2532 },
 	{ 1284, 2778 } };
+
+static const int DimensionsCanvas150[12][2] = {
+	{ 1182, 1182 }, 	// 20x20cm
+	{ 1772, 1182 }, 	// 30x20cm
+	{ 2363, 1772 }, 	// 40x30cm
+	{ 2363, 2363 }, 	// 40x40cm
+	{ 3544, 2363 },     // 60x40cm
+	{ 3544, 3544 },     // 60x60cm
+	{ 4430, 2953 }, 	// 75x50cm
+	{ 4725, 3544 }, 	// 80x60cm
+	{ 4725, 4725 }, 	// 80x80cm
+	{ 5315, 3544 }, 	// 90x60cm
+	{ 5906, 4430 }, 	// 100x75cm
+	{ 7087, 4725 } };	// 120x80cm
+
 
 static const int DimensionsTexture[6] =	{ 128, 256, 512, 1024, 2048, 4096 };
 

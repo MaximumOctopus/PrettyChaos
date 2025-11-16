@@ -512,13 +512,13 @@
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
             <BuildOrder>10</BuildOrder>
         </None>
+        <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
-        <FormResources Include="FormEditBounds.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
         <FormResources Include="FormAnimate.dfm"/>
+        <FormResources Include="FormEditBounds.dfm"/>
         <FormResources Include="FormText.dfm"/>
         <FormResources Include="FormAbout.dfm"/>
-        <FormResources Include="main.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>

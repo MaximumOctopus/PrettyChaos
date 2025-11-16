@@ -104,19 +104,29 @@ bool MandelbrotQuartic::MultiThreadRender(bool preview, bool super_sample)
 	}
 	else
 	{
-		int h_delta = std::round((double)Height / 5);
+		int h_delta = std::round((double)Height / 10);
 
 		std::thread t1(Render, 0, h_delta);
 		std::thread t2(Render, h_delta, 2 * h_delta);
 		std::thread t3(Render, 2 * h_delta, 3 * h_delta);
 		std::thread t4(Render, 3 * h_delta, 4 * h_delta);
-		std::thread t5(Render, 4 * h_delta, Height);
+		std::thread t5(Render, 4 * h_delta, 5 * h_delta);
+		std::thread t6(Render, 5 * h_delta, 6 * h_delta);
+		std::thread t7(Render, 6 * h_delta, 7 * h_delta);
+		std::thread t8(Render, 7 * h_delta, 8 * h_delta);
+		std::thread t9(Render, 8 * h_delta, 9 * h_delta);
+		std::thread t10(Render, 9 * h_delta, Height);
 
 		t1.join();
 		t2.join();
 		t3.join();
 		t4.join();
 		t5.join();
+		t6.join();
+		t7.join();
+		t8.join();
+		t9.join();
+		t10.join();
 	}
 
 	if (preview)

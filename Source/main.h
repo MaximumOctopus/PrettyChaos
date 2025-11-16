@@ -38,7 +38,7 @@
 class TfrmMain : public TForm
 {
 __published:	// IDE-managed Components
-	TPanel *Panel1;
+	TPanel *pToolbar;
 	TPanel *Panel3;
 	TImage *iRender;
 	TSpeedButton *sbRender;
@@ -241,7 +241,7 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbEditBounds;
 	TEdit *eWidth;
 	TEdit *eHeight;
-	TGroupBox *GroupBox1;
+	TGroupBox *gbPalette;
 	TSpeedButton *bEditPalette;
 	TPaintBox *pbPalette;
 	TShape *sInfinity;
@@ -288,6 +288,42 @@ __published:	// IDE-managed Components
 	TShape *sInfinity2;
 	TLabel *lVarE;
 	TEdit *eVarE;
+	TMenuItem *Canvas1;
+	TMenuItem *N150dpi1;
+	TMenuItem *N20;
+	TMenuItem *N20x20cm1;
+	TMenuItem *N20x20cm2;
+	TMenuItem *N40x30cm1;
+	TMenuItem *N40x30cm2;
+	TMenuItem *N60x40cm1;
+	TMenuItem *N60x40cm2;
+	TMenuItem *N75x50cm1;
+	TMenuItem *N75x50cm2;
+	TMenuItem *N80x80cm1;
+	TMenuItem *N80x80cm2;
+	TMenuItem *N100x75cm1;
+	TMenuItem *N100x75cm2;
+	TMenuItem *N150dpi2;
+	TMenuItem *N120x80cm1;
+	TMenuItem *N100x75cm3;
+	TMenuItem *N90x60cm1;
+	TMenuItem *N80x80cm3;
+	TMenuItem *N80x60cm1;
+	TMenuItem *N75x50cm3;
+	TMenuItem *N60x60cm1;
+	TMenuItem *N60x40cm3;
+	TMenuItem *N40x40cm1;
+	TMenuItem *N40x30cm3;
+	TMenuItem *N30x20cm1;
+	TMenuItem *N20x20cm3;
+	TSpeedButton *sbQuickPaletteMain;
+	TPopupMenu *puQuickPalette;
+	TMenuItem *LoadPalette1;
+	TMenuItem *N21;
+	TPopupMenu *puQuickPalette2;
+	TMenuItem *MenuItem1;
+	TMenuItem *MenuItem2;
+	TSpeedButton *sbQuickPaletteBackground;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -347,9 +383,16 @@ __published:	// IDE-managed Components
 	void __fastcall pbPalette2Click(TObject *Sender);
 	void __fastcall sInfinity2MouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
+	void __fastcall N20x20cm1Click(TObject *Sender);
+	void __fastcall N20x20cm3Click(TObject *Sender);
+	void __fastcall sbQuickPaletteMainClick(TObject *Sender);
+	void __fastcall sbQuickPaletteBackgroundClick(TObject *Sender);
 
 
 private:	// User declarations
+
+	void __fastcall SelectPaletteMain(TObject *);
+	void __fastcall SelectPaletteBackground(TObject *);
 
 	bool IsBusy = false;
 
@@ -365,7 +408,8 @@ private:	// User declarations
 
 	Animation AnimationConfiguration;
 
-	std::wstring PalettePath = L"";
+	std::wstring SystemPalettePath = L"";
+	std::wstring UserPalettePath = L"";
 	std::wstring ProjectPath = L"";
     std::wstring RenderPath = L"";
 
@@ -403,13 +447,16 @@ private:	// User declarations
 	void UpdatePalette();
     void UpdateAllParameters();
 
+    void SetNewPalette(int, const std::wstring);
 	bool LoadAndSetPalette(int, const std::wstring);
 
 	void SetWarning(bool);
 
 	void SetTitle(const std::wstring);
 
-    void UpdateLastHistoryItem();
+	void UpdateLastHistoryItem();
+
+    void BuildQuickPaletteMenu();
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);

@@ -20,8 +20,12 @@ class PaletteHandler
 
 public:
 
+	std::vector<std::wstring> AvailablePalettes;
+
 	std::vector<Palette*> Palettes;
 
 	PaletteHandler();
 	~PaletteHandler();
+
+	void UpdatePaletteList(const std::wstring);
 };

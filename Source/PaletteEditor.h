@@ -105,6 +105,7 @@ __published:	// IDE-managed Components
 	TSpeedButton *sbVertical;
 	TShape *sSingleColour;
 	TCheckBox *cbGradient;
+	TBitBtn *bReset;
 	void __fastcall tbRedChange(TObject *Sender);
 	void __fastcall sbAddNewKeyClick(TObject *Sender);
 	void __fastcall shapeStartColourMouseDown(TObject *Sender, TMouseButton Button,
@@ -152,6 +153,7 @@ __published:	// IDE-managed Components
 	void __fastcall cbPalettesChange(TObject *Sender);
 	void __fastcall sSingleColourMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
           int X, int Y);
+	void __fastcall bResetClick(TObject *Sender);
 
 private:
 

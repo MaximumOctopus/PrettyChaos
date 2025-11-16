@@ -19,7 +19,7 @@ object frmMain: TfrmMain
   OnKeyDown = FormKeyDown
   OnPaint = FormPaint
   TextHeight = 13
-  object Panel1: TPanel
+  object pToolbar: TPanel
     Left = 0
     Top = 0
     Width = 1584
@@ -296,7 +296,6 @@ object frmMain: TfrmMain
     Align = alClient
     TabOrder = 1
     OnMouseMove = Panel3MouseMove
-    ExplicitHeight = 1038
     object iRender: TImage
       Left = 0
       Top = 1
@@ -314,7 +313,6 @@ object frmMain: TfrmMain
       Color = clWhite
       ParentBackground = False
       TabOrder = 0
-      ExplicitHeight = 1036
       object PageControl1: TPageControl
         Left = 1
         Top = 1
@@ -323,7 +321,6 @@ object frmMain: TfrmMain
         ActivePage = TabSheet1
         Align = alClient
         TabOrder = 0
-        ExplicitHeight = 786
         object TabSheet1: TTabSheet
           Caption = 'Fractal'
           object Label16: TLabel
@@ -574,7 +571,7 @@ object frmMain: TfrmMain
               OnExit = eWidthExit
             end
           end
-          object GroupBox1: TGroupBox
+          object gbPalette: TGroupBox
             Left = 3
             Top = 383
             Width = 212
@@ -628,6 +625,74 @@ object frmMain: TfrmMain
               Width = 20
               Height = 20
               OnMouseDown = sInfinity2MouseDown
+            end
+            object sbQuickPaletteMain: TSpeedButton
+              Left = 174
+              Top = 56
+              Width = 23
+              Height = 22
+              Glyph.Data = {
+                36030000424D3603000000000000360000002800000010000000100000000100
+                18000000000000030000C21E0000C21E00000000000000000000FFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B07A58B07A58B07A58FFFFFFDD9BD9DD9BD9DD9BD9FFFFFFB177FFB177FFB177
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B2EBD0B2EBD0B2EBD0FFFFFF6DCC506DCC506DCC50FFFFFFEBB060EBB060EBB0
+                60FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73AAFF73AAFFFFFFFF67D5F067D5F067D5
+                F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+              OnClick = sbQuickPaletteMainClick
+            end
+            object sbQuickPaletteBackground: TSpeedButton
+              Left = 174
+              Top = 84
+              Width = 23
+              Height = 22
+              Glyph.Data = {
+                36030000424D3603000000000000360000002800000010000000100000000100
+                18000000000000030000C21E0000C21E00000000000000000000FFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B07A58B07A58B07A58FFFFFFDD9BD9DD9BD9DD9BD9FFFFFFB177FFB177FFB177
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B2EBD0B2EBD0B2EBD0FFFFFF6DCC506DCC506DCC50FFFFFFEBB060EBB060EBB0
+                60FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73AAFF73AAFFFFFFFF67D5F067D5F067D5
+                F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+              OnClick = sbQuickPaletteBackgroundClick
             end
           end
           object gbVarABC: TGroupBox
@@ -825,7 +890,6 @@ object frmMain: TfrmMain
             ItemHeight = 13
             TabOrder = 0
             OnDblClick = lbHistoryDblClick
-            ExplicitHeight = 727
           end
           object Panel2: TPanel
             Left = 0
@@ -876,7 +940,6 @@ object frmMain: TfrmMain
         Color = clWhite
         ParentBackground = False
         TabOrder = 1
-        ExplicitTop = 819
         object iPreview: TImage
           Left = 14
           Top = 6
@@ -894,7 +957,6 @@ object frmMain: TfrmMain
     Height = 19
     Panels = <>
     SimplePanel = True
-    ExplicitTop = 1072
   end
   object ImageList1: TImageList
     Left = 1016
@@ -1896,6 +1958,136 @@ object frmMain: TfrmMain
     object N19: TMenuItem
       Caption = '-'
     end
+    object Canvas1: TMenuItem
+      Caption = 'Canvas'
+      object N150dpi1: TMenuItem
+        Caption = '@150 dpi'
+        object N20x20cm1: TMenuItem
+          Caption = '20 x 20cm'
+          OnClick = N20x20cm1Click
+        end
+        object N20x20cm2: TMenuItem
+          Tag = 1
+          Caption = '30 x 20cm'
+          OnClick = N20x20cm1Click
+        end
+        object N40x30cm1: TMenuItem
+          Tag = 2
+          Caption = '40 x 30cm'
+          OnClick = N20x20cm1Click
+        end
+        object N40x30cm2: TMenuItem
+          Tag = 3
+          Caption = '40 x 40 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N60x40cm1: TMenuItem
+          Tag = 4
+          Caption = '60 x 40 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N60x40cm2: TMenuItem
+          Tag = 5
+          Caption = '60 x 60 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N75x50cm1: TMenuItem
+          Tag = 6
+          Caption = '75 x 50 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N75x50cm2: TMenuItem
+          Tag = 7
+          Caption = '80 x 60 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N80x80cm1: TMenuItem
+          Tag = 8
+          Caption = '80 x 80 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N80x80cm2: TMenuItem
+          Tag = 9
+          Caption = '90 x 60 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N100x75cm1: TMenuItem
+          Tag = 10
+          Caption = '100 x 75 cm'
+          OnClick = N20x20cm1Click
+        end
+        object N100x75cm2: TMenuItem
+          Tag = 11
+          Caption = '120 x 80 cm'
+          OnClick = N20x20cm1Click
+        end
+      end
+      object N150dpi2: TMenuItem
+        Caption = '@300 dpi'
+        object N20x20cm3: TMenuItem
+          Caption = '20 x 20cm'
+          OnClick = N20x20cm3Click
+        end
+        object N30x20cm1: TMenuItem
+          Tag = 1
+          Caption = '30 x 20cm'
+          OnClick = N20x20cm3Click
+        end
+        object N40x30cm3: TMenuItem
+          Tag = 2
+          Caption = '40 x 30cm'
+          OnClick = N20x20cm3Click
+        end
+        object N40x40cm1: TMenuItem
+          Tag = 3
+          Caption = '40 x 40 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N60x40cm3: TMenuItem
+          Tag = 4
+          Caption = '60 x 40 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N60x60cm1: TMenuItem
+          Tag = 5
+          Caption = '60 x 60 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N75x50cm3: TMenuItem
+          Tag = 6
+          Caption = '75 x 50 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N80x60cm1: TMenuItem
+          Tag = 7
+          Caption = '80 x 60 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N80x80cm3: TMenuItem
+          Tag = 8
+          Caption = '80 x 80 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N90x60cm1: TMenuItem
+          Tag = 9
+          Caption = '90 x 60 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N100x75cm3: TMenuItem
+          Tag = 10
+          Caption = '100 x 75 cm'
+          OnClick = N20x20cm3Click
+        end
+        object N120x80cm1: TMenuItem
+          Tag = 11
+          Caption = '120 x 80 cm'
+          OnClick = N20x20cm3Click
+        end
+      end
+    end
+    object N20: TMenuItem
+      Caption = '-'
+    end
     object Resize1: TMenuItem
       Caption = 'Resize'
       object Quarter1: TMenuItem
@@ -2394,5 +2586,27 @@ object frmMain: TfrmMain
     Filter = 'Pretty Chaos Palette files (*.palette)|*.palette'
     Left = 904
     Top = 64
+  end
+  object puQuickPalette: TPopupMenu
+    Left = 776
+    Top = 202
+    object LoadPalette1: TMenuItem
+      Caption = 'Load Palette'
+      Enabled = False
+    end
+    object N21: TMenuItem
+      Caption = '-'
+    end
+  end
+  object puQuickPalette2: TPopupMenu
+    Left = 896
+    Top = 226
+    object MenuItem1: TMenuItem
+      Caption = 'Load Palette'
+      Enabled = False
+    end
+    object MenuItem2: TMenuItem
+      Caption = '-'
+    end
   end
 end

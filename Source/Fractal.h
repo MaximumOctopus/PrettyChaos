@@ -132,6 +132,8 @@ public:
 	int supersamples = 8;
 	int supersamplenormalistioncoefficient = 3; // log2(supersamples)
 
+    int maxdim = 0;
+
 	Variables Var;
 
 	Palette *pp;    // main colour palette

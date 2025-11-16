@@ -42,7 +42,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 {
 	srand((unsigned)time(NULL));
 
-	PalettePath = ExtractFilePath(Application->ExeName) + L"Palettes\\";
+	SystemPalettePath = ExtractFilePath(Application->ExeName) + L"Palettes\\";
+	UserPalettePath = ExtractFilePath(Application->ExeName) + L"Palettes\\";
 	ProjectPath = ExtractFilePath(Application->ExeName) + L"Projects\\";
 	RenderPath = ExtractFilePath(Application->ExeName) + L"Renders\\";
 
@@ -88,6 +89,8 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	eWidthExit(nullptr);
 
 	UpdatePalette();
+
+	BuildQuickPaletteMenu();
 }
 
 
@@ -506,8 +509,6 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 {
 	bool rendered = true;
 
-	auto StartTime = std::chrono::system_clock::now();
-
 	sbMain->SimpleText = "Rendering...";
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC)
@@ -541,7 +542,7 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 		if (imagedescription->Active)
 		{
 			RenderTextToScreen();
-        }
+		}
 
 		if (miSaveAllImages->Checked)
 		{
@@ -550,11 +551,7 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 			SaveFractal(file_name);
 		}
 
-		std::chrono::system_clock::time_point EndTime = std::chrono::system_clock::now();
-
-		std::chrono::duration<double> elapsed_seconds = EndTime - StartTime;
-
-		std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds (" + std::to_wstring(elapsed_seconds.count()) + L" seconds)";
+		std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds";
 
 		history->AddProject(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->GetAsProject(cbFractalSelector->ItemIndex));
 
@@ -1162,7 +1159,7 @@ void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
 
 void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 {
-	if (OpenPalette(0, PalettePath))
+	if (OpenPalette(0, UserPalettePath))
 	{
 		UpdatePalette();
 
@@ -1181,7 +1178,7 @@ void __fastcall TfrmMain::bEditPaletteClick(TObject *Sender)
 
 void __fastcall TfrmMain::pbPalette2Click(TObject *Sender)
 {
-	if (OpenPalette(1, PalettePath))
+	if (OpenPalette(1, UserPalettePath))
 	{
 		UpdatePalette();
 
@@ -1200,32 +1197,38 @@ void __fastcall TfrmMain::pbPalette2Click(TObject *Sender)
 
 void __fastcall TfrmMain::sbLoadPaletteClick(TObject *Sender)
 {
-	odPalette->InitialDir = PalettePath.c_str();
+	odPalette->InitialDir = UserPalettePath.c_str();
 
 	if (odPalette->Execute())
 	{
-		GPaletteHandler->Palettes[0]->Clear(false);
+		SetNewPalette(0, odPalette->FileName.c_str());
+	}
+}
 
-		if (LoadAndSetPalette(0, odPalette->FileName.c_str()))
+
+void TfrmMain::SetNewPalette(int index, const std::wstring file_name)
+{
+	GPaletteHandler->Palettes[index]->Clear(false);
+
+	if (LoadAndSetPalette(index, file_name))
+	{
+		UserPalettePath = ExtractFilePath(odPalette->FileName);
+
+		if (miShowPreview->Checked) RenderPreview();
+
+		if (miRecolour->Checked && !miShowPreview->Checked)
 		{
-			PalettePath = ExtractFilePath(odPalette->FileName);
-
-			if (miShowPreview->Checked) RenderPreview();
-
-			if (miRecolour->Checked && !miShowPreview->Checked)
+			if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AttemptRecolour())
 			{
-				if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AttemptRecolour())
-				{
-					CopyFromFractalToScreen();
-				}
+				CopyFromFractalToScreen();
 			}
 		}
-		else
-		{
-			std::wstring error = L"Error loading palette, using default.";
+	}
+	else
+	{
+		std::wstring error = L"Error loading palette \"" + file_name + L"\"";
 
-			sbMain->SimpleText = error.c_str();
-		}
+		sbMain->SimpleText = error.c_str();
 	}
 }
 
@@ -1448,6 +1451,28 @@ void __fastcall TfrmMain::miTextureDimensionsClick(TObject *Sender)
 
 	eWidth->Text = DimensionsTexture[mi->Tag];
 	eHeight->Text = DimensionsTexture[mi->Tag];
+
+	UpdateDimension(false);
+}
+
+
+void __fastcall TfrmMain::N20x20cm1Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	eWidth->Text = DimensionsCanvas150[mi->Tag][0];
+	eHeight->Text = DimensionsCanvas150[mi->Tag][1];
+
+	UpdateDimension(false);
+}
+
+
+void __fastcall TfrmMain::N20x20cm3Click(TObject *Sender)
+{
+	TMenuItem* mi = (TMenuItem*)Sender;
+
+	eWidth->Text = DimensionsCanvas150[mi->Tag][0] * 2;
+	eHeight->Text = DimensionsCanvas150[mi->Tag][1] * 2;
 
 	UpdateDimension(false);
 }
@@ -1693,4 +1718,60 @@ void __fastcall TfrmMain::sbSaveHistoryClick(TObject *Sender)
 
 		}
 	}
+}
+
+
+void TfrmMain::BuildQuickPaletteMenu()
+{
+	GPaletteHandler->UpdatePaletteList(SystemPalettePath);
+
+	if (GPaletteHandler->AvailablePalettes.size() != 0)
+	{
+		for (int t = 0; t < GPaletteHandler->AvailablePalettes.size(); t++)
+		{
+			TMenuItem *mi = new TMenuItem(puQuickPalette);
+			mi->Caption = GPaletteHandler->AvailablePalettes[t].c_str();
+			mi->Tag = t;
+			mi->OnClick = SelectPaletteMain;
+
+			puQuickPalette->Items->Add(mi);
+
+			TMenuItem *mi2 = new TMenuItem(puQuickPalette2);
+			mi2->Caption = GPaletteHandler->AvailablePalettes[t].c_str();
+			mi2->Tag = t;
+			mi2->OnClick = SelectPaletteBackground;
+
+			puQuickPalette2->Items->Add(mi2);
+		}
+	}
+}
+
+
+void __fastcall TfrmMain::SelectPaletteMain(TObject *Sender)
+{
+	TMenuItem *mi = (TMenuItem*)Sender;
+
+	SetNewPalette(0, SystemPalettePath + GPaletteHandler->AvailablePalettes[mi->Tag] + L".palette");
+}
+
+
+void __fastcall TfrmMain::SelectPaletteBackground(TObject *Sender)
+{
+	TMenuItem *mi = (TMenuItem*)Sender;
+
+	SetNewPalette(1, SystemPalettePath + GPaletteHandler->AvailablePalettes[mi->Tag] + L".palette");
+}
+
+
+void __fastcall TfrmMain::sbQuickPaletteMainClick(TObject *Sender)
+{
+	puQuickPalette->Popup(Left + pMain->Left + gbPalette->Left + sbQuickPaletteMain->Left + 5,
+						  Top + pToolbar->Height + pMain->Top + gbPalette->Top + sbQuickPaletteMain->Top + 35);
+}
+
+
+void __fastcall TfrmMain::sbQuickPaletteBackgroundClick(TObject *Sender)
+{
+	puQuickPalette2->Popup(Left + pMain->Left + gbPalette->Left + sbQuickPaletteBackground->Left + 5,
+						   Top + pToolbar->Height + pMain->Top + gbPalette->Top + sbQuickPaletteBackground->Top + 35);
 }

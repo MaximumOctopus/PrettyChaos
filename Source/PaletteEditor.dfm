@@ -715,6 +715,16 @@ object frmPaletteEditor: TfrmPaletteEditor
     Caption = 'Gradient'
     TabOrder = 7
   end
+  object bReset: TBitBtn
+    Left = 196
+    Top = 533
+    Width = 75
+    Height = 25
+    Caption = 'Reset'
+    ImageIndex = 3
+    TabOrder = 8
+    OnClick = bResetClick
+  end
   object iPalette: TImageList
     Left = 264
     Top = 529

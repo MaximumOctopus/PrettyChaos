@@ -632,23 +632,7 @@ void __fastcall TfrmPaletteEditor::bAcceptClick(TObject *Sender)
 	{
 		GPaletteHandler->Palettes[t]->SetFromTemp();
 
-        GPaletteHandler->Palettes[t]->CopyPublic();
-	}
-}
-
-
-void __fastcall TfrmPaletteEditor::bSaveClick(TObject *Sender)
-{
-	std::wstring file_name = Utility::GetSaveFileName(2, PalettePath);
-
-	if (!file_name.empty())
-	{
-		if (file_name.find(L".palette") == std::wstring::npos)
-		{
-			file_name += L".palette";
-		}
-
-		SavePalette(file_name);
+		GPaletteHandler->Palettes[t]->CopyPublic();
 	}
 }
 
@@ -667,10 +651,10 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 	sSingleColour->Enabled = ShowPaletteOptions;
 	cbGradient->Enabled = ShowPaletteOptions;
 
-	cbInterleve->Enabled = ShowPaletteOptions;
-	rbInterleveX2->Enabled = ShowPaletteOptions;
-	rbInterleveX4->Enabled = ShowPaletteOptions;
-	cbInterleveReverse->Enabled = ShowPaletteOptions;
+	cbInterleve->Enabled = !ShowPaletteOptions;
+	rbInterleveX2->Enabled = !ShowPaletteOptions;
+	rbInterleveX4->Enabled = !ShowPaletteOptions;
+	cbInterleveReverse->Enabled = !ShowPaletteOptions;
 
 	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection)
 	{
@@ -751,7 +735,38 @@ void __fastcall TfrmPaletteEditor::bLoadClick(TObject *Sender)
 		if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Load(file_name))
 		{
 			BuildGuiForPalette();
-        }
+		}
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::bSaveClick(TObject *Sender)
+{
+	std::wstring file_name = Utility::GetSaveFileName(2, PalettePath);
+
+	if (!file_name.empty())
+	{
+		if (file_name.find(L".palette") == std::wstring::npos)
+		{
+			file_name += L".palette";
+		}
+
+		SavePalette(file_name);
+	}
+}
+
+
+void __fastcall TfrmPaletteEditor::bResetClick(TObject *Sender)
+{
+	std::wstring path = ExtractFilePath(Application->ExeName).c_str();
+	std::wstring file_name = path + L"Palettes\\default_greyscale.palette";
+
+	ClearPalette(false);
+	ResetUI();
+
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->Load(file_name))
+	{
+		BuildGuiForPalette();
 	}
 }
 

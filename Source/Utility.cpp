@@ -141,6 +141,19 @@ namespace Utility
 	}
 
 
+	std::wstring RemoveExtension(const std::wstring s)
+	{
+		auto i = s.rfind(L'.');
+
+		if (i != std::wstring::npos)
+		{
+			return s.substr(0, i);
+		}
+
+		return s;
+	}
+
+
 	std::wstring ProcessFileName(const std::wstring& file_name)
 	{
 		if (file_name.find(L"$") != std::wstring::npos)
