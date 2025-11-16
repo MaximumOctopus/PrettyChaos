@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.23
+  PrettyChaos 0.24
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  August 13th 2025
+  November 16th 2025
 
 =================================================================================================
 
@@ -34,6 +34,15 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.24 / November 16th 2025
+
+Added: Canvas dimensions. A range of populare Canvas sizes in 150 and 300dpi
+Added: "Reset" to Palette editor (reloads default grey gradient and resets everything)
+Added: Quick Load Palette button to the Palette section on the right hand menu
+Added: 2x Interleve now works correctly
+
+A few minor fixes and tweaks.
 
 0.23 / August 13th 2025
 
