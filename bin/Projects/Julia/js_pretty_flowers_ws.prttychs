@@ -1,0 +1,23 @@
+[
+Name=Julia Set
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=0.500000
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+SS=1
+SSLevel=16
+Palette=random_7_hsv_rainbows.palette
+GradientDirection=0
+IsGradient=0
+xmin=0.2625
+xmax=0.5125
+ymin=-0.377325581395349
+ymax=-0.272674418604651
+var_a=-0.43
+var_b=0.59015
+var_c=0
+var_d=0
+var_e=0
+]
