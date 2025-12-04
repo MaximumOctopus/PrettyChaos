@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.24
+  PrettyChaos 0.25
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  November 16th 2025
+  December 4th 2025
 
 =================================================================================================
 
@@ -34,6 +34,13 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.25 / December 4th 2025
+
+Added: Morphing. Alters the fractal paramters either linearly or radially as the
+       fractal is being generated.
+	   
+A few minor tweaks and fixes.
 
 0.24 / November 16th 2025
 
