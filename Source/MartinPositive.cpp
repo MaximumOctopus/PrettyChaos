@@ -145,6 +145,11 @@ void MartinPositive::Render(int hstart, int hend)
 }
 
 
+void MartinPositive::RenderMorph(int hstart, int hend)
+{
+}
+
+
 void MartinPositive::ResetView()
 {
 	int x_min = Fast::Floor(-(double)Width / (2 * Var.d));

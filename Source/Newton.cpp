@@ -53,6 +53,11 @@ void Newton::Render(int hs, int he)
 }
 
 
+void Newton::RenderMorph(int hs, int he)
+{
+}
+
+
 void Newton::ResetView()
 {
 

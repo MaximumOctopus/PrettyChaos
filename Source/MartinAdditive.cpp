@@ -145,6 +145,11 @@ void MartinAdditive::Render(int hstart, int hend)
 }
 
 
+void MartinAdditive::RenderMorph(int hstart, int hend)
+{
+}
+
+
 void MartinAdditive::ResetView()
 {
 	int x_min = std::floor(-(double)Width / (2 * Var.d));

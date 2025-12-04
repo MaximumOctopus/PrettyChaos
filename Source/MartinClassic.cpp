@@ -145,6 +145,11 @@ void Martin::Render(int hstart, int hend)
 }
 
 
+void Martin::RenderMorph(int hstart, int hend)
+{
+}
+
+
 void Martin::ResetView()
 {
 	int x_min = std::floor(-(double)Width / (2 * Var.d));

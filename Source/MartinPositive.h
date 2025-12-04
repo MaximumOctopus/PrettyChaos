@@ -25,6 +25,7 @@ public:
 
 	void PreRender(bool) override;
 	void Render(int, int) override;
+	void RenderMorph(int, int) override;
 	void RenderSS(int, int) override;
 
 	void ResetView() override;

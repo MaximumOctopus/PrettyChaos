@@ -13,22 +13,22 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.24 (debug) :: November 16th 2025";
+static const std::wstring __PrettyChaosVersion = L"0.25 (debug) :: December 4th 2025";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.24 :: November 16th 2025";
+static const std::wstring __PrettyChaosVersion = L"0.25 :: December 4th 2025";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
 
 static const int DimensionsDesktop[17][2] = {
-	{ 1024, 768 },
-	{ 1280, 720 },
-	{ 1280, 800 },
+	{ 1024,  768 },
+	{ 1280,  720 },
+	{ 1280,  800 },
 	{ 1280, 1024 },
-	{ 1360, 768 },
-	{ 1366, 768 },
-	{ 1440, 900 },
-	{ 1600, 900 },
+	{ 1360,  768 },
+	{ 1366,  768 },
+	{ 1440,  900 },
+	{ 1600,  900 },
 	{ 1680, 1050 },
 	{ 1920, 1200 },
 	{ 1920, 1080 },

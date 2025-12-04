@@ -152,6 +152,11 @@ void MartinDeJong::Render(int hstart, int hend)
 }
 
 
+void MartinDeJong::RenderMorph(int hstart, int hend)
+{
+}
+
+
 void MartinDeJong::ResetView()
 {
 	int x_min = std::floor(-(double)Width / (2 * Var.e));

@@ -10,8 +10,6 @@
 
 #pragma once
 
-#include <thread>
-
 #include "Fractal.h"
 #include "MandelbrotRenderCore.h"
 
@@ -26,9 +24,11 @@ public:
 
 	~MandelbrotNtic();
 
-	bool MultiThreadRender(bool, bool) override;
+	bool MultiThreadRender(bool, bool, bool) override;
 	void Render(int, int) override;
+	void RenderMorph(int, int) override;
 	void RenderSS(int, int) override;
+	void RenderSSMorph(int, int) override;
 
 	void ResetView() override;
 

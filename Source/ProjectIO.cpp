@@ -165,6 +165,25 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 					case FileProperty::SuperSamplingLevel:
 						project.SuperSamplingLevel = stoi(value);
 						break;
+
+					case FileProperty::MorphEnabled:
+						project.MorphEnabled = stoi(value);
+						break;
+					case FileProperty::MorphA:
+						project.MorphA = stoi(value);
+						break;
+					case FileProperty::MorphB:
+						project.MorphB = stoi(value);
+						break;
+					case FileProperty::MorphVarA:
+						project.morph_var_a = stod(value);
+						break;
+					case FileProperty::MorphVarB:
+						project.morph_var_b = stod(value);
+						break;
+					case FileProperty::MorphType:
+						project.MorphType = stoi(value);
+						break;
                     }
 				}
 			}
@@ -253,6 +272,29 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 		file << Formatting::to_utf8(L"var_c=" + Formatting::LDToStr(project.var_c) + L"\n");
 		file << Formatting::to_utf8(L"var_d=" + Formatting::LDToStr(project.var_d) + L"\n");
 		file << Formatting::to_utf8(L"var_e=" + Formatting::LDToStr(project.var_e) + L"\n");
+
+		if (project.MorphEnabled)
+		{
+			file << Formatting::to_utf8(L"MorphType=" + std::to_wstring(project.MorphType) + L"\n");
+			file << Formatting::to_utf8(L"Morph=1\n");
+
+			if (project.MorphA)
+			{
+				file << Formatting::to_utf8(L"MorphA=1\n");
+			}
+
+			if (project.MorphB)
+			{
+				file << Formatting::to_utf8(L"MorphB=1\n");
+			}
+
+			file << Formatting::to_utf8(L"var_morph_a=" + Formatting::LDToStr(project.morph_var_a) + L"\n");
+			file << Formatting::to_utf8(L"var_morph_b=" + Formatting::LDToStr(project.morph_var_b) + L"\n");
+		}
+		else
+		{
+			file << Formatting::to_utf8(L"Morph=0\n");
+		}
 
 		file << Formatting::to_utf8(L"]\n");
 

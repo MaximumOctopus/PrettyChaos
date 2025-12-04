@@ -11,6 +11,7 @@
 #include <Vcl.Dialogs.hpp>
 
 #include <string>
+#include <thread>
 
 #include "Constants.h"
 #include "Fast.h"
@@ -102,10 +103,122 @@ void Fractal::SwapDimensions()
 }
 
 
-bool Fractal::MultiThreadRender(bool preview, bool super_sample)
+bool Fractal::MultiThreadRender(bool preview, bool super_sample, bool morph)
 {
 	// handled by subclass
     return false;
+}
+
+
+void Fractal::MT()
+{
+	int h_delta = std::round((double)Height / 10);
+
+	std::thread t1(Render, 0, h_delta);
+	std::thread t2(Render, h_delta, 2 * h_delta);
+	std::thread t3(Render, 2 * h_delta, 3 * h_delta);
+	std::thread t4(Render, 3 * h_delta, 4 * h_delta);
+	std::thread t5(Render, 4 * h_delta, 5 * h_delta);
+	std::thread t6(Render, 5 * h_delta, 6 * h_delta);
+	std::thread t7(Render, 6 * h_delta, 7 * h_delta);
+	std::thread t8(Render, 7 * h_delta, 8 * h_delta);
+	std::thread t9(Render, 8 * h_delta, 9 * h_delta);
+	std::thread t10(Render, 9 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
+	t7.join();
+	t8.join();
+	t9.join();
+	t10.join();
+}
+
+
+void Fractal::MTSS()
+{
+	int h_delta = std::round((double)Height / 10);
+
+	std::thread t1(RenderSS, 0, h_delta);
+	std::thread t2(RenderSS, h_delta, 2 * h_delta);
+	std::thread t3(RenderSS, 2 * h_delta, 3 * h_delta);
+	std::thread t4(RenderSS, 3 * h_delta, 4 * h_delta);
+	std::thread t5(RenderSS, 4 * h_delta, 5 * h_delta);
+	std::thread t6(RenderSS, 5 * h_delta, 6 * h_delta);
+	std::thread t7(RenderSS, 6 * h_delta, 7 * h_delta);
+	std::thread t8(RenderSS, 7 * h_delta, 8 * h_delta);
+	std::thread t9(RenderSS, 8 * h_delta, 9 * h_delta);
+	std::thread t10(RenderSS, 9 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
+	t7.join();
+	t8.join();
+	t9.join();
+	t10.join();
+}
+
+
+void Fractal::MTSSMorph()
+{
+	int h_delta = std::round((double)Height / 10);
+
+	std::thread t1(RenderSSMorph, 0, h_delta);
+	std::thread t2(RenderSSMorph, h_delta, 2 * h_delta);
+	std::thread t3(RenderSSMorph, 2 * h_delta, 3 * h_delta);
+	std::thread t4(RenderSSMorph, 3 * h_delta, 4 * h_delta);
+	std::thread t5(RenderSSMorph, 4 * h_delta, 5 * h_delta);
+	std::thread t6(RenderSSMorph, 5 * h_delta, 6 * h_delta);
+	std::thread t7(RenderSSMorph, 6 * h_delta, 7 * h_delta);
+	std::thread t8(RenderSSMorph, 7 * h_delta, 8 * h_delta);
+	std::thread t9(RenderSSMorph, 8 * h_delta, 9 * h_delta);
+	std::thread t10(RenderSSMorph, 9 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
+	t7.join();
+	t8.join();
+	t9.join();
+	t10.join();
+}
+
+
+void Fractal::MTMorph()
+{
+	int h_delta = std::round((double)Height / 10);
+
+	std::thread t1(RenderMorph, 0, h_delta);
+	std::thread t2(RenderMorph, h_delta, 2 * h_delta);
+	std::thread t3(RenderMorph, 2 * h_delta, 3 * h_delta);
+	std::thread t4(RenderMorph, 3 * h_delta, 4 * h_delta);
+	std::thread t5(RenderMorph, 4 * h_delta, 5 * h_delta);
+	std::thread t6(RenderMorph, 5 * h_delta, 6 * h_delta);
+	std::thread t7(RenderMorph, 6 * h_delta, 7 * h_delta);
+	std::thread t8(RenderMorph, 7 * h_delta, 8 * h_delta);
+	std::thread t9(RenderMorph, 8 * h_delta, 9 * h_delta);
+	std::thread t10(RenderMorph, 9 * h_delta, Height);
+
+	t1.join();
+	t2.join();
+	t3.join();
+	t4.join();
+	t5.join();
+	t6.join();
+	t7.join();
+	t8.join();
+	t9.join();
+	t10.join();
 }
 
 
@@ -121,9 +234,21 @@ void Fractal::Render(int hs, int he)
 }
 
 
+void Fractal::RenderMorph(int hs, int he)
+{
+	// handled by subclass
+}
+
+
 void Fractal::RenderSS(int hs, int he)
 {
 	// handled by subclass
+}
+
+
+void Fractal::RenderSSMorph(int hs, int he)
+{
+    // handled by subclass
 }
 
 
@@ -380,6 +505,18 @@ void Fractal::SetABC(long double a, long double b, long double c, long double d,
 	Var.c = c;
 	Var.d = d;
 	Var.e = e;
+}
+
+
+void Fractal::SetMorph(int morph_type, bool morph_a, bool morph_b, long double a, long double b)
+{
+    MorphType = morph_type;
+
+	MorphA = morph_a;
+    MorphB = morph_b;
+
+	Var.morph_a = a;
+	Var.morph_b = b;
 }
 
 

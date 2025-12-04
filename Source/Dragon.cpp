@@ -215,6 +215,11 @@ void Dragon::Render(int hstart, int hend)
 }
 
 
+void Dragon::RenderMorph(int hs, int he)
+{
+}
+
+
 void Dragon::DrawLine(int x1, int y1, int x2, int y2, int colour)
 {
 	int x,y,xe,ye;

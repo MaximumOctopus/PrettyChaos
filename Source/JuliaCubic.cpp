@@ -9,7 +9,6 @@
 //
 
 #include <string>
-#include <thread>
 
 #include "ColourUtility.h"
 #include "Constants.h"
@@ -20,6 +19,7 @@
 JuliaCubic::JuliaCubic() : Fractal()
 {
 	AcceptsABC = true;
+    AcceptsMorph = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
 
@@ -51,7 +51,7 @@ JuliaCubic::~JuliaCubic()
 }
 
 
-bool JuliaCubic::MultiThreadRender(bool preview, bool super_sample)
+bool JuliaCubic::MultiThreadRender(bool preview, bool super_sample, bool morph)
 {
 	// nothing to render, point isn't valid
 	if (PointGoesToInfinity(Var.a, Var.b))
@@ -68,55 +68,25 @@ bool JuliaCubic::MultiThreadRender(bool preview, bool super_sample)
 
 	if (super_sample)
 	{
-		int h_delta = std::round((double)Height / 10);
-
-		std::thread t1(RenderSS, 0, h_delta);
-		std::thread t2(RenderSS, h_delta, 2 * h_delta);
-		std::thread t3(RenderSS, 2 * h_delta, 3 * h_delta);
-		std::thread t4(RenderSS, 3 * h_delta, 4 * h_delta);
-		std::thread t5(RenderSS, 4 * h_delta, 5 * h_delta);
-		std::thread t6(RenderSS, 5 * h_delta, 6 * h_delta);
-		std::thread t7(RenderSS, 6 * h_delta, 7 * h_delta);
-		std::thread t8(RenderSS, 7 * h_delta, 8 * h_delta);
-		std::thread t9(RenderSS, 8 * h_delta, 9 * h_delta);
-		std::thread t10(RenderSS, 9 * h_delta, Height);
-
-		t1.join();
-		t2.join();
-		t3.join();
-		t4.join();
-		t5.join();
-		t6.join();
-		t7.join();
-		t8.join();
-		t9.join();
-		t10.join();
+		if (morph)
+		{
+			MTSSMorph();
+		}
+		else
+		{
+			MTSS();
+        }
 	}
 	else
 	{
-		int h_delta = std::round((double)Height / 10);
-
-		std::thread t1(Render, 0, h_delta);
-		std::thread t2(Render, h_delta, 2 * h_delta);
-		std::thread t3(Render, 2 * h_delta, 3 * h_delta);
-		std::thread t4(Render, 3 * h_delta, 4 * h_delta);
-		std::thread t5(Render, 4 * h_delta, 5 * h_delta);
-		std::thread t6(Render, 5 * h_delta, 6 * h_delta);
-		std::thread t7(Render, 6 * h_delta, 7 * h_delta);
-		std::thread t8(Render, 7 * h_delta, 8 * h_delta);
-		std::thread t9(Render, 8 * h_delta, 9 * h_delta);
-		std::thread t10(Render, 9 * h_delta, Height);
-
-		t1.join();
-		t2.join();
-		t3.join();
-		t4.join();
-		t5.join();
-		t6.join();
-		t7.join();
-		t8.join();
-		t9.join();
-		t10.join();
+		if (morph)
+		{
+			MTMorph();
+		}
+		else
+		{
+			MT();
+		}
 	}
 
 	if (preview)
@@ -197,6 +167,99 @@ void JuliaCubic::RenderSS(int hstart, int hend)
 }
 
 
+void JuliaCubic::RenderSSMorph(int hstart, int hend)
+{
+	long double vara = Var.a;
+	long double varb = Var.b;
+
+	if (MorphType == 0)
+	{
+		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
+	}
+
+	for (int y = hstart; y < hend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		if (MorphType == 0)
+		{
+			if (MorphA) vara += Var.morph_a;
+			if (MorphB) varb += Var.morph_b;
+		}
+
+		for (int x = 0; x < Width; x++)
+		{
+			for (int ss = 0; ss < supersamples; ss++)
+			{
+				long double deltax = 0.5 - (rand() / (RAND_MAX + 1.0));
+				long double deltay = 0.5 - (rand() / (RAND_MAX + 1.0));
+
+				long double p = xmin + ((long double)x + deltax) * (xmax - xmin) / (long double)Width;    // real part
+				long double q = ymin + ((long double)y + deltay) * (ymax - ymin) / (long double)Height;   // imaginary part
+
+				if (MorphType == 1)
+				{
+					long double xp = std::abs(((long double)Width / 2) - (long double)x + deltax);
+					long double yp = std::abs(((long double)Height / 2) - (long double)y + deltay);
+
+					if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+					if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+				}
+				else if (MorphType == 2)
+				{
+					if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
+					if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
+				}
+
+				int it = 0;
+
+				while (p * p + q * q <= bailout_radius && it < max_iterations)
+				{
+					long double atan2pq = 3 * std::atan2(q, p);
+					long double pow15 = (p * p + q * q) * std::sqrt(p * p + q * q);	// (p * p + q * q) ^ 1.5
+
+					p = pow15 * std::cos(atan2pq) + Var.a;
+					q = pow15 * std::sin(atan2pq) + Var.b;
+
+					it++;
+				}
+
+				switch (RenderMode)
+				{
+				case __RMJuliaEscapeTime:
+				case __RMJuliaTwoTone:
+				case __RMJuliaThreeTone:
+				case __RMJuliaFourTone:
+				case __RMJuliaFiveTone:
+				{
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				case __RMJuliaDistance:
+				{
+					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
+
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				case __RMJuliaDistanceOrigin:
+					int nx = Fast::Floor(x - (Width / 2));
+					int ny = Fast::Floor(y - (Height / 2));
+
+					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
+
+					FractalData[ydotwidth + x] += pp->Colours[index];
+						break;
+				}
+			}
+
+			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
+		}
+	}
+}
+
+
 void JuliaCubic::Render(int hstart, int hend)
 {
 	for (int y = hstart; y < hend; y++)
@@ -217,6 +280,91 @@ void JuliaCubic::Render(int hstart, int hend)
 
 				p = pow15 * std::cos(atan2pq) + Var.a;
 				q = pow15 * std::sin(atan2pq) + Var.b;
+
+				it++;
+			}
+
+			switch (RenderMode)
+			{
+			case __RMJuliaEscapeTime:
+			case __RMJuliaTwoTone:
+			case __RMJuliaThreeTone:
+			case __RMJuliaFourTone:
+			case __RMJuliaFiveTone:
+			{
+				FractalData[ydotwidth + x].a = it;
+				break;
+			}
+			case __RMJuliaDistance:
+			{
+				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
+
+				FractalData[ydotwidth + x].a = it;
+				break;
+			}
+			case __RMJuliaDistanceOrigin:
+				int nx = Fast::Floor(x - (Width / 2));
+				int ny = Fast::Floor(y - (Height / 2));
+
+				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
+
+				FractalData[ydotwidth + x] = pp->Colours[index];
+				break;
+			}
+		}
+	}
+}
+
+
+void JuliaCubic::RenderMorph(int hstart, int hend)
+{
+	long double vara = Var.a;
+	long double varb = Var.b;
+
+	if (MorphType == 0)
+	{
+		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
+	}
+
+	for (int y = hstart; y < hend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		if (MorphType == 0)
+		{
+			if (MorphA) vara += Var.morph_a;
+			if (MorphB) varb += Var.morph_b;
+		}
+
+		for (int x = 0; x < Width; x++)
+		{
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+			long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
+
+			if (MorphType == 1)
+			{
+				long double xp = std::abs(((long double)Width / 2) - (long double)x);
+				long double yp = std::abs(((long double)Height / 2) - (long double)y);
+
+				if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+				if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+			}
+			else if (MorphType == 2)
+			{
+				if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
+			    if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
+			}
+
+			int it = 0;
+
+			while (p * p + q * q <= bailout_radius && it < max_iterations)
+			{
+				long double atan2pq = 3 * std::atan2(q, p);
+				long double pow15 = (p * p + q * q) * std::sqrt(p * p + q * q);	// (p * p + q * q) ^ 1.5
+
+				p = pow15 * std::cos(atan2pq) + vara;
+				q = pow15 * std::sin(atan2pq) + varb;
 
 				it++;
 			}

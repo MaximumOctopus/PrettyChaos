@@ -41,6 +41,15 @@ struct PCProject
 	long double var_d = 0;
 	long double var_e = 0;
 
+	bool MorphEnabled = false;
+
+    int MorphType = 0;
+	bool MorphA = false;
+	bool MorphB = false;
+
+	long double morph_var_a = 0;
+    long double morph_var_b = 0;
+
     std::wstring ProjectFileName = L"";
 	std::wstring PaletteFileName = L"";
 	std::wstring Palette2FileName = L"";
@@ -58,10 +67,12 @@ class ProjectIO
 		DeltaA = 18, DeltaB = 19, DeltaC = 20, DeltaD = 21, DeltaE = 22,
 		Parameters = 23, Zoom = 24, Prefix = 25,
 		PaletteFileName = 26, BackgroundPaletteFileName = 27, GradientDirection = 28, IsGradient = 29,
-		SuperSampling = 30, SuperSamplingLevel = 31
+		SuperSampling = 30, SuperSamplingLevel = 31,
+		MorphEnabled = 32, MorphA = 33, MorphB = 34,
+		MorphVarA = 35, MorphVarB = 36, MorphType = 37
 	};
 
-	static const int kPropertyListCount = 31;
+	static const int kPropertyListCount = 37;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
 		L"Name", L"Width", L"Height", L"RenderMode", L"nCoeff",
@@ -72,7 +83,9 @@ class ProjectIO
 		L"DeltaA", L"DeltaB", L"DeltaC", L"DeltaD", L"DeltaE",
 		L"Parameters", L"Zoom", L"Prefix",
 		L"Palette", L"Palette2", L"GradientDirection", L"IsGradient",
-		L"SS", L"SSLevel"
+		L"SS", L"SSLevel",
+		L"Morph", L"MorphA", L"MorphB",
+		L"var_morph_a", L"var_morph_b", L"MorphType"
 	};
 
 	const FileProperty FilePropertyReference[kPropertyListCount] = {
@@ -84,7 +97,9 @@ class ProjectIO
 		FileProperty::DeltaA, FileProperty::DeltaB, FileProperty::DeltaC, FileProperty::DeltaD, FileProperty::DeltaE,
 		FileProperty::Parameters, FileProperty::Zoom, FileProperty::Prefix,
 		FileProperty::PaletteFileName, FileProperty::BackgroundPaletteFileName, FileProperty::GradientDirection, FileProperty::IsGradient,
-		FileProperty::SuperSampling, FileProperty::SuperSamplingLevel
+		FileProperty::SuperSampling, FileProperty::SuperSamplingLevel,
+		FileProperty::MorphEnabled, FileProperty::MorphA, FileProperty::MorphB,
+		FileProperty::MorphVarA, FileProperty::MorphVarB, FileProperty::MorphType
 	};
 
 	FileProperty GetInputProperty(const std::wstring);

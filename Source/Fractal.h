@@ -24,6 +24,7 @@
 
 enum class QuickParameterMode { kNone = 0, kABPlusFine = 1, kABC };
 
+
 struct DefaultConfig
 {
 	long double n_coeff = 1;  		// used to map the linear range of palette colours to an exponential range (very cool)
@@ -59,6 +60,9 @@ struct Variables
 	long double c = 0;
 	long double d = 0;
 	long double e = 0;
+
+	long double morph_a = 0.0001;
+	long double morph_b = 0.0001;
 };
 
 
@@ -142,6 +146,7 @@ public:
 	int AcceptsABCSpectificRenderModeBegin = -1;
 	int AcceptsABCSpectificRenderModeEnd = -1;
 	bool AcceptsABC = false;
+	bool AcceptsMorph = false;
 	bool AcceptsVarA = false;
 	bool AcceptsVarB = false;
 	bool AcceptsVarC = false;
@@ -151,6 +156,10 @@ public:
 	bool AcceptsZoom = true;
 
 	bool MultiThread = false;
+
+    int MorphType = 0;          // linear, radial (screen), radial (fractal)
+	bool MorphA = false;
+	bool MorphB = false;
 
 	QuickParameterMode QPM = QuickParameterMode::kNone;
 
@@ -188,10 +197,17 @@ public:
 
 	~Fractal();
 
-	virtual bool MultiThreadRender(bool, bool);
+	virtual bool MultiThreadRender(bool, bool, bool);
 	virtual void PreRender(bool);
 	virtual void Render(int, int);
+	virtual void RenderMorph(int, int);
 	virtual void RenderSS(int, int);
+	virtual void RenderSSMorph(int, int);
+
+	void MT();
+	void MTMorph();
+	void MTSS();
+	void MTSSMorph();
 
 	virtual void ResetView();
 
@@ -211,6 +227,7 @@ public:
 	void SetRenderMode(int);
 
 	void SetABC(long double, long double, long double, long double, long double);
+    void SetMorph(int, bool, bool, long double, long double);
 	bool ShowABC(int);
 
 	void SetPaletteInfinity(Colour);

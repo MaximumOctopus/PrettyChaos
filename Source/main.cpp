@@ -253,6 +253,17 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 
 	// =========================================================================
 
+	cbMorphEnabled->Checked = project.MorphEnabled;
+	cbMorphA->Checked = project.MorphA;
+	cbMorphB->Checked = project.MorphB;
+
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a = project.morph_var_a;
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b = project.morph_var_b;
+
+    cbMorphType->ItemIndex = project.MorphType;
+
+	// =========================================================================
+
 	miSuperSample->Checked = project.SuperSampling;
 	miSuperSampleClick(NULL);
 
@@ -287,6 +298,9 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
 	eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
 	eVarE->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.e);
+
+	eVarAMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a);
+	eVarBMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b);
 
 	// =========================================================================
 
@@ -401,6 +415,19 @@ PCProject TfrmMain::GetProjectSettings()
 	project.var_c = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
 	project.var_d = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
 
+	if (cbMorphEnabled->Checked)
+	{
+		project.MorphEnabled = true;
+
+		project.MorphA = cbMorphA->Checked;
+		project.MorphB = cbMorphB->Checked;
+
+		project.morph_var_a = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a;
+		project.morph_var_b = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b;
+
+        project.MorphType = cbMorphType->ItemIndex;
+	}
+
 	project.SuperSampling = miSuperSample->Checked;
 	project.SuperSamplingLevel = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples;
 
@@ -424,6 +451,9 @@ void TfrmMain::UpdateAllParameters()
 		eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
 		eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
 		eVarE->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.e);
+
+		eVarAMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a);
+		eVarBMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b);
 	}
 }
 
@@ -488,7 +518,12 @@ void TfrmMain::UpdateABCPanel()
 		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
 		lVarD->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameD.c_str();
 		lVarE->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameE.c_str();
+
+		cbMorphA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
+		cbMorphB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
 	}
+
+	gbMorph->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsMorph;
 }
 
 
@@ -518,6 +553,12 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 																		eVarC->Text.ToDouble(),
 																		eVarD->Text.ToDouble(),
 																		eVarE->Text.ToDouble());
+
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetMorph(cbMorphType->ItemIndex,
+		                                                                  cbMorphA->Checked,
+																		  cbMorphB->Checked,
+																		  eVarAMorph->Text.ToDouble(),
+																		  eVarBMorph->Text.ToDouble());
 	}
 
 	eCoeffNExit(eCoeffN);
@@ -526,7 +567,9 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
 	{
-		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(false, miSuperSample->Checked);
+		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(false,
+																							  miSuperSample->Checked,
+																							  cbMorphEnabled->Checked);
 
 		SetWarning(!rendered);
 	}
@@ -587,7 +630,7 @@ void TfrmMain::RenderPreview()
 
 	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
 	{
-		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(true, false);
+		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(true, false, false);
 
 		SetWarning(!rendered);
 	}
@@ -1262,11 +1305,8 @@ void __fastcall TfrmMain::sInfinity2MouseDown(TObject *Sender, TMouseButton Butt
 
 void TfrmMain::UpdatePalette()
 {
-	pbPalette->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[0]->Gradient);
-	sInfinity->Brush->Color = TColor(GPaletteHandler->Palettes[0]->SingleColour.ToIntBGR());
-
-	pbPalette2->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[1]->Gradient);
-	sInfinity2->Brush->Color = TColor(GPaletteHandler->Palettes[1]->SingleColour.ToIntBGR());
+	pbPalette->Invalidate();
+	pbPalette2->Invalidate();
 }
 
 
@@ -1774,4 +1814,16 @@ void __fastcall TfrmMain::sbQuickPaletteBackgroundClick(TObject *Sender)
 {
 	puQuickPalette2->Popup(Left + pMain->Left + gbPalette->Left + sbQuickPaletteBackground->Left + 5,
 						   Top + pToolbar->Height + pMain->Top + gbPalette->Top + sbQuickPaletteBackground->Top + 35);
+}
+void __fastcall TfrmMain::pbPalettePaint(TObject *Sender)
+{
+	pbPalette->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[0]->Gradient);
+	sInfinity->Brush->Color = TColor(GPaletteHandler->Palettes[0]->SingleColour.ToIntBGR());
+}
+
+
+void __fastcall TfrmMain::pbPalette2Paint(TObject *Sender)
+{
+	pbPalette2->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[1]->Gradient);
+	sInfinity2->Brush->Color = TColor(GPaletteHandler->Palettes[1]->SingleColour.ToIntBGR());
 }

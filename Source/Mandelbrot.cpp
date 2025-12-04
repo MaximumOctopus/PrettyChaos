@@ -11,7 +11,6 @@
 // https://en.wikipedia.org/wiki/Orbit_trap
 
 #include <string>
-#include <thread>
 
 #include "ColourUtility.h"
 #include "Constants.h"
@@ -26,7 +25,8 @@ Mandelbrot::Mandelbrot() : Fractal()
 	NumIterationsPerPixel = new int[2001];
 	for (int z = 0; z < 2001; z++) NumIterationsPerPixel[z] = 0;
 
-   	AcceptsABC = true;
+	AcceptsABC = true;
+    AcceptsMorph = true;
 	AcceptsVarA = true;
 	AcceptsVarB = true;
 
@@ -61,7 +61,7 @@ Mandelbrot::~Mandelbrot()
 }
 
 
-bool Mandelbrot::MultiThreadRender(bool preview, bool super_sample)
+bool Mandelbrot::MultiThreadRender(bool preview, bool super_sample, bool morph)
 {
 	StartTime = std::chrono::system_clock::now();
 
@@ -74,55 +74,25 @@ bool Mandelbrot::MultiThreadRender(bool preview, bool super_sample)
 
 	if (super_sample)
 	{
-		int h_delta = std::round((double)Height / 10);
-
-		std::thread t1(RenderSS, 0, h_delta);
-		std::thread t2(RenderSS, h_delta, 2 * h_delta);
-		std::thread t3(RenderSS, 2 * h_delta, 3 * h_delta);
-		std::thread t4(RenderSS, 3 * h_delta, 4 * h_delta);
-		std::thread t5(RenderSS, 4 * h_delta, 5 * h_delta);
-		std::thread t6(RenderSS, 5 * h_delta, 6 * h_delta);
-		std::thread t7(RenderSS, 6 * h_delta, 7 * h_delta);
-		std::thread t8(RenderSS, 7 * h_delta, 8 * h_delta);
-		std::thread t9(RenderSS, 8 * h_delta, 9 * h_delta);
-		std::thread t10(RenderSS, 9 * h_delta, Height);
-
-		t1.join();
-		t2.join();
-		t3.join();
-		t4.join();
-		t5.join();
-		t6.join();
-		t7.join();
-		t8.join();
-		t9.join();
-		t10.join();
+		if (morph)
+		{
+			MTSSMorph();
+		}
+		else
+		{
+			MTSS();
+        }
 	}
 	else
 	{
-		int h_delta = std::round((double)Height / 10);
-
-		std::thread t1(Render, 0, h_delta);
-		std::thread t2(Render, h_delta, 2 * h_delta);
-		std::thread t3(Render, 2 * h_delta, 3 * h_delta);
-		std::thread t4(Render, 3 * h_delta, 4 * h_delta);
-		std::thread t5(Render, 4 * h_delta, 5 * h_delta);
-		std::thread t6(Render, 5 * h_delta, 6 * h_delta);
-		std::thread t7(Render, 6 * h_delta, 7 * h_delta);
-		std::thread t8(Render, 7 * h_delta, 8 * h_delta);
-		std::thread t9(Render, 8 * h_delta, 9 * h_delta);
-		std::thread t10(Render, 9 * h_delta, Height);
-
-		t1.join();
-		t2.join();
-		t3.join();
-		t4.join();
-		t5.join();
-		t6.join();
-		t7.join();
-		t8.join();
-		t9.join();
-		t10.join();
+		if (morph)
+		{
+			MTMorph();
+		}
+		else
+		{
+			MT();
+		}
 	}
 
 	if (preview)
@@ -257,6 +227,153 @@ void Mandelbrot::RenderSS(int hstart, int hend)
 }
 
 
+void Mandelbrot::RenderSSMorph(int hstart, int hend)
+{
+	long double vara = Var.a;
+	long double varb = Var.b;
+
+	if (MorphType == 0)
+	{
+		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
+	}
+
+	for (int y = hstart; y < hend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		if (MorphType == 0)
+		{
+			if (MorphA) vara += Var.morph_a;
+			if (MorphB) varb += Var.morph_b;
+		}
+
+		for (int x = 0; x < Width; x++)
+		{
+			FractalData[ydotwidth + x].Clear();
+
+			for (int ss = 0; ss < supersamples; ss++)
+			{
+				long double deltax = 0.5 - (rand() / (RAND_MAX + 1.0));
+				long double deltay = 0.5 - (rand() / (RAND_MAX + 1.0));
+
+				long double p = xmin + ((long double)x + deltax) * (xmax - xmin) / (long double)Width;    // real part
+				long double q = ymin + ((long double)y + deltay) * (ymax - ymin) / (long double)Height;   // imaginary part
+
+				if (MorphType == 1)
+				{
+					long double xp = std::abs(((long double)Width / 2) - (long double)x + deltax);
+					long double yp = std::abs(((long double)Height / 2) - (long double)y + deltay);
+
+					if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+					if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+				}
+				else if (MorphType == 2)
+				{
+					if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
+					if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
+				}
+
+				int it = 0;
+
+				Data[ydotwidth + x] = 10000000000000;
+				long double x1 = 0;
+				long double y1 = 0;
+				long double x2 = 0;
+				long double y2 = 0;
+				long double w = 0;
+
+				while (x2 + y2 <= bailout_radius && it < max_iterations)
+				{
+					x1 = x2 - y2 + p;
+					y1 = w - x2 - y2 + q;
+
+					x2 = x1 * x1;
+					y2 = y1 * y1;
+
+					w = (x1 + y1) * (x1 + y1);
+
+					if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
+					{
+						long double cr = x1 - vara;
+						long double ci = y1 - varb;
+
+						long double magnitude = std::sqrt(cr * cr + ci * ci);
+
+						if (magnitude < Data[ydotwidth + x])
+						{
+							Data[ydotwidth + x] = magnitude;
+						}
+					}
+
+					it++;
+				}
+
+				switch (RenderMode)
+				{
+				case __RMMandelbrotEscapeTime:
+				case __RMMandelbrotOrbitTrap:
+				case __RMMandelbrotOrbitTrapFilled:
+				case __RMMandelbrotTwoTone:
+				case __RMMandelbrotThreeTone:
+				case __RMMandelbrotFourTone:
+				case __RMMandelbrotFiveTone:
+				{
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				case __RMMandelbrotContinuous:
+				{
+					if (it < max_iterations)
+					{
+						long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
+						long double nu = 1 - std::log2(log_zn);
+
+						long double itnew = it + nu;
+
+						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+						long double it_d = (long double)it + nu;
+
+						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
+																					   pp->Colours[it + 1],
+																					   it_d - (std::floorl(it_d)));
+					}
+					else
+					{
+						FractalData[ydotwidth + x].a = -1;
+					}
+
+					break;
+				}
+				case __RMMandelbrotDistance:
+				{
+					if (it < max_iterations)
+					{
+						Data[ydotwidth + x] = std::sqrt(w);
+					}
+
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				case __RMMandelbrotDistanceII:
+				{
+					if (it < max_iterations)
+					{
+						Data[ydotwidth + x] = std::sqrt(x2 + y2 * x2 + y2);
+					}
+
+					FractalData[ydotwidth + x].a += it;
+					break;
+				}
+				}
+			}
+
+			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
+		}
+	}
+}
+
+
 void Mandelbrot::Render(int hstart, int hend)
 {
 	for (int y = hstart; y < hend; y++)
@@ -292,6 +409,144 @@ void Mandelbrot::Render(int hstart, int hend)
 				{
 					long double cr = x1 - Var.a;
 					long double ci = y1 - Var.b;
+
+					long double magnitude = std::sqrt(cr * cr + ci * ci);
+
+					if (magnitude < Data[ydotwidth + x])
+					{
+						Data[ydotwidth + x] = magnitude;
+					}
+				}
+
+				it++;
+			}
+
+			switch (RenderMode)
+			{
+			case __RMMandelbrotEscapeTime:
+			case __RMMandelbrotOrbitTrap:
+			case __RMMandelbrotOrbitTrapFilled:
+			case __RMMandelbrotTwoTone:
+			case __RMMandelbrotThreeTone:
+			case __RMMandelbrotFourTone:
+			case __RMMandelbrotFiveTone:
+			{
+				FractalData[ydotwidth + x].a = it;
+				break;
+			}
+			case __RMMandelbrotContinuous:
+			{
+				if (it < max_iterations)
+				{
+					long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
+					long double nu = 1 - std::log2(log_zn);
+
+					long double itnew = it + nu;
+
+					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+					long double it_d = (long double)it + nu;
+
+					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
+																				  pp->Colours[it + 1],
+																				  it_d - (std::floorl(it_d)));
+				}
+				else
+				{
+					FractalData[ydotwidth + x].a = -1;
+				}
+
+				break;
+			}
+			case __RMMandelbrotDistance:
+			{
+				if (it < max_iterations)
+				{
+					Data[ydotwidth + x] = std::sqrt(w);
+				}
+
+				FractalData[ydotwidth + x].a = it;
+				break;
+			}
+			case __RMMandelbrotDistanceII:
+			{
+				if (it < max_iterations)
+				{
+					Data[ydotwidth + x] = std::sqrt(x2 + y2 * x2 + y2);
+				}
+
+				FractalData[ydotwidth + x].a = it;
+				break;
+			}
+			}
+		}
+	}
+}
+
+
+void Mandelbrot::RenderMorph(int hstart, int hend)
+{
+	long double vara = Var.a;
+	long double varb = Var.b;
+
+	if (MorphType == 0)
+	{
+		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
+	}
+
+	for (int y = hstart; y < hend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		if (MorphType == 0)
+		{
+			if (MorphA) vara += Var.morph_a;
+			if (MorphB) varb += Var.morph_b;
+		}
+
+		long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
+
+		for (int x = 0; x < Width; x++)
+		{
+			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+
+			if (MorphType == 1)
+			{
+				long double xp = std::abs(((long double)Width / 2) - (long double)x);
+				long double yp = std::abs(((long double)Height / 2) - (long double)y);
+
+				if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+				if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+			}
+			else if (MorphType == 2)
+			{
+				if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
+				if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
+			}
+
+			int it = 0;
+
+			Data[ydotwidth + x] = 10000000000000;
+			long double x1 = 0;
+			long double y1 = 0;
+			long double x2 = 0;
+			long double y2 = 0;
+			long double w = 0;
+
+			while (x2 + y2 <= bailout_radius && it < max_iterations)
+			{
+				x1 = x2 - y2 + p;
+				y1 = w - x2 - y2 + q;
+
+				x2 = x1 * x1;
+				y2 = y1 * y1;
+
+				w = (x1 + y1) * (x1 + y1);
+
+				if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
+				{
+					long double cr = x1 - vara;
+					long double ci = y1 - varb;
 
 					long double magnitude = std::sqrt(cr * cr + ci * ci);
 

@@ -311,13 +311,12 @@ object frmMain: TfrmMain
       Height = 1059
       Align = alRight
       Color = clWhite
-      ParentBackground = False
       TabOrder = 0
-      object PageControl1: TPageControl
+      object pcMain: TPageControl
         Left = 1
         Top = 1
         Width = 229
-        Height = 808
+        Height = 636
         ActivePage = TabSheet1
         Align = alClient
         TabOrder = 0
@@ -338,8 +337,8 @@ object frmMain: TfrmMain
             Shape = bsTopLine
           end
           object GroupBox4: TGroupBox
-            Left = 3
-            Top = 685
+            Left = 6
+            Top = 519
             Width = 212
             Height = 87
             Caption = 'Cursor'
@@ -371,9 +370,388 @@ object frmMain: TfrmMain
               Caption = '...'
             end
           end
+          object gbVarABC: TGroupBox
+            Left = 6
+            Top = 210
+            Width = 212
+            Height = 167
+            Caption = 'Extra Parameters'
+            TabOrder = 1
+            object lVarA: TLabel
+              Left = 16
+              Top = 30
+              Width = 6
+              Height = 13
+              Caption = 'a'
+            end
+            object lVarB: TLabel
+              Left = 16
+              Top = 57
+              Width = 6
+              Height = 13
+              Caption = 'b'
+            end
+            object lVarC: TLabel
+              Left = 16
+              Top = 84
+              Width = 5
+              Height = 13
+              Caption = 'c'
+            end
+            object lVarD: TLabel
+              Left = 16
+              Top = 111
+              Width = 6
+              Height = 13
+              Caption = 'd'
+            end
+            object lVarE: TLabel
+              Left = 16
+              Top = 138
+              Width = 6
+              Height = 13
+              Caption = 'e'
+            end
+            object eVarA: TEdit
+              Left = 88
+              Top = 27
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 0
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eVarB: TEdit
+              Left = 88
+              Top = 54
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 1
+              Text = '1000'
+              OnExit = eCoeffNExit
+            end
+            object eVarC: TEdit
+              Left = 88
+              Top = 81
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 2
+              Text = '256'
+              OnExit = eCoeffNExit
+            end
+            object eVarD: TEdit
+              Left = 88
+              Top = 108
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 3
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eVarE: TEdit
+              Left = 88
+              Top = 135
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 4
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+          end
+          object GroupBox3: TGroupBox
+            Left = 6
+            Top = 54
+            Width = 212
+            Height = 150
+            Caption = 'Render'
+            TabOrder = 2
+            object Label10: TLabel
+              Left = 16
+              Top = 62
+              Width = 44
+              Height = 13
+              Caption = 'Coeff (n)'
+            end
+            object Label11: TLabel
+              Left = 16
+              Top = 89
+              Width = 47
+              Height = 13
+              Caption = 'Iterations'
+            end
+            object Label12: TLabel
+              Left = 16
+              Top = 116
+              Width = 47
+              Height = 13
+              Caption = 'Bailout (r)'
+            end
+            object cbRenderMode: TComboBox
+              Left = 16
+              Top = 24
+              Width = 185
+              Height = 21
+              Style = csDropDownList
+              TabOrder = 0
+              OnChange = cbRenderModeChange
+            end
+            object eCoeffN: TEdit
+              Left = 88
+              Top = 59
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              TabOrder = 1
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eIterations: TEdit
+              Left = 88
+              Top = 86
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              NumbersOnly = True
+              TabOrder = 2
+              Text = '1000'
+              OnExit = eCoeffNExit
+            end
+            object eBailoutRadius: TEdit
+              Left = 88
+              Top = 113
+              Width = 115
+              Height = 21
+              Hint = 'maps linear palette to exponential palette (default is 1)'
+              Alignment = taRightJustify
+              NumbersOnly = True
+              TabOrder = 3
+              Text = '256'
+              OnExit = eCoeffNExit
+            end
+          end
+          object cbFractalSelector: TComboBox
+            Left = 53
+            Top = 3
+            Width = 165
+            Height = 21
+            Style = csDropDownList
+            TabOrder = 3
+            OnChange = cbFractalSelectorChange
+          end
+          object gbMorph: TGroupBox
+            Left = 6
+            Top = 383
+            Width = 212
+            Height = 130
+            Caption = 'Morph'
+            TabOrder = 4
+            object eVarAMorph: TEdit
+              Left = 88
+              Top = 46
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 0
+              Text = '1'
+              OnExit = eCoeffNExit
+            end
+            object eVarBMorph: TEdit
+              Left = 88
+              Top = 73
+              Width = 115
+              Height = 21
+              Alignment = taRightJustify
+              PopupMenu = puExamples
+              TabOrder = 1
+              Text = '1000'
+              OnExit = eCoeffNExit
+            end
+            object cbMorphA: TCheckBox
+              Left = 12
+              Top = 50
+              Width = 66
+              Height = 17
+              Caption = 'a'
+              TabOrder = 2
+            end
+            object cbMorphB: TCheckBox
+              Left = 12
+              Top = 73
+              Width = 66
+              Height = 17
+              Caption = 'b'
+              TabOrder = 3
+            end
+            object cbMorphEnabled: TCheckBox
+              Left = 12
+              Top = 23
+              Width = 66
+              Height = 17
+              Caption = 'Enabled'
+              TabOrder = 4
+            end
+            object cbMorphType: TComboBox
+              Left = 88
+              Top = 100
+              Width = 113
+              Height = 21
+              Style = csDropDownList
+              ItemIndex = 0
+              TabOrder = 5
+              Text = 'Linear'
+              Items.Strings = (
+                'Linear'
+                'Radial (Screen)'
+                'Radial (fractal)')
+            end
+          end
+        end
+        object TabSheet3: TTabSheet
+          Caption = 'Render'
+          ImageIndex = 2
+          object gbPalette: TGroupBox
+            Left = 6
+            Top = 3
+            Width = 212
+            Height = 116
+            Caption = 'Palette'
+            TabOrder = 0
+            object bEditPalette: TSpeedButton
+              Left = 6
+              Top = 24
+              Width = 62
+              Height = 22
+              Caption = 'Edit'
+              ImageIndex = 4
+              Images = ImageList1
+              OnClick = bEditPaletteClick
+            end
+            object pbPalette: TPaintBox
+              Left = 17
+              Top = 58
+              Width = 125
+              Height = 20
+              OnClick = bEditPaletteClick
+              OnPaint = pbPalettePaint
+            end
+            object sInfinity: TShape
+              Left = 148
+              Top = 58
+              Width = 20
+              Height = 20
+              OnMouseDown = sInfinityMouseDown
+            end
+            object sbLoadPalette: TSpeedButton
+              Left = 74
+              Top = 24
+              Width = 62
+              Height = 22
+              Caption = 'Open'
+              ImageIndex = 7
+              Images = ImageList1
+              OnClick = sbLoadPaletteClick
+            end
+            object pbPalette2: TPaintBox
+              Left = 17
+              Top = 84
+              Width = 125
+              Height = 20
+              OnClick = pbPalette2Click
+              OnPaint = pbPalette2Paint
+            end
+            object sInfinity2: TShape
+              Left = 148
+              Top = 84
+              Width = 20
+              Height = 20
+              OnMouseDown = sInfinity2MouseDown
+            end
+            object sbQuickPaletteMain: TSpeedButton
+              Left = 174
+              Top = 56
+              Width = 23
+              Height = 22
+              Glyph.Data = {
+                36030000424D3603000000000000360000002800000010000000100000000100
+                18000000000000030000C21E0000C21E00000000000000000000FFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B07A58B07A58B07A58FFFFFFDD9BD9DD9BD9DD9BD9FFFFFFB177FFB177FFB177
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B2EBD0B2EBD0B2EBD0FFFFFF6DCC506DCC506DCC50FFFFFFEBB060EBB060EBB0
+                60FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73AAFF73AAFFFFFFFF67D5F067D5F067D5
+                F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+              OnClick = sbQuickPaletteMainClick
+            end
+            object sbQuickPaletteBackground: TSpeedButton
+              Left = 174
+              Top = 84
+              Width = 23
+              Height = 22
+              Glyph.Data = {
+                36030000424D3603000000000000360000002800000010000000100000000100
+                18000000000000030000C21E0000C21E00000000000000000000FFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B07A58B07A58B07A58FFFFFFDD9BD9DD9BD9DD9BD9FFFFFFB177FFB177FFB177
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
+                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                B2EBD0B2EBD0B2EBD0FFFFFF6DCC506DCC506DCC50FFFFFFEBB060EBB060EBB0
+                60FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
+                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73AAFF73AAFFFFFFFF67D5F067D5F067D5
+                F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
+                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
+                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
+              OnClick = sbQuickPaletteBackgroundClick
+            end
+          end
           object GroupBox2: TGroupBox
-            Left = 3
-            Top = 505
+            Left = 6
+            Top = 125
             Width = 212
             Height = 174
             Caption = 'Dimensions'
@@ -571,312 +949,6 @@ object frmMain: TfrmMain
               OnExit = eWidthExit
             end
           end
-          object gbPalette: TGroupBox
-            Left = 3
-            Top = 383
-            Width = 212
-            Height = 116
-            Caption = 'Palette'
-            TabOrder = 2
-            object bEditPalette: TSpeedButton
-              Left = 6
-              Top = 24
-              Width = 62
-              Height = 22
-              Caption = 'Edit'
-              ImageIndex = 4
-              Images = ImageList1
-              OnClick = bEditPaletteClick
-            end
-            object pbPalette: TPaintBox
-              Left = 17
-              Top = 58
-              Width = 125
-              Height = 20
-              OnClick = bEditPaletteClick
-            end
-            object sInfinity: TShape
-              Left = 148
-              Top = 58
-              Width = 20
-              Height = 20
-              OnMouseDown = sInfinityMouseDown
-            end
-            object sbLoadPalette: TSpeedButton
-              Left = 74
-              Top = 24
-              Width = 62
-              Height = 22
-              Caption = 'Open'
-              ImageIndex = 7
-              Images = ImageList1
-              OnClick = sbLoadPaletteClick
-            end
-            object pbPalette2: TPaintBox
-              Left = 17
-              Top = 84
-              Width = 125
-              Height = 20
-              OnClick = pbPalette2Click
-            end
-            object sInfinity2: TShape
-              Left = 148
-              Top = 84
-              Width = 20
-              Height = 20
-              OnMouseDown = sInfinity2MouseDown
-            end
-            object sbQuickPaletteMain: TSpeedButton
-              Left = 174
-              Top = 56
-              Width = 23
-              Height = 22
-              Glyph.Data = {
-                36030000424D3603000000000000360000002800000010000000100000000100
-                18000000000000030000C21E0000C21E00000000000000000000FFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
-                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                B07A58B07A58B07A58FFFFFFDD9BD9DD9BD9DD9BD9FFFFFFB177FFB177FFB177
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
-                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
-                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                B2EBD0B2EBD0B2EBD0FFFFFF6DCC506DCC506DCC50FFFFFFEBB060EBB060EBB0
-                60FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
-                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
-                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73AAFF73AAFFFFFFFF67D5F067D5F067D5
-                F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
-                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
-              OnClick = sbQuickPaletteMainClick
-            end
-            object sbQuickPaletteBackground: TSpeedButton
-              Left = 174
-              Top = 84
-              Width = 23
-              Height = 22
-              Glyph.Data = {
-                36030000424D3603000000000000360000002800000010000000100000000100
-                18000000000000030000C21E0000C21E00000000000000000000FFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
-                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                B07A58B07A58B07A58FFFFFFDD9BD9DD9BD9DD9BD9FFFFFFB177FFB177FFB177
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB07A58B07A58B07A58FFFFFFDD9BD9DD
-                9BD9DD9BD9FFFFFFB177FFB177FFB177FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
-                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                B2EBD0B2EBD0B2EBD0FFFFFF6DCC506DCC506DCC50FFFFFFEBB060EBB060EBB0
-                60FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFB2EBD0B2EBD0B2EBD0FFFFFF6DCC506D
-                CC506DCC50FFFFFFEBB060EBB060EBB060FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
-                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73AAFF73AAFFFFFFFF67D5F067D5F067D5
-                F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF6B6FFE6B6FFE6B6FFEFFFFFF73AAFF73
-                AAFF73AAFFFFFFFF67D5F067D5F067D5F0FFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
-                FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
-              OnClick = sbQuickPaletteBackgroundClick
-            end
-          end
-          object gbVarABC: TGroupBox
-            Left = 3
-            Top = 210
-            Width = 212
-            Height = 167
-            Caption = 'Extra Parameters'
-            TabOrder = 3
-            object lVarA: TLabel
-              Left = 16
-              Top = 30
-              Width = 6
-              Height = 13
-              Caption = 'a'
-            end
-            object lVarB: TLabel
-              Left = 16
-              Top = 57
-              Width = 6
-              Height = 13
-              Caption = 'b'
-            end
-            object lVarC: TLabel
-              Left = 16
-              Top = 84
-              Width = 5
-              Height = 13
-              Caption = 'c'
-            end
-            object lVarD: TLabel
-              Left = 16
-              Top = 111
-              Width = 6
-              Height = 13
-              Caption = 'd'
-            end
-            object lVarE: TLabel
-              Left = 16
-              Top = 138
-              Width = 6
-              Height = 13
-              Caption = 'e'
-            end
-            object eVarA: TEdit
-              Left = 88
-              Top = 27
-              Width = 115
-              Height = 21
-              Hint = 'maps linear palette to exponential palette (default is 1)'
-              Alignment = taRightJustify
-              PopupMenu = puExamples
-              TabOrder = 0
-              Text = '1'
-              OnExit = eCoeffNExit
-            end
-            object eVarB: TEdit
-              Left = 88
-              Top = 54
-              Width = 115
-              Height = 21
-              Alignment = taRightJustify
-              PopupMenu = puExamples
-              TabOrder = 1
-              Text = '1000'
-              OnExit = eCoeffNExit
-            end
-            object eVarC: TEdit
-              Left = 88
-              Top = 81
-              Width = 115
-              Height = 21
-              Hint = 'maps linear palette to exponential palette (default is 1)'
-              Alignment = taRightJustify
-              PopupMenu = puExamples
-              TabOrder = 2
-              Text = '256'
-              OnExit = eCoeffNExit
-            end
-            object eVarD: TEdit
-              Left = 88
-              Top = 108
-              Width = 115
-              Height = 21
-              Hint = 'maps linear palette to exponential palette (default is 1)'
-              Alignment = taRightJustify
-              PopupMenu = puExamples
-              TabOrder = 3
-              Text = '1'
-              OnExit = eCoeffNExit
-            end
-            object eVarE: TEdit
-              Left = 88
-              Top = 135
-              Width = 115
-              Height = 21
-              Alignment = taRightJustify
-              PopupMenu = puExamples
-              TabOrder = 4
-              Text = '1'
-              OnExit = eCoeffNExit
-            end
-          end
-          object GroupBox3: TGroupBox
-            Left = 6
-            Top = 54
-            Width = 212
-            Height = 150
-            Caption = 'Render'
-            TabOrder = 4
-            object Label10: TLabel
-              Left = 16
-              Top = 62
-              Width = 44
-              Height = 13
-              Caption = 'Coeff (n)'
-            end
-            object Label11: TLabel
-              Left = 16
-              Top = 89
-              Width = 47
-              Height = 13
-              Caption = 'Iterations'
-            end
-            object Label12: TLabel
-              Left = 16
-              Top = 116
-              Width = 47
-              Height = 13
-              Caption = 'Bailout (r)'
-            end
-            object cbRenderMode: TComboBox
-              Left = 16
-              Top = 24
-              Width = 185
-              Height = 21
-              Style = csDropDownList
-              TabOrder = 0
-              OnChange = cbRenderModeChange
-            end
-            object eCoeffN: TEdit
-              Left = 88
-              Top = 59
-              Width = 115
-              Height = 21
-              Hint = 'maps linear palette to exponential palette (default is 1)'
-              Alignment = taRightJustify
-              TabOrder = 1
-              Text = '1'
-              OnExit = eCoeffNExit
-            end
-            object eIterations: TEdit
-              Left = 88
-              Top = 86
-              Width = 115
-              Height = 21
-              Alignment = taRightJustify
-              NumbersOnly = True
-              TabOrder = 2
-              Text = '1000'
-              OnExit = eCoeffNExit
-            end
-            object eBailoutRadius: TEdit
-              Left = 88
-              Top = 113
-              Width = 115
-              Height = 21
-              Hint = 'maps linear palette to exponential palette (default is 1)'
-              Alignment = taRightJustify
-              NumbersOnly = True
-              TabOrder = 3
-              Text = '256'
-              OnExit = eCoeffNExit
-            end
-          end
-          object cbFractalSelector: TComboBox
-            Left = 53
-            Top = 3
-            Width = 165
-            Height = 21
-            Style = csDropDownList
-            TabOrder = 5
-            OnChange = cbFractalSelectorChange
-          end
         end
         object TabSheet2: TTabSheet
           Caption = 'History'
@@ -885,7 +957,7 @@ object frmMain: TfrmMain
             Left = 0
             Top = 31
             Width = 221
-            Height = 749
+            Height = 577
             Align = alClient
             ItemHeight = 13
             TabOrder = 0
@@ -933,9 +1005,9 @@ object frmMain: TfrmMain
       end
       object Panel4: TPanel
         Left = 1
-        Top = 809
+        Top = 637
         Width = 229
-        Height = 249
+        Height = 421
         Align = alBottom
         Color = clWhite
         ParentBackground = False
