@@ -1,0 +1,23 @@
+[
+Name=Julia Set
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=10000.000000
+BailoutRadius=4.000000
+SS=1
+SSLevel=32
+Palette=random_11_wild_flames.palette
+GradientDirection=0
+IsGradient=0
+xmin=0.48798828125
+xmax=0.50361328125
+ymin=-0.331688317587209
+ymax=-0.325147619912791
+var_a=-0.53
+var_b=0.67015
+var_c=0
+var_d=0
+var_e=0
+]
