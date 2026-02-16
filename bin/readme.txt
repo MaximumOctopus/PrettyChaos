@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.25
+  PrettyChaos 0.26
   (c) Paul Alan Freshney 2023-2025
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  December 4th 2025
+  February 15th 2025
 
 =================================================================================================
 
@@ -34,6 +34,10 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.26 / February 15th 2026
+
+A few minor tweaks. Application will now warn if there are unsaved edits.
 
 0.25 / December 4th 2025
 
