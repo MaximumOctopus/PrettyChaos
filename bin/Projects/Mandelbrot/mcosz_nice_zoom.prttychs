@@ -1,0 +1,23 @@
+[
+Name=Mandelbrot Cos(z)
+Width=1720
+Height=720
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=1000.000000
+BailoutRadius=4.000000
+SS=0
+SSLevel=4
+GradientDirection=0
+IsGradient=0
+xmin=-0.654651162790698
+xmax=-0.404651162790698
+ymin=-1.30799418604651
+ymax=-1.20334302325581
+var_a=-0.7
+var_b=0.27015
+var_c=0
+var_d=0
+var_e=0
+Morph=0
+]
