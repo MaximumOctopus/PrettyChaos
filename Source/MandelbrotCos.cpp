@@ -382,15 +382,18 @@ void MandelbrotCos::RenderSSMorph(int hstart, int hend)
 
 void MandelbrotCos::Render(int hstart, int hend)
 {
+	long double yyh = (ymax - ymin) / (long double)Height;
+	long double xxw = (xmax - xmin) / (long double)Width;
+
 	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
 
-		long double q = ymin + (long double)y * (ymax - ymin) / (long double)Height;   // imaginary part
+		long double q = ymin + (long double)y * yyh;		// imaginary part
 
 		for (int x = 0; x < Width; x++)
 		{
-			long double p = xmin + (long double)x * (xmax - xmin) / (long double)Width;    // real part
+			long double p = xmin + (long double)x * xxw;    // real part
 
 			int it = 0;
 

@@ -89,7 +89,7 @@ __published:	// IDE-managed Components
 	TMenuItem *N1;
 	TMenuItem *N2;
 	TMenuItem *N3;
-	TMenuItem *N4;
+	TMenuItem *miExit;
 	TMenuItem *ools1;
 	TMenuItem *Resetparameters1;
 	TMenuItem *N5;
@@ -397,6 +397,10 @@ __published:	// IDE-managed Components
 	void __fastcall sbQuickPaletteBackgroundClick(TObject *Sender);
 	void __fastcall pbPalettePaint(TObject *Sender);
 	void __fastcall pbPalette2Paint(TObject *Sender);
+	void __fastcall cbMorphTypeChange(TObject *Sender);
+	void __fastcall cbMorphEnabledClick(TObject *Sender);
+	void __fastcall miExitClick(TObject *Sender);
+	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
 
 
 private:	// User declarations
@@ -462,11 +466,14 @@ private:	// User declarations
 
 	void SetWarning(bool);
 
-	void SetTitle(const std::wstring);
+	void SetTitle();
+    void UpdateRenderButton();
 
 	void UpdateLastHistoryItem();
 
-    void BuildQuickPaletteMenu();
+	void BuildQuickPaletteMenu();
+
+    void SetChangesPending(bool);
 
 public:		// User declarations
 	__fastcall TfrmMain(TComponent* Owner);

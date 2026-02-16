@@ -22,6 +22,9 @@ public:
 
 	std::vector<std::wstring> Names;
 
+	std::wstring ProjectFileName = L"";
+	bool ChangesPending = false;
+
 	FractalHandler();
     ~FractalHandler();
 };

@@ -47,18 +47,18 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	ProjectPath = ExtractFilePath(Application->ExeName) + L"Projects\\";
 	RenderPath = ExtractFilePath(Application->ExeName) + L"Renders\\";
 
-	SetTitle(L"");
-
 	PaletteBitmap = new Graphics::TBitmap;
 	PaletteBitmap->PixelFormat = pf24bit;
 	PaletteBitmap->Width = 125;
 	PaletteBitmap->Height = 1;
 
-    QPFine = 0.01;
+	QPFine = 0.01;
 
 	GPaletteHandler = new PaletteHandler();
 
 	GFractalHandler = new FractalHandler();
+
+	SetTitle();
 
 	for (int t = 0; t < GFractalHandler->Fractals.size(); t++)
 	{
@@ -91,12 +91,30 @@ __fastcall TfrmMain::TfrmMain(TComponent* Owner)
 	UpdatePalette();
 
 	BuildQuickPaletteMenu();
+
+	SetChangesPending(false);
 }
 
 
 void __fastcall TfrmMain::FormClose(TObject *Sender, TCloseAction &Action)
 {
 	imagedescription->Save();
+}
+
+
+void __fastcall TfrmMain::FormCloseQuery(TObject *Sender, bool &CanClose)
+{
+	if (GFractalHandler->ChangesPending)
+	{
+		if (MessageDlg(L"Exit without saving changes! Are you sure?", mtWarning, mbYesNo, 0) != mrYes)
+		{
+			CanClose = false;
+
+            return;
+		}
+	}
+
+	CanClose = true;
 }
 
 
@@ -199,6 +217,8 @@ void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 void TfrmMain::UpdateFromFractalChange()
 {
 	UpdateAllParameters();
+
+	UpdateRenderButton();
 
 	cbRenderMode->Clear();
 
@@ -382,7 +402,9 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 
 	// =========================================================================
 
-	SetTitle(ExtractFileName(project.ProjectFileName.c_str()).c_str());
+	GFractalHandler->ProjectFileName = ExtractFileName(project.ProjectFileName.c_str()).c_str();
+
+	SetChangesPending(false);
 
 	// =========================================================================
 
@@ -764,9 +786,13 @@ void __fastcall TfrmMain::bSaveProjectClick(TObject *Sender)
 
 		projectio->Save(file_name, project, AnimationConfiguration);
 
-		SetTitle(ExtractFileName(project.ProjectFileName.c_str()).c_str());
+		GFractalHandler->ProjectFileName = ExtractFileName(project.ProjectFileName.c_str()).c_str();
+
+		SetTitle();
 
 		ProjectPath = ExtractFilePath(file_name.c_str());
+
+		SetChangesPending(false);
 	}
 }
 
@@ -1197,6 +1223,8 @@ void __fastcall TfrmMain::sbAboutClick(TObject *Sender)
  void __fastcall TfrmMain::eWidthExit(TObject *Sender)
 {
 	UpdateDimension(false);
+
+	SetChangesPending(true);
 }
 
 
@@ -1322,6 +1350,8 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
 
+	SetChangesPending(true);
+
 	sbReZoom->Enabled = false;
 
 	UpdateZoomPanel();
@@ -1341,6 +1371,8 @@ void __fastcall TfrmMain::cbFractalSelectorChange(TObject *Sender)
 void __fastcall TfrmMain::cbRenderModeChange(TObject *Sender)
 {
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(cbRenderMode->ItemIndex);
+
+   	SetChangesPending(true);
 
 	UpdateABCPanel();
 
@@ -1382,6 +1414,8 @@ void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetParameters(n, i, rb);
+
+	SetChangesPending(true);
 }
 
 
@@ -1471,6 +1505,8 @@ void __fastcall TfrmMain::miDesktopDimensionClick(TObject *Sender)
 	eHeight->Text = DimensionsDesktop[mi->Tag][1];
 
 	UpdateDimension(false);
+
+	SetChangesPending(true);
 }
 
 
@@ -1482,6 +1518,8 @@ void __fastcall TfrmMain::miMobileDimensionsClick(TObject *Sender)
 	eHeight->Text = DimensionsPhone[mi->Tag][1];
 
 	UpdateDimension(false);
+
+	SetChangesPending(true);
 }
 
 
@@ -1586,6 +1624,12 @@ void __fastcall TfrmMain::miExampleM1Click(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::miExitClick(TObject *Sender)
+{
+    Close();
+}
+
+
 void __fastcall TfrmMain::iRenderMouseMove(TObject *Sender, TShiftState Shift, int X,
 		  int Y)
 {
@@ -1632,29 +1676,46 @@ void TfrmMain::SetWarning(bool warning)
 }
 
 
-void TfrmMain::SetTitle(const std::wstring file_name)
+void TfrmMain::SetTitle()
 {
-	std::wstring title = L"PrettyChaos " + __PrettyChaosVersion;
+	std::wstring title = L"PrettyChaos";
 
-	if (!file_name.empty())
+	if (GFractalHandler->ChangesPending)
 	{
-		title += L" - " + file_name;
+		title += L"*";
+	}
+
+	title += L" " + __PrettyChaosVersion;;
+
+	if (!GFractalHandler->ProjectFileName.empty())
+	{
+		title += L" - " + GFractalHandler->ProjectFileName;
 	}
 
     Caption = title.c_str();
 }
 
 
-void __fastcall TfrmMain::miSuperSampleClick(TObject *Sender)
+void TfrmMain::UpdateRenderButton()
 {
 	if (miSuperSample->Checked)
 	{
-		sbRender->Caption = L"Render (ss)";
+		std::wstring ss = L"Render (" + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples) + L"x)";
+
+		sbRender->Caption = ss.c_str();
 	}
 	else
 	{
 		sbRender->Caption = L"Render";
-    }
+	}
+}
+
+
+void __fastcall TfrmMain::miSuperSampleClick(TObject *Sender)
+{
+	UpdateRenderButton();
+
+	SetChangesPending(true);
 }
 
 
@@ -1687,6 +1748,10 @@ void __fastcall TfrmMain::miSamples4Click(TObject *Sender)
 			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 6;
 			break;
 	}
+
+	UpdateRenderButton();
+
+	SetChangesPending(true);
 }
 
 
@@ -1826,4 +1891,24 @@ void __fastcall TfrmMain::pbPalette2Paint(TObject *Sender)
 {
 	pbPalette2->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[1]->Gradient);
 	sInfinity2->Brush->Color = TColor(GPaletteHandler->Palettes[1]->SingleColour.ToIntBGR());
+}
+
+
+void __fastcall TfrmMain::cbMorphEnabledClick(TObject *Sender)
+{
+	SetChangesPending(true);
+}
+
+
+void __fastcall TfrmMain::cbMorphTypeChange(TObject *Sender)
+{
+	SetChangesPending(true);
+}
+
+
+void TfrmMain::SetChangesPending(bool status)
+{
+	GFractalHandler->ChangesPending = status;
+
+	SetTitle();
 }

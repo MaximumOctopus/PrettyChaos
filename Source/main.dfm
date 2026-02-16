@@ -15,6 +15,7 @@ object frmMain: TfrmMain
   Position = poMainFormCenter
   ShowHint = True
   OnClose = FormClose
+  OnCloseQuery = FormCloseQuery
   OnDestroy = FormDestroy
   OnKeyDown = FormKeyDown
   OnPaint = FormPaint
@@ -45,7 +46,7 @@ object frmMain: TfrmMain
       OnClick = sbSaveImageClick
     end
     object bSaveProject: TSpeedButton
-      Left = 102
+      Left = 103
       Top = 2
       Width = 89
       Height = 27
@@ -587,6 +588,7 @@ object frmMain: TfrmMain
               Height = 17
               Caption = 'a'
               TabOrder = 2
+              OnClick = cbMorphEnabledClick
             end
             object cbMorphB: TCheckBox
               Left = 12
@@ -595,6 +597,7 @@ object frmMain: TfrmMain
               Height = 17
               Caption = 'b'
               TabOrder = 3
+              OnClick = cbMorphEnabledClick
             end
             object cbMorphEnabled: TCheckBox
               Left = 12
@@ -603,6 +606,7 @@ object frmMain: TfrmMain
               Height = 17
               Caption = 'Enabled'
               TabOrder = 4
+              OnClick = cbMorphEnabledClick
             end
             object cbMorphType: TComboBox
               Left = 88
@@ -613,6 +617,7 @@ object frmMain: TfrmMain
               ItemIndex = 0
               TabOrder = 5
               Text = 'Linear'
+              OnChange = cbMorphTypeChange
               Items.Strings = (
                 'Linear'
                 'Radial (Screen)'
@@ -2214,8 +2219,9 @@ object frmMain: TfrmMain
       object N3: TMenuItem
         Caption = '-'
       end
-      object N4: TMenuItem
+      object miExit: TMenuItem
         Caption = 'Exit'
+        OnClick = miExitClick
       end
     end
     object Edity1: TMenuItem

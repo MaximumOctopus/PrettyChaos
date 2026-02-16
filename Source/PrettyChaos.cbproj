@@ -182,8 +182,6 @@
         <UsePackages>false</UsePackages>
         <LinkPackageStatics>rtl.lib;vcl.lib;vclimg.lib;VclSmp.lib;vclx.lib</LinkPackageStatics>
         <Icon_MainIcon>PrettyChaos_Icon.ico</Icon_MainIcon>
-        <BCC_OptimizeMaximum>true</BCC_OptimizeMaximum>
-        <BCC_OptimizeForSpeed>false</BCC_OptimizeForSpeed>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2_Win64x)'!=''">
         <AppDPIAwarenessMode>PerMonitorV2</AppDPIAwarenessMode>
@@ -552,6 +550,9 @@
                     <VFOLDER ID="{184CCC3B-DB8E-4F28-B220-C98BAE953BC5}" name="File I/O"/>
                     <VFOLDER ID="{6F195188-9F40-4F70-B1F3-F2BFE6978011}" name="Forms"/>
                     <VFOLDER ID="{BBE05D73-59E7-4A65-B577-231FCB7AF8EE}" name="History"/>
+                    <VFOLDER ID="{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}" name="Palette">
+                        <VFOLDER ID="{46D9CB62-2EB1-420D-BC6E-3252AEC2B8FE}" name="Palette"/>
+                    </VFOLDER>
                     <VFOLDER ID="{64C7C5C2-487C-4A13-995B-F058C27D22E0}" name="Renderers">
                         <VFOLDER ID="{CBC6E249-27A9-4600-9ED7-EEE1DE006581}" name="Base"/>
                         <VFOLDER ID="{23FBDFF5-6240-4159-81D9-03F9995582AA}" name="Dragon"/>
@@ -571,15 +572,12 @@
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>
                     </VFOLDER>
-                    <VFOLDER ID="{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}" name="Palette">
-                        <VFOLDER ID="{46D9CB62-2EB1-420D-BC6E-3252AEC2B8FE}" name="Palette"/>
-                    </VFOLDER>
                     <VFOLDER ID="{51396BD9-C1F8-4606-8962-298686808B56}" name="Settings"/>
                     <VFOLDER ID="{F7E93CCB-5C56-4504-908C-142359F6D58A}" name="Utility"/>
                 </VFOLDERS>
                 <Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
-                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp280.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcboffice2k290.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
+                    <Excluded_Packages Name="$(BDSBIN)\bcbofficexp290.bpl">Embarcadero C++Builder Office XP Servers Package</Excluded_Packages>
                 </Excluded_Packages>
             </CPlusPlusBuilder.Personality>
             <Deployment Version="4">
