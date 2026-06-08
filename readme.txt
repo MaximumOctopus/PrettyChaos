@@ -1,14 +1,13 @@
 =================================================================================================
-  PrettyChaos 0.26
-  (c) Paul Alan Freshney 2023-2025
+  PrettyChaos 0.27
+  (c) Paul Alan Freshney 2023-2026
 
   paul@freshney.org
 
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  February 15th 2025
-
+  June 8th 2026
 =================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
@@ -34,6 +33,12 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.27 / June 8th 2026
+
+Julia Sin/Cos now 20-30% faster. A few minor optimisations across the application.
+
+Added Palette "shift". New buttons just below palette selection. Shifts the palette 1 or 10 colours to the left/right.
 
 0.26 / February 15th 2026
 
