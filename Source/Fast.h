@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -15,14 +15,14 @@
 
 namespace Fast
 {
-    inline int32_t Floor(double fp)
-    {
-        int32_t i = static_cast<int32_t>(fp);
+	inline int32_t Floor(double fp)
+	{
+		int32_t i = static_cast<int32_t>(fp);
 
-        return (fp < i) ? (i - 1) : (i);
+		return (fp < i) ? (i - 1) : (i);
 	}
 
-    // https://stackoverflow.com/questions/18662261/fastest-implementation-of-sine-cosine-and-square-root-in-c-doesnt-need-to-b
+	// https://stackoverflow.com/questions/18662261/fastest-implementation-of-sine-cosine-and-square-root-in-c-doesnt-need-to-b
 	inline long double Cos(long double x) noexcept
 	{
 		constexpr long double tp = 1.0/(2.0 * M_PI);

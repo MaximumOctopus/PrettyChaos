@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -142,7 +142,7 @@ void MandelbrotCosNtic::RenderSS(int hstart, int hend)
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = Var.c * std::atan2(y1, x1);
-					long double pown = std::pow(x2 + y2, halfn);
+					long double pown = exp(halfn * log(x2 + y2));
 
 					m = pown * std::cos(atan2pq) + p;
 					y1 = pown * std::sin(atan2pq) + q;
@@ -293,7 +293,7 @@ void MandelbrotCosNtic::RenderSSMorph(int hstart, int hend)
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = Var.c * std::atan2(y1, x1);
-					long double pown = std::pow(x2 + y2, halfn);
+					long double pown = exp(halfn * log(x2 + y2));
 
 					m = pown * std::cos(atan2pq) + p;
 					y1 = pown * std::sin(atan2pq) + q;
@@ -409,7 +409,7 @@ void MandelbrotCosNtic::Render(int hstart, int hend)
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = Var.c * std::atan2(y1, x1);
-				long double pown = std::pow(x2 + y2, halfn);
+				long double pown = exp(halfn * log(x2 + y2));
 
 				m = pown * std::cos(atan2pq) + p;
 				y1 = pown * std::sin(atan2pq) + q;
@@ -553,7 +553,7 @@ void MandelbrotCosNtic::RenderMorph(int hstart, int hend)
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = Var.c * std::atan2(y1, x1);
-				long double pown = std::pow(x2 + y2, halfn);
+				long double pown = exp(halfn * log(x2 + y2));
 
 				m = pown * std::cos(atan2pq) + p;
 				y1 = pown * std::sin(atan2pq) + q;

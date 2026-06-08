@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -856,9 +856,9 @@ void Fractal::FinaliseRenderJulia(TBitmap *canvas)
 				{
 					if (max == min)
 					{
-						ptr[x].rgbtRed = pp->Colours[499].r;
-						ptr[x].rgbtGreen = pp->Colours[499].g;
-						ptr[x].rgbtBlue = pp->Colours[499].b;
+						ptr[x].rgbtRed = pp->Colours[pp->ColourCount - 1].r;
+						ptr[x].rgbtGreen = pp->Colours[pp->ColourCount - 1].g;
+						ptr[x].rgbtBlue = pp->Colours[pp->ColourCount - 1].b;
 					}
 					else
 					{
@@ -936,7 +936,7 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas)
 			}
 		}
 
-		long total = 0;
+		long double total = 0;
 
 		for (int i = 0; i < max_iterations; i++)
 		{
@@ -957,12 +957,12 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas)
 
 				for (int i = 0; i < FractalData[ydotwidth + x].a; i++)
 				{
-					c += (long double)NumIterationsPerPixel[i] / (long double)total;
+					c += (long double)NumIterationsPerPixel[i] / total;
 				}
 
 				if (FractalData[ydotwidth + x].a != max_iterations)
 				{
-					int index = Fast::Floor(std::pow(c, n_coeff) * pp->ColourCount);
+					int index = Fast::Floor(exp(n_coeff * log(c)) * pp->ColourCount);
 
 					if (index >= 0 && index <= 500)
 					{
@@ -973,8 +973,8 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas)
 				}
 				else
 				{
-					if (pp2->IsGradient)
-					{
+				   if (pp2->IsGradient)
+				   {
 						if (pp2->GradientDirection)
 						{
 							int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
@@ -997,7 +997,7 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas)
 						ptr[x].rgbtRed = pp2->SingleColour.r;
 						ptr[x].rgbtGreen = pp2->SingleColour.g;
 						ptr[x].rgbtBlue = pp2->SingleColour.b;
-  					}
+					}
 				}
 			}
 		}

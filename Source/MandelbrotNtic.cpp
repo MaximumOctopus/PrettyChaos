@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -138,17 +138,14 @@ void MandelbrotNtic::RenderSS(int hstart, int hend)
 				long double y1 = 0;
 				long double x2 = 0;
 				long double y2 = 0;
-				long double m = 0;
 
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = Var.c * std::atan2(y1, x1);
-					long double pown = std::pow(x2 + y2, halfn);
+					long double pown = exp(halfn * log(x2 + y2));
 
-					m = pown * std::cos(atan2pq) + p;
+					x1 = pown * std::cos(atan2pq) + p;
 					y1 = pown * std::sin(atan2pq) + q;
-
-					x1 = m;
 
 					x2 = x1 * x1;
 					y2 = y1 * y1;
@@ -288,17 +285,14 @@ void MandelbrotNtic::RenderSSMorph(int hstart, int hend)
 				long double y1 = 0;
 				long double x2 = 0;
 				long double y2 = 0;
-				long double m = 0;
 
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = Var.c * std::atan2(y1, x1);
-					long double pown = std::pow(x2 + y2, halfn);
+					long double pown = exp(halfn * log(x2 + y2));
 
-					m = pown * std::cos(atan2pq) + p;
+					x1 = pown * std::cos(atan2pq) + p;
 					y1 = pown * std::sin(atan2pq) + q;
-
-					x1 = m;
 
 					x2 = x1 * x1;
 					y2 = y1 * y1;
@@ -403,17 +397,14 @@ void MandelbrotNtic::Render(int hstart, int hend)
 			long double y1 = 0;
 			long double x2 = 0;
 			long double y2 = 0;
-			long double m = 0;
 
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = Var.c * std::atan2(y1, x1);
-				long double pown = std::pow(x2 + y2, halfn);
+				long double pown = exp(halfn * log(x2 + y2));
 
-				m = pown * std::cos(atan2pq) + p;
+				x1 = pown * std::cos(atan2pq) + p;
 				y1 = pown * std::sin(atan2pq) + q;
-
-				x1 = m;
 
 				x2 = x1 * x1;
 				y2 = y1 * y1;
@@ -544,17 +535,14 @@ void MandelbrotNtic::RenderMorph(int hstart, int hend)
 			long double y1 = 0;
 			long double x2 = 0;
 			long double y2 = 0;
-			long double m = 0;
 
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = Var.c * std::atan2(y1, x1);
-				long double pown = std::pow(x2 + y2, halfn);
+				long double pown = exp(halfn * log(x2 + y2));
 
-				m = pown * std::cos(atan2pq) + p;
+				x1 = pown * std::cos(atan2pq) + p;
 				y1 = pown * std::sin(atan2pq) + q;
-
-				x1 = m;
 
 				x2 = x1 * x1;
 				y2 = y1 * y1;

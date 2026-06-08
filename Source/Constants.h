@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.26 (debug) :: February 15th 2026";
+static const std::wstring __PrettyChaosVersion = L"0.27 (debug) :: June 8th 2026";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.26 :: February 15th 2026";
+static const std::wstring __PrettyChaosVersion = L"0.27 :: June 8th 2026";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";

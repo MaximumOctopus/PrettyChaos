@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -332,6 +332,12 @@ __published:	// IDE-managed Components
 	TCheckBox *cbMorphB;
 	TCheckBox *cbMorphEnabled;
 	TComboBox *cbMorphType;
+	TBitBtn *bPaletteLeftFast;
+	TBitBtn *bPaletteRightFast;
+	TBitBtn *bPaletteLeft;
+	TBitBtn *bPaletteRight;
+	TRadioButton *rbSelectMain;
+	TRadioButton *rbSelectBackground;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -401,6 +407,10 @@ __published:	// IDE-managed Components
 	void __fastcall cbMorphEnabledClick(TObject *Sender);
 	void __fastcall miExitClick(TObject *Sender);
 	void __fastcall FormCloseQuery(TObject *Sender, bool &CanClose);
+	void __fastcall bPaletteLeftFastClick(TObject *Sender);
+	void __fastcall bPaletteRightFastClick(TObject *Sender);
+	void __fastcall bPaletteRightClick(TObject *Sender);
+	void __fastcall bPaletteLeftClick(TObject *Sender);
 
 
 private:	// User declarations
@@ -436,6 +446,8 @@ private:	// User declarations
 	double LastZoomX, LastZoomY;
 
 	void RenderPreview();
+
+	void PostPaletteChange();
 
 	void ZoomPointClick(double, double);
 	void ZoomOut();

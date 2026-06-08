@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -62,4 +62,16 @@ void PaletteHandler::UpdatePaletteList(const std::wstring path)
 
 		FindClose(search_handle);
 	}
+}
+
+
+void PaletteHandler::ShiftPaletteLeft(int index)
+{
+    Palettes[index]->ShiftLeft();
+}
+
+
+void PaletteHandler::ShiftPaletteRight(int index)
+{
+    Palettes[index]->ShiftRight();
 }

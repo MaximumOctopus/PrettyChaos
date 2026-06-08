@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -82,4 +82,7 @@ public:
 	void CopyToTemp();
 
 	int AddNewKey(int, int, int, bool);
+
+	void ShiftLeft();
+    void ShiftRight();
 };

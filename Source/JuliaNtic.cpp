@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -130,10 +130,10 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 				while (p * p + q * q <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = Var.c * std::atan2(q, p);
-					long double pow25 = std::pow(p * p + q * q, halfn);
+					long double pown = exp(halfn * log(p * p + q * q));
 
-					p = pow25 * std::cos(atan2pq) + Var.a;
-					q = pow25 * std::sin(atan2pq) + Var.b;
+					p = pown * std::cos(atan2pq) + Var.a;
+					q = pown * std::sin(atan2pq) + Var.b;
 
 					it++;
 				}
@@ -225,10 +225,10 @@ void JuliaNtic::RenderSSMorph(int hstart, int hend)
 				while (p * p + q * q <= bailout_radius && it < max_iterations)
 				{
 					long double atan2pq = Var.c * std::atan2(q, p);
-					long double pow25 = std::pow(p * p + q * q, halfn);
+					long double pown = exp(halfn * log(p * p + q * q));
 
-					p = pow25 * std::cos(atan2pq) + vara;
-					q = pow25 * std::sin(atan2pq) + varb;
+					p = pown * std::cos(atan2pq) + vara;
+					q = pown * std::sin(atan2pq) + varb;
 
 					it++;
 				}
@@ -286,7 +286,7 @@ void JuliaNtic::Render(int hstart, int hend)
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = Var.c * std::atan2(q, p);
-				long double pown = std::pow(p * p + q * q, halfn);
+				long double pown = exp(halfn * log(p * p + q * q));
 
 				p = pown * std::cos(atan2pq) + Var.a;
 				q = pown * std::sin(atan2pq) + Var.b;
@@ -373,7 +373,7 @@ void JuliaNtic::RenderMorph(int hstart, int hend)
 			while (p * p + q * q <= bailout_radius && it < max_iterations)
 			{
 				long double atan2pq = Var.c * std::atan2(q, p);
-				long double pown = std::pow(p * p + q * q, halfn);
+				long double pown = exp(halfn * log(p * p + q * q));
 
 				p = pown * std::cos(atan2pq) + vara;
 				q = pown * std::sin(atan2pq) + varb;

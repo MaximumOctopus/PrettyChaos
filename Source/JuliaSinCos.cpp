@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -126,14 +126,20 @@ void JuliaSinCos::Render(int hstart, int hend)
 			long double u = 0;
 			long double x2 = 0;
 			long double y2 = 0;
-			long double m = 0;
+			long double shq = 0;
+			long double sinp = 0;
+			long double cosp = 0;
 
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
-				u = cos(p) * sinh(q);
+				shq = sinh(q);
+				sinp = sin(p);
+				cosp = cos(p);
 
-				r = cosh(q) * (sin(p) + cos(p));
-				s = u -(sin(p) * sinh(q));
+				u = cosp * shq;
+
+				r = cosh(q) * (sinp + cosp);
+				s = u -(sinp * shq);
 
 				p = r + Var.a;
 				q = s + Var.b;
@@ -224,14 +230,20 @@ void JuliaSinCos::RenderMorph(int hstart, int hend)
 			long double u = 0;
 			long double x2 = 0;
 			long double y2 = 0;
-			long double m = 0;
+			long double shq = 0;
+			long double sinp = 0;
+			long double cosp = 0;
 
 			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
-				u = cos(p) * sinh(q);
+				shq = sinh(q);
+				sinp = sin(p);
+				cosp = cos(p);
 
-				r = cosh(q) * (sin(p) + cos(p));
-				s = u -(sin(p) * sinh(q));
+				u = cosp * shq;
+
+				r = cosh(q) * (sinp + cosp);
+		   		s = u -(sinp * shq);
 
 				p = r + vara;
 				q = s + varb;
@@ -295,14 +307,20 @@ void JuliaSinCos::RenderSS(int hstart, int hend)
 				long double u = 0;
 				long double x2 = 0;
 				long double y2 = 0;
-				long double m = 0;
+				long double shq = 0;
+				long double sinp = 0;
+				long double cosp = 0;
 
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
-					u = cos(p) * sinh(q);
+					shq = sinh(q);
+					sinp = sin(p);
+					cosp = cos(p);
 
-					r = cosh(q) * (sin(p) + cos(p));
-					s = u -(sin(p) * sinh(q));
+					u = cosp * shq;
+
+					r = cosh(q) * (sinp + cosp);
+					s = u -(sinp * shq);
 
 					p = r + Var.a;
 					q = s + Var.b;
@@ -402,14 +420,20 @@ void JuliaSinCos::RenderSSMorph(int hstart, int hend)
 				long double u = 0;
 				long double x2 = 0;
 				long double y2 = 0;
-				long double m = 0;
+				long double shq = 0;
+				long double sinp = 0;
+				long double cosp = 0;
 
 				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
-					u = cos(p) * sinh(q);
+					shq = sinh(q);
+					sinp = sin(p);
+					cosp = cos(p);
 
-					r = cosh(q) * (sin(p) + cos(p));
-					s = u -(sin(p) * sinh(q));
+					u = cosp * shq;
+
+					r = cosh(q) * (sinp + cosp);
+					s = u -(sinp * shq);
 
 					p = r + vara;
 					q = s + varb;

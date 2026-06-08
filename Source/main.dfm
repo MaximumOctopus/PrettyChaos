@@ -632,7 +632,7 @@ object frmMain: TfrmMain
             Left = 6
             Top = 3
             Width = 212
-            Height = 116
+            Height = 166
             Caption = 'Palette'
             TabOrder = 0
             object bEditPalette: TSpeedButton
@@ -753,10 +753,26 @@ object frmMain: TfrmMain
                 FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
               OnClick = sbQuickPaletteBackgroundClick
             end
+            object rbSelectMain: TRadioButton
+              Left = 16
+              Top = 128
+              Width = 20
+              Height = 17
+              Checked = True
+              TabOrder = 0
+              TabStop = True
+            end
+            object rbSelectBackground: TRadioButton
+              Left = 34
+              Top = 128
+              Width = 20
+              Height = 17
+              TabOrder = 1
+            end
           end
           object GroupBox2: TGroupBox
-            Left = 6
-            Top = 125
+            Left = 11
+            Top = 197
             Width = 212
             Height = 174
             Caption = 'Dimensions'
@@ -953,6 +969,42 @@ object frmMain: TfrmMain
               Text = '1024'
               OnExit = eWidthExit
             end
+          end
+          object bPaletteLeftFast: TBitBtn
+            Left = 66
+            Top = 127
+            Width = 30
+            Height = 25
+            Caption = '<<'
+            TabOrder = 2
+            OnClick = bPaletteLeftFastClick
+          end
+          object bPaletteRightFast: TBitBtn
+            Left = 174
+            Top = 127
+            Width = 30
+            Height = 25
+            Caption = '>>'
+            TabOrder = 3
+            OnClick = bPaletteRightFastClick
+          end
+          object bPaletteLeft: TBitBtn
+            Left = 102
+            Top = 127
+            Width = 30
+            Height = 25
+            Caption = '<'
+            TabOrder = 4
+            OnClick = bPaletteLeftClick
+          end
+          object bPaletteRight: TBitBtn
+            Left = 138
+            Top = 127
+            Width = 30
+            Height = 25
+            Caption = '>'
+            TabOrder = 5
+            OnClick = bPaletteRightClick
           end
         end
         object TabSheet2: TTabSheet

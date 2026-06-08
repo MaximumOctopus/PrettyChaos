@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -1880,6 +1880,8 @@ void __fastcall TfrmMain::sbQuickPaletteBackgroundClick(TObject *Sender)
 	puQuickPalette2->Popup(Left + pMain->Left + gbPalette->Left + sbQuickPaletteBackground->Left + 5,
 						   Top + pToolbar->Height + pMain->Top + gbPalette->Top + sbQuickPaletteBackground->Top + 35);
 }
+
+
 void __fastcall TfrmMain::pbPalettePaint(TObject *Sender)
 {
 	pbPalette->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[0]->Gradient);
@@ -1891,6 +1893,76 @@ void __fastcall TfrmMain::pbPalette2Paint(TObject *Sender)
 {
 	pbPalette2->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[1]->Gradient);
 	sInfinity2->Brush->Color = TColor(GPaletteHandler->Palettes[1]->SingleColour.ToIntBGR());
+}
+
+
+void TfrmMain::PostPaletteChange()
+{
+	if (miShowPreview->Checked) RenderPreview();
+
+	if (miRecolour->Checked && !miShowPreview->Checked)
+	{
+			if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AttemptRecolour())
+			{
+				CopyFromFractalToScreen();
+			}
+	}
+
+	//	UpdatePalette();
+}
+
+
+void __fastcall TfrmMain::bPaletteRightClick(TObject *Sender)
+{
+	int index = 0;
+
+	if (rbSelectBackground->Checked) index = 1;
+
+	GPaletteHandler->ShiftPaletteLeft(index);
+
+	PostPaletteChange();
+}
+
+
+void __fastcall TfrmMain::bPaletteLeftClick(TObject *Sender)
+{
+	int index = 0;
+
+	if (rbSelectBackground->Checked) index = 1;
+
+	GPaletteHandler->ShiftPaletteRight(index);
+
+	PostPaletteChange();
+}
+
+
+void __fastcall TfrmMain::bPaletteLeftFastClick(TObject *Sender)
+{
+	int index = 0;
+
+	if (rbSelectBackground->Checked) index = 1;
+
+	for (int t = 0; t < 10; t++)
+	{
+		GPaletteHandler->ShiftPaletteLeft(index);
+	}
+
+	PostPaletteChange();
+}
+
+
+void __fastcall TfrmMain::bPaletteRightFastClick(TObject *Sender)
+{
+	int index = 0;
+
+	if (rbSelectBackground->Checked) index = 1;
+
+	for (int t = 0; t < 10; t++)
+	{
+		GPaletteHandler->ShiftPaletteRight(index);
+	}
+
+	PostPaletteChange();
 }
 
 
@@ -1912,3 +1984,4 @@ void TfrmMain::SetChangesPending(bool status)
 
 	SetTitle();
 }
+

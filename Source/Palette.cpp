@@ -1,7 +1,7 @@
 //
 // PrettyChaos 1.0
 //
-// (c) Paul Alan Freshney 2023-2025
+// (c) Paul Alan Freshney 2023-2026
 //
 // paul@freshney.org
 //
@@ -686,5 +686,39 @@ int Palette::AddNewKey(int colour, int mode, int position, bool locked)
 	Keys.push_back(pk);
 
 	return Keys.size() - 1;
+}
+
+
+void Palette::ShiftLeft()
+{
+	int r = Colours[0].r;
+	int g = Colours[0].g;
+	int b = Colours[0].b;
+
+	for (int t = 0; t < ColourCount - 1; t++)
+	{
+		Colours[t].r = Colours[t + 1].r;
+		Colours[t].g = Colours[t + 1].g;
+		Colours[t].b = Colours[t + 1].b;
+	}
+
+	Colours[ColourCount - 1].r = r;
+	Colours[ColourCount - 1].g = g;
+	Colours[ColourCount - 1].b = b;
+}
+
+
+void Palette::ShiftRight()
+{
+	Colour c = Colours[ColourCount - 1];
+
+	for (int t = ColourCount - 1 ; t >= 0; t--)
+	{
+		Colours[t].r = Colours[t - 1].r;
+		Colours[t].g = Colours[t - 1].g;
+		Colours[t].b = Colours[t - 1].b;
+	}
+
+	Colours[0] = c;
 }
 
