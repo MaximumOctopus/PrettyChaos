@@ -1,0 +1,27 @@
+[
+Name=Mandelbrot (II)
+Width=1280
+Height=1024
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=10000.000000
+BailoutRadius=16.000000
+SS=0
+SSLevel=8
+Palette=red_orange_blue.palette
+GradientDirection=0
+DrawMode=0
+GridWidth=10
+GridColour1=16777215
+GridColour2=4491298
+xmin=-1.04769921875
+xmax=-1.00910546875
+ymin=-0.376771484375
+ymax=-0.345896484375
+var_a=-0.765
+var_b=0
+var_c=1000
+var_d=0
+var_e=0
+Morph=0
+]

@@ -1,0 +1,24 @@
+[
+Name=Mandelbrot z^2 + z
+Width=3440
+Height=1440
+RenderMode=0
+nCoeff=1.000000
+MaxIterations=2000.000000
+BailoutRadius=400.000000
+SS=1
+SSLevel=16
+Palette=_default_greyscale.palette
+GradientDirection=0
+IsGradient=0
+xmin=-0.736046511627907
+xmax=-0.236046511627907
+ymin=-0.752325581395349
+ymax=-0.543023255813953
+var_a=-0.7
+var_b=0.27015
+var_c=0
+var_d=0
+var_e=0
+Morph=0
+]
