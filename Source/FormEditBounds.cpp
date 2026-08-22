@@ -48,6 +48,9 @@ void TfrmEditBounds::SetBoundsValues(int _width, int _height, double _xmin, doub
 
 void __fastcall TfrmEditBounds::bOKClick(TObject *Sender)
 {
+	if (eXMin->Text == L"" || eXMax->Text == L"" ||
+		eYMin->Text == L"" || eYMax->Text == L"") return;
+
 	xmin = eXMin->Text.ToDouble();
 	xmax = eXMax->Text.ToDouble();
 	ymin = eYMin->Text.ToDouble();
@@ -78,4 +81,6 @@ void __fastcall TfrmEditBounds::bOKClick(TObject *Sender)
 			xmax = c_xaxis + (x_range / 2);
 		}
 	}
+
+    ModalResult = mrOk;
 }

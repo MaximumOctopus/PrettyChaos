@@ -11,7 +11,6 @@
 #pragma once
 
 #include "Fractal.h"
-#include "MandelbrotRenderCore.h"
 
 
 class MandelbrotCos : public Fractal

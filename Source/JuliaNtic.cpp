@@ -20,31 +20,27 @@
 
 JuliaNtic::JuliaNtic() : Fractal()
 {
-	AcceptsABC = true;
 	AcceptsMorph = true;
-	AcceptsVarA = true;
-	AcceptsVarB = true;
-	AcceptsVarC = true;
 
 	QPM = QuickParameterMode::kABPlusFine;
 
-	Defaults.Set(1, 1000, 4, 0.89, -0.19, 6, 0, 0);
+	Defaults.Set(1, 1000, 4, 0.89, -0.19, 6, 1000, 0);
 
 	MultiThread = true;
 
 	Name = L"Julia Set (n-tic)";
 
-	RenderModes.push_back(L"Escape time");
-	RenderModes.push_back(L"Distance");
-	RenderModes.push_back(L"Distance from origin");
-	RenderModes.push_back(L"Two-tone");
-	RenderModes.push_back(L"Three-tone");
-	RenderModes.push_back(L"Four-tone");
-	RenderModes.push_back(L"Five-tone");
+	Parameters.push_back(RenderModeParameters(L"Escape time", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance from origin", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Two-tone", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Three-tone", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Four-tone", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Five-tone", L"real", L"imaginary", L"n", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR", L"real", L"imaginary", L"n", L"Coeff", L""));
 
-	NameA = L"real";
-	NameB = L"imaginary";
-	NameC = L"n";
+	MorphNameA = L"real";
+	MorphNameB = L"imaginary";
 
 	ResetAll();
 }
@@ -138,33 +134,7 @@ void JuliaNtic::RenderSS(int hstart, int hend)
 					it++;
 				}
 
-				switch (RenderMode)
-				{
-				case __RMJuliaEscapeTime:
-				case __RMJuliaTwoTone:
-				case __RMJuliaThreeTone:
-				case __RMJuliaFourTone:
-				case __RMJuliaFiveTone:
-				{
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistance:
-				{
-					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistanceOrigin:
-					int nx = Fast::Floor(x - (Width / 2));
-					int ny = Fast::Floor(y - (Height / 2));
-
-					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-					FractalData[ydotwidth + x] += pp->Colours[index];
-					break;
-				}
+				JuliaColourise(it, ydotwidth + x, x, y, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -233,33 +203,7 @@ void JuliaNtic::RenderSSMorph(int hstart, int hend)
 					it++;
 				}
 
-				switch (RenderMode)
-				{
-				case __RMJuliaEscapeTime:
-				case __RMJuliaTwoTone:
-				case __RMJuliaThreeTone:
-				case __RMJuliaFourTone:
-				case __RMJuliaFiveTone:
-				{
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistance:
-				{
-					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistanceOrigin:
-					int nx = Fast::Floor(x - (Width / 2));
-					int ny = Fast::Floor(y - (Height / 2));
-
-					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-					FractalData[ydotwidth + x] += pp->Colours[index];
-					break;
-				}
+				JuliaColourise(it, ydotwidth + x, x, y, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -294,33 +238,7 @@ void JuliaNtic::Render(int hstart, int hend)
 				it++;
 			}
 
-			switch (RenderMode)
-			{
-			case __RMJuliaEscapeTime:
-			case __RMJuliaTwoTone:
-			case __RMJuliaThreeTone:
-			case __RMJuliaFourTone:
-			case __RMJuliaFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistance:
-			{
-				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistanceOrigin:
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
-
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-				FractalData[ydotwidth + x] = pp->Colours[index];
-				break;
-			}
+			JuliaColourise(it, ydotwidth + x, x, y, p, q);
 		}
 	}
 }
@@ -381,33 +299,7 @@ void JuliaNtic::RenderMorph(int hstart, int hend)
 				it++;
 			}
 
-			switch (RenderMode)
-			{
-			case __RMJuliaEscapeTime:
-			case __RMJuliaTwoTone:
-			case __RMJuliaThreeTone:
-			case __RMJuliaFourTone:
-			case __RMJuliaFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistance:
-			{
-				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistanceOrigin:
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
-
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-				FractalData[ydotwidth + x] = pp->Colours[index];
-				break;
-			}
+			JuliaColourise(it, ydotwidth + x, x, y, p, q);
 		}
 	}
 }
@@ -421,8 +313,9 @@ void JuliaNtic::ResetView()
 
 std::wstring JuliaNtic::GetParameters()
 {
-	return L"render mode: " + RenderModes[RenderMode] +
-		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
+	return L"Julia (z^n): r " + Formatting::LDToStr(Var.a) + L"; i " + Formatting::LDToStr(Var.b) + L", x " + Formatting::LDToStr(xmin) + L" <-> " + Formatting::LDToStr(xmax) + L" y " + Formatting::LDToStr(ymin) + L" <-> " + Formatting::LDToStr(ymax) +
+		   L"; render mode: " + Parameters[RenderMode].Name +
+		   L"; ^n: " + std::to_wstring(Var.c) + L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
 		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
@@ -444,7 +337,7 @@ void JuliaNtic::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Julia Set (z^n)\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + Parameters[RenderMode].Name + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");

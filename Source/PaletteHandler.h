@@ -31,4 +31,7 @@ public:
 
 	void ShiftPaletteLeft(int);
 	void ShiftPaletteRight(int);
+
+	int DrawModeToInt(DrawModeOption);
+	DrawModeOption IntToDrawMode(int);
 };

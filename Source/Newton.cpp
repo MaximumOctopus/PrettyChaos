@@ -16,11 +16,6 @@
 
 Newton::Newton() : Fractal()
 {
-	AcceptsABC = true;
-	AcceptsVarA = true;
-	AcceptsVarB = true;
-	AcceptsVarC = true;
-
 	Var.a = 45;
 	Var.b = 2;
 	Var.c = -300;
@@ -29,7 +24,7 @@ Newton::Newton() : Fractal()
 
 	Name = L"Newton";
 
-	RenderModes.push_back(L"Average");
+	//RenderModes.push_back(L"Average");
 }
 
 

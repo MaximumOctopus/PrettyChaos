@@ -27,30 +27,32 @@ MandelbrotNtic::MandelbrotNtic() : Fractal()
 	NumIterationsPerPixel = new int[2001];
 	for (int z = 0; z < 2001; z++) NumIterationsPerPixel[z] = 0;
 
-	AcceptsABC = true;
-    AcceptsMorph = true;
-	AcceptsVarA = true;
-	AcceptsVarB = true;
-	AcceptsVarC = true;
+	AcceptsMorph = true;
+	HasTests = true;
 
 	Defaults.Set(1, 100, 4, 0, 0, 5, 0, 0);
 
 	MultiThread = true;
 
-	RenderModes.push_back(L"Escape time");
-	RenderModes.push_back(L"Continuous");
-	RenderModes.push_back(L"Distance");
-	RenderModes.push_back(L"Distance II");
-	RenderModes.push_back(L"Orbit Trap");
-	RenderModes.push_back(L"Orbit Trap (filled)");
-	RenderModes.push_back(L"Two-tone");
-	RenderModes.push_back(L"Three-tone");
-	RenderModes.push_back(L"Four-tone");
-	RenderModes.push_back(L"Five-tone");
+	Parameters.push_back(RenderModeParameters(L"Escape time", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Continuous", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance II", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Orbit Trap", L"n", L"orbit x", L"orbit y", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Orbit Trap (filled)", L"n", L"orbit x", L"orbit y", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Two-tone", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Three-tone", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Four-tone", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Five-tone", L"n", L"", L"", L"", L""));
 
-	NameA = L"orbit x";
-	NameB = L"orbit y";
-	NameC = L"n";
+	Tests.push_back(L"Re(z)^2 + Im(z)^2 < n");
+	Tests.push_back(L"||Re(z)^2| - |Im(z)^2|| < n");
+	Tests.push_back(L"|Re(z)^2 - Im(z)^2| < n");
+	Tests.push_back(L"Re(z)^2 * Im(z)^2 < n");
+	Tests.push_back(L"|Re(z)^2| + |Im(z)^2| < n");
+
+	MorphNameA = L"orbit x";
+	MorphNameB = L"orbit y";
 
 	ResetAll();
 }
@@ -116,7 +118,7 @@ bool MandelbrotNtic::MultiThreadRender(bool preview, bool super_sample, bool mor
 
 void MandelbrotNtic::RenderSS(int hstart, int hend)
 {
-	long double halfn = Var.c / 2;
+	long double halfn = Var.a / 2;
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -139,9 +141,9 @@ void MandelbrotNtic::RenderSS(int hstart, int hend)
 				long double x2 = 0;
 				long double y2 = 0;
 
-				while (x2 + y2 <= bailout_radius && it < max_iterations)
+				while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
 				{
-					long double atan2pq = Var.c * std::atan2(y1, x1);
+					long double atan2pq = Var.a * std::atan2(y1, x1);
 					long double pown = exp(halfn * log(x2 + y2));
 
 					x1 = pown * std::cos(atan2pq) + p;
@@ -152,8 +154,8 @@ void MandelbrotNtic::RenderSS(int hstart, int hend)
 
 					if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 					{
-						long double cr = p - Var.a;
-						long double ci = q - Var.b;
+						long double cr = p - Var.b;
+						long double ci = q - Var.c;
 
 						long double magnitude = std::sqrt(cr * cr + ci * ci);
 
@@ -166,61 +168,7 @@ void MandelbrotNtic::RenderSS(int hstart, int hend)
 					it++;
 				}
 
-				switch (RenderMode)
-				{
-				case __RMMandelbrotEscapeTime:
-				case __RMMandelbrotOrbitTrap:
-				case __RMMandelbrotOrbitTrapFilled:
-				case __RMMandelbrotTwoTone:
-				case __RMMandelbrotThreeTone:
-				case __RMMandelbrotFourTone:
-				case __RMMandelbrotFiveTone:
-				{
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMMandelbrotContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
-						long double nu = 1 - std::log2(log_zn);
-
-						long double itnew = it + nu;
-
-						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-						long double it_d = (long double)it + nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x].a = -1;
-					}
-
-					break;
-				}
-				case __RMMandelbrotDistance:
-				{
-					if (it < max_iterations)
-					{
-						Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
-					}
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMMandelbrotDistanceII:
-				{
-					if (it < max_iterations)
-					{
-						Data[ydotwidth + x] = std::sqrt(x2 + y2 * x2 + y2);
-					}
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				}
+				MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -231,15 +179,15 @@ void MandelbrotNtic::RenderSS(int hstart, int hend)
 
 void MandelbrotNtic::RenderSSMorph(int hstart, int hend)
 {
-	long double halfn = Var.c / 2;
+	long double halfn = Var.a / 2;
 
-	long double vara = Var.a;
-	long double varb = Var.b;
+	long double vara = Var.b;
+	long double varb = Var.c;
 
 	if (MorphType == 0)
 	{
-		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
-		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
+		if (MorphA) vara = Var.b + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.c + (hstart * Var.morph_b);
 	}
 
 	for (int y = hstart; y < hend; y++)
@@ -269,13 +217,13 @@ void MandelbrotNtic::RenderSSMorph(int hstart, int hend)
 					long double xp = std::abs(((long double)Width / 2) - (long double)x + deltax);
 					long double yp = std::abs(((long double)Height / 2) - (long double)y + deltay);
 
-					if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
-					if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+					if (MorphA) vara = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+					if (MorphB) varb = Var.c + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
 				}
 				else if (MorphType == 2)
 				{
-					if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
-					if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
+					if (MorphA)	vara = Var.b + std::sqrt(p * p + q * q) * Var.morph_a;
+					if (MorphB)	varb = Var.c + std::sqrt(p * p + q * q) * Var.morph_b;
 				}
 
 				int it = 0;
@@ -286,9 +234,9 @@ void MandelbrotNtic::RenderSSMorph(int hstart, int hend)
 				long double x2 = 0;
 				long double y2 = 0;
 
-				while (x2 + y2 <= bailout_radius && it < max_iterations)
+				while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
 				{
-					long double atan2pq = Var.c * std::atan2(y1, x1);
+					long double atan2pq = Var.a * std::atan2(y1, x1);
 					long double pown = exp(halfn * log(x2 + y2));
 
 					x1 = pown * std::cos(atan2pq) + p;
@@ -313,61 +261,7 @@ void MandelbrotNtic::RenderSSMorph(int hstart, int hend)
 					it++;
 				}
 
-				switch (RenderMode)
-				{
-				case __RMMandelbrotEscapeTime:
-				case __RMMandelbrotOrbitTrap:
-				case __RMMandelbrotOrbitTrapFilled:
-				case __RMMandelbrotTwoTone:
-				case __RMMandelbrotThreeTone:
-				case __RMMandelbrotFourTone:
-				case __RMMandelbrotFiveTone:
-				{
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMMandelbrotContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
-						long double nu = 1 - std::log2(log_zn);
-
-						long double itnew = it + nu;
-
-						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-						long double it_d = (long double)it + nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x].a = -1;
-					}
-
-					break;
-				}
-				case __RMMandelbrotDistance:
-				{
-					if (it < max_iterations)
-					{
-						Data[ydotwidth + x] = std::sqrt((x1 + y1) * (x1 + y1));
-					}
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMMandelbrotDistanceII:
-				{
-					if (it < max_iterations)
-					{
-						Data[ydotwidth + x] = std::sqrt(x2 + y2 * x2 + y2);
-					}
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				}
+				MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -378,7 +272,7 @@ void MandelbrotNtic::RenderSSMorph(int hstart, int hend)
 
 void MandelbrotNtic::Render(int hstart, int hend)
 {
-	long double halfn = Var.c / 2;
+	long double halfn = Var.a / 2;
 
 	for (int y = hstart; y < hend; y++)
 	{
@@ -398,9 +292,9 @@ void MandelbrotNtic::Render(int hstart, int hend)
 			long double x2 = 0;
 			long double y2 = 0;
 
-			while (x2 + y2 <= bailout_radius && it < max_iterations)
+			while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
 			{
-				long double atan2pq = Var.c * std::atan2(y1, x1);
+				long double atan2pq = Var.a * std::atan2(y1, x1);
 				long double pown = exp(halfn * log(x2 + y2));
 
 				x1 = pown * std::cos(atan2pq) + p;
@@ -411,8 +305,8 @@ void MandelbrotNtic::Render(int hstart, int hend)
 
 				if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 				{
-					long double cr = p - Var.a;
-					long double ci = q - Var.b;
+					long double cr = p - Var.b;
+					long double ci = q - Var.c;
 
 					long double magnitude = std::sqrt(cr * cr + ci * ci);
 
@@ -425,61 +319,7 @@ void MandelbrotNtic::Render(int hstart, int hend)
 				it++;
 			}
 
-			switch (RenderMode)
-			{
-			case __RMMandelbrotEscapeTime:
-			case __RMMandelbrotOrbitTrap:
-			case __RMMandelbrotOrbitTrapFilled:
-			case __RMMandelbrotTwoTone:
-			case __RMMandelbrotThreeTone:
-			case __RMMandelbrotFourTone:
-			case __RMMandelbrotFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMMandelbrotContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
-					long double nu = 1 - std::log2(log_zn);
-
-					long double itnew = it + nu;
-
-					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
-																				  pp->Colours[it + 1],
-																				  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x].a = -1;
-				}
-
-				break;
-			}
-			case __RMMandelbrotDistance:
-			{
-				if (it < max_iterations)
-				{
-					Data[ydotwidth + x] = std::sqrt((x1 + x2) * (x1 + x2));
-				}
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMMandelbrotDistanceII:
-			{
-				if (it < max_iterations)
-				{
-					Data[ydotwidth + x] = std::sqrt(x2 + y2 * x2 + y2);
-				}
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			}
+			MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 		}
 	}
 }
@@ -487,15 +327,15 @@ void MandelbrotNtic::Render(int hstart, int hend)
 
 void MandelbrotNtic::RenderMorph(int hstart, int hend)
 {
-	long double halfn = Var.c / 2;
+	long double halfn = Var.a / 2;
 
-	long double vara = Var.a;
-	long double varb = Var.b;
+	long double vara = Var.b;
+	long double varb = Var.c;
 
 	if (MorphType == 0)
 	{
-		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
-		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
+		if (MorphA) vara = Var.b + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.c + (hstart * Var.morph_b);
 	}
 
 	for (int y = hstart; y < hend; y++)
@@ -519,13 +359,13 @@ void MandelbrotNtic::RenderMorph(int hstart, int hend)
 				long double xp = std::abs(((long double)Width / 2) - (long double)x);
 				long double yp = std::abs(((long double)Height / 2) - (long double)y);
 
-				if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
-				if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+				if (MorphA) vara = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+				if (MorphB) varb = Var.c + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
 			}
 			else if (MorphType == 2)
 			{
-				if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
-				if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
+				if (MorphA)	vara = Var.b + std::sqrt(p * p + q * q) * Var.morph_a;
+				if (MorphB)	varb = Var.c + std::sqrt(p * p + q * q) * Var.morph_b;
 			}
 
 			int it = 0;
@@ -536,9 +376,9 @@ void MandelbrotNtic::RenderMorph(int hstart, int hend)
 			long double x2 = 0;
 			long double y2 = 0;
 
-			while (x2 + y2 <= bailout_radius && it < max_iterations)
+			while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
 			{
-				long double atan2pq = Var.c * std::atan2(y1, x1);
+				long double atan2pq = Var.a * std::atan2(y1, x1);
 				long double pown = exp(halfn * log(x2 + y2));
 
 				x1 = pown * std::cos(atan2pq) + p;
@@ -563,61 +403,7 @@ void MandelbrotNtic::RenderMorph(int hstart, int hend)
 				it++;
 			}
 
-			switch (RenderMode)
-			{
-			case __RMMandelbrotEscapeTime:
-			case __RMMandelbrotOrbitTrap:
-			case __RMMandelbrotOrbitTrapFilled:
-			case __RMMandelbrotTwoTone:
-			case __RMMandelbrotThreeTone:
-			case __RMMandelbrotFourTone:
-			case __RMMandelbrotFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMMandelbrotContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
-					long double nu = 1 - std::log2(log_zn);
-
-					long double itnew = it + nu;
-
-					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
-																				  pp->Colours[it + 1],
-																				  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x].a = -1;
-				}
-
-				break;
-			}
-			case __RMMandelbrotDistance:
-			{
-				if (it < max_iterations)
-				{
-					Data[ydotwidth + x] = std::sqrt((x1 + x2) * (x1 + x2));
-				}
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMMandelbrotDistanceII:
-			{
-				if (it < max_iterations)
-				{
-					Data[ydotwidth + x] = std::sqrt(x2 + y2 * x2 + y2);
-				}
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			}
+			MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 		}
 	}
 }
@@ -627,16 +413,17 @@ void MandelbrotNtic::ResetView()
 {
 	SetView(-2.00, 2.00, -1.6, 1.6);
 
-	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
-	Var.b = ymin + ((ymax - ymin) / 2);     //
-    Var.c = 5;
+	Var.a = 5;
+	Var.b = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
+	Var.c = ymin + ((ymax - ymin) / 2);     //
 }
 
 
 std::wstring MandelbrotNtic::GetParameters()
 {
-	return L"render mode: " + RenderModes[RenderMode] +
-		   L"; orbit x: " + std::to_wstring(Var.a) + L"; orbit y " + std::to_wstring(Var.b) +
+	return L"Mandelbrot (z^n): x " + Formatting::LDToStr(xmin) + L" <-> " + Formatting::LDToStr(xmax) + L", y " + Formatting::LDToStr(ymin) + L" <-> " + Formatting::LDToStr(ymax) +
+		   L"; render mode: " + Parameters[RenderMode].Name +
+		   L"; ^n: " + std::to_wstring(Var.a) + L"; orbit x: " + std::to_wstring(Var.b) + L"; orbit y " + std::to_wstring(Var.c) +
 		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
@@ -657,8 +444,9 @@ std::wstring MandelbrotNtic::HistoryEntry()
 void MandelbrotNtic::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Mandelbrot (z^n) fractal\n");
+   	ofile << Formatting::to_utf8(L"    ^n         : " + std::to_wstring(Var.a) + L"\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + Parameters[RenderMode].Name + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");
@@ -670,8 +458,8 @@ void MandelbrotNtic::ToFile(std::ofstream& ofile)
 
 	if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 	{
-		ofile << Formatting::to_utf8(L"    Orbit x    : " + Formatting::LDToStr(Var.a) + L"\n");
-		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.b) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit x    : " + Formatting::LDToStr(Var.b) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.c) + L"\n");
 	}
 }
 

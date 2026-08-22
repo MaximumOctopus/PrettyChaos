@@ -13,14 +13,14 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.27 (debug) :: June 8th 2026";
+static const std::wstring __PrettyChaosVersion = L"0.28 (debug) :: August 22nd 2026";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.27 :: June 8th 2026";
+static const std::wstring __PrettyChaosVersion = L"0.28 :: August 22nd 2026";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";
 
-static const int DimensionsDesktop[17][2] = {
+static const int DimensionsDesktop[18][2] = {
 	{ 1024,  768 },
 	{ 1280,  720 },
 	{ 1280,  800 },
@@ -37,7 +37,8 @@ static const int DimensionsDesktop[17][2] = {
 	{ 2560, 1600 },
 	{ 2880, 1800 },
 	{ 3440, 1440 },
-	{ 3840, 2160 }};
+	{ 3840, 2160 },
+	{ 5120, 1440 }};
 
 static const int DimensionsPhone[12][2] = {
 	{  828, 1792 },
@@ -70,7 +71,7 @@ static const int DimensionsCanvas150[12][2] = {
 
 static const int DimensionsTexture[6] =	{ 128, 256, 512, 1024, 2048, 4096 };
 
-static const double JuliaSetExamples[28][2] = {
+static const double JuliaSetExamples[29][2] = {
 	{ -0.79, 0.15 },
 	{ -0.162, 1.04 },
 	{ 0.3, -0.01 },
@@ -98,7 +99,8 @@ static const double JuliaSetExamples[28][2] = {
 	{ -1, 0 },
 	{ 0.3, 0.6 },
 	{ 0.8, 0.156 },
-	{ 0.2793, -0.01 } };
+	{ 0.2793, -0.01 },
+	{ -0.81, 0.27015 } };
 
 static const double JuliaCubicExamples[10][2] = {
 	{ -1.5855, 0.6877 },

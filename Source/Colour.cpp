@@ -36,6 +36,14 @@ Colour::Colour(std::wstring s) noexcept
 }
 
 
+Colour::Colour(int bgr) noexcept
+{
+	r = (bgr & 0x0000FF);
+	g = (bgr & 0x00FF00) >> 8;
+	b = (bgr & 0xFF0000) >> 16;
+}
+
+
 Colour::Colour(int R, int G, int B) noexcept
 {
 	r = R;

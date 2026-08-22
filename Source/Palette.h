@@ -16,6 +16,25 @@
 #include "PaletteKey.h"
 
 
+enum class DrawModeOption { kSingleColour = 0, kGradient, kGrid, kGridGradient };
+
+
+class Pattern
+{
+public:
+
+	DrawModeOption DrawMode = DrawModeOption::kSingleColour;
+
+	bool GradientDirection = false;     // horizontal
+	Colour SingleColour;
+
+	Colour GridColourOn = 0;
+	Colour GridColourOff = 0;
+
+    int GridWidth = 10;
+};
+
+
 class Palette
 {
 	int GradientKeyAt(int);
@@ -46,13 +65,8 @@ public:
 	double Log = 1;
 	bool ColourSpace = true;            // false is b/w
 
-	bool TempGradientDirection = false;
-	bool TempIsGradient = true;
-	Colour TempSingleColour;
-
-	bool GradientDirection = false;     // horizontal
-	bool IsGradient = false;
-	Colour SingleColour;
+	Pattern PatternLive;
+	Pattern PatternTest;
 
 	Colour *Colours = nullptr;
 
@@ -84,5 +98,5 @@ public:
 	int AddNewKey(int, int, int, bool);
 
 	void ShiftLeft();
-    void ShiftRight();
+	void ShiftRight();
 };

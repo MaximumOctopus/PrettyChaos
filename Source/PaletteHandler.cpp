@@ -22,6 +22,12 @@ PaletteHandler::PaletteHandler()
 	Palette* p1 = new Palette(500, L"Main");
 	Palette* p2 = new Palette(500, L"Background");
 
+	p1->PatternLive.DrawMode = DrawModeOption::kGradient;
+
+	p2->PatternLive.DrawMode = DrawModeOption::kSingleColour;
+	p2->PatternLive.GridColourOff = 0xffffff;
+    p2->PatternLive.GridColourOn = 0x00448822;
+
 	Palettes.push_back(p1);
     Palettes.push_back(p2);
 }
@@ -73,5 +79,41 @@ void PaletteHandler::ShiftPaletteLeft(int index)
 
 void PaletteHandler::ShiftPaletteRight(int index)
 {
-    Palettes[index]->ShiftRight();
+	Palettes[index]->ShiftRight();
+}
+
+
+int PaletteHandler::DrawModeToInt(DrawModeOption dmo)
+{
+	switch (dmo)
+	{
+	case DrawModeOption::kSingleColour:
+		return 0;
+	case DrawModeOption::kGradient:
+		return 1;
+	case DrawModeOption::kGrid:
+		return 2;
+	case DrawModeOption::kGridGradient:
+		return 3;
+	}
+
+    return 0;
+}
+
+
+DrawModeOption PaletteHandler::IntToDrawMode(int dmo)
+{
+	switch (dmo)
+	{
+	case 0:
+		return DrawModeOption::kSingleColour;
+	case 1:
+		return DrawModeOption::kGradient;
+	case 2:
+		return DrawModeOption::kGrid;
+	case 3:
+		return DrawModeOption::kGridGradient;
+	}
+
+	return DrawModeOption::kSingleColour;
 }

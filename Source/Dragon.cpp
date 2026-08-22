@@ -21,21 +21,16 @@
 
 Dragon::Dragon() : Fractal()
 {
-	AcceptsABC = true;
-	AcceptsVarA = true;
-
 	AcceptsZoom = false;
 
 	Defaults.Set(1, 4, 256, 16, 0, 0, 0, 0);
 
 	Name = L"Dragon curve";
 
-	RenderModes.push_back(L"Iteration");
-	RenderModes.push_back(L"Direction");
-	RenderModes.push_back(L"Distance");
-	RenderModes.push_back(L"Distance Alt");
-
-	NameA = L"Recursions";
+	Parameters.push_back(RenderModeParameters(L"Iteration", L"Recursions", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Direction", L"Recursions", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance", L"Recursions", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance Alt", L"Recursions", L"", L"", L"", L""));
 
 	ResetAll();
 }
@@ -343,7 +338,7 @@ void Dragon::ResetView()
 
 std::wstring Dragon::GetParameters()
 {
-	return L"render mode: " + RenderModes[RenderMode] +
+	return L"render mode: " + Parameters[RenderMode].Name +
 		   L"; recursions: " + std::to_wstring(Var.a) + L"; max iterations: " + std::to_wstring(max_iterations);
 }
 
@@ -364,7 +359,7 @@ void Dragon::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Dragon fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + Parameters[RenderMode].Name + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    recursions : " + std::to_wstring(Var.a) + L"\n");

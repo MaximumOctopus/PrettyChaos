@@ -17,12 +17,54 @@
 #include <vector>
 
 #include "Colour.h"
+#include "ColourUtility.h"
+#include "Fast.h"
 #include "Formatting.h"
 #include "Palette.h"
 #include "ProjectHistory.h"
 
 
 enum class QuickParameterMode { kNone = 0, kABPlusFine = 1, kABC };
+
+
+struct RenderModeParameters
+{
+	std::wstring Name = L"";
+
+	bool AcceptsParameters = false;
+
+	bool AcceptsVarA = false;
+	bool AcceptsVarB = false;
+	bool AcceptsVarC = false;
+	bool AcceptsVarD = false;
+	bool AcceptsVarE = false;
+
+	std::wstring VarAName = L"";
+	std::wstring VarBName = L"";
+	std::wstring VarCName = L"";
+	std::wstring VarDName = L"";
+	std::wstring VarEName = L"";
+
+	RenderModeParameters(const std::wstring n,
+			             const std::wstring n_a, const std::wstring n_b, const std::wstring n_c, const std::wstring n_d, const std::wstring n_e)
+	{
+		Name = n;
+
+		AcceptsVarA = !n_a.empty();
+		AcceptsVarB = !n_b.empty();
+		AcceptsVarC = !n_c.empty();
+		AcceptsVarD = !n_d.empty();
+		AcceptsVarE = !n_e.empty();
+
+		VarAName = n_a;
+		VarBName = n_b;
+		VarCName = n_c;
+		VarDName = n_d;
+		VarEName = n_e;
+
+		AcceptsParameters = (AcceptsVarA || AcceptsVarB || AcceptsVarC || AcceptsVarD || AcceptsVarE);
+	}
+};
 
 
 struct DefaultConfig
@@ -80,7 +122,8 @@ protected:
 	static const int __RMJuliaThreeTone = 4;
 	static const int __RMJuliaFourTone = 5;
 	static const int __RMJuliaFiveTone = 6;
-	static const int __RMJuliaContinuous = 7;
+	static const int __RMJuliaXOR = 7;
+	static const int __RMJuliaContinuous = 8;
 
 	static const int __RMMandelbrotEscapeTime = 0;
 	static const int __RMMandelbrotContinuous = 1;
@@ -92,6 +135,9 @@ protected:
 	static const int __RMMandelbrotThreeTone = 7;
 	static const int __RMMandelbrotFourTone = 8;
 	static const int __RMMandelbrotFiveTone = 9;
+	static const int __RMMandelbrotXOR = 10;
+	static const int __RMMandelbrotXOR2 = 11;
+	static const int __RMMandelbrotXOR3 = 12;
 
 	static const int __RMMartinAverage = 0;
 	static const int __RMMartinTime = 1;
@@ -104,6 +150,7 @@ protected:
 	int HasChanged = true;
 
 	void SwapDimensions();
+	void CreateRenderCanvases();
 
 	void CalculateRenderTime();
 
@@ -118,14 +165,32 @@ protected:
 	void ColourNTone(TBitmap* canvas, int);
 	void OrbitTrap(TBitmap* canvas, bool);
 
+	void ColourNToneThread(TBitmap*, int, int, int);
+
+	void JuliaThreadEscapeTime(TBitmap *, int, int, int, int);
+
+	void MandelbrotThreadEscapeTime(TBitmap *, int, int, int);
+	void MandelbrotThreadContinuous(TBitmap *, int, int);
+	void MandelbrotThreadXOR(TBitmap *);
+
+	void OrbitTrapThreadNonFilled(TBitmap *, int, int, double);
+	void OrbitTrapThreadFilled(TBitmap *, int, int, double);
+
 public:
 
 	#ifdef _DEBUG
 	std::wstring debug = L"";
 	#endif
 
-	std::vector<std::wstring> RenderModes;
-	std::wstring Name;
+	std::vector<std::wstring> Tests;
+	bool HasTests = false;
+	int CurrentTest = 0;
+
+	std::vector<RenderModeParameters> Parameters;
+	std::wstring Name = L"";
+
+	std::wstring MorphNameA = L"";
+	std::wstring MorphNameB = L"";
 
 	DefaultConfig Defaults;
 
@@ -143,16 +208,7 @@ public:
 	Palette *pp;    // main colour palette
 	Palette *pp2;   // secondary palette for background (etc.)
 
-	int AcceptsABCSpectificRenderModeBegin = -1;
-	int AcceptsABCSpectificRenderModeEnd = -1;
-	bool AcceptsABC = false;
 	bool AcceptsMorph = false;
-	bool AcceptsVarA = false;
-	bool AcceptsVarB = false;
-	bool AcceptsVarC = false;
-	bool AcceptsVarD = false;
-	bool AcceptsVarE = false;
-
 	bool AcceptsZoom = true;
 
 	bool MultiThread = false;
@@ -163,12 +219,6 @@ public:
 
 	QuickParameterMode QPM = QuickParameterMode::kNone;
 
-	std::wstring NameA = L"";
-	std::wstring NameB = L"";
-	std::wstring NameC = L"";
-	std::wstring NameD = L"";
-	std::wstring NameE = L"";
-
 	int RenderMode = 0;
 
 	std::wstring RenderTime = L"0";
@@ -177,8 +227,15 @@ public:
 	long double* Data = nullptr;
 
 	TBitmap *RenderCanvas = nullptr;
+	TBitmap *rc1 = nullptr;
+	TBitmap *rc2 = nullptr;
+	TBitmap *rc3 = nullptr;
+	TBitmap *rc4 = nullptr;
+	TBitmap *rc5 = nullptr;
     TBitmap *PreviewCanvas = nullptr;
-    TBitmap *CopyCanvas = nullptr;
+	TBitmap *CopyCanvas = nullptr;
+
+    Colour* colours;
 
 	long double ymin = 0;    		// fractal objects must set these in their constructor
 	long double ymax = 0;    		//
@@ -228,7 +285,6 @@ public:
 
 	void SetABC(long double, long double, long double, long double, long double);
     void SetMorph(int, bool, bool, long double, long double);
-	bool ShowABC(int);
 
 	void SetPaletteInfinity(Colour);
 
@@ -251,4 +307,231 @@ public:
     virtual std::wstring HistoryEntry();
 
 	virtual void ToFile(std::ofstream&);
+
+
+#pragma region Inline_Test_Functions
+inline bool JuliaTest(long double p, long double q)
+{
+	switch (CurrentTest)
+	{
+	case 0:
+		return p * p + q * q < bailout_radius;
+	case 1:
+		return abs(abs(p) - abs(q)) < bailout_radius;
+	case 2:
+		return abs(abs(p * p) - abs(q * q)) < bailout_radius;
+	case 3:
+		return p * p * q * q < bailout_radius;
+	case 4:
+		return abs(abs(p) + abs(q)) < bailout_radius;
+	}
+
+	return true;
+}
+
+
+inline bool MandelbrotTest(long double x1, long double y1, long double x2, long double y2)
+{
+	switch (CurrentTest)
+	{
+	case 0:
+		return x2 + y2 < bailout_radius;
+	case 1:
+		return abs(abs(x1) - abs(y1)) < bailout_radius;
+	case 2:
+		return abs(x2 - y2) < bailout_radius;
+	case 3:
+		return x2 * y2 < bailout_radius;
+	case 4:
+		return abs(abs(x1) + abs(y1)) < bailout_radius;
+	}
+
+	return true;
+}
+#pragma end_region
+
+
+#pragma region Inline_Colouring_Functions
+inline void MandelbrotColourise(int it, int ydotwidthplusx,
+	long double x1, long double y1,
+	long double x2, long double y2,
+	long double p, long double q)
+{
+	switch (RenderMode)
+	{
+	case __RMMandelbrotEscapeTime:
+	case __RMMandelbrotOrbitTrap:
+	case __RMMandelbrotOrbitTrapFilled:
+	case __RMMandelbrotTwoTone:
+	case __RMMandelbrotThreeTone:
+	case __RMMandelbrotFourTone:
+	case __RMMandelbrotFiveTone:
+		FractalData[ydotwidthplusx].a = it;
+		break;
+	case __RMMandelbrotContinuous:
+	{
+		if (it < max_iterations)
+		{
+			long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
+			long double nu = 1 - std::log2(log_zn);
+
+			long double itnew = it + nu;
+
+			it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+			long double it_d = (long double)it + nu;
+
+			FractalData[ydotwidthplusx] = ColourUtility::LinearInterpolate(pp->Colours[it],
+																		   pp->Colours[it + 1],
+																		   it_d - (std::floorl(it_d)));
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+
+		break;
+	}
+	case __RMMandelbrotDistance:
+	{
+		if (it < max_iterations)
+		{
+			Data[ydotwidthplusx] = std::sqrt((x1 + y1) * (x1 + y1));
+		}
+
+		FractalData[ydotwidthplusx].a = it;
+		break;
+	}
+	case __RMMandelbrotDistanceII:
+	{
+		if (it < max_iterations)
+		{
+			Data[ydotwidthplusx] = std::sqrt(x2 + y2 * x2 + y2);
+		}
+
+		FractalData[ydotwidthplusx].a = it;
+		break;
+	}
+	case __RMMandelbrotXOR:
+		if (it < max_iterations)
+		{
+			long double ldi = Var.c * abs(q - y1);
+			long double ldc = Var.c * abs(p - x1);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a = ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	case __RMMandelbrotXOR2:
+		if (it < max_iterations)
+		{
+			long double ldi = Var.c * abs(x2);
+			long double ldc = Var.c * abs(y2);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a = ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	case __RMMandelbrotXOR3:
+		if (it < max_iterations)
+		{
+            long double w = (x1 + y1) * (x1 + y1);
+
+			long double ldi = Var.c * abs(w - x2);
+			long double ldc = Var.c * abs(w - y2);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a = ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	}
+}
+
+
+inline void JuliaColourise(int it, int ydotwidthplusx,
+        int x, int y,
+		long double p, long double q)
+{
+	switch (RenderMode)
+	{
+	case __RMJuliaEscapeTime:
+	case __RMJuliaTwoTone:
+	case __RMJuliaThreeTone:
+	case __RMJuliaFourTone:
+	case __RMJuliaFiveTone:
+	{
+		FractalData[ydotwidthplusx].a = it;
+		break;
+	}
+	case __RMJuliaDistance:
+	{
+		Data[ydotwidthplusx] = std::sqrt((p + q) * (p + q));
+
+		FractalData[ydotwidthplusx].a = it;
+
+		break;
+	}
+	case __RMJuliaDistanceOrigin:
+	{
+		int nx = Fast::Floor(x - (Width / 2));
+		int ny = Fast::Floor(y - (Height / 2));
+
+		int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
+
+		FractalData[ydotwidthplusx] = pp->Colours[index];
+		break;
+	}
+	case __RMJuliaXOR:
+		if (it < max_iterations)
+		{
+			long double ldi = Var.d * abs(q - Var.b);
+			long double ldc = Var.d * abs(p - Var.a);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a = ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	case __RMJuliaContinuous:
+		if (it < max_iterations)
+		{
+			long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
+			long double nu = 1 - std::log2(log_zn);
+
+			long double itnew = it + nu;
+
+			it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+			long double it_d = (long double)it + nu;
+
+			FractalData[ydotwidthplusx] = ColourUtility::LinearInterpolate(pp->Colours[it],
+																		   pp->Colours[it + 1],
+																		   it_d - (std::floorl(it_d)));
+		}
+		else
+		{
+			FractalData[ydotwidthplusx] = pp2->PatternLive.SingleColour;
+		}
+
+		break;
+	}
+}
+#pragma end_region
 };

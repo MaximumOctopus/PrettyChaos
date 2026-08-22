@@ -206,8 +206,8 @@ void __fastcall TfrmMain::FormKeyDown(TObject *Sender, WORD &Key, TShiftState Sh
 
 void __fastcall TfrmMain::FormDestroy(TObject *Sender)
 {
-	delete GPaletteHandler;
 	delete GFractalHandler;
+	delete GPaletteHandler;
 	delete history;
 	delete projectio;
 	delete imagedescription;
@@ -222,14 +222,28 @@ void TfrmMain::UpdateFromFractalChange()
 
 	cbRenderMode->Clear();
 
-	for (int t = 0; t < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderModes.size(); t++)
+	for (int t = 0; t < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Parameters.size(); t++)
 	{
-		cbRenderMode->Items->Add(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderModes[t].c_str());
+		cbRenderMode->Items->Add(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Parameters[t].Name.c_str());
+	}
+
+	cbBoundaryTest->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->HasTests;
+
+	if (cbBoundaryTest->Visible)
+	{
+		cbBoundaryTest->Items->Clear();
+
+		for (int t = 0; t < GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Tests.size(); t++)
+		{
+			cbBoundaryTest->Items->Add(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Tests[t].c_str());
+		}
+
+        cbBoundaryTest->ItemIndex = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->CurrentTest;
 	}
 
 	cbRenderMode->ItemIndex = 0;
 
-    cbRenderModeChange(nullptr);
+	cbRenderModeChange(nullptr);
 }
 
 
@@ -249,27 +263,34 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 
 	UpdateDimension(true);
 
+	int fractal = cbFractalSelector->ItemIndex;
+
 	// =========================================================================
 
-	cbRenderMode->ItemIndex = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderMode;
+	GFractalHandler->Fractals[fractal]->SetRenderMode(project.RenderMode);
+	GFractalHandler->Fractals[fractal]->n_coeff = project.nCoeff;
+
+	cbRenderMode->ItemIndex = GFractalHandler->Fractals[fractal]->RenderMode;
 	cbRenderModeChange(nullptr);
 
-	// =========================================================================
+	if (cbBoundaryTest->Visible)
+	{
+		cbBoundaryTest->ItemIndex = project.BoundaryTest;
+    }
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetRenderMode(project.RenderMode);
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff = project.nCoeff;
+	GFractalHandler->Fractals[fractal]->max_iterations = project.MaxIterations;
+	GFractalHandler->Fractals[fractal]->bailout_radius = project.BailoutRadius;
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations = project.MaxIterations;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius = project.BailoutRadius;
+	GFractalHandler->Fractals[fractal]->xmin = project.xmin;
+	GFractalHandler->Fractals[fractal]->xmax = project.xmax;
+	GFractalHandler->Fractals[fractal]->ymin = project.ymin;
+	GFractalHandler->Fractals[fractal]->ymax = project.ymax;
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin = project.xmin;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax = project.xmax;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin = project.ymin;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax = project.ymax;
-
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a = project.var_a;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b = project.var_b;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c = project.var_c;
+	GFractalHandler->Fractals[fractal]->Var.a = project.var_a;
+	GFractalHandler->Fractals[fractal]->Var.b = project.var_b;
+	GFractalHandler->Fractals[fractal]->Var.c = project.var_c;
+	GFractalHandler->Fractals[fractal]->Var.d = project.var_d;
+	GFractalHandler->Fractals[fractal]->Var.e = project.var_e;
 
 	// =========================================================================
 
@@ -277,8 +298,8 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 	cbMorphA->Checked = project.MorphA;
 	cbMorphB->Checked = project.MorphB;
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a = project.morph_var_a;
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b = project.morph_var_b;
+	GFractalHandler->Fractals[fractal]->Var.morph_a = project.morph_var_a;
+	GFractalHandler->Fractals[fractal]->Var.morph_b = project.morph_var_b;
 
     cbMorphType->ItemIndex = project.MorphType;
 
@@ -308,19 +329,19 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 
 	// =========================================================================
 
-	eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff);
-	eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
-	eWidth->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width);
-	eHeight->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height);
+	eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[fractal]->n_coeff);
+	eIterations->Text = FloatToStr(GFractalHandler->Fractals[fractal]->max_iterations);
+	eWidth->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Width);
+	eHeight->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Height);
 
-	eVarA->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a);
-	eVarB->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b);
-	eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
-	eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
-	eVarE->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.e);
+	eVarA->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.a);
+	eVarB->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.b);
+	eVarC->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.c);
+	eVarD->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.d);
+	eVarE->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.e);
 
-	eVarAMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a);
-	eVarBMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b);
+	eVarAMorph->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.morph_a);
+	eVarBMorph->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.morph_b);
 
 	// =========================================================================
 
@@ -414,28 +435,32 @@ void TfrmMain::SetFromProjectFile(PCProject &project, Animation &animation)
 
 PCProject TfrmMain::GetProjectSettings()
 {
+	int fractal = cbFractalSelector->ItemIndex;
+
 	PCProject project;
 
 	project.Name = cbFractalSelector->Text.c_str();
 
-	project.Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-	project.Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
+	project.Width = GFractalHandler->Fractals[fractal]->Width;
+	project.Height = GFractalHandler->Fractals[fractal]->Height;
 
-	project.RenderMode = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderMode;
-	project.nCoeff = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
+	project.RenderMode = GFractalHandler->Fractals[fractal]->RenderMode;
+	project.BoundaryTest = GFractalHandler->Fractals[fractal]->CurrentTest;
+	project.nCoeff = GFractalHandler->Fractals[fractal]->n_coeff;
 
-	project.MaxIterations = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
-	project.BailoutRadius = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius;
+	project.MaxIterations = GFractalHandler->Fractals[fractal]->max_iterations;
+	project.BailoutRadius = GFractalHandler->Fractals[fractal]->bailout_radius;
 
-	project.xmin = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin;
-	project.xmax = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax;
-	project.ymin = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin;
-	project.ymax = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax;
+	project.xmin = GFractalHandler->Fractals[fractal]->xmin;
+	project.xmax = GFractalHandler->Fractals[fractal]->xmax;
+	project.ymin = GFractalHandler->Fractals[fractal]->ymin;
+	project.ymax = GFractalHandler->Fractals[fractal]->ymax;
 
-	project.var_a = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a;
-	project.var_b = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b;
-	project.var_c = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c;
-	project.var_d = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d;
+	project.var_a = GFractalHandler->Fractals[fractal]->Var.a;
+	project.var_b = GFractalHandler->Fractals[fractal]->Var.b;
+	project.var_c = GFractalHandler->Fractals[fractal]->Var.c;
+	project.var_d = GFractalHandler->Fractals[fractal]->Var.d;
+	project.var_e = GFractalHandler->Fractals[fractal]->Var.e;
 
 	if (cbMorphEnabled->Checked)
 	{
@@ -444,14 +469,14 @@ PCProject TfrmMain::GetProjectSettings()
 		project.MorphA = cbMorphA->Checked;
 		project.MorphB = cbMorphB->Checked;
 
-		project.morph_var_a = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a;
-		project.morph_var_b = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b;
+		project.morph_var_a = GFractalHandler->Fractals[fractal]->Var.morph_a;
+		project.morph_var_b = GFractalHandler->Fractals[fractal]->Var.morph_b;
 
         project.MorphType = cbMorphType->ItemIndex;
 	}
 
 	project.SuperSampling = miSuperSample->Checked;
-	project.SuperSamplingLevel = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples;
+	project.SuperSamplingLevel = GFractalHandler->Fractals[fractal]->supersamples;
 
 	return project;
 }
@@ -459,33 +484,37 @@ PCProject TfrmMain::GetProjectSettings()
 
 void TfrmMain::UpdateAllParameters()
 {
-	eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff);
-	eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
-	eBailoutRadius->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius);
+	int fractal = cbFractalSelector->ItemIndex;
 
-	eWidth->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width;
-	eHeight->Text = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height;
+	eCoeffN->Text = FloatToStr(GFractalHandler->Fractals[fractal]->n_coeff);
+	eIterations->Text = FloatToStr(GFractalHandler->Fractals[fractal]->max_iterations);
+	eBailoutRadius->Text = FloatToStr(GFractalHandler->Fractals[fractal]->bailout_radius);
+
+	eWidth->Text = GFractalHandler->Fractals[fractal]->Width;
+	eHeight->Text = GFractalHandler->Fractals[fractal]->Height;
 
 	if (gbVarABC->Visible)
 	{
-		eVarA->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.a);
-		eVarB->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.b);
-		eVarC->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.c);
-		eVarD->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.d);
-		eVarE->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.e);
+		eVarA->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.a);
+		eVarB->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.b);
+		eVarC->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.c);
+		eVarD->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.d);
+		eVarE->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.e);
 
-		eVarAMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_a);
-		eVarBMorph->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Var.morph_b);
+		eVarAMorph->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.morph_a);
+		eVarBMorph->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.morph_b);
 	}
 }
 
 
 void TfrmMain::UpdateFractalPanel()
 {
-	lXMin->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin);
-	lXMax->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax);
-	lYMin->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin);
-	lYMax->Caption = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
+	int fractal = cbFractalSelector->ItemIndex;
+
+	lXMin->Caption = FloatToStr(GFractalHandler->Fractals[fractal]->xmin);
+	lXMax->Caption = FloatToStr(GFractalHandler->Fractals[fractal]->xmax);
+	lYMin->Caption = FloatToStr(GFractalHandler->Fractals[fractal]->ymin);
+	lYMax->Caption = FloatToStr(GFractalHandler->Fractals[fractal]->ymax);
 }
 
 
@@ -496,9 +525,11 @@ void TfrmMain::UpdateDimension(bool force)
 
 	if (Width > 0 && Height > 0)
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetDimensions(force, Width, Height);
+		int fractal = cbFractalSelector->ItemIndex;
 
-		if (GPaletteHandler->Palettes[1]->GradientDirection)
+		GFractalHandler->Fractals[fractal]->SetDimensions(force, Width, Height);
+
+		if (GPaletteHandler->Palettes[1]->PatternLive.GradientDirection)
 		{
 			GPaletteHandler->Palettes[1]->SetSize(Width);
 		}
@@ -510,8 +541,8 @@ void TfrmMain::UpdateDimension(bool force)
 		iRender->Width = Width;
 		iRender->Height = Height;
 
-		iPreview->Width = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreviewWidth;
-		iPreview->Height = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreviewHeight;
+		iPreview->Width = GFractalHandler->Fractals[fractal]->PreviewWidth;
+		iPreview->Height = GFractalHandler->Fractals[fractal]->PreviewHeight;
 
 		UpdateFractalPanel();
 
@@ -522,43 +553,55 @@ void TfrmMain::UpdateDimension(bool force)
 
 void TfrmMain::UpdateABCPanel()
 {
-	gbVarABC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ShowABC(cbRenderMode->ItemIndex);
+	int fractal = cbFractalSelector->ItemIndex;
+
+	gbVarABC->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsParameters;
 
 	if (gbVarABC->Visible)
 	{
-		lVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
-		eVarB->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarB;
-		lVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
-		eVarC->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarC;
-		lVarD->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarD;
-		eVarD->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarD;
-		lVarE->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarE;
-		eVarE->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsVarE;
+		lVarA->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarA;
+		eVarA->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarA;
+		lVarB->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarB;
+		eVarB->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarB;
+		lVarC->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarC;
+		eVarC->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarC;
+		lVarD->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarD;
+		eVarD->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarD;
+		lVarE->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarE;
+		eVarE->Visible = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsVarE;
 
-		lVarA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
-		lVarB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
-		lVarC->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameC.c_str();
-		lVarD->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameD.c_str();
-		lVarE->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameE.c_str();
+		lVarA->Caption = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].VarAName.c_str();
+		lVarB->Caption = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].VarBName.c_str();
+		lVarC->Caption = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].VarCName.c_str();
+		lVarD->Caption = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].VarDName.c_str();
+		lVarE->Caption = GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].VarEName.c_str();
 
-		cbMorphA->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameA.c_str();
-		cbMorphB->Caption = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->NameB.c_str();
+		eVarA->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.a);
+		eVarB->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.b);
+		eVarC->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.c);
+		eVarD->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.d);
+		eVarE->Text = FloatToStr(GFractalHandler->Fractals[fractal]->Var.e);
+
+		cbMorphA->Caption = GFractalHandler->Fractals[fractal]->MorphNameA.c_str();
+		cbMorphB->Caption = GFractalHandler->Fractals[fractal]->MorphNameB.c_str();
 	}
 
-	gbMorph->Visible = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsMorph;
+	gbMorph->Visible = GFractalHandler->Fractals[fractal]->AcceptsMorph;
 }
 
 
 void TfrmMain::UpdateZoomPanel()
 {
+	int fractal = cbFractalSelector->ItemIndex;
+
 	history->Zoom.clear();
 
-	sbReset->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
-	sbZoomOnPoint->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
-	sbZoom->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
-	sbZoomCrop->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
-	sbBack->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
-	sbForward->Enabled = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsZoom;
+	sbReset->Enabled = GFractalHandler->Fractals[fractal]->AcceptsZoom;
+	sbZoomOnPoint->Enabled = GFractalHandler->Fractals[fractal]->AcceptsZoom;
+	sbZoom->Enabled = GFractalHandler->Fractals[fractal]->AcceptsZoom;
+	sbZoomCrop->Enabled = GFractalHandler->Fractals[fractal]->AcceptsZoom;
+	sbBack->Enabled = GFractalHandler->Fractals[fractal]->AcceptsZoom;
+	sbForward->Enabled = GFractalHandler->Fractals[fractal]->AcceptsZoom;
 }
 
 
@@ -566,38 +609,40 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 {
 	bool rendered = true;
 
+	int fractal = cbFractalSelector->ItemIndex;
+
 	sbMain->SimpleText = "Rendering...";
 
-	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC)
+	if (GFractalHandler->Fractals[fractal]->Parameters[cbRenderMode->ItemIndex].AcceptsParameters)
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(),
-																		eVarB->Text.ToDouble(),
-																		eVarC->Text.ToDouble(),
-																		eVarD->Text.ToDouble(),
-																		eVarE->Text.ToDouble());
+		GFractalHandler->Fractals[fractal]->SetABC(eVarA->Text.ToDouble(),
+												   eVarB->Text.ToDouble(),
+												   eVarC->Text.ToDouble(),
+												   eVarD->Text.ToDouble(),
+												   eVarE->Text.ToDouble());
 
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetMorph(cbMorphType->ItemIndex,
-		                                                                  cbMorphA->Checked,
-																		  cbMorphB->Checked,
-																		  eVarAMorph->Text.ToDouble(),
-																		  eVarBMorph->Text.ToDouble());
+		GFractalHandler->Fractals[fractal]->SetMorph(cbMorphType->ItemIndex,
+													 cbMorphA->Checked,
+													 cbMorphB->Checked,
+													 eVarAMorph->Text.ToDouble(),
+													 eVarBMorph->Text.ToDouble());
 	}
 
 	eCoeffNExit(eCoeffN);
 
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetDimensions(false, iRender->Width, iRender->Height);
+	GFractalHandler->Fractals[fractal]->SetDimensions(false, iRender->Width, iRender->Height);
 
-	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThread)
+	if (GFractalHandler->Fractals[fractal]->MultiThread)
 	{
-		rendered = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->MultiThreadRender(false,
-																							  miSuperSample->Checked,
-																							  cbMorphEnabled->Checked);
+		rendered = GFractalHandler->Fractals[fractal]->MultiThreadRender(false,
+																		 miSuperSample->Checked,
+																	     cbMorphEnabled->Checked);
 
 		SetWarning(!rendered);
 	}
 	else
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->PreRender(false);
+		GFractalHandler->Fractals[fractal]->PreRender(false);
 	}
 
 	if (rendered)
@@ -616,9 +661,9 @@ void __fastcall TfrmMain::sbRenderClick(TObject *Sender)
 			SaveFractal(file_name);
 		}
 
-		std::wstring c = L"Rendered in " + GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->RenderTime + L" seconds";
+		std::wstring c = L"Rendered in " + GFractalHandler->Fractals[fractal]->RenderTime + L" seconds";
 
-		history->AddProject(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->GetAsProject(cbFractalSelector->ItemIndex));
+		history->AddProject(GFractalHandler->Fractals[fractal]->GetAsProject(fractal));
 
 		UpdateLastHistoryItem();
 
@@ -637,7 +682,7 @@ void TfrmMain::RenderPreview()
 
 	bool rendered = true;
 
-	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->AcceptsABC)
+	if (GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Parameters[cbRenderMode->ItemIndex].AcceptsParameters)
 	{
 		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetABC(eVarA->Text.ToDouble(),
 																		eVarB->Text.ToDouble(),
@@ -1050,11 +1095,14 @@ void __fastcall TfrmMain::miConfigAnimationClick(TObject *Sender)
 
 void __fastcall TfrmMain::sbResetClick(TObject *Sender)
 {
-	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetView();
+	if (cbFractalSelector->ItemIndex >= 0)
+	{
+		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ResetView();
 
-	UpdateDimension(true);
+		UpdateDimension(true);
 
-	UpdateFractalPanel();
+		UpdateFractalPanel();
+    }
 }
 
 
@@ -1380,6 +1428,12 @@ void __fastcall TfrmMain::cbRenderModeChange(TObject *Sender)
 }
 
 
+void __fastcall TfrmMain::cbBoundaryTestChange(TObject *Sender)
+{
+	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->CurrentTest = cbBoundaryTest->ItemIndex;
+}
+
+
 void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 {
 	double n = eCoeffN->Text.ToDouble();
@@ -1393,14 +1447,14 @@ void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 		n = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->n_coeff;
 	}
 
-	if (i <= 0 || (i > 20000 && GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Name.find(L"Martin") == std::string::npos))
+	if (i <= 0)
 	{
 		eIterations->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations);
 
 		i = GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->max_iterations;
 	}
 
-	if (rb < 4)
+	if (rb < 1)
 	{
 		eBailoutRadius->Text = FloatToStr(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->bailout_radius);
 
@@ -1411,7 +1465,6 @@ void __fastcall TfrmMain::eCoeffNExit(TObject *Sender)
 	{
 		if (miShowPreview->Checked) RenderPreview();
 	}
-
 
 	GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetParameters(n, i, rb);
 
@@ -1424,9 +1477,9 @@ void __fastcall TfrmMain::sbCopyBoundsToClipboardClick(TObject *Sender)
 	TClipboard *clippy = Clipboard();
 
 	std::wstring bounds = L"xmin = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin) +
-		L", xmax = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax) +
-		L", ymin = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin) +
-		L", ymax = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
+						  L", xmax = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax) +
+						  L", ymin = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin) +
+						  L", ymax = " + std::to_wstring(GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
 
 	clippy->AsText = bounds.c_str();
 }
@@ -1477,17 +1530,19 @@ void __fastcall TfrmMain::miQPAClick(TObject *Sender)
 
 void __fastcall TfrmMain::sbEditBoundsClick(TObject *Sender)
 {
+	int fractal = cbFractalSelector->ItemIndex;
+
 	frmEditBounds->SetBoundsValues(
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Width,
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->Height,
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmin,
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->xmax,
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymin,
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->ymax);
+		GFractalHandler->Fractals[fractal]->Width,
+		GFractalHandler->Fractals[fractal]->Height,
+		GFractalHandler->Fractals[fractal]->xmin,
+		GFractalHandler->Fractals[fractal]->xmax,
+		GFractalHandler->Fractals[fractal]->ymin,
+		GFractalHandler->Fractals[fractal]->ymax);
 
 	if (frmEditBounds->ShowModal() == mrOk)
 	{
-		GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->SetView(frmEditBounds->xmin,
+		GFractalHandler->Fractals[fractal]->SetView(frmEditBounds->xmin,
 			frmEditBounds->xmax,
 			frmEditBounds->ymin,
 			frmEditBounds->ymax);
@@ -1721,6 +1776,8 @@ void __fastcall TfrmMain::miSuperSampleClick(TObject *Sender)
 
 void __fastcall TfrmMain::miSamples4Click(TObject *Sender)
 {
+	int fractal = cbFractalSelector->ItemIndex;
+
 	TMenuItem* mi = (TMenuItem*)Sender;
 
     mi->Checked = true;
@@ -1728,24 +1785,24 @@ void __fastcall TfrmMain::miSamples4Click(TObject *Sender)
 	switch (mi->Tag)
 	{
 		case 0:
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 4;
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 2;
+			GFractalHandler->Fractals[fractal]->supersamples = 4;
+			GFractalHandler->Fractals[fractal]->supersamplenormalistioncoefficient = 2;
 			break;
 		case 1:
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 8;
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 3;
+			GFractalHandler->Fractals[fractal]->supersamples = 8;
+			GFractalHandler->Fractals[fractal]->supersamplenormalistioncoefficient = 3;
 			break;
 		case 2:
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 16;
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 4;
+			GFractalHandler->Fractals[fractal]->supersamples = 16;
+			GFractalHandler->Fractals[fractal]->supersamplenormalistioncoefficient = 4;
 			break;
 		case 3:
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 32;
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 5;
+			GFractalHandler->Fractals[fractal]->supersamples = 32;
+			GFractalHandler->Fractals[fractal]->supersamplenormalistioncoefficient = 5;
 			break;
 		case 4:
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamples = 64;
-			GFractalHandler->Fractals[cbFractalSelector->ItemIndex]->supersamplenormalistioncoefficient = 6;
+			GFractalHandler->Fractals[fractal]->supersamples = 64;
+			GFractalHandler->Fractals[fractal]->supersamplenormalistioncoefficient = 6;
 			break;
 	}
 
@@ -1885,14 +1942,14 @@ void __fastcall TfrmMain::sbQuickPaletteBackgroundClick(TObject *Sender)
 void __fastcall TfrmMain::pbPalettePaint(TObject *Sender)
 {
 	pbPalette->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[0]->Gradient);
-	sInfinity->Brush->Color = TColor(GPaletteHandler->Palettes[0]->SingleColour.ToIntBGR());
+	sInfinity->Brush->Color = TColor(GPaletteHandler->Palettes[0]->PatternLive.SingleColour.ToIntBGR());
 }
 
 
 void __fastcall TfrmMain::pbPalette2Paint(TObject *Sender)
 {
 	pbPalette2->Canvas->StretchDraw(TRect(0, 0, 124, 19), GPaletteHandler->Palettes[1]->Gradient);
-	sInfinity2->Brush->Color = TColor(GPaletteHandler->Palettes[1]->SingleColour.ToIntBGR());
+	sInfinity2->Brush->Color = TColor(GPaletteHandler->Palettes[1]->PatternLive.SingleColour.ToIntBGR());
 }
 
 
@@ -1984,4 +2041,6 @@ void TfrmMain::SetChangesPending(bool status)
 
 	SetTitle();
 }
+
+
 

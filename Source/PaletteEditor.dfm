@@ -1,11 +1,10 @@
 object frmPaletteEditor: TfrmPaletteEditor
   Left = 0
   Top = 0
-  Hint = 'Generates purely random colours for each key'
   BorderStyle = bsDialog
   Caption = 'Palette Editor'
-  ClientHeight = 570
-  ClientWidth = 546
+  ClientHeight = 579
+  ClientWidth = 544
   Color = clBtnFace
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -22,103 +21,21 @@ object frmPaletteEditor: TfrmPaletteEditor
   TextHeight = 13
   object Bevel2: TBevel
     Left = 8
-    Top = 525
+    Top = 535
     Width = 530
     Height = 42
     Shape = bsFrame
   end
   object Label7: TLabel
-    Left = 33
+    Left = 7
     Top = 11
     Width = 39
     Height = 13
     Caption = 'Palettes'
   end
-  object sbHorizontal: TSpeedButton
-    Left = 278
-    Top = 8
-    Width = 23
-    Height = 22
-    GroupIndex = 2
-    Down = True
-    ImageIndex = 10
-    Images = iPalette
-  end
-  object sbVertical: TSpeedButton
-    Left = 299
-    Top = 8
-    Width = 23
-    Height = 22
-    GroupIndex = 2
-    ImageIndex = 11
-    Images = iPalette
-  end
-  object sSingleColour: TShape
-    Left = 410
-    Top = 12
-    Width = 14
-    Height = 15
-    Brush.Color = clBlack
-    OnMouseDown = sSingleColourMouseDown
-  end
-  object GroupBox2: TGroupBox
-    Left = 8
-    Top = 451
-    Width = 530
-    Height = 66
-    Caption = 'Gradient Shape'
-    TabOrder = 4
-    object sbLinear: TSpeedButton
-      Left = 12
-      Top = 32
-      Width = 23
-      Height = 22
-      GroupIndex = 3
-      Down = True
-      ImageIndex = 8
-      Images = iPalette
-      OnClick = sbLinearClick
-    end
-    object sbLog: TSpeedButton
-      Tag = 1
-      Left = 41
-      Top = 32
-      Width = 23
-      Height = 22
-      GroupIndex = 3
-      ImageIndex = 9
-      Images = iPalette
-      OnClick = sbLinearClick
-    end
-    object lLog: TLabel
-      Left = 482
-      Top = 34
-      Width = 8
-      Height = 16
-      Caption = '1'
-      Font.Charset = DEFAULT_CHARSET
-      Font.Color = clWindowText
-      Font.Height = -13
-      Font.Name = 'Courier New'
-      Font.Style = []
-      ParentFont = False
-    end
-    object tbLog: TTrackBar
-      Left = 78
-      Top = 32
-      Width = 398
-      Height = 23
-      Max = 100
-      Min = 1
-      Position = 1
-      TabOrder = 0
-      TickStyle = tsNone
-      OnChange = tbLogChange
-    end
-  end
   object bSave: TBitBtn
     Left = 99
-    Top = 533
+    Top = 544
     Width = 75
     Height = 25
     Caption = 'Save'
@@ -129,7 +46,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   end
   object bLoad: TBitBtn
     Left = 18
-    Top = 533
+    Top = 544
     Width = 75
     Height = 25
     Caption = 'Load'
@@ -140,7 +57,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   end
   object BitBtn1: TBitBtn
     Left = 454
-    Top = 533
+    Top = 544
     Width = 75
     Height = 25
     Cancel = True
@@ -150,7 +67,7 @@ object frmPaletteEditor: TfrmPaletteEditor
   end
   object bAccept: TBitBtn
     Left = 373
-    Top = 533
+    Top = 544
     Width = 75
     Height = 25
     Caption = 'OK'
@@ -160,574 +77,732 @@ object frmPaletteEditor: TfrmPaletteEditor
     TabOrder = 3
     OnClick = bAcceptClick
   end
-  object gbColour: TGroupBox
-    Left = 8
-    Top = 44
-    Width = 530
-    Height = 401
-    Caption = 'Colour'
-    TabOrder = 5
-    object sbAddNewKey: TSpeedButton
-      Left = 79
-      Top = 24
-      Width = 23
-      Height = 22
-      ImageIndex = 2
-      Images = iPalette
-      OnClick = sbAddNewKeyClick
-    end
-    object iPointer: TImage
-      Left = 12
-      Top = 108
-      Width = 10
-      Height = 10
-      AutoSize = True
-      Picture.Data = {
-        07544269746D617076010000424D760100000000000036000000280000000A00
-        00000A000000010018000000000040010000130B0000130B0000000000000000
-        0000FF00FFFF00FFFF00FF000000000000000000000000FF00FFFF00FFFF00FF
-        0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
-        0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
-        0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
-        0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
-        0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
-        0000FF00FF000000000000000000000000000000000000000000000000FF00FF
-        0000FF00FFFF00FF000000000000000000000000000000000000FF00FFFF00FF
-        0000FF00FFFF00FFFF00FF000000000000000000000000FF00FFFF00FFFF00FF
-        0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
-        0000}
-      Transparent = True
-    end
-    object sbColour: TSpeedButton
-      Left = 167
-      Top = 24
-      Width = 23
-      Height = 22
-      GroupIndex = 1
-      Down = True
-      ImageIndex = 0
-      Images = iPalette
-      OnClick = sbColourClick
-    end
-    object sbBW: TSpeedButton
-      Left = 196
-      Top = 25
-      Width = 23
-      Height = 22
-      GroupIndex = 1
-      ImageIndex = 1
-      Images = iPalette
-      OnClick = sbColourClick
-    end
-    object sbDeleteSelectedKey: TSpeedButton
-      Left = 100
-      Top = 24
-      Width = 23
-      Height = 22
-      ImageIndex = 5
-      Images = iPalette
-      OnClick = sbDeleteSelectedKeyClick
-    end
-    object Label1: TLabel
-      Left = 19
-      Top = 66
-      Width = 37
-      Height = 13
-      Caption = 'Position'
-    end
-    object sbClear: TSpeedButton
-      Left = 12
-      Top = 24
-      Width = 52
-      Height = 22
-      Caption = 'Clear'
-      Images = iPalette
-      OnClick = sbClearClick
-    end
-    object sbAlignAll: TSpeedButton
-      Left = 131
-      Top = 24
-      Width = 23
-      Height = 22
-      ImageIndex = 7
-      Images = iPalette
-      OnClick = sbAlignAllClick
-    end
-    object pbGradient: TPaintBox
-      Left = 12
-      Top = 129
-      Width = 500
-      Height = 25
-    end
-    object sbRGB: TSpeedButton
-      Left = 119
-      Top = 62
-      Width = 40
-      Height = 22
-      GroupIndex = 2
-      Down = True
-      Caption = 'RGB'
-      OnClick = sbRGBClick
-    end
-    object sbHSV: TSpeedButton
-      Tag = 1
-      Left = 165
-      Top = 62
-      Width = 40
-      Height = 22
-      GroupIndex = 2
-      Caption = 'HSV'
-      OnClick = sbRGBClick
-    end
-    object Label6: TLabel
-      Left = 223
-      Top = 66
-      Width = 27
-      Height = 13
-      Caption = 'Steps'
-    end
-    object sbReverse: TSpeedButton
-      Left = 460
-      Top = 24
-      Width = 52
-      Height = 22
-      Caption = 'Reverse'
-      Images = iPalette
-      OnClick = sbReverseClick
-    end
-    object sbRandom: TSpeedButton
-      Left = 402
-      Top = 24
-      Width = 52
-      Height = 22
-      Hint = 'Generates purely random colours for each key'
-      Caption = 'Rand 2'
-      Images = iPalette
-      OnClick = sbRandomClick
-    end
-    object sbRandomFrom: TSpeedButton
-      Left = 344
-      Top = 24
-      Width = 52
-      Height = 22
-      Hint = 'Generates a random colour from the previous  key'
-      Caption = 'Rand 1'
-      Images = iPalette
-      OnClick = sbRandomFromClick
-    end
-    object pcColourSpace: TPageControl
-      Left = 10
-      Top = 175
-      Width = 502
-      Height = 193
-      ActivePage = TabSheet1
-      TabOrder = 0
-      OnChange = pcColourSpaceChange
-      object TabSheet1: TTabSheet
-        Caption = 'RGB'
-        object pbRed: TPaintBox
-          Left = 38
-          Top = 43
-          Width = 256
-          Height = 5
-          OnPaint = pbRedPaint
-        end
-        object pbGreen: TPaintBox
-          Left = 38
-          Top = 96
-          Width = 256
-          Height = 5
-          OnPaint = pbGreenPaint
-        end
-        object pbBlue: TPaintBox
-          Left = 38
-          Top = 147
-          Width = 256
-          Height = 5
-          OnPaint = pbBluePaint
-        end
-        object Shape1: TShape
-          Left = 5
-          Top = 14
-          Width = 15
-          Height = 15
-          Brush.Color = clRed
-        end
-        object Shape2: TShape
-          Left = 5
-          Top = 67
-          Width = 15
-          Height = 15
-          Brush.Color = clLime
-        end
-        object Shape3: TShape
-          Left = 5
-          Top = 118
-          Width = 15
-          Height = 15
-          Brush.Color = clBlue
-        end
-        object lHexRed: TLabel
-          Left = 361
-          Top = 16
-          Width = 16
-          Height = 16
-          Caption = 'AA'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Courier New'
-          Font.Style = []
-          ParentFont = False
-        end
-        object lHexGreen: TLabel
-          Left = 361
-          Top = 69
-          Width = 16
-          Height = 16
-          Caption = 'AA'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Courier New'
-          Font.Style = []
-          ParentFont = False
-        end
-        object lHexBlue: TLabel
-          Left = 361
-          Top = 120
-          Width = 16
-          Height = 16
-          Caption = 'AA'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Courier New'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Label5: TLabel
-          Left = 407
-          Top = 45
-          Width = 48
-          Height = 16
-          Caption = 'Colour'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Courier New'
-          Font.Style = []
-          ParentFont = False
-        end
-        object lColourHex: TLabel
-          Left = 407
-          Top = 67
-          Width = 64
-          Height = 16
-          Caption = '0x000000'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -13
-          Font.Name = 'Courier New'
-          Font.Style = []
-          ParentFont = False
-        end
-        object seRed: TSpinEdit
-          Left = 306
-          Top = 15
-          Width = 49
-          Height = 22
-          MaxValue = 255
-          MinValue = 0
-          TabOrder = 0
-          Value = 0
-          OnChange = seRedChange
-        end
-        object tbRed: TTrackBar
-          Left = 28
-          Top = 14
-          Width = 272
-          Height = 23
-          Max = 255
-          TabOrder = 1
-          TickStyle = tsNone
-          OnChange = tbRedChange
-        end
-        object seGreen: TSpinEdit
-          Left = 306
-          Top = 68
-          Width = 49
-          Height = 22
-          MaxValue = 255
-          MinValue = 0
-          TabOrder = 2
-          Value = 0
-          OnChange = seGreenChange
-        end
-        object tbGreen: TTrackBar
-          Left = 28
-          Top = 67
-          Width = 272
-          Height = 23
-          Max = 255
-          TabOrder = 3
-          TickStyle = tsNone
-          OnChange = tbRedChange
-        end
-        object seBlue: TSpinEdit
-          Left = 306
-          Top = 119
-          Width = 49
-          Height = 22
-          MaxValue = 255
-          MinValue = 0
-          TabOrder = 4
-          Value = 0
-          OnChange = seBlueChange
-        end
-        object tbBlue: TTrackBar
-          Left = 28
-          Top = 118
-          Width = 272
-          Height = 23
-          Max = 255
-          TabOrder = 5
-          TickStyle = tsNone
-          OnChange = tbRedChange
-        end
-      end
-      object TabSheet2: TTabSheet
-        Caption = 'HSV'
-        ImageIndex = 1
-        object pbHue: TPaintBox
-          Left = 38
-          Top = 43
-          Width = 255
-          Height = 5
-          OnPaint = pbHuePaint
-        end
-        object pbSaturation: TPaintBox
-          Left = 38
-          Top = 96
-          Width = 255
-          Height = 5
-          OnPaint = pbSaturationPaint
-        end
-        object pbValue: TPaintBox
-          Left = 38
-          Top = 147
-          Width = 255
-          Height = 5
-          OnPaint = pbValuePaint
-        end
-        object Label2: TLabel
-          Left = 10
-          Top = 11
-          Width = 10
-          Height = 18
-          Caption = 'H'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -15
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Label3: TLabel
-          Left = 10
-          Top = 64
-          Width = 8
-          Height = 18
-          Caption = 'S'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -15
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
-        object Label4: TLabel
-          Left = 10
-          Top = 115
-          Width = 9
-          Height = 18
-          Caption = 'V'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -15
-          Font.Name = 'Tahoma'
-          Font.Style = []
-          ParentFont = False
-        end
-        object tbHue: TTrackBar
-          Left = 28
-          Top = 14
-          Width = 272
-          Height = 23
-          Max = 360
-          TabOrder = 0
-          TickStyle = tsNone
-          OnChange = tbHueChange
-        end
-        object tbSaturation: TTrackBar
-          Left = 28
-          Top = 67
-          Width = 272
-          Height = 23
-          Max = 255
-          TabOrder = 1
-          TickStyle = tsNone
-          OnChange = tbHueChange
-        end
-        object tbValue: TTrackBar
-          Left = 28
-          Top = 118
-          Width = 272
-          Height = 23
-          Max = 255
-          TabOrder = 2
-          TickStyle = tsNone
-          OnChange = tbHueChange
-        end
-        object seHue: TSpinEdit
-          Left = 306
-          Top = 15
-          Width = 49
-          Height = 22
-          MaxValue = 360
-          MinValue = 0
-          TabOrder = 3
-          Value = 0
-          OnChange = seHueChange
-        end
-        object seSaturation: TSpinEdit
-          Left = 306
-          Top = 68
-          Width = 49
-          Height = 22
-          MaxValue = 255
-          MinValue = 0
-          TabOrder = 4
-          Value = 0
-          OnChange = seSaturationChange
-        end
-        object seValue: TSpinEdit
-          Left = 306
-          Top = 119
-          Width = 49
-          Height = 22
-          MaxValue = 255
-          MinValue = 0
-          TabOrder = 5
-          Value = 0
-          OnChange = seValueChange
-        end
-      end
-    end
-    object sePosition: TSpinEdit
-      Left = 62
-      Top = 62
-      Width = 42
-      Height = 22
-      MaxValue = 499
-      MinValue = 0
-      TabOrder = 1
-      Value = 0
-      OnChange = sePositionChange
-    end
-    object cbSteps: TComboBox
-      Left = 256
-      Top = 63
-      Width = 45
-      Height = 21
-      Style = csDropDownList
-      ItemIndex = 0
-      TabOrder = 2
-      Text = '1'
-      OnChange = cbStepsChange
-      OnClick = sbColourClick
-      Items.Strings = (
-        '1'
-        '2'
-        '4'
-        '5'
-        '10'
-        '20'
-        '25'
-        '50'
-        '100'
-        '125'
-        '250')
-    end
-    object cbInterleve: TCheckBox
-      Left = 320
-      Top = 65
-      Width = 71
-      Height = 17
-      Caption = 'Interleve'
-      TabOrder = 3
-      OnClick = cbInterleveClick
-    end
-    object rbInterleveX2: TRadioButton
-      Left = 397
-      Top = 65
-      Width = 35
-      Height = 17
-      Caption = 'x2'
-      Checked = True
-      TabOrder = 4
-      TabStop = True
-      OnClick = rbInterleveX2Click
-    end
-    object rbInterleveX4: TRadioButton
-      Left = 434
-      Top = 65
-      Width = 35
-      Height = 17
-      Caption = 'x4'
-      TabOrder = 5
-      OnClick = rbInterleveX2Click
-    end
-    object cbInterleveReverse: TCheckBox
-      Left = 475
-      Top = 65
-      Width = 37
-      Height = 17
-      Caption = '><'
-      TabOrder = 6
-      OnClick = cbInterleveReverseClick
-    end
-  end
   object cbPalettes: TComboBox
-    Left = 89
+    Left = 63
     Top = 8
     Width = 138
     Height = 21
     Style = csDropDownList
-    TabOrder = 6
+    TabOrder = 4
     OnChange = cbPalettesChange
-  end
-  object cbGradient: TCheckBox
-    Left = 430
-    Top = 11
-    Width = 75
-    Height = 17
-    Caption = 'Gradient'
-    TabOrder = 7
   end
   object bReset: TBitBtn
     Left = 196
-    Top = 533
+    Top = 544
     Width = 75
     Height = 25
     Caption = 'Reset'
     ImageIndex = 3
-    TabOrder = 8
+    TabOrder = 5
     OnClick = bResetClick
   end
+  object pcOptions: TPageControl
+    Left = 8
+    Top = 44
+    Width = 531
+    Height = 485
+    ActivePage = tsGradient
+    TabOrder = 6
+    object tsPattern: TTabSheet
+      Caption = 'Pattern'
+      object sSingleColour: TShape
+        Left = 143
+        Top = 24
+        Width = 34
+        Height = 21
+        Brush.Color = clBlack
+        OnMouseDown = sSingleColourMouseDown
+      end
+      object sGridOn: TShape
+        Left = 143
+        Top = 136
+        Width = 34
+        Height = 21
+        Brush.Color = clBlack
+        OnMouseDown = sSingleColourMouseDown
+      end
+      object Label8: TLabel
+        Left = 50
+        Top = 107
+        Width = 28
+        Height = 13
+        Caption = 'Width'
+      end
+      object sGridOff: TShape
+        Left = 143
+        Top = 163
+        Width = 34
+        Height = 21
+        Brush.Color = clBlack
+        OnMouseDown = sSingleColourMouseDown
+      end
+      object Label9: TLabel
+        Left = 50
+        Top = 142
+        Width = 14
+        Height = 13
+        Caption = 'On'
+      end
+      object Label10: TLabel
+        Left = 51
+        Top = 169
+        Width = 16
+        Height = 13
+        Caption = 'Off'
+      end
+      object rbSingleColour: TRadioButton
+        Left = 24
+        Top = 24
+        Width = 113
+        Height = 17
+        Caption = 'Single colour'
+        Checked = True
+        TabOrder = 0
+        TabStop = True
+      end
+      object rbGrid: TRadioButton
+        Left = 24
+        Top = 64
+        Width = 113
+        Height = 17
+        Caption = 'Grid'
+        TabOrder = 1
+      end
+      object eGridWidth: TEdit
+        Left = 97
+        Top = 104
+        Width = 40
+        Height = 21
+        Alignment = taRightJustify
+        TabOrder = 2
+        Text = '10'
+      end
+    end
+    object tsGradient: TTabSheet
+      Caption = 'Gradient'
+      ImageIndex = 1
+      object sbClear: TSpeedButton
+        Left = 12
+        Top = 16
+        Width = 52
+        Height = 22
+        Caption = 'Clear'
+        Images = iPalette
+        OnClick = sbClearClick
+      end
+      object sbAddNewKey: TSpeedButton
+        Left = 79
+        Top = 16
+        Width = 23
+        Height = 22
+        ImageIndex = 2
+        Images = iPalette
+        OnClick = sbAddNewKeyClick
+      end
+      object sbDeleteSelectedKey: TSpeedButton
+        Left = 100
+        Top = 16
+        Width = 23
+        Height = 22
+        ImageIndex = 5
+        Images = iPalette
+        OnClick = sbDeleteSelectedKeyClick
+      end
+      object sbAlignAll: TSpeedButton
+        Left = 131
+        Top = 16
+        Width = 23
+        Height = 22
+        ImageIndex = 7
+        Images = iPalette
+        OnClick = sbAlignAllClick
+      end
+      object sbColour: TSpeedButton
+        Left = 167
+        Top = 16
+        Width = 23
+        Height = 22
+        GroupIndex = 1
+        Down = True
+        ImageIndex = 0
+        Images = iPalette
+        OnClick = sbColourClick
+      end
+      object sbBW: TSpeedButton
+        Left = 196
+        Top = 17
+        Width = 23
+        Height = 22
+        GroupIndex = 1
+        ImageIndex = 1
+        Images = iPalette
+        OnClick = sbColourClick
+      end
+      object sbRandomFrom: TSpeedButton
+        Left = 344
+        Top = 16
+        Width = 52
+        Height = 22
+        Hint = 'Generates a random colour from the previous  key'
+        Caption = 'Rand 1'
+        Images = iPalette
+        OnClick = sbRandomFromClick
+      end
+      object sbRandom: TSpeedButton
+        Left = 402
+        Top = 16
+        Width = 52
+        Height = 22
+        Hint = 'Generates purely random colours for each key'
+        Caption = 'Rand 2'
+        Images = iPalette
+        OnClick = sbRandomClick
+      end
+      object sbReverse: TSpeedButton
+        Left = 460
+        Top = 16
+        Width = 52
+        Height = 22
+        Caption = 'Reverse'
+        Images = iPalette
+        OnClick = sbReverseClick
+      end
+      object Label6: TLabel
+        Left = 223
+        Top = 58
+        Width = 27
+        Height = 13
+        Caption = 'Steps'
+      end
+      object sbHSV: TSpeedButton
+        Tag = 1
+        Left = 165
+        Top = 54
+        Width = 40
+        Height = 22
+        GroupIndex = 2
+        Caption = 'HSV'
+        OnClick = sbRGBClick
+      end
+      object sbRGB: TSpeedButton
+        Left = 119
+        Top = 54
+        Width = 40
+        Height = 22
+        GroupIndex = 2
+        Caption = 'RGB'
+        OnClick = sbRGBClick
+      end
+      object Label1: TLabel
+        Left = 19
+        Top = 58
+        Width = 37
+        Height = 13
+        Caption = 'Position'
+      end
+      object iPointer: TImage
+        Left = 12
+        Top = 100
+        Width = 10
+        Height = 10
+        AutoSize = True
+        Picture.Data = {
+          07544269746D617076010000424D760100000000000036000000280000000A00
+          00000A000000010018000000000040010000130B0000130B0000000000000000
+          0000FF00FFFF00FFFF00FF000000000000000000000000FF00FFFF00FFFF00FF
+          0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
+          0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
+          0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
+          0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
+          0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
+          0000FF00FF000000000000000000000000000000000000000000000000FF00FF
+          0000FF00FFFF00FF000000000000000000000000000000000000FF00FFFF00FF
+          0000FF00FFFF00FFFF00FF000000000000000000000000FF00FFFF00FFFF00FF
+          0000FF00FFFF00FFFF00FFFF00FF000000000000FF00FFFF00FFFF00FFFF00FF
+          0000}
+        Transparent = True
+      end
+      object pbGradient: TPaintBox
+        Left = 12
+        Top = 121
+        Width = 500
+        Height = 25
+      end
+      object sbHorizontal: TSpeedButton
+        Left = 236
+        Top = 16
+        Width = 23
+        Height = 22
+        GroupIndex = 2
+        Down = True
+        ImageIndex = 10
+        Images = iPalette
+      end
+      object sbVertical: TSpeedButton
+        Left = 257
+        Top = 16
+        Width = 23
+        Height = 22
+        GroupIndex = 2
+        ImageIndex = 11
+        Images = iPalette
+      end
+      object sInfinity: TShape
+        Left = 306
+        Top = 16
+        Width = 32
+        Height = 21
+        Hint = 
+          'Colour to use for values that tend to infinity (outside of the g' +
+          'radient)'
+        Brush.Color = clBlack
+        OnMouseDown = sSingleColourMouseDown
+      end
+      object cbInterleveReverse: TCheckBox
+        Left = 475
+        Top = 57
+        Width = 37
+        Height = 17
+        Caption = '><'
+        TabOrder = 0
+        OnClick = cbInterleveReverseClick
+      end
+      object rbInterleveX4: TRadioButton
+        Left = 434
+        Top = 57
+        Width = 35
+        Height = 17
+        Caption = 'x4'
+        TabOrder = 1
+        OnClick = rbInterleveX2Click
+      end
+      object rbInterleveX2: TRadioButton
+        Left = 397
+        Top = 57
+        Width = 35
+        Height = 17
+        Caption = 'x2'
+        Checked = True
+        TabOrder = 2
+        TabStop = True
+        OnClick = rbInterleveX2Click
+      end
+      object cbInterleve: TCheckBox
+        Left = 320
+        Top = 57
+        Width = 71
+        Height = 17
+        Caption = 'Interleve'
+        TabOrder = 3
+        OnClick = cbInterleveClick
+      end
+      object cbSteps: TComboBox
+        Left = 256
+        Top = 55
+        Width = 45
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 0
+        TabOrder = 4
+        Text = '1'
+        OnChange = cbStepsChange
+        OnClick = sbColourClick
+        Items.Strings = (
+          '1'
+          '2'
+          '4'
+          '5'
+          '10'
+          '20'
+          '25'
+          '50'
+          '100'
+          '125'
+          '250')
+      end
+      object sePosition: TSpinEdit
+        Left = 62
+        Top = 54
+        Width = 42
+        Height = 22
+        MaxValue = 499
+        MinValue = 0
+        TabOrder = 5
+        Value = 0
+        OnChange = sePositionChange
+      end
+      object pcColourSpace: TPageControl
+        Left = 10
+        Top = 167
+        Width = 502
+        Height = 193
+        ActivePage = TabSheet1
+        TabOrder = 6
+        OnChange = pcColourSpaceChange
+        object TabSheet1: TTabSheet
+          Caption = 'RGB'
+          object pbRed: TPaintBox
+            Left = 38
+            Top = 43
+            Width = 256
+            Height = 5
+            OnPaint = pbRedPaint
+          end
+          object pbGreen: TPaintBox
+            Left = 38
+            Top = 96
+            Width = 256
+            Height = 5
+            OnPaint = pbGreenPaint
+          end
+          object pbBlue: TPaintBox
+            Left = 38
+            Top = 147
+            Width = 256
+            Height = 5
+            OnPaint = pbBluePaint
+          end
+          object Shape1: TShape
+            Left = 5
+            Top = 14
+            Width = 15
+            Height = 15
+            Brush.Color = clRed
+            Pen.Color = clWhite
+          end
+          object Shape2: TShape
+            Left = 5
+            Top = 67
+            Width = 15
+            Height = 15
+            Brush.Color = clLime
+            Pen.Color = clWhite
+          end
+          object Shape3: TShape
+            Left = 5
+            Top = 118
+            Width = 15
+            Height = 15
+            Brush.Color = clBlue
+            Pen.Color = clWhite
+          end
+          object lHexRed: TLabel
+            Left = 361
+            Top = 16
+            Width = 16
+            Height = 16
+            Caption = 'AA'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier New'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lHexGreen: TLabel
+            Left = 361
+            Top = 69
+            Width = 16
+            Height = 16
+            Caption = 'AA'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier New'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object lHexBlue: TLabel
+            Left = 361
+            Top = 120
+            Width = 16
+            Height = 16
+            Caption = 'AA'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier New'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label5: TLabel
+            Left = 420
+            Top = 45
+            Width = 48
+            Height = 16
+            Caption = 'Colour'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+          end
+          object lColourHex: TLabel
+            Left = 412
+            Top = 67
+            Width = 64
+            Height = 16
+            Caption = '0x000000'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -13
+            Font.Name = 'Courier New'
+            Font.Style = []
+            ParentFont = False
+          end
+          object seRed: TSpinEdit
+            Left = 306
+            Top = 15
+            Width = 49
+            Height = 22
+            MaxValue = 255
+            MinValue = 0
+            TabOrder = 0
+            Value = 0
+            OnChange = seRedChange
+          end
+          object tbRed: TTrackBar
+            Left = 28
+            Top = 14
+            Width = 272
+            Height = 23
+            Max = 255
+            TabOrder = 1
+            TickStyle = tsNone
+            OnChange = tbRedChange
+          end
+          object seGreen: TSpinEdit
+            Left = 306
+            Top = 68
+            Width = 49
+            Height = 22
+            MaxValue = 255
+            MinValue = 0
+            TabOrder = 2
+            Value = 0
+            OnChange = seGreenChange
+          end
+          object tbGreen: TTrackBar
+            Left = 28
+            Top = 67
+            Width = 272
+            Height = 23
+            Max = 255
+            TabOrder = 3
+            TickStyle = tsNone
+            OnChange = tbRedChange
+          end
+          object seBlue: TSpinEdit
+            Left = 306
+            Top = 119
+            Width = 49
+            Height = 22
+            MaxValue = 255
+            MinValue = 0
+            TabOrder = 4
+            Value = 0
+            OnChange = seBlueChange
+          end
+          object tbBlue: TTrackBar
+            Left = 28
+            Top = 118
+            Width = 272
+            Height = 23
+            Max = 255
+            TabOrder = 5
+            TickStyle = tsNone
+            OnChange = tbRedChange
+          end
+        end
+        object TabSheet2: TTabSheet
+          Caption = 'HSV'
+          ImageIndex = 1
+          object pbHue: TPaintBox
+            Left = 38
+            Top = 43
+            Width = 255
+            Height = 5
+            OnPaint = pbHuePaint
+          end
+          object pbSaturation: TPaintBox
+            Left = 38
+            Top = 96
+            Width = 255
+            Height = 5
+            OnPaint = pbSaturationPaint
+          end
+          object pbValue: TPaintBox
+            Left = 38
+            Top = 147
+            Width = 255
+            Height = 5
+            OnPaint = pbValuePaint
+          end
+          object Label2: TLabel
+            Left = 10
+            Top = 11
+            Width = 11
+            Height = 18
+            Caption = 'H'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label3: TLabel
+            Left = 10
+            Top = 64
+            Width = 10
+            Height = 18
+            Caption = 'S'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object Label4: TLabel
+            Left = 10
+            Top = 115
+            Width = 10
+            Height = 18
+            Caption = 'V'
+            Font.Charset = DEFAULT_CHARSET
+            Font.Color = clWindowText
+            Font.Height = -15
+            Font.Name = 'Tahoma'
+            Font.Style = [fsBold]
+            ParentFont = False
+          end
+          object tbHue: TTrackBar
+            Left = 28
+            Top = 14
+            Width = 272
+            Height = 23
+            Max = 360
+            TabOrder = 0
+            TickStyle = tsNone
+            OnChange = tbHueChange
+          end
+          object tbSaturation: TTrackBar
+            Left = 28
+            Top = 67
+            Width = 272
+            Height = 23
+            Max = 255
+            TabOrder = 1
+            TickStyle = tsNone
+            OnChange = tbHueChange
+          end
+          object tbValue: TTrackBar
+            Left = 28
+            Top = 118
+            Width = 272
+            Height = 23
+            Max = 255
+            TabOrder = 2
+            TickStyle = tsNone
+            OnChange = tbHueChange
+          end
+          object seHue: TSpinEdit
+            Left = 306
+            Top = 15
+            Width = 49
+            Height = 22
+            MaxValue = 360
+            MinValue = 0
+            TabOrder = 3
+            Value = 0
+            OnChange = seHueChange
+          end
+          object seSaturation: TSpinEdit
+            Left = 306
+            Top = 68
+            Width = 49
+            Height = 22
+            MaxValue = 255
+            MinValue = 0
+            TabOrder = 4
+            Value = 0
+            OnChange = seSaturationChange
+          end
+          object seValue: TSpinEdit
+            Left = 306
+            Top = 119
+            Width = 49
+            Height = 22
+            MaxValue = 255
+            MinValue = 0
+            TabOrder = 5
+            Value = 0
+            OnChange = seValueChange
+          end
+        end
+      end
+      object GroupBox2: TGroupBox
+        Left = 10
+        Top = 379
+        Width = 502
+        Height = 66
+        Caption = 'Gradient Shape'
+        TabOrder = 7
+        object sbLinear: TSpeedButton
+          Left = 12
+          Top = 32
+          Width = 23
+          Height = 22
+          GroupIndex = 3
+          Down = True
+          ImageIndex = 8
+          Images = iPalette
+          OnClick = sbLinearClick
+        end
+        object sbLog: TSpeedButton
+          Tag = 1
+          Left = 41
+          Top = 32
+          Width = 23
+          Height = 22
+          GroupIndex = 3
+          ImageIndex = 9
+          Images = iPalette
+          OnClick = sbLinearClick
+        end
+        object lLog: TLabel
+          Left = 482
+          Top = 34
+          Width = 8
+          Height = 16
+          Caption = '1'
+          Font.Charset = DEFAULT_CHARSET
+          Font.Color = clWindowText
+          Font.Height = -13
+          Font.Name = 'Courier New'
+          Font.Style = []
+          ParentFont = False
+        end
+        object tbLog: TTrackBar
+          Left = 78
+          Top = 32
+          Width = 398
+          Height = 23
+          Max = 100
+          Min = 1
+          Position = 1
+          TabOrder = 0
+          TickStyle = tsNone
+          OnChange = tbLogChange
+        end
+      end
+    end
+  end
   object iPalette: TImageList
-    Left = 264
-    Top = 529
+    Left = 492
+    Top = 20
     Bitmap = {
       494C01010C001800040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000004000000001002000000000000040
@@ -875,107 +950,107 @@ object frmPaletteEditor: TfrmPaletteEditor
       C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
       C000C0C0C000C0C0C00090909000000000000000000090909000CACACA00C0C0
       C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
-      C000C0C0C000C9C9C900909090000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C8C8C800FFFFFF00FFFF
+      C000C0C0C000C9C9C900909090000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C8C8C800FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00CACACA000B0B0B0000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FEFEFE00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB0000000000FFE5BB00808080000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00E4CCA7008F8169005F5646006459
-      490019161200FFE5BB00808080000000000000000000C0C0C000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00EBEB
+      EB0000000000FFFFFF00808080000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00E4CCA70000000000000000000000
+      000000000000FFFFFF00808080000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FEFEFE00FEFEFE00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000808080000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF0010101000000000000000000011111100FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FCE2B800FFE5BB00FFE5BB000000
-      0000FFE5BB00FFE5BB00808080000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00D4BE9B00786B58008C7D6600D8C29E00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DFDFDF000000
+      0000D8D8D800FFFFFF00808080000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00D4BE9B000000000000000000D8C29E00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFEFE00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF0002020200FFFFFF00FFFFFF000B0B0B00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB0000000000FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00F8DEB500887A630098886F00FCE2B900FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF000202020000000000000000000B0B0B00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00DBDBDB0000000000DCDC
+      DC00FFFFFF00FFFFFF00808080000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00F8DEB5000000000000000000FCE2B900FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FDFDFD00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF0002020200FFFFFF00FFFFFF000D0D0D00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB0000000000FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00FFE5BB00FCE2
-      B8006C614F00E4CDA700FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF000202
+      FF00FFFFFF00FFFFFF000202020000000000000000000D0D0D00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FEFEFE00DEDEDE0000000000DBDBDB00FBFB
+      FB00FFFFFF00FFFFFF00808080000000000080808000FFFFFF00FFFFFF00FCE2
+      B80000000000E4CDA700FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF000202
       0200020202000707070003030300020202000202020005050500020202000202
       020010101000FEFEFE00C0C0C0000000000000000000C0C0C000FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF0005050500FFFFFF00FFFFFF000A0A0A00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB0000000000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00FFE5BB00877A
-      6300D8C29E00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF000505
-      0500FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF0000000000FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FEFE
-      FE00FEFEFE00FDFDFD0002020200FFFFFF00FFFFFF0010101000FFFFFF00FEFE
-      FE00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB0000000000FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00E0C9A4009484
-      6C00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF000303
-      0300FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF0000000000FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FEFE
-      FE00FFFFFF00FFFFFF0002020200FFFFFF00FFFFFF0011111100FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB0000000000FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00A08F7500D8C2
-      9E00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF000202
+      FF00FFFFFF00FFFFFF000505050000000000000000000A0A0A00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FDFDFD00D9D9D90000000000E0E0E000FDFDFD00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF00FFFFFF000000
+      0000D8C29E00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF000505
+      0500000000000000000000000000000000000000000000000000000000000000
+      000000000000FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FEFE
+      FE00FEFEFE00FDFDFD0002020200000000000000000010101000FFFFFF00FEFE
+      FE00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00DEDEDE0000000000E5E5E500F5F5F500FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF00E0C9A4000000
+      0000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF000303
+      0300000000000000000000000000000000000000000000000000000000000000
+      000000000000FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FEFE
+      FE00FFFFFF00FFFFFF0002020200000000000000000011111100FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FAFAFA00E3E3E30000000000D8D8D800FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF0000000000D8C2
+      9E00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF000202
       02000F0F0F00070707000909090011111100101010000A0A0A000D0D0D000B0B
       0B0011111100FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF0003030300FFFFFF00FFFFFF0009090900FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB0000000000FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB007C6F5B00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF0003030300000000000000000009090900FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00DBDBDB0000000000DFDFDF00FCFCFC00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF0000000000FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF0007070700FFFFFF00FFFFFF0007070700FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB0000000000FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB0094856C00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF0007070700000000000000000007070700FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FBFBFB00DFDF
+      DF0000000000E6E6E600F6F6F600FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF0000000000FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFEFE00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000000000000C0C0C000FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF0002020200FFFFFF00FFFFFF000F0F0F00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB000000
-      0000FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB0088796300FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C0C0C000FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF000202020000000000000000000F0F0F00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000F1F1F100E6E6E6000000
+      0000E5E5E500FCFCFC00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF0000000000FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000606060000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF0002020200050505000303030002020200FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB0000000000FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB0012100D00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000000000000C3C3C300FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF0000000000D9D9
+      D900FDFDFD00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF0000000000FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000000000000C3C3C300FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C9C9C9000808080000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00808080000000000080808000FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5BB00FFE5
-      BB00FFE5BB00FFE5BB0080808000000000000000000091919100C0C0C000C0C0
+      FF00FFFFFF00FFFFFF00C0C0C0000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00808080000000000080808000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF0080808000000000000000000091919100C0C0C000C0C0
       C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
       C000C0C0C000C0C0C00090909000000000000000000098989800C8C8C800C0C0
       C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0C000C0C0
@@ -1018,79 +1093,79 @@ object frmPaletteEditor: TfrmPaletteEditor
       FF00FFFFFF00FFFFFF00C0C0C00000000000000000006F6F6F00F2F2F200E5E5
       E500E5E5E500E5E5E500E5E5E500E5E5E500E5E5E500E6E6E600E5E5E500E4E4
       E400000000009191910000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000000000000000D9D9D900FFFFFF00FFFF
+      0000000000000000000000000000000000000000000000000000FFFFFF000000
+      00000000000000000000FFFFFF000000000000000000D9D9D900FFFFFF00FFFF
       FF00FFFFFF00DDDDDD0090909000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00D9D9D9000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFEFE00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C000000000000202020000000000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00B6B6B6000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000000000000000D9D9D900FFFFFF00FFFF
+      0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+      FF000000000000000000FFFFFF000000000000000000D9D9D900FFFFFF00FFFF
       FF00F0F0F00000000000000000007C7C7C00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00D9D9D9000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C000000000004B4B4B003232320066666600FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-      FF00FFFFFF000C0C0C008F8F8F00000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000084848400000000000000000000000000D9D9D900FFFFFF00E0E0
+      FF00FFFFFF000C0C0C008F8F8F000000000000000000FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF0084848400FFFFFF000000000000000000D9D9D900FFFFFF00E0E0
       E000030303003D3D3D00B9B9B900000000006E6E6E00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00D9D9D9000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C000000000003E3E3E00DBDBDB0000000000E6E6
       E600FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00B6B6B60000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000000000000000DFDFDF00FFFFFF001D1D
+      0000000000000000000000000000000000000000000000000000FFFFFF00FFFF
+      FF000000000000000000FFFFFF000000000000000000DFDFDF00FFFFFF001D1D
       1D0019191900FFFFFF00FFFFFF00BBBBBB00000000006E6E6E00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00D9D9D9000000000000000000C0C0C000FFFFFF00BFBF
       BF003636360036363600363636000B0B0B000B0B0B0036363600363636003636
       3600BFBFBF00FFFFFF00C0C0C000000000000E0E0E00FFFFFF00666666004949
       4900FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00292929008F8F8F000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000000000000000DBDBDB00FFFFFF00C1C1
+      0000000000000000000000000000000000000000000000000000FFFFFF000000
+      00000000000000000000FFFFFF000000000000000000DBDBDB00FFFFFF00C1C1
       C100F8F8F800FFFFFF00FFFFFF00FFFFFF00BDBDBD00000000006E6E6E00FFFF
       FF00FFFFFF00FFFFFF00D9D9D9000000000000000000C0C0C000FFFFFF00BFBF
       BF003636360036363600363636000B0B0B000B0B0B0036363600363636003636
       3600BFBFBF00FFFFFF00C0C0C000000000000E0E0E00FFFFFF00F0F0F0000000
       0000C3C3C300E6E6E600E5E5E500E5E5E500E6E6E600E6E6E600E5E5E500E8E8
-      E800F3F3F300EBEBEB00A1A1A100000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      E800F3F3F300EBEBEB00A1A1A1000000000000000000FFFFFF00000000000000
+      000000000000FFFFFF0000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000D8D8D800FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BDBDBD00000000007070
       7000FFFFFF00FFFFFF00D7D7D7000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FEFEFE00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000011111100F6F6F600FFFFFF009393
       9300070707002626260026262600262626002626260026262600262626002424
-      2400141414002424240043434300484848000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      24001414140024242400434343004848480000000000FFFFFF00000000000000
+      0000FFFFFF00FFFFFF0000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000D9D9D900FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00BDBDBD000000
       000053535300FFFFFF00DEDEDE000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000012121200F4F4F400FFFFFF00FFFF
       FF00EBEBEB00EFEFEF00F5F5F500F5F5F500F5F5F500F5F5F500F5F5F500DADA
-      DA0004040400CBCBCB0000000000000000000000000000000000848484000000
-      0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000000000000000D9D9D900FFFFFF00FFFF
+      DA0004040400CBCBCB00000000000000000000000000FFFFFF0084848400FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
+      FF00FFFFFF00FFFFFF00FFFFFF000000000000000000D9D9D900FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A6A6
       A60055555500FFFFFF00DEDEDE000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000013131300FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00F5F5F500F5F5F500F5F5F500F5F5F500F5F5F500DADA
-      DA00000000000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      DA000000000000000000000000000000000000000000FFFFFF00000000000000
+      0000FFFFFF00FFFFFF0000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000D9D9D900FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00D7D7D7000000000000000000C0C0C000FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00C0C0C0000000000000000000DBDBDB00E6E6E600E5E5
       E500AAAAAA002424240026262600262626002525250026262600252525002424
-      2400595959000000000000000000000000000000000000000000000000000000
-      0000000000000000000000000000000000000000000000000000000000000000
+      24005959590000000000000000000000000000000000FFFFFF00000000000000
+      000000000000FFFFFF0000000000000000000000000000000000000000000000
       00000000000000000000000000000000000000000000F2F2F200FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00F2F2F2000000000000000000DBDBDB00FFFFFF00FFFF
@@ -1249,11 +1324,11 @@ object frmPaletteEditor: TfrmPaletteEditor
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
-      00000000000000000000000000000000FFFFFFFF000000000001000100000000
-      0001000100000000000100010000000000010001000000000001000100000000
-      0001000100000000000100010000000000010001000000000001000100000000
-      0001000100000000000100010000000000010001000000000001000100000000
-      0001000100000000000100010000000000000000FFFFFFFF00000000FFFFFFFF
+      00000000000000000000000000000000FFFFFFFFFFFFCFF30001000180018001
+      0001000180008001000100018000818100010001800181810001000180018181
+      0001000180018181000100018FF98181000100018FF981810001000180018181
+      0001000180018181000100018001818100010001800080010001000180008001
+      000100018001800100010001FFFFFFFF00000000FFFFFFFF00000000FFFFFFFF
       000000000007FFFF000000000003FFDD000000000003FFCD0000000000018001
       000000000001FFCD000000000000FFDD000000000000BBFF000000000000B3FF
       0000000000038001000000000007B3FF000000000007BBFF0000000003FFFFFF

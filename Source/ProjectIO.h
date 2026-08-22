@@ -23,6 +23,7 @@ struct PCProject
 	int Height = 0;
 
 	int RenderMode = 0;
+    int BoundaryTest = 0;
 	bool SuperSampling = false;
     int SuperSamplingLevel = 8;
 	double nCoeff = 1;
@@ -59,23 +60,24 @@ struct PCProject
 class ProjectIO
 {
 	enum class FileProperty {
-		None = 0, Name = 1, Width = 2, Height = 3, RenderMode = 4, nCoeff = 5,
-		MaxIterations = 6, BailoutRadius = 7,
-		xmin = 8, xmax = 9, ymin = 10, ymax = 11,
-		var_a = 12, var_b = 13, var_c = 14, var_d = 15, var_e = 16,
-		Steps = 17,
-		DeltaA = 18, DeltaB = 19, DeltaC = 20, DeltaD = 21, DeltaE = 22,
-		Parameters = 23, Zoom = 24, Prefix = 25,
-		PaletteFileName = 26, BackgroundPaletteFileName = 27, GradientDirection = 28, IsGradient = 29,
-		SuperSampling = 30, SuperSamplingLevel = 31,
-		MorphEnabled = 32, MorphA = 33, MorphB = 34,
-		MorphVarA = 35, MorphVarB = 36, MorphType = 37
+		None = 0, Name, Width, Height, RenderMode, BoundaryTest, nCoeff,
+		MaxIterations, BailoutRadius,
+		xmin, xmax, ymin, ymax,
+		var_a, var_b, var_c, var_d, var_e,
+		Steps,
+		DeltaA, DeltaB, DeltaC, DeltaD, DeltaE,
+		Parameters, Zoom, Prefix,
+		PaletteFileName, BackgroundPaletteFileName, GradientDirection, IsGradient,
+		SuperSampling, SuperSamplingLevel,
+		MorphEnabled, MorphA, MorphB,
+		MorphVarA, MorphVarB, MorphType,
+		DrawMode, GridWidth, GridColour1, GridColour2
 	};
 
-	static const int kPropertyListCount = 37;
+	static const int kPropertyListCount = 42;
 
 	const std::wstring FilePropertyList[kPropertyListCount] = {
-		L"Name", L"Width", L"Height", L"RenderMode", L"nCoeff",
+		L"Name", L"Width", L"Height", L"RenderMode", L"BoundaryTest", L"nCoeff",
 		L"MaxIterations", L"BailoutRadius",
 		L"xmin", L"xmax", L"ymin", L"ymax",
 		L"var_a", L"var_b", L"var_c", L"var_d", L"var_e",
@@ -85,11 +87,12 @@ class ProjectIO
 		L"Palette", L"Palette2", L"GradientDirection", L"IsGradient",
 		L"SS", L"SSLevel",
 		L"Morph", L"MorphA", L"MorphB",
-		L"var_morph_a", L"var_morph_b", L"MorphType"
+		L"var_morph_a", L"var_morph_b", L"MorphType",
+		L"DrawMode", L"GridWidth", L"GridColour1", L"GridColour2"
 	};
 
 	const FileProperty FilePropertyReference[kPropertyListCount] = {
-		FileProperty::Name, FileProperty::Width, FileProperty::Height, FileProperty::RenderMode, FileProperty::nCoeff,
+		FileProperty::Name, FileProperty::Width, FileProperty::Height, FileProperty::RenderMode, FileProperty::BoundaryTest, FileProperty::nCoeff,
 		FileProperty::MaxIterations, FileProperty::BailoutRadius,
 		FileProperty::xmin, FileProperty::xmax, FileProperty::ymin, FileProperty::ymax,
 		FileProperty::var_a, FileProperty::var_b, FileProperty::var_c, FileProperty::var_d, FileProperty::var_e,
@@ -99,7 +102,8 @@ class ProjectIO
 		FileProperty::PaletteFileName, FileProperty::BackgroundPaletteFileName, FileProperty::GradientDirection, FileProperty::IsGradient,
 		FileProperty::SuperSampling, FileProperty::SuperSamplingLevel,
 		FileProperty::MorphEnabled, FileProperty::MorphA, FileProperty::MorphB,
-		FileProperty::MorphVarA, FileProperty::MorphVarB, FileProperty::MorphType
+		FileProperty::MorphVarA, FileProperty::MorphVarB, FileProperty::MorphType,
+		FileProperty::DrawMode, FileProperty::GridWidth, FileProperty::GridColour1, FileProperty::GridColour2
 	};
 
 	FileProperty GetInputProperty(const std::wstring);

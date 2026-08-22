@@ -8,20 +8,23 @@
 // https://github.com/MaximumOctopus/PrettyChaos
 //
 
+// https://en.wikipedia.org/wiki/Burning_Ship_fractal
+
+
 #pragma once
 
 #include "Fractal.h"
 
 
-class MandelbrotCosNtic : public Fractal
+class MandelbrotShip : public Fractal
 {
 	void OrbitTrap(bool);
 
 public:
 
-	MandelbrotCosNtic();
+	MandelbrotShip();
 
-	~MandelbrotCosNtic();
+	~MandelbrotShip();
 
 	bool MultiThreadRender(bool, bool, bool) override;
 	void Render(int, int) override;
@@ -33,7 +36,7 @@ public:
 
 	std::wstring GetParameters() override;
 
-	std::wstring Description() override;
+    std::wstring Description() override;
 	std::wstring HistoryEntry() override;
 
     void ToFile(std::ofstream&) override;

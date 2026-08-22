@@ -24,12 +24,6 @@
 
 MartinAdditive::MartinAdditive() : Fractal()
 {
-	AcceptsABC = true;
-	AcceptsVarA = true;
-	AcceptsVarB = true;
-	AcceptsVarC = true;
-	AcceptsVarD = true;
-
 	QPM = QuickParameterMode::kABPlusFine;
 
 	AcceptsZoom = false;
@@ -40,14 +34,9 @@ MartinAdditive::MartinAdditive() : Fractal()
 
 	Name = L"Martin (Additive)";
 
-	RenderModes.push_back(L"Average");
-	RenderModes.push_back(L"Time");
-	RenderModes.push_back(L"Distance");
-
-	NameA = L"a";
-	NameB = L"b";
-	NameC = L"c";
-	NameD = L"Zoom";
+	Parameters.push_back(RenderModeParameters(L"Average", L"a", L"b", L"c", L"Zoom", L""));
+	Parameters.push_back(RenderModeParameters(L"Time", L"a", L"b", L"c", L"Zoom", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance", L"a", L"b", L"c", L"Zoom", L""));
 
 	ResetAll();
 }
@@ -130,15 +119,16 @@ void MartinAdditive::Render(int hstart, int hend)
 				break;
 			}
 			case __RMMartinDistance:
-				int index = Fast::Floor((std::sqrt(xold * xold + yold * yold) / maxdim) * pp->ColourCount);
+				int ii = Fast::Floor((std::sqrt(xold * xold + yold * yold) / maxdim) * pp->ColourCount);
 
-				FractalData[y * Width + x].a = index;
+				FractalData[y * Width + x].a = ii;
 				break;
 			}
 		}
 
 		xnew = yold + std::sqrt(std::abs(Var.b * xold - Var.c));
 		ynew = Var.a - xold;
+
 		xold = xnew;
 		yold = ynew;
 	}
@@ -164,7 +154,7 @@ void MartinAdditive::ResetView()
 
 std::wstring MartinAdditive::GetParameters()
 {
-	return L"render mode: " + RenderModes[RenderMode] +
+	return L"render mode: " + Parameters[RenderMode].Name +
 		   L"; a: " + std::to_wstring(Var.a) + L"; b " + std::to_wstring(Var.b) + L"; c: " + std::to_wstring(Var.c) + L"; Zoom " + std::to_wstring(Var.d) +
 		   L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
@@ -187,7 +177,7 @@ void MartinAdditive::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Martin (Additive) fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + Parameters[RenderMode].Name + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    a          : " + std::to_wstring(Var.a) + L"\n");

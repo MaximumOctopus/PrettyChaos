@@ -84,7 +84,7 @@ void __fastcall TfrmPaletteEditor::FormShow(TObject *Sender)
 
 	RenderGradient();
 
-	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->SingleColour.ToIntBGR());
+	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternLive.SingleColour.ToIntBGR());
 }
 
 
@@ -649,14 +649,15 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 	sbHorizontal->Enabled = ShowPaletteOptions;
 	sbVertical->Enabled = ShowPaletteOptions;
 	sSingleColour->Enabled = ShowPaletteOptions;
-	cbGradient->Enabled = ShowPaletteOptions;
 
 	cbInterleve->Enabled = !ShowPaletteOptions;
 	rbInterleveX2->Enabled = !ShowPaletteOptions;
 	rbInterleveX4->Enabled = !ShowPaletteOptions;
 	cbInterleveReverse->Enabled = !ShowPaletteOptions;
 
-	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection)
+	tsPattern->Enabled = ShowPaletteOptions;
+
+	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GradientDirection)
 	{
 		sbVertical->Down = true;
 	}
@@ -665,8 +666,30 @@ void TfrmPaletteEditor::BuildGuiForPalette()
 		sbHorizontal->Down = true;
 	}
 
-	cbGradient->Checked = GPaletteHandler->Palettes[CurrentPaletteIndex]->TempIsGradient;
-	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->TempSingleColour.ToIntBGR());
+	switch (GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.DrawMode)
+	{
+	case DrawModeOption::kSingleColour:
+		pcOptions->ActivePageIndex = 0;
+		rbSingleColour->Checked = true;
+		break;
+	case DrawModeOption::kGradient:
+		pcOptions->ActivePageIndex = 1;
+		break;
+	case DrawModeOption::kGrid:
+		pcOptions->ActivePageIndex = 0;
+		rbGrid->Checked = true;
+		break;
+	case DrawModeOption::kGridGradient:
+		pcOptions->ActivePageIndex = 0;
+		break;
+	}
+
+	sSingleColour->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.SingleColour.ToIntBGR());
+	sInfinity->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.SingleColour.ToIntBGR());
+
+	eGridWidth->Text = GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GridWidth;
+	sGridOn->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GridColourOn.ToIntBGR());
+	sGridOff->Brush->Color = TColor(GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GridColourOff.ToIntBGR());
 
 	if (GPaletteHandler->Palettes[CurrentPaletteIndex]->ColourSpace)
 	{
@@ -797,7 +820,7 @@ void TfrmPaletteEditor::ClearPalette(bool autoadd)
 void TfrmPaletteEditor::AddShape(int index)
 {
 	TShape *shape = new TShape(this);
-	shape->Parent = gbColour;
+	shape->Parent = tsGradient;
 	shape->Width = 10;
 	shape->Height = 10;
 	shape->Top = __KeyTop;
@@ -1001,15 +1024,37 @@ void __fastcall TfrmPaletteEditor::cbPalettesChange(TObject *Sender)
 	{
 		if (sbHorizontal->Down)
 		{
-			GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = false;
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GradientDirection = false;
 		}
 		else
 		{
-			GPaletteHandler->Palettes[CurrentPaletteIndex]->TempGradientDirection = true;
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GradientDirection = true;
 		}
 
-		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempIsGradient = cbGradient->Checked;
-		GPaletteHandler->Palettes[CurrentPaletteIndex]->TempSingleColour = sSingleColour->Brush->Color;
+		if (pcOptions->ActivePageIndex == 0)
+		{
+			if (rbSingleColour->Checked)
+			{
+				GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.DrawMode = DrawModeOption::kSingleColour;
+			}
+			else if (rbGrid->Checked)
+			{
+				GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.DrawMode = DrawModeOption::kGrid;
+			}
+
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.SingleColour = sSingleColour->Brush->Color;
+		}
+		else
+		{
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.DrawMode = DrawModeOption::kGradient;
+
+			GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.SingleColour = sInfinity->Brush->Color;
+		}
+
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GridColourOn = sGridOn->Brush->Color;
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GridColourOff = sGridOff->Brush->Color;
+
+		GPaletteHandler->Palettes[CurrentPaletteIndex]->PatternTest.GridWidth = eGridWidth->Text.ToIntDef(10);
     }
 
 	CurrentPaletteIndex = cbPalettes->ItemIndex;
@@ -1033,10 +1078,14 @@ void __fastcall TfrmPaletteEditor::cbPalettesChange(TObject *Sender)
 void __fastcall TfrmPaletteEditor::sSingleColourMouseDown(TObject *Sender, TMouseButton Button,
 		  TShiftState Shift, int X, int Y)
 {
+	TShape *shape = (TShape*)Sender;
+
+	frmColourDialog->SelectedColour = shape->Brush->Color;
+
 	if (frmColourDialog->ShowModal() == mrOk)
 	{
-		sSingleColour->Brush->Color = TColor(frmColourDialog->SelectedColour);
+		shape->Brush->Color = TColor(frmColourDialog->SelectedColour);
 
-		sSingleColour->Hint = ColourUtility::BGRtoRGBHex(frmColourDialog->SelectedColour);
+		shape->Hint = ColourUtility::BGRtoRGBHex(frmColourDialog->SelectedColour);
 	}
 }

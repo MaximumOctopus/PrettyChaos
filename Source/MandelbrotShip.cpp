@@ -9,47 +9,39 @@
 //
 
 // https://en.wikipedia.org/wiki/Orbit_trap
-// z -> Cos(z^n + c)
-
 
 #include <string>
 
 #include "ColourUtility.h"
 #include "Constants.h"
 #include "Fast.h"
-#include "MandelbrotCosNtic.h"
+#include "MandelbrotShip.h"
 
 
-MandelbrotCosNtic::MandelbrotCosNtic() : Fractal()
+MandelbrotShip::MandelbrotShip() : Fractal()
 {
-	Name = L"Mandelbrot Cos(z^n)";
+	Name = L"Mandelbrot Burning Ship";
 
 	NumIterationsPerPixel = new int[2001];
 	for (int z = 0; z < 2001; z++) NumIterationsPerPixel[z] = 0;
 
 	AcceptsMorph = true;
-	HasTests = true;
-
-	Defaults.Set(1, 100, 4, 0, 0, 5, 0, 0);
 
 	MultiThread = true;
 
-	Parameters.push_back(RenderModeParameters(L"Escape time", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Continuous", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Distance", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Distance II", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Orbit Trap", L"n", L"orbit x", L"orbit y", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Orbit Trap (filled)", L"n", L"orbit x", L"orbit y", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Two-tone", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Three-tone", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Four-tone", L"n", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"Five-tone", L"n", L"", L"", L"", L""));
+	Defaults.Set(1, 1000, 4, 0, 0, 1000, 0, 0);
 
-	Tests.push_back(L"Re(z)^2 + Im(z)^2 < n");
-	Tests.push_back(L"||Re(z)^2| - |Im(z)^2|| < n");
-	Tests.push_back(L"|Re(z)^2 - Im(z)^2| < n");
-	Tests.push_back(L"Re(z)^2 * Im(z)^2 < n");
-	Tests.push_back(L"|Re(z)^2| + |Im(z)^2| < n");
+	Parameters.push_back(RenderModeParameters(L"Escape time", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Continuous", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance II", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Orbit Trap", L"orbit x", L"orbit y", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Orbit Trap (filled)", L"orbit x", L"orbit y", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Two-tone", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Three-tone", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Four-tone", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Five-tone", L"", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR", L"", L"", L"Coeff", L"", L""));
 
 	MorphNameA = L"orbit x";
 	MorphNameB = L"orbit y";
@@ -58,13 +50,13 @@ MandelbrotCosNtic::MandelbrotCosNtic() : Fractal()
 }
 
 
-MandelbrotCosNtic::~MandelbrotCosNtic()
+MandelbrotShip::~MandelbrotShip()
 {
 	delete NumIterationsPerPixel;
 }
 
 
-bool MandelbrotCosNtic::MultiThreadRender(bool preview, bool super_sample, bool morph)
+bool MandelbrotShip::MultiThreadRender(bool preview, bool super_sample, bool morph)
 {
 	StartTime = std::chrono::system_clock::now();
 
@@ -111,14 +103,12 @@ bool MandelbrotCosNtic::MultiThreadRender(bool preview, bool super_sample, bool 
 
 	CalculateRenderTime();
 
-    return true;
+	return true;
 }
 
 
-void MandelbrotCosNtic::RenderSS(int hstart, int hend)
+void MandelbrotShip::RenderSS(int hstart, int hend)
 {
-	long double halfn = Var.a / 2;
-
 	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
@@ -139,26 +129,22 @@ void MandelbrotCosNtic::RenderSS(int hstart, int hend)
 				long double y1 = 0;
 				long double x2 = 0;
 				long double y2 = 0;
-				long double m = 0;
+				long double w = 0;
 
-				while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
+				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
-					long double atan2pq = Var.a * std::atan2(y1, x1);
-					long double pown = exp(halfn * log(x2 + y2));
-
-					m = pown * std::cos(atan2pq) + p;
-					y1 = pown * std::sin(atan2pq) + q;
-
-					x1 = std::cos(m) * std::cosh(y1);
-					y1 = -(std::sin(m) * std::sinh(y1));
+					x1 = x2 - y2 + p;
+					y1 = w - x2 - y2 + q;
 
 					x2 = x1 * x1;
 					y2 = y1 * y1;
 
+					w = (x1 + y1) * (x1 + y1);
+
 					if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 					{
-						long double cr = p - Var.b;
-						long double ci = q - Var.c;
+						long double cr = x1 - Var.a;
+						long double ci = y1 - Var.b;
 
 						long double magnitude = std::sqrt(cr * cr + ci * ci);
 
@@ -180,17 +166,15 @@ void MandelbrotCosNtic::RenderSS(int hstart, int hend)
 }
 
 
-void MandelbrotCosNtic::RenderSSMorph(int hstart, int hend)
+void MandelbrotShip::RenderSSMorph(int hstart, int hend)
 {
-	long double halfn = Var.a / 2;
-
-	long double vara = Var.b;
-	long double varb = Var.c;
+	long double vara = Var.a;
+	long double varb = Var.b;
 
 	if (MorphType == 0)
 	{
-		if (MorphA) vara = Var.b + (hstart * Var.morph_a);
-		if (MorphB) varb = Var.c + (hstart * Var.morph_b);
+		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
 	}
 
 	for (int y = hstart; y < hend; y++)
@@ -220,13 +204,13 @@ void MandelbrotCosNtic::RenderSSMorph(int hstart, int hend)
 					long double xp = std::abs(((long double)Width / 2) - (long double)x + deltax);
 					long double yp = std::abs(((long double)Height / 2) - (long double)y + deltay);
 
-					if (MorphA) vara = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
-					if (MorphB) varb = Var.c + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+					if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+					if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
 				}
 				else if (MorphType == 2)
 				{
-					if (MorphA)	vara = Var.b + std::sqrt(p * p + q * q) * Var.morph_a;
-					if (MorphB)	varb = Var.c + std::sqrt(p * p + q * q) * Var.morph_b;
+					if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
+					if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
 				}
 
 				int it = 0;
@@ -236,26 +220,22 @@ void MandelbrotCosNtic::RenderSSMorph(int hstart, int hend)
 				long double y1 = 0;
 				long double x2 = 0;
 				long double y2 = 0;
-				long double m = 0;
+				long double w = 0;
 
-				while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
+				while (x2 + y2 <= bailout_radius && it < max_iterations)
 				{
-					long double atan2pq = Var.a * std::atan2(y1, x1);
-					long double pown = exp(halfn * log(x2 + y2));
+					w = x2 - y2 + p;
+					y1 = abs(2 * x1 * y1) + q;
 
-					m = pown * std::cos(atan2pq) + p;
-					y1 = pown * std::sin(atan2pq) + q;
-
-					x1 = std::cos(m) * std::cosh(y1);
-					y1 = -(std::sin(m) * std::sinh(y1));
+					x1 = w;
 
 					x2 = x1 * x1;
 					y2 = y1 * y1;
 
 					if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 					{
-						long double cr = p - vara;
-						long double ci = q - varb;
+						long double cr = x1 - vara;
+						long double ci = y1 - varb;
 
 						long double magnitude = std::sqrt(cr * cr + ci * ci);
 
@@ -277,10 +257,8 @@ void MandelbrotCosNtic::RenderSSMorph(int hstart, int hend)
 }
 
 
-void MandelbrotCosNtic::Render(int hstart, int hend)
+void MandelbrotShip::Render(int hstart, int hend)
 {
-	long double halfn = Var.a / 2;
-
 	for (int y = hstart; y < hend; y++)
 	{
 		int ydotwidth = y * Width;
@@ -298,26 +276,22 @@ void MandelbrotCosNtic::Render(int hstart, int hend)
 			long double y1 = 0;
 			long double x2 = 0;
 			long double y2 = 0;
-			long double m = 0;
+			long double w = 0;
 
-			while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
+			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
-				long double atan2pq = Var.a * std::atan2(y1, x1);
-				long double pown = exp(halfn * log(x2 + y2));
+				w = x2 - y2 + p;
+				y1 = abs(2 * x1 * y1) + q;
 
-				m = pown * std::cos(atan2pq) + p;
-				y1 = pown * std::sin(atan2pq) + q;
-
-				x1 = std::cos(m) * std::cosh(y1);
-				y1 = -(std::sin(m) * std::sinh(y1));
+				x1 = w;
 
 				x2 = x1 * x1;
 				y2 = y1 * y1;
 
 				if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 				{
-					long double cr = p - Var.b;
-					long double ci = q - Var.c;
+					long double cr = x1 - Var.a;
+					long double ci = y1 - Var.b;
 
 					long double magnitude = std::sqrt(cr * cr + ci * ci);
 
@@ -336,17 +310,15 @@ void MandelbrotCosNtic::Render(int hstart, int hend)
 }
 
 
-void MandelbrotCosNtic::RenderMorph(int hstart, int hend)
+void MandelbrotShip::RenderMorph(int hstart, int hend)
 {
-	long double halfn = Var.a / 2;
-
-	long double vara = Var.b;
-	long double varb = Var.c;
+	long double vara = Var.a;
+	long double varb = Var.b;
 
 	if (MorphType == 0)
 	{
-		if (MorphA) vara = Var.b + (hstart * Var.morph_a);
-		if (MorphB) varb = Var.c + (hstart * Var.morph_b);
+		if (MorphA) vara = Var.a + (hstart * Var.morph_a);
+		if (MorphB) varb = Var.b + (hstart * Var.morph_b);
 	}
 
 	for (int y = hstart; y < hend; y++)
@@ -370,13 +342,13 @@ void MandelbrotCosNtic::RenderMorph(int hstart, int hend)
 				long double xp = std::abs(((long double)Width / 2) - (long double)x);
 				long double yp = std::abs(((long double)Height / 2) - (long double)y);
 
-				if (MorphA) vara = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
-				if (MorphB) varb = Var.c + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
+				if (MorphA) vara = Var.a + std::sqrt(xp * xp + yp * yp) * Var.morph_a;
+				if (MorphB) varb = Var.b + std::sqrt(xp * xp + yp * yp) * Var.morph_b;
 			}
 			else if (MorphType == 2)
 			{
-				if (MorphA)	vara = Var.b + std::sqrt(p * p + q * q) * Var.morph_a;
-				if (MorphB)	varb = Var.c + std::sqrt(p * p + q * q) * Var.morph_b;
+				if (MorphA)	vara = Var.a + std::sqrt(p * p + q * q) * Var.morph_a;
+				if (MorphB)	varb = Var.b + std::sqrt(p * p + q * q) * Var.morph_b;
 			}
 
 			int it = 0;
@@ -386,26 +358,22 @@ void MandelbrotCosNtic::RenderMorph(int hstart, int hend)
 			long double y1 = 0;
 			long double x2 = 0;
 			long double y2 = 0;
-			long double m = 0;
+			long double w = 0;
 
-			while (MandelbrotTest(x1, y1, x2, y2) && it < max_iterations)
+			while (x2 + y2 <= bailout_radius && it < max_iterations)
 			{
-				long double atan2pq = Var.a * std::atan2(y1, x1);
-				long double pown = exp(halfn * log(x2 + y2));
-
-				m = pown * std::cos(atan2pq) + p;
-				y1 = pown * std::sin(atan2pq) + q;
-
-				x1 = std::cos(m) * std::cosh(y1);
-				y1 = -(std::sin(m) * std::sinh(y1));
+				w = x2 - y2 + p;
+				y1 = w - x2 - y2 + q;
 
 				x2 = x1 * x1;
 				y2 = y1 * y1;
 
+				w = (x1 + y1) * (x1 + y1);
+
 				if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 				{
-					long double cr = p - vara;
-					long double ci = q - varb;
+					long double cr = x1 - vara;
+					long double ci = y1 - varb;
 
 					long double magnitude = std::sqrt(cr * cr + ci * ci);
 
@@ -424,42 +392,41 @@ void MandelbrotCosNtic::RenderMorph(int hstart, int hend)
 }
 
 
-void MandelbrotCosNtic::ResetView()
+void MandelbrotShip::ResetView()
 {
-	SetView(-2.00, 2.00, -1.6, 1.6);
+	SetView(-2.0, 1.4, -1.8, 0.92);
 
-    Var.a = 5;
-	Var.b = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
-	Var.c = ymin + ((ymax - ymin) / 2);     //
+	Var.a = xmin + ((xmax - xmin) / 2);     // set orbit trap position to centre of view
+	Var.b = ymin + ((ymax - ymin) / 2);     //
+	Var.c = 1000;
 }
 
 
-std::wstring MandelbrotCosNtic::GetParameters()
+std::wstring MandelbrotShip::GetParameters()
 {
-	return L"Mandelbrot (Cos(z^n)): x " + Formatting::LDToStr(xmin) + L" <-> " + Formatting::LDToStr(xmax) + L", y " + Formatting::LDToStr(ymin) + L" <-> " + Formatting::LDToStr(ymax) +
+	return L"Mandelbrot Burning Ship: x " + Formatting::LDToStr(xmin) + L" <-> " + Formatting::LDToStr(xmax) + L", y " + Formatting::LDToStr(ymin) + L" <-> " + Formatting::LDToStr(ymax) +
 		   L"; render mode: " + Parameters[RenderMode].Name +
-		   L"; ^n: " + std::to_wstring(Var.a) + L"; orbit x: " + std::to_wstring(Var.b) + L"; orbit y " + std::to_wstring(Var.c) +
+		   L"; orbit x: " + std::to_wstring(Var.a) + L"; orbit y " + std::to_wstring(Var.b) +
 		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
 }
 
 
-std::wstring MandelbrotCosNtic::Description()
+std::wstring MandelbrotShip::Description()
 {
-	return L"Mandelbrot (Cos(z^n)): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"MandelbrotShip: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-std::wstring MandelbrotCosNtic::HistoryEntry()
+std::wstring MandelbrotShip::HistoryEntry()
 {
-	return L"Mandelbrot (Cos(z^n)): " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
+	return L"MandelbrotShip: " +  Formatting::LDToStr(xmin) + L", " + Formatting::LDToStr(xmax) + L" / " + Formatting::LDToStr(ymin) + L", " + Formatting::LDToStr(ymax);
 }
 
 
-void MandelbrotCosNtic::ToFile(std::ofstream& ofile)
+void MandelbrotShip::ToFile(std::ofstream& ofile)
 {
-	ofile << Formatting::to_utf8(L"Mandelbrot Cos(z^n) fractal\n");
-	ofile << Formatting::to_utf8(L"    ^n         : " + std::to_wstring(Var.a) + L"\n");
+	ofile << Formatting::to_utf8(L"Mandelbrot Burning Ship fractal\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
 	ofile << Formatting::to_utf8(L"    Rendermode : " + Parameters[RenderMode].Name + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
@@ -473,7 +440,7 @@ void MandelbrotCosNtic::ToFile(std::ofstream& ofile)
 
 	if (RenderMode == __RMMandelbrotOrbitTrap || RenderMode == __RMMandelbrotOrbitTrapFilled)
 	{
-		ofile << Formatting::to_utf8(L"    Orbit x    : " + Formatting::LDToStr(Var.b) + L"\n");
-		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.c) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit x    : " + Formatting::LDToStr(Var.a) + L"\n");
+		ofile << Formatting::to_utf8(L"    Orbit y    : " + Formatting::LDToStr(Var.b) + L"\n");
 	}
 }

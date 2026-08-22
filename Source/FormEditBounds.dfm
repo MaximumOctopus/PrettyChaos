@@ -3,7 +3,7 @@ object frmEditBounds: TfrmEditBounds
   Top = 0
   BorderStyle = bsDialog
   Caption = 'Edit Fractal Bounds'
-  ClientHeight = 195
+  ClientHeight = 202
   ClientWidth = 368
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
@@ -15,15 +15,15 @@ object frmEditBounds: TfrmEditBounds
   OnShow = FormShow
   TextHeight = 13
   object Bevel1: TBevel
-    Left = 8
-    Top = 8
+    Left = 7
+    Top = 16
     Width = 353
     Height = 153
     Shape = bsFrame
   end
   object Label5: TLabel
     Left = 32
-    Top = 26
+    Top = 34
     Width = 7
     Height = 13
     Caption = 'X'
@@ -36,7 +36,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label1: TLabel
     Left = 40
-    Top = 34
+    Top = 42
     Width = 15
     Height = 11
     Caption = 'Min'
@@ -49,7 +49,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label6: TLabel
     Left = 32
-    Top = 53
+    Top = 61
     Width = 7
     Height = 13
     Caption = 'X'
@@ -62,7 +62,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label2: TLabel
     Left = 40
-    Top = 61
+    Top = 69
     Width = 17
     Height = 11
     Caption = 'Max'
@@ -75,7 +75,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label7: TLabel
     Left = 32
-    Top = 80
+    Top = 88
     Width = 7
     Height = 13
     Caption = 'Y'
@@ -88,7 +88,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label3: TLabel
     Left = 40
-    Top = 88
+    Top = 96
     Width = 15
     Height = 11
     Caption = 'Min'
@@ -101,7 +101,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label8: TLabel
     Left = 32
-    Top = 107
+    Top = 115
     Width = 7
     Height = 13
     Caption = 'Y'
@@ -114,7 +114,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object Label4: TLabel
     Left = 40
-    Top = 115
+    Top = 123
     Width = 17
     Height = 11
     Caption = 'Max'
@@ -126,18 +126,17 @@ object frmEditBounds: TfrmEditBounds
     ParentFont = False
   end
   object bOK: TBitBtn
-    Left = 205
-    Top = 167
+    Left = 204
+    Top = 175
     Width = 75
     Height = 25
     Caption = 'OK'
-    ModalResult = 1
     TabOrder = 0
     OnClick = bOKClick
   end
   object bCancel: TBitBtn
-    Left = 286
-    Top = 167
+    Left = 285
+    Top = 175
     Width = 75
     Height = 25
     Cancel = True
@@ -147,39 +146,43 @@ object frmEditBounds: TfrmEditBounds
   end
   object eXMin: TEdit
     Left = 80
-    Top = 29
-    Width = 121
+    Top = 37
+    Width = 145
     Height = 21
+    Alignment = taRightJustify
     TabOrder = 2
-    Text = 'eXMin'
+    Text = '0'
   end
   object eXMax: TEdit
     Left = 80
-    Top = 56
-    Width = 121
+    Top = 64
+    Width = 145
     Height = 21
+    Alignment = taRightJustify
     TabOrder = 3
-    Text = 'Edit1'
+    Text = '0'
   end
   object eYMin: TEdit
     Left = 80
-    Top = 83
-    Width = 121
+    Top = 91
+    Width = 145
     Height = 21
+    Alignment = taRightJustify
     TabOrder = 4
-    Text = 'Edit1'
+    Text = '0'
   end
   object eYMax: TEdit
     Left = 80
-    Top = 110
-    Width = 121
+    Top = 118
+    Width = 145
     Height = 21
+    Alignment = taRightJustify
     TabOrder = 5
-    Text = 'Edit1'
+    Text = '0'
   end
   object rbNoFitting: TRadioButton
     Left = 256
-    Top = 34
+    Top = 42
     Width = 65
     Height = 17
     Caption = 'No fitting'
@@ -189,7 +192,7 @@ object frmEditBounds: TfrmEditBounds
   end
   object rbAutoFitting: TRadioButton
     Left = 256
-    Top = 57
+    Top = 65
     Width = 89
     Height = 17
     Caption = 'Auto fitting'

@@ -66,11 +66,11 @@ namespace Formatting
     // utf8 output magic
     std::string to_utf8(const std::wstring& str)
     {
-        return to_utf8(str.c_str(), (int)str.size());
+		return to_utf8x(str.c_str(), (int)str.size());
     }
 
 
-    std::string to_utf8(const wchar_t* buffer, int len)
+    std::string to_utf8x(const wchar_t* buffer, int len)
     {
         int nChars = ::WideCharToMultiByte(
             CP_UTF8,

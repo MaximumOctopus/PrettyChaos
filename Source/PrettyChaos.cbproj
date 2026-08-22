@@ -96,6 +96,7 @@
         <IncludePath>PrettyChaos\;$(IncludePath)</IncludePath>
         <ILINK_LibraryPath>PrettyChaos\;$(ILINK_LibraryPath)</ILINK_LibraryPath>
         <SanitizedProjectName>PrettyChaos</SanitizedProjectName>
+        <Custom_Styles>Carbon|VCLSTYLE|$(BDSCOMMONDIR)\Styles\Carbon.vsf</Custom_Styles>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Base_Win32)'!=''">
         <PackageImports>adortl;appanalytics;bcbie;bcbsmp;bindcomp;bindcompdbx;bindcompfmx;bindcompvcl;bindcompvclsmp;bindcompvclwinx;bindengine;CloudService;CustomIPTransport;dbexpress;dbrtl;dbxcds;DbxClientDriver;DbxCommonDriver;DBXInterBaseDriver;DBXMySQLDriver;DBXSqliteDriver;dsnap;dsnapcon;dsnapxml;FireDAC;FireDACADSDriver;FireDACCommon;FireDACCommonDriver;FireDACCommonODBC;FireDACIBDriver;FireDACMSAccDriver;FireDACMySQLDriver;FireDACPgDriver;FireDACSqliteDriver;fmx;fmxase;fmxdae;fmxFireDAC;fmxobj;IndyCore;IndyIPClient;IndyIPCommon;IndyIPServer;IndyProtocols;IndySystem;inet;inetdb;inetdbxpress;RESTBackendComponents;RESTComponents;rtl;soapmidas;soaprtl;soapserver;svn;tethering;vcl;vclactnband;vcldb;vcldsnap;vcledge;vclFireDAC;vclie;vclimg;VCLRESTComponents;VclSmp;vcltouch;vclwinx;vclx;xmlrtl;$(PackageImports)</PackageImports>
@@ -392,6 +393,14 @@
             <VirtualFolder>{336B4CAC-09CC-422C-9E5A-2A6CA8A5A13E}</VirtualFolder>
             <BuildOrder>59</BuildOrder>
         </None>
+        <CppCompile Include="MandelbrotEZ.cpp">
+            <VirtualFolder>{BAB191AF-FB60-422C-96E0-406462CE4E14}</VirtualFolder>
+            <BuildOrder>76</BuildOrder>
+        </CppCompile>
+        <None Include="MandelbrotEZ.h">
+            <VirtualFolder>{BAB191AF-FB60-422C-96E0-406462CE4E14}</VirtualFolder>
+            <BuildOrder>77</BuildOrder>
+        </None>
         <CppCompile Include="MandelbrotNtic.cpp">
             <VirtualFolder>{29DBFC0D-82E4-4142-872A-3FDBA64B1476}</VirtualFolder>
             <BuildOrder>65</BuildOrder>
@@ -407,6 +416,22 @@
         <None Include="MandelbrotQuartic.h">
             <VirtualFolder>{86D106E1-8F83-42D7-B4F3-A7ABE0D41DC7}</VirtualFolder>
             <BuildOrder>62</BuildOrder>
+        </None>
+        <CppCompile Include="MandelbrotShip.cpp">
+            <VirtualFolder>{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}</VirtualFolder>
+            <BuildOrder>84</BuildOrder>
+        </CppCompile>
+        <None Include="MandelbrotShip.h">
+            <VirtualFolder>{8AA4D4F1-23EC-48C7-8168-1C28E5829BA2}</VirtualFolder>
+            <BuildOrder>85</BuildOrder>
+        </None>
+        <CppCompile Include="MandelbrotZ2Z.cpp">
+            <VirtualFolder>{7BB0704B-53D9-416B-B4D3-29627B169CB1}</VirtualFolder>
+            <BuildOrder>78</BuildOrder>
+        </CppCompile>
+        <None Include="MandelbrotZ2Z.h">
+            <VirtualFolder>{7BB0704B-53D9-416B-B4D3-29627B169CB1}</VirtualFolder>
+            <BuildOrder>79</BuildOrder>
         </None>
         <CppCompile Include="MartinAdditive.cpp">
             <VirtualFolder>{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}</VirtualFolder>
@@ -471,6 +496,14 @@
             <DependentOn>PaletteEditor.h</DependentOn>
             <BuildOrder>11</BuildOrder>
         </CppCompile>
+        <None Include="PaletteFolder.cpp">
+            <VirtualFolder>{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}</VirtualFolder>
+            <BuildOrder>80</BuildOrder>
+        </None>
+        <None Include="PaletteFolder.h">
+            <VirtualFolder>{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}</VirtualFolder>
+            <BuildOrder>81</BuildOrder>
+        </None>
         <CppCompile Include="PaletteHandler.cpp">
             <VirtualFolder>{D7F6F6C6-6A1B-479C-AD5B-6CEBEE78C0F4}</VirtualFolder>
             <BuildOrder>49</BuildOrder>
@@ -510,13 +543,13 @@
             <VirtualFolder>{F7E93CCB-5C56-4504-908C-142359F6D58A}</VirtualFolder>
             <BuildOrder>10</BuildOrder>
         </None>
-        <FormResources Include="main.dfm"/>
         <FormResources Include="PaletteEditor.dfm"/>
+        <FormResources Include="FormText.dfm"/>
+        <FormResources Include="FormEditBounds.dfm"/>
         <FormResources Include="FormColourDialog.dfm"/>
         <FormResources Include="FormAnimate.dfm"/>
-        <FormResources Include="FormEditBounds.dfm"/>
-        <FormResources Include="FormText.dfm"/>
         <FormResources Include="FormAbout.dfm"/>
+        <FormResources Include="main.dfm"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -567,8 +600,10 @@
                         <VFOLDER ID="{FFDEDC69-B18E-4B86-BDF5-28C2E6C98690}" name="Mandelbrot_Cos"/>
                         <VFOLDER ID="{D12492A8-F745-4419-8C05-1F05A60D1612}" name="Mandelbrot_CosNtic"/>
                         <VFOLDER ID="{336B4CAC-09CC-422C-9E5A-2A6CA8A5A13E}" name="Mandelbrot_Cube"/>
+                        <VFOLDER ID="{BAB191AF-FB60-422C-96E0-406462CE4E14}" name="Mandelbrot_e"/>
                         <VFOLDER ID="{29DBFC0D-82E4-4142-872A-3FDBA64B1476}" name="Mandelbrot_Ntic"/>
                         <VFOLDER ID="{86D106E1-8F83-42D7-B4F3-A7ABE0D41DC7}" name="Mandelbrot_Quartic"/>
+                        <VFOLDER ID="{7BB0704B-53D9-416B-B4D3-29627B169CB1}" name="Mandelbrot_Z2Z"/>
                         <VFOLDER ID="{5B6578CE-6CEC-421F-9B4B-16C54714CC2C}" name="Martin"/>
                         <VFOLDER ID="{75F84065-5D8A-4ECB-9C26-E525BE8D3CCF}" name="Newton"/>
                     </VFOLDER>

@@ -13,15 +13,15 @@
 #include "Fractal.h"
 
 
-class MandelbrotCosNtic : public Fractal
+class MandelbrotZ2Z : public Fractal
 {
 	void OrbitTrap(bool);
 
 public:
 
-	MandelbrotCosNtic();
+	MandelbrotZ2Z();
 
-	~MandelbrotCosNtic();
+	~MandelbrotZ2Z();
 
 	bool MultiThreadRender(bool, bool, bool) override;
 	void Render(int, int) override;
@@ -33,8 +33,9 @@ public:
 
 	std::wstring GetParameters() override;
 
-	std::wstring Description() override;
+    std::wstring Description() override;
 	std::wstring HistoryEntry() override;
 
     void ToFile(std::ofstream&) override;
 };
+

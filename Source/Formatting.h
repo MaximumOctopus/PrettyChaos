@@ -22,5 +22,5 @@ namespace Formatting
     std::wstring LDToStr(long double);
 
 	std::string to_utf8(const std::wstring& str);
-	std::string to_utf8(const wchar_t* buffer, int len);
+	std::string to_utf8x(const wchar_t* buffer, int len);
 }

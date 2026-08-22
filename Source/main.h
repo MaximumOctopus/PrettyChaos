@@ -338,6 +338,9 @@ __published:	// IDE-managed Components
 	TBitBtn *bPaletteRight;
 	TRadioButton *rbSelectMain;
 	TRadioButton *rbSelectBackground;
+	TMenuItem *N5120x14401;
+	TComboBox *cbBoundaryTest;
+	TMenuItem *N0810270151;
 	void __fastcall sbRenderClick(TObject *Sender);
 	void __fastcall sbSaveImageClick(TObject *Sender);
 	void __fastcall iRenderMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift,
@@ -411,6 +414,7 @@ __published:	// IDE-managed Components
 	void __fastcall bPaletteRightFastClick(TObject *Sender);
 	void __fastcall bPaletteRightClick(TObject *Sender);
 	void __fastcall bPaletteLeftClick(TObject *Sender);
+	void __fastcall cbBoundaryTestChange(TObject *Sender);
 
 
 private:	// User declarations

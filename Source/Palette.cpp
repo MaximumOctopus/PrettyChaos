@@ -551,7 +551,7 @@ bool Palette::Load(const std::wstring file_name)
 						break;
 
 					case 14:
-						SingleColour.FromIntBGR(stoi(value));
+						PatternLive.SingleColour.FromIntBGR(stoi(value));
 						break;
 
 					case 15:
@@ -586,7 +586,7 @@ bool Palette::Save(const std::wstring file_name)
 	if (file)
 	{
 		file << Formatting::to_utf8(L"[\n");
-		file << Formatting::to_utf8(L"infinity=" + std::to_wstring(SingleColour.ToIntBGR()) + L"\n");
+		file << Formatting::to_utf8(L"infinity=" + std::to_wstring(PatternLive.SingleColour.ToIntBGR()) + L"\n");
 		file << Formatting::to_utf8(L"colourspace=" + std::to_wstring(ColourSpace) + L"\n");
 		file << Formatting::to_utf8(L"steps=" + std::to_wstring(Steps) + L"\n");
 		file << Formatting::to_utf8(L"interleve=" + std::to_wstring(Interleve) + L"\n");
@@ -661,17 +661,13 @@ int Palette::GetKeyType(const std::wstring key)
 
 void Palette::SetFromTemp()
 {
-	GradientDirection = TempGradientDirection;
-	IsGradient = TempIsGradient;
-	SingleColour = TempSingleColour;
+	PatternLive = PatternTest;
 }
 
 
 void Palette::CopyToTemp()
 {
-	TempGradientDirection = GradientDirection;
-	TempIsGradient = IsGradient;
-	TempSingleColour = SingleColour;
+	PatternTest = PatternLive;
 }
 
 

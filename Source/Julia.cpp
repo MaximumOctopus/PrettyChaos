@@ -18,30 +18,28 @@
 
 Julia::Julia() : Fractal()
 {
-	AcceptsABC = true;
 	AcceptsMorph = true;
-	AcceptsVarA = true;
-	AcceptsVarB = true;
 
 	MultiThread = true;
 
-	Defaults.Set(1, 1000, 4, -0.7, 0.27015, 0, 0, 0);
+	Defaults.Set(1, 1000, 4,  -0.5125, 0.5213, 0, 1000, 0);
 
 	QPM = QuickParameterMode::kABPlusFine;
 
 	Name = L"Julia Set";
 
-	RenderModes.push_back(L"Escape time");
-	RenderModes.push_back(L"Distance");
-	RenderModes.push_back(L"Distance from origin");
-	RenderModes.push_back(L"Two-tone");
-	RenderModes.push_back(L"Three-tone");
-	RenderModes.push_back(L"Four-tone");
-	RenderModes.push_back(L"Five-tone");
-	RenderModes.push_back(L"Continuous");
+	Parameters.push_back(RenderModeParameters(L"Escape time", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Distance from origin", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Two-tone", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Three-tone", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Four-tone", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"Five-tone", L"real", L"imaginary", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR", L"real", L"imaginary", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"Continuous", L"real", L"imaginary", L"", L"", L""));
 
-	NameA = L"real";
-	NameB = L"imaginary";
+	MorphNameA = L"real";
+	MorphNameB = L"imaginary";
 
 	ResetAll();
 }
@@ -132,59 +130,7 @@ void Julia::Render(int hstart, int hend)
 				it++;
 			}
 
-			switch (RenderMode)
-			{
-			case __RMJuliaEscapeTime:
-			case __RMJuliaTwoTone:
-			case __RMJuliaThreeTone:
-			case __RMJuliaFourTone:
-			case __RMJuliaFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistance:
-			{
-				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-				FractalData[ydotwidth + x].a = it;
-
-				break;
-			}
-			case __RMJuliaDistanceOrigin:
-			{
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
-
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-				FractalData[ydotwidth + x] = pp->Colours[index];
-				break;
-			}
-			case __RMJuliaContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
-					long double nu = 1 - std::log2(log_zn);
-
-					long double itnew = it + nu;
-
-					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
-																				  pp->Colours[it + 1],
-																				  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x] = pp2->SingleColour;
-				}
-
-				break;
-			}
-			}
+			JuliaColourise(it, ydotwidth + x, x, y, p, q);
 		}
 	}
 }
@@ -244,59 +190,7 @@ void Julia::RenderMorph(int hstart, int hend)
 				it++;
 			}
 
-			switch (RenderMode)
-			{
-			case __RMJuliaEscapeTime:
-			case __RMJuliaTwoTone:
-			case __RMJuliaThreeTone:
-			case __RMJuliaFourTone:
-			case __RMJuliaFiveTone:
-			{
-				FractalData[ydotwidth + x].a = it;
-				break;
-			}
-			case __RMJuliaDistance:
-			{
-				Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-				FractalData[ydotwidth + x].a = it;
-
-				break;
-			}
-			case __RMJuliaDistanceOrigin:
-			{
-				int nx = Fast::Floor(x - (Width / 2));
-				int ny = Fast::Floor(y - (Height / 2));
-
-				int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-				FractalData[ydotwidth + x] = pp->Colours[index];
-				break;
-			}
-			case __RMJuliaContinuous:
-			{
-				if (it < max_iterations)
-				{
-					long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
-					long double nu = 1 - std::log2(log_zn);
-
-					long double itnew = it + nu;
-
-					it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-					long double it_d = (long double)it + nu;
-
-					FractalData[ydotwidth + x] = ColourUtility::LinearInterpolate(pp->Colours[it],
-																				  pp->Colours[it + 1],
-																				  it_d - (std::floorl(it_d)));
-				}
-				else
-				{
-					FractalData[ydotwidth + x] = pp2->SingleColour;
-				}
-
-				break;
-			}
-			}
+			JuliaColourise(it, ydotwidth + x, x, y, p, q);
 		}
 	}
 }
@@ -331,58 +225,7 @@ void Julia::RenderSS(int hstart, int hend)
 					it++;
 				}
 
-				switch (RenderMode)
-				{
-				case __RMJuliaEscapeTime:
-				case __RMJuliaTwoTone:
-				case __RMJuliaThreeTone:
-				case __RMJuliaFourTone:
-				case __RMJuliaFiveTone:
-				{
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistance:
-				{
-					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistanceOrigin:
-				{
-					int nx = Fast::Floor(x - (Width / 2));
-					int ny = Fast::Floor(y - (Height / 2));
-
-					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-					FractalData[ydotwidth + x] += pp->Colours[index];
-					break;
-				}
-				case __RMJuliaContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
-						long double nu = 1 - std::log2(log_zn);
-
-						long double itnew = it + nu;
-
-						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-						long double it_d = (long double)it + nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x] += pp2->SingleColour;
-					}
-
-					break;
-				}
-				}
+				JuliaColourise(it, ydotwidth + x, x, y, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -450,58 +293,7 @@ void Julia::RenderSSMorph(int hstart, int hend)
 					it++;
 				}
 
-				switch (RenderMode)
-				{
-				case __RMJuliaEscapeTime:
-				case __RMJuliaTwoTone:
-				case __RMJuliaThreeTone:
-				case __RMJuliaFourTone:
-				case __RMJuliaFiveTone:
-				{
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistance:
-				{
-					Data[ydotwidth + x] = std::sqrt((p + q) * (p + q));
-
-					FractalData[ydotwidth + x].a += it;
-					break;
-				}
-				case __RMJuliaDistanceOrigin:
-				{
-					int nx = Fast::Floor(x - (Width / 2));
-					int ny = Fast::Floor(y - (Height / 2));
-
-					int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
-
-					FractalData[ydotwidth + x] += pp->Colours[index];
-					break;
-				}
-				case __RMJuliaContinuous:
-				{
-					if (it < max_iterations)
-					{
-						long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
-						long double nu = 1 - std::log2(log_zn);
-
-						long double itnew = it + nu;
-
-						it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
-						long double it_d = (long double)it + nu;
-
-						FractalData[ydotwidth + x] += ColourUtility::LinearInterpolate(pp->Colours[it],
-																					   pp->Colours[it + 1],
-																					   it_d - (std::floorl(it_d)));
-					}
-					else
-					{
-						FractalData[ydotwidth + x] += pp2->SingleColour;
-					}
-
-					break;
-				}
-				}
+				JuliaColourise(it, ydotwidth + x, x, y, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -518,7 +310,8 @@ void Julia::ResetView()
 
 std::wstring Julia::GetParameters()
 {
-	return L"render mode: " + RenderModes[RenderMode] +
+	return L"Julia (z^2): r " + Formatting::LDToStr(Var.a) + L"; i " + Formatting::LDToStr(Var.b) + L", x " + Formatting::LDToStr(xmin) + L" <-> " + Formatting::LDToStr(xmax) + L" y " + Formatting::LDToStr(ymin) + L" <-> " + Formatting::LDToStr(ymax) +
+		   L"; render mode: " + Parameters[RenderMode].Name +
 		   L"; real: " + std::to_wstring(Var.a) + L"; imaginary " + std::to_wstring(Var.b) +
 		   L"; bailout radius: " + std::to_wstring(bailout_radius) + L"; max iterations: " + std::to_wstring(max_iterations) +
 		   L"; coeff n: " + std::to_wstring(n_coeff);
@@ -541,7 +334,7 @@ void Julia::ToFile(std::ofstream& ofile)
 {
 	ofile << Formatting::to_utf8(L"Julia Set (z^2)\n");
 	ofile << Formatting::to_utf8(L"    Size       : " + std::to_wstring(Width) + L" x " + std::to_wstring(Height) + L"\n");
-	ofile << Formatting::to_utf8(L"    Rendermode : " + RenderModes[RenderMode] + L" (" + std::to_wstring(RenderMode) + L")\n");
+	ofile << Formatting::to_utf8(L"    Rendermode : " + Parameters[RenderMode].Name + L" (" + std::to_wstring(RenderMode) + L")\n");
 	ofile << Formatting::to_utf8(L"    Iterations : " + std::to_wstring(max_iterations) + L"\n");
 	ofile << Formatting::to_utf8(L"    n coeff    : " + std::to_wstring(n_coeff) + L"\n");
 	ofile << Formatting::to_utf8(L"    r bailout  : " + std::to_wstring(bailout_radius) + L"\n\n");

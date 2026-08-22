@@ -25,6 +25,9 @@
 #include "MandelbrotNtic.h"
 #include "MandelbrotCos.h"
 #include "MandelbrotCosNtic.h"
+#include "MandelbrotEZ.h"
+#include "MandelbrotZ2Z.h"
+#include "MandelbrotShip.h"
 #include "MartinClassic.h"
 #include "MartinAdditive.h"
 #include "MartinPositive.h"
@@ -48,6 +51,9 @@ FractalHandler::FractalHandler()
 	Fractal* m4 = new MandelbrotNtic();
 	Fractal* m5 = new MandelbrotCos();
 	Fractal* m6 = new MandelbrotCosNtic();
+	Fractal* m7 = new MandelbrotEZ();
+	Fractal* m8 = new MandelbrotZ2Z();
+	Fractal* m9 = new MandelbrotShip();
 	Fractal* mf = new Martin();
 	Fractal* ma = new MartinAdditive();
 	Fractal* md = new MartinDeJong();
@@ -63,11 +69,14 @@ FractalHandler::FractalHandler()
 	Fractals.push_back(j7);
 
 	Fractals.push_back(m1);
+	Fractals.push_back(m8);
 	Fractals.push_back(m2);
 	Fractals.push_back(m3);
 	Fractals.push_back(m4);
 	Fractals.push_back(m5);
 	Fractals.push_back(m6);
+	Fractals.push_back(m7);
+	Fractals.push_back(m8);
 
 	Fractals.push_back(mf);
 	Fractals.push_back(ma);
@@ -81,10 +90,5 @@ FractalHandler::FractalHandler()
 
 FractalHandler::~FractalHandler()
 {
-	for (int t = 0; t < Fractals.size(); t++)
-	{
-		delete Fractals[t];
-	}
-
 	Fractals.clear();
 }

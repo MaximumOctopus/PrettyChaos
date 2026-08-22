@@ -77,6 +77,9 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 					case FileProperty::RenderMode:
 						project.RenderMode = stoi(value);
 						break;
+					case FileProperty::BoundaryTest:
+						project.BoundaryTest = stoi(value);
+                        break;
 					case FileProperty::nCoeff:
 						project.nCoeff = stod(value);
 						break;
@@ -152,10 +155,17 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 						break;
 
 					case FileProperty::GradientDirection:
-						GPaletteHandler->Palettes[1]->GradientDirection = stoi(value);
+						GPaletteHandler->Palettes[1]->PatternLive.GradientDirection = stoi(value);
 						break;
-					case FileProperty::IsGradient:
-						GPaletteHandler->Palettes[1]->IsGradient = stoi(value);
+					case FileProperty::IsGradient:  // not used in versions 0.29 and above, but kept for compatibility
+						if (stoi(value))
+						{
+							GPaletteHandler->Palettes[1]->PatternLive.DrawMode = DrawModeOption::kGradient;
+						}
+						else
+						{
+							GPaletteHandler->Palettes[1]->PatternLive.DrawMode = DrawModeOption::kSingleColour;
+						}
 						break;
 
 					case FileProperty::SuperSampling:
@@ -183,6 +193,19 @@ bool ProjectIO::Load(const std::wstring file_name, PCProject &project, Animation
 						break;
 					case FileProperty::MorphType:
 						project.MorphType = stoi(value);
+						break;
+
+					case FileProperty::DrawMode:
+						GPaletteHandler->Palettes[1]->PatternLive.DrawMode = GPaletteHandler->IntToDrawMode(stoi(value));
+						break;
+					case FileProperty::GridWidth:
+						GPaletteHandler->Palettes[1]->PatternLive.GridWidth = stoi(value);
+						break;
+					case FileProperty::GridColour1:
+						GPaletteHandler->Palettes[1]->PatternLive.GridColourOff = stoi(value);
+						break;
+					case FileProperty::GridColour2:
+						GPaletteHandler->Palettes[1]->PatternLive.GridColourOn = stoi(value);
 						break;
                     }
 				}
@@ -227,6 +250,7 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 		file << Formatting::to_utf8(L"Height=" + std::to_wstring(project.Height) + L"\n");
 
 		file << Formatting::to_utf8(L"RenderMode=" + std::to_wstring(project.RenderMode) + L"\n");
+		file << Formatting::to_utf8(L"BoundaryTest=" + std::to_wstring(project.BoundaryTest) + L"\n");
 		file << Formatting::to_utf8(L"nCoeff=" + std::to_wstring(project.nCoeff) + L"\n");
 		file << Formatting::to_utf8(L"MaxIterations=" + std::to_wstring(project.MaxIterations) + L"\n");
 		file << Formatting::to_utf8(L"BailoutRadius=" + std::to_wstring(project.BailoutRadius) + L"\n");
@@ -244,7 +268,7 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 			file << Formatting::to_utf8(L"Palette2=" + GPaletteHandler->Palettes[1]->FileName + L"\n");
 		}
 
-		if (GPaletteHandler->Palettes[1]->GradientDirection)
+		if (GPaletteHandler->Palettes[1]->PatternLive.GradientDirection)
 		{
 			file << Formatting::to_utf8(L"GradientDirection=1\n");
 		}
@@ -253,14 +277,10 @@ bool ProjectIO::Save(const std::wstring file_name, PCProject &project, Animation
 			file << Formatting::to_utf8(L"GradientDirection=0\n");
 		}
 
-		if (GPaletteHandler->Palettes[1]->IsGradient)
-		{
-			file << Formatting::to_utf8(L"IsGradient=1\n");
-		}
-		else
-		{
-			file << Formatting::to_utf8(L"IsGradient=0\n");
-		}
+		file << Formatting::to_utf8(L"DrawMode=" + std::to_wstring(GPaletteHandler->DrawModeToInt(GPaletteHandler->Palettes[1]->PatternLive.DrawMode)) + L"\n");
+		file << Formatting::to_utf8(L"GridWidth=" + std::to_wstring(GPaletteHandler->Palettes[1]->PatternLive.GridWidth) + L"\n");
+		file << Formatting::to_utf8(L"GridColour1=" + std::to_wstring(GPaletteHandler->Palettes[1]->PatternLive.GridColourOff.ToIntBGR()) + L"\n");
+		file << Formatting::to_utf8(L"GridColour2=" + std::to_wstring(GPaletteHandler->Palettes[1]->PatternLive.GridColourOn.ToIntBGR()) + L"\n");
 
 		file << Formatting::to_utf8(L"xmin=" + Formatting::LDToStr(project.xmin) + L"\n");
 		file << Formatting::to_utf8(L"xmax=" + Formatting::LDToStr(project.xmax) + L"\n");

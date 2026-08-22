@@ -12,14 +12,15 @@
 #pragma hdrstop
 #include <tchar.h>
 
-USEFORM("main.cpp", frmMain);
+#include <Vcl.Styles.hpp>
+#include <Vcl.Themes.hpp>
 USEFORM("PaletteEditor.cpp", frmPaletteEditor);
+USEFORM("FormText.cpp", frmText);
 USEFORM("FormEditBounds.cpp", frmEditBounds);
 USEFORM("FormColourDialog.cpp", frmColourDialog);
 USEFORM("FormAnimate.cpp", frmAnimate);
-USEFORM("FormText.cpp", frmText);
 USEFORM("FormAbout.cpp", frmAbout);
-
+USEFORM("main.cpp", frmMain);
 //---------------------------------------------------------------------------
 int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 {
@@ -27,6 +28,7 @@ int WINAPI _tWinMain(HINSTANCE, HINSTANCE, LPTSTR, int)
 	{
 		Application->Initialize();
 		Application->MainFormOnTaskBar = true;
+		TStyleManager::TrySetStyle("Carbon");
 		Application->CreateForm(__classid(TfrmMain), &frmMain);
 		Application->CreateForm(__classid(TfrmColourDialog), &frmColourDialog);
 		Application->CreateForm(__classid(TfrmEditBounds), &frmEditBounds);
