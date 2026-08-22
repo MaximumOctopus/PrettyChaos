@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.27
+  PrettyChaos 0.28
   (c) Paul Alan Freshney 2023-2026
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  June 8th 2026
+  August 22nd 2026
 =================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
@@ -33,6 +33,18 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.28 / August 22nd 2026
+
+Added z^2 + z, e^z, and Burning Ship Mandelbrot variations.
+
+Added multiple "boundary test" options to all Mandelbrots (found under the colour option drop down list). Default is the top option.
+
+Added a new colouring option: XOR.
+
+Added the ability to render a grid to fill the points that tend to infinity.
+
+A few minor tweaks and bug fixes.
 
 0.27 / June 8th 2026
 
