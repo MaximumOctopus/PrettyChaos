@@ -1,5 +1,5 @@
 =================================================================================================
-  PrettyChaos 0.28
+  PrettyChaos 0.29
   (c) Paul Alan Freshney 2023-2026
 
   paul@freshney.org
@@ -7,7 +7,7 @@
   Source code and portable install
     https://github.com/MaximumOctopus/PrettyChaos
 
-  August 22nd 2026
+  August 23rd 2026
 =================================================================================================
 
 PrettyChaos is an open source fractal generation tool.
@@ -33,6 +33,12 @@ All of my software is free and open source; please consider donating to a local 
 =================================================================================================
 
 Release History
+
+0.29 / August 23rd 2026
+
+I broke super-sampling in the previous build... ooops, now fixed.
+
+Added two extra XOR modes to Mandelbrot, and added an alternative colour mode (called test).
 
 0.28 / August 22nd 2026
 
