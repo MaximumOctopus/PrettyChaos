@@ -1119,6 +1119,29 @@ void Fractal::FinaliseRenderMandelbrot(TBitmap *canvas)
 	case __RMMandelbrotXOR3:
 		MandelbrotThreadXOR(canvas);
 		break;
+	case __RMMandelbrotTest:
+	{
+		int h_delta = std::round((double)Height / 5);
+
+		std::thread t1(MandelbrotThreadFastEscape, rc1, 0, h_delta);
+		std::thread t2(MandelbrotThreadFastEscape, rc2, h_delta, 2 * h_delta);
+		std::thread t3(MandelbrotThreadFastEscape, rc3, 2 * h_delta, 3 * h_delta);
+		std::thread t4(MandelbrotThreadFastEscape, rc4, 3 * h_delta, 4 * h_delta);
+		std::thread t5(MandelbrotThreadFastEscape, rc5, 4 * h_delta, Height);
+
+		t1.join();
+		t2.join();
+		t3.join();
+		t4.join();
+		t5.join();
+
+		canvas->Canvas->Draw(0, 0, rc1);
+		canvas->Canvas->Draw(0, rc1->Height, rc2);
+		canvas->Canvas->Draw(0, rc1->Height + rc2->Height, rc3);
+		canvas->Canvas->Draw(0, rc1->Height + rc2->Height + rc3->Height, rc4);
+		canvas->Canvas->Draw(0, rc1->Height + rc2->Height + rc3->Height + rc4->Height, rc5);
+		break;
+	}
 	}
 }
 
@@ -1152,6 +1175,77 @@ void Fractal::MandelbrotThreadEscapeTime(TBitmap *canvas, int ybegin, int yend, 
 					ptr[x].rgbtGreen = pp->Colours[index].g;
 					ptr[x].rgbtBlue = pp->Colours[index].b;
 				}
+			}
+			else
+			{
+				switch (pp2->PatternLive.DrawMode)
+				{
+				case DrawModeOption::kSingleColour:
+					ptr[x].rgbtRed = pp2->PatternLive.SingleColour.r;
+					ptr[x].rgbtGreen = pp2->PatternLive.SingleColour.g;
+					ptr[x].rgbtBlue = pp2->PatternLive.SingleColour.b;
+					break;
+				case DrawModeOption::kGradient:
+					if (pp2->PatternLive.GradientDirection)
+					{
+						int index = (int)std::floor(((double)x / Width) * pp2->ColourCount);
+
+						ptr[x].rgbtRed = pp2->Colours[index].r;
+						ptr[x].rgbtGreen = pp2->Colours[index].g;
+						ptr[x].rgbtBlue = pp2->Colours[index].b;
+					}
+					else
+					{
+						int index = (int)Fast::Floor(((double)y / Height) * pp2->ColourCount);
+
+						ptr[x].rgbtRed = pp2->Colours[index].r;
+						ptr[x].rgbtGreen = pp2->Colours[index].g;
+						ptr[x].rgbtBlue = pp2->Colours[index].b;
+					}
+					break;
+				case DrawModeOption::kGrid:
+					if (x % pp2->PatternLive.GridWidth == 0 ||
+						y % pp2->PatternLive.GridWidth == 0)
+					{
+						ptr[x].rgbtRed = pp2->PatternLive.GridColourOn.r;
+						ptr[x].rgbtGreen = pp2->PatternLive.GridColourOn.g;
+						ptr[x].rgbtBlue = pp2->PatternLive.GridColourOn.b;
+					}
+					else
+					{
+						ptr[x].rgbtRed = pp2->PatternLive.GridColourOff.r;
+						ptr[x].rgbtGreen = pp2->PatternLive.GridColourOff.g;
+						ptr[x].rgbtBlue = pp2->PatternLive.GridColourOff.b;
+					}
+					break;
+				case DrawModeOption::kGridGradient:
+					break;
+				}
+			}
+		}
+	}
+}
+
+
+void Fractal::MandelbrotThreadFastEscape(TBitmap *canvas, int ybegin, int yend)
+{
+	TRGBTriple *ptr;
+
+	for (int y = ybegin; y < yend; y++)
+	{
+		int ydotwidth = y * Width;
+
+		ptr = reinterpret_cast<TRGBTriple *>(canvas->ScanLine[y - ybegin]);
+
+		for (int x = 0; x < Width; x++)
+		{
+			if (FractalData[ydotwidth + x].a != max_iterations)
+			{
+				int index = FractalData[ydotwidth + x].a % pp->ColourCount;
+
+				ptr[x].rgbtRed = pp->Colours[index].r;
+				ptr[x].rgbtGreen = pp->Colours[index].g;
+				ptr[x].rgbtBlue = pp->Colours[index].b;
 			}
 			else
 			{

@@ -138,6 +138,7 @@ protected:
 	static const int __RMMandelbrotXOR = 10;
 	static const int __RMMandelbrotXOR2 = 11;
 	static const int __RMMandelbrotXOR3 = 12;
+    static const int __RMMandelbrotTest = 13;
 
 	static const int __RMMartinAverage = 0;
 	static const int __RMMartinTime = 1;
@@ -170,6 +171,7 @@ protected:
 	void JuliaThreadEscapeTime(TBitmap *, int, int, int, int);
 
 	void MandelbrotThreadEscapeTime(TBitmap *, int, int, int);
+	void MandelbrotThreadFastEscape(TBitmap *, int, int);
 	void MandelbrotThreadContinuous(TBitmap *, int, int);
 	void MandelbrotThreadXOR(TBitmap *);
 
@@ -366,6 +368,7 @@ inline void MandelbrotColourise(int it, int ydotwidthplusx,
 	case __RMMandelbrotThreeTone:
 	case __RMMandelbrotFourTone:
 	case __RMMandelbrotFiveTone:
+	case __RMMandelbrotTest:
 		FractalData[ydotwidthplusx].a = it;
 		break;
 	case __RMMandelbrotContinuous:
@@ -414,8 +417,8 @@ inline void MandelbrotColourise(int it, int ydotwidthplusx,
 	case __RMMandelbrotXOR:
 		if (it < max_iterations)
 		{
-			long double ldi = Var.c * abs(q - y1);
-			long double ldc = Var.c * abs(p - x1);
+			long double ldi = Var.d * abs(q - y1);
+			long double ldc = Var.d * abs(p - x1);
 
 			int ldx = (int)ldi ^ (int)ldc;
 
@@ -429,8 +432,8 @@ inline void MandelbrotColourise(int it, int ydotwidthplusx,
 	case __RMMandelbrotXOR2:
 		if (it < max_iterations)
 		{
-			long double ldi = Var.c * abs(x2);
-			long double ldc = Var.c * abs(y2);
+			long double ldi = Var.d * abs(x2);
+			long double ldc = Var.d * abs(y2);
 
 			int ldx = (int)ldi ^ (int)ldc;
 
@@ -444,10 +447,10 @@ inline void MandelbrotColourise(int it, int ydotwidthplusx,
 	case __RMMandelbrotXOR3:
 		if (it < max_iterations)
 		{
-            long double w = (x1 + y1) * (x1 + y1);
+			long double w = (x1 + y1) * (x1 + y1);
 
-			long double ldi = Var.c * abs(w - x2);
-			long double ldc = Var.c * abs(w - y2);
+			long double ldi = Var.d * abs(w - x2);
+			long double ldc = Var.d * abs(w - y2);
 
 			int ldx = (int)ldi ^ (int)ldc;
 
@@ -462,8 +465,121 @@ inline void MandelbrotColourise(int it, int ydotwidthplusx,
 }
 
 
+inline void MandelbrotColouriseSS(int it, int ydotwidthplusx,
+	long double x1, long double y1,
+	long double x2, long double y2,
+	long double p, long double q)
+{
+	switch (RenderMode)
+	{
+	case __RMMandelbrotEscapeTime:
+	case __RMMandelbrotOrbitTrap:
+	case __RMMandelbrotOrbitTrapFilled:
+	case __RMMandelbrotTwoTone:
+	case __RMMandelbrotThreeTone:
+	case __RMMandelbrotFourTone:
+	case __RMMandelbrotFiveTone:
+	case __RMMandelbrotTest:
+	{
+		FractalData[ydotwidthplusx].a += it;
+		break;
+	}
+	case __RMMandelbrotContinuous:
+	{
+		if (it < max_iterations)
+		{
+			long double log_zn = std::log(x2 + y2) / 0.60205999132796239042747778944899;    // 2 * log(2)
+			long double nu = 1 - std::log2(log_zn);
+
+			long double itnew = it + nu;
+
+			it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+			long double it_d = (long double)it + nu;
+
+			FractalData[ydotwidthplusx] += ColourUtility::LinearInterpolate(pp->Colours[it],
+																		   pp->Colours[it + 1],
+																		   it_d - (std::floorl(it_d)));
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+
+		break;
+	}
+	case __RMMandelbrotDistance:
+	{
+		if (it < max_iterations)
+		{
+			Data[ydotwidthplusx] = std::sqrt((x1 + y1) * (x1 + y1));
+		}
+
+		FractalData[ydotwidthplusx].a += it;
+		break;
+	}
+	case __RMMandelbrotDistanceII:
+	{
+		if (it < max_iterations)
+		{
+			Data[ydotwidthplusx] = std::sqrt(x2 + y2 * x2 + y2);
+		}
+
+		FractalData[ydotwidthplusx].a += it;
+		break;
+	}
+case __RMMandelbrotXOR:
+		if (it < max_iterations)
+		{
+			long double ldi = Var.d * abs(q - y1);
+			long double ldc = Var.d * abs(p - x1);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a += ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	case __RMMandelbrotXOR2:
+		if (it < max_iterations)
+		{
+			long double ldi = Var.d * abs(x2);
+			long double ldc = Var.d * abs(y2);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a += ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	case __RMMandelbrotXOR3:
+		if (it < max_iterations)
+		{
+			long double w = (x1 + y1) * (x1 + y1);
+
+			long double ldi = Var.d * abs(w - x2);
+			long double ldc = Var.d * abs(w - y2);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a += ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	}
+}
+
+
 inline void JuliaColourise(int it, int ydotwidthplusx,
-        int x, int y,
+		int x, int y,
 		long double p, long double q)
 {
 	switch (RenderMode)
@@ -531,6 +647,80 @@ inline void JuliaColourise(int it, int ydotwidthplusx,
 		}
 
 		break;
+	}
+}
+
+
+inline void JuliaColouriseSS(int it, int ydotwidthplusx,
+		int x, int y,
+		long double p, long double q)
+{
+	switch (RenderMode)
+	{
+	case __RMJuliaEscapeTime:
+	case __RMJuliaTwoTone:
+	case __RMJuliaThreeTone:
+	case __RMJuliaFourTone:
+	case __RMJuliaFiveTone:
+	{
+		FractalData[ydotwidthplusx].a += it;
+		break;
+	}
+	case __RMJuliaDistance:
+	{
+		Data[ydotwidthplusx] = std::sqrt((p + q) * (p + q));
+
+		FractalData[ydotwidthplusx].a += it;
+		break;
+	}
+	case __RMJuliaDistanceOrigin:
+	{
+		int nx = Fast::Floor(x - (Width / 2));
+		int ny = Fast::Floor(y - (Height / 2));
+
+		int index = Fast::Floor( ((std::sqrt(nx * nx + ny * ny) / maxdim) * std::pow((long double)it / max_iterations, n_coeff)) * pp->ColourCount);
+
+		FractalData[ydotwidthplusx] += pp->Colours[index];
+		break;
+	}
+	case __RMJuliaXOR:
+		if (it < max_iterations)
+		{
+			long double ldi = Var.d * abs(q - Var.b);
+			long double ldc = Var.d * abs(p - Var.a);
+
+			int ldx = (int)ldi ^ (int)ldc;
+
+			FractalData[ydotwidthplusx].a += ldx;
+		}
+		else
+		{
+			FractalData[ydotwidthplusx].a = -1;
+		}
+		break;
+	case __RMJuliaContinuous:
+	{
+		if (it < max_iterations)
+		{
+			long double log_zn = std::log(p * p + q * q) / 0.60205999132796239042747778944899;    // 2 * log(2)
+			long double nu = 1 - std::log2(log_zn);
+
+			long double itnew = it + nu;
+
+			it = std::pow((Fast::Floor(itnew) / max_iterations), n_coeff) * pp->ColourCount;
+			long double it_d = (long double)it + nu;
+
+			FractalData[ydotwidthplusx] += ColourUtility::LinearInterpolate(pp->Colours[it],
+																			pp->Colours[it + 1],
+																		    it_d - (std::floorl(it_d)));
+		}
+		else
+		{
+			FractalData[ydotwidthplusx] += pp2->PatternLive.SingleColour;
+		}
+
+		break;
+	}
 	}
 }
 #pragma end_region

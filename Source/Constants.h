@@ -13,9 +13,9 @@
 #include <string>
 
 #ifdef _DEBUG
-static const std::wstring __PrettyChaosVersion = L"0.28 (debug) :: August 22nd 2026";
+static const std::wstring __PrettyChaosVersion = L"0.29 (debug) :: August 23rd 2026";
 #else
-static const std::wstring __PrettyChaosVersion = L"0.28 :: August 22nd 2026";
+static const std::wstring __PrettyChaosVersion = L"0.29 :: August 23rd 2026";
 #endif
 
 static const std::wstring __AutoSaveTemplate = L"Images\\$yyyy$mm$dd_$Th$Tm$Ts.png";

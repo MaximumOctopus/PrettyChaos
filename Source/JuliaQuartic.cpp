@@ -132,7 +132,7 @@ void JuliaQuartic::RenderSS(int hstart, int hend)
 					it++;
 				}
 
-				JuliaColourise(it, ydotwidth + x, x, y, p, q);
+				JuliaColouriseSS(it, ydotwidth + x, x, y, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -199,7 +199,7 @@ void JuliaQuartic::RenderSSMorph(int hstart, int hend)
 					it++;
 				}
 
-				JuliaColourise(it, ydotwidth + x, x, y, p, q);
+				JuliaColouriseSS(it, ydotwidth + x, x, y, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;

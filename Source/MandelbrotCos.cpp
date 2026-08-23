@@ -33,7 +33,7 @@ MandelbrotCos::MandelbrotCos() : Fractal()
 
 	MultiThread = true;
 
-	Defaults.Set(1, 1000, 4, 0, 0, 0, 0, 0);
+	Defaults.Set(1, 1000, 4, 0, 0, 0, 1000, 0);
 
 	Parameters.push_back(RenderModeParameters(L"Escape time", L"", L"", L"", L"", L""));
 	Parameters.push_back(RenderModeParameters(L"Continuous", L"", L"", L"", L"", L""));
@@ -45,7 +45,10 @@ MandelbrotCos::MandelbrotCos() : Fractal()
 	Parameters.push_back(RenderModeParameters(L"Three-tone", L"", L"", L"", L"", L""));
 	Parameters.push_back(RenderModeParameters(L"Four-tone", L"", L"", L"", L"", L""));
 	Parameters.push_back(RenderModeParameters(L"Five-tone", L"", L"", L"", L"", L""));
-	Parameters.push_back(RenderModeParameters(L"XOR", L"Coeff", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR", L"", L"", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR II", L"", L"", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR III", L"", L"", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"Test", L"", L"", L"", L"", L""));
 
 	Tests.push_back(L"Re(z)^2 + Im(z)^2 < n");
 	Tests.push_back(L"||Re(z)^2| - |Im(z)^2|| < n");
@@ -170,7 +173,7 @@ void MandelbrotCos::RenderSS(int hstart, int hend)
 					it++;
 				}
 
-				MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
+				MandelbrotColouriseSS(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -261,7 +264,7 @@ void MandelbrotCos::RenderSSMorph(int hstart, int hend)
 					it++;
 				}
 
-				MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
+				MandelbrotColouriseSS(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;

@@ -30,7 +30,7 @@ MandelbrotCosNtic::MandelbrotCosNtic() : Fractal()
 	AcceptsMorph = true;
 	HasTests = true;
 
-	Defaults.Set(1, 100, 4, 0, 0, 5, 0, 0);
+	Defaults.Set(1, 100, 4, 5, 0, 0, 1000, 0);
 
 	MultiThread = true;
 
@@ -44,6 +44,10 @@ MandelbrotCosNtic::MandelbrotCosNtic() : Fractal()
 	Parameters.push_back(RenderModeParameters(L"Three-tone", L"n", L"", L"", L"", L""));
 	Parameters.push_back(RenderModeParameters(L"Four-tone", L"n", L"", L"", L"", L""));
 	Parameters.push_back(RenderModeParameters(L"Five-tone", L"n", L"", L"", L"", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR", L"n", L"", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR II", L"n", L"", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"XOR III", L"n", L"", L"", L"Coeff", L""));
+	Parameters.push_back(RenderModeParameters(L"Test", L"n", L"", L"", L"", L""));
 
 	Tests.push_back(L"Re(z)^2 + Im(z)^2 < n");
 	Tests.push_back(L"||Re(z)^2| - |Im(z)^2|| < n");
@@ -171,7 +175,7 @@ void MandelbrotCosNtic::RenderSS(int hstart, int hend)
 					it++;
 				}
 
-				MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
+				MandelbrotColouriseSS(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
@@ -268,7 +272,7 @@ void MandelbrotCosNtic::RenderSSMorph(int hstart, int hend)
 					it++;
 				}
 
-				MandelbrotColourise(it, ydotwidth + x, x1, y1, x2, y2, p, q);
+				MandelbrotColouriseSS(it, ydotwidth + x, x1, y1, x2, y2, p, q);
 			}
 
 			FractalData[ydotwidth + x] >>= supersamplenormalistioncoefficient;
